@@ -1,2 +1,2 @@
-Ç°¶Ë´úÂëÔÚ camp-frontend
-ºóÌ¨´úÂëÔÚ camp-backend
+å‰ç«¯ä»£ç åœ¨ camp-frontend
+åå°ä»£ç åœ¨ camp-backend
