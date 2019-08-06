@@ -31,10 +31,16 @@
 </template>
 
 <script>
+import {request} from '@/api/request.js'
 export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  mounted(){
+    request("/campback/url",{"aaa":123},"post",'json').then(res=>{
+      console.log(res);
+    })
   }
 }
 </script>
