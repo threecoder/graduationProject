@@ -32,6 +32,7 @@
 
 <script>
 import {request} from '@/api/request.js'
+import {setLocalStorage,getLocalStorage,removeLocalStorage} from '@/assets/js/util.js'
 export default {
   name: 'HelloWorld',
   props: {
@@ -41,6 +42,8 @@ export default {
     request("/campback/url",{"aaa":123},"post",'json').then(res=>{
       console.log(res);
     })
+    removeLocalStorage("asd");
+    console.log(getLocalStorage("asd"));
   }
 }
 </script>
