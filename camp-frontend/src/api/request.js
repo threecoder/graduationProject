@@ -36,8 +36,7 @@ export function getHeaders() {
     let randomNum = getRandomNum(); //获得随机数
     const time = new Date().getTime();  //时间戳
     const sign = `#${time}#${randomNum}#${SALT}`;
-    const signature = md5.hex(sign).toLowerCase();  //加密后小写
-    console.log(signature);
+    const signature = md5.hex(sign).toUpperCase();  //加密后大写
     return {
         time,
         signature,
@@ -53,4 +52,11 @@ export function getRandomNum() {
         randomNum += myStr[index];
     }
     return randomNum;
+}
+
+export function Encrypt(value){
+    if(!value){
+        return null;
+    }
+    return md5.hex(value).toUpperCase();
 }

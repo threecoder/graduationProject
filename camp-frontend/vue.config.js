@@ -1,4 +1,5 @@
 module.exports = {
+    lintOnSave: false,
     productionSourceMap: false,
     publicPath: './',
     devServer: {

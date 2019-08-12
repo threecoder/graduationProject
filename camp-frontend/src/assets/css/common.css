@@ -1,0 +1,18 @@
+body,html {
+    margin: 0;
+    padding: 0;
+}
+.fl {
+    float: left;
+}
+.fr {
+    float: right;
+}
+.container {
+    margin: 0 auto;
+    width: 68%;
+    overflow: hidden;
+}
+.cursor {
+    cursor: pointer;
+}
