@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h3>哈哈哈平台</h3>
+    <h3>证书管理平台</h3>
     <el-form :model="userForm" :rules="rules" ref="loginForm">
       <el-form-item prop="username">
         <el-input
