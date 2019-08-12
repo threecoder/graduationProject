@@ -26,10 +26,7 @@
             </el-submenu>
             <el-menu-item index="">协会公告</el-menu-item>
             <el-menu-item index="">联系我们</el-menu-item>
-            <el-submenu index="" class="fr">
-                <template slot="title">个人中心</template>
-                <el-menu-item index="">注销登陆</el-menu-item>
-            </el-submenu>
+            <el-menu-item index="/personal" class="fr">个人中心</el-menu-item>
         </el-menu>
         <div style="margin-top:60px" v-show="fixed"></div>
         <router-view />

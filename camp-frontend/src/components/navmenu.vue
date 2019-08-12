@@ -2,8 +2,8 @@
   <div>
     <template v-for="(item,index) in data">
       <el-menu-item :key="index" :index="item.index" v-if="!item.children">{{item.title}}</el-menu-item>
-      <el-submenu :key="index" v-if="item.children">
-        <template :index="item.index" slot="title">{{item.title}}</template>
+      <el-submenu :key="index" :index="item.index" v-if="item.children">
+        <template slot="title">{{item.title}}</template>
         <navmenu :data="item.children"></navmenu>
       </el-submenu>
     </template>
@@ -20,11 +20,11 @@ export default {
     return {
       menuList: [
         {
-          index: "1",
+          index: "",
           title: "协会介绍",
           children: [
-            { index: "1.1", title: "发展历史" },
-            { index: "1.2", title: "师资力量" },
+            { index: "", title: "发展历史" },
+            { index: "", title: "师资力量" },
             { index: "1.3", title: "品牌价值" }
           ]
         },
@@ -52,7 +52,25 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-div {
-  display: inline-block;
+::v-deep .el-menu-item.is-active {
+  background-color: #c43938!important;
+  color: #ffffff!important;
+  border-radius: 5px;
+  margin: 0 10px;
+  &:after {
+      background: transparent!important;
+    }
+}
+::v-deep .el-menu-item,
+::v-deep .el-submenu__title {
+    &:hover {
+      background-color: #c43938!important;
+      color: #fff!important;
+      border-radius: 6px;
+      margin: 0 10px;
+      &:after {
+        background: transparent!important;
+      }
+    }
 }
 </style>

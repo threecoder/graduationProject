@@ -22,6 +22,11 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: Login
+    },
+    {
+      path: '/personal',
+      name: 'personal',
+      component: resolve => require(["../views/personal/personal.vue"],resolve)
     }
   ]
 })
