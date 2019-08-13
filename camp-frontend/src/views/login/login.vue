@@ -52,6 +52,7 @@ export default {
       callback();
     }
     return {
+      redirect: this.$route.query.redirect,
       userForm: {
         username: "",
         password: ""
@@ -76,9 +77,12 @@ export default {
         password:Encrypt(this.userForm.password)
       }
       console.log(params);
-      request("/campback/login",params,"post").then(res=>{
-        console.log(res);
-      });
+      window.localStorage.setItem("token",1);
+      this.$router.push({
+        path:this.redirect? this.redirect:'/personal'
+      })
+      // request("/campback/login",params,"post").then(res=>{
+      // });
     },
     
   }

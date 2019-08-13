@@ -16,3 +16,13 @@ body,html {
 .cursor {
     cursor: pointer;
 }
+
+/* 过渡 */
+.fade-enter-active,
+.fade-leave-active {
+    transition: all 0.3s ease;
+}
+.fade-enter,
+.fade-leave {
+    opacity: 0;
+}

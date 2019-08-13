@@ -72,5 +72,9 @@ export default {
         background: transparent!important;
       }
     }
+    &:active,
+    &:visited {
+      background-color: #c43938!important;
+    }
 }
 </style>

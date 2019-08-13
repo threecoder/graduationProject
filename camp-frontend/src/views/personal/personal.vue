@@ -1,28 +1,37 @@
 <template>
-    <el-container>
-        <el-header>
-            <div class="container">
+    <el-row class="allContainer">
+        <el-col :span="24" class="header">
+            <div style="margin-left:250px;width:100%">
                 <h3 @click="toHomePage">协会首页</h3>
-                <div class="infoContainer">
+                <div class="infoContainer fr">
                     <span>admin</span>
                     <span>退出登录</span>
                 </div>
             </div>
-        </el-header>
-        <el-container>
+        </el-col>
+    
+        <el-col :span="24" class="mainContainer">
             <aside>
                 <el-menu
                     mode="vertical"
-                    default-active="/personal"
+                    default-active="/login"
                     :router="true"
                     :unique-opened="true"
                     text-color="#fff">
                     <navmenu :data="menuList"></navmenu>
                 </el-menu>
             </aside>
-            <el-main></el-main>
-        </el-container>
-    </el-container>
+            <section class="content-container">
+                <el-row>
+                    <el-col :span="24" class="">
+                        <transition name="fade" mode="out-in">
+                            <router-view />
+                        </transition>
+                    </el-col>
+                </el-row>
+            </section>
+        </el-col>
+    </el-row>
 </template>
 <script>
 import navmenu from '../../components/navmenu.vue'
@@ -34,11 +43,11 @@ export default {
         return{
             menuList: [
                 {
-                    index: "/personal",
+                    index: "",
                     title: "协会介绍",
                     children: [
-                        { index: "/personal", title: "发展历史" },
-                        { index: "/personal", title: "师资力量" },
+                        { index: "/hello", title: "发展历史" },
+                        { index: "/login", title: "师资力量" },
                         { index: "/personal", title: "品牌价值" }
                     ]
                 },
@@ -74,7 +83,21 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.el-header {
+.allContainer {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    width: 100%;
+    overflow-x: auto;
+    // min-width: 1280px;
+
+    &>.el-col:nth-child(1) {
+        height:60px;
+    }
+}
+.header {
+    display: flex;
+    border-bottom: 1px solid #ccc;
     h3 {
         display: inline-block;
         height: 60px;
@@ -85,8 +108,8 @@ export default {
         display: inline-block;
         height: 60px;
         text-align: center;
-        position: relative;
-        left: 70%;
+        margin-right: 60px;
+        line-height: 60px;
         span {
             padding: 0 10px;
             &:first-child::after{
@@ -101,21 +124,49 @@ export default {
         }
     }
 }
-aside {
-    // padding-top: 20px;
-    font-size: 16px;
-    flex: 0 0 250px;
-    width: 250px;
-    text-align: center;
-    background-color: #2b2b2b;
-    overflow-y: auto;
-    ::v-deep .el-menu {
-        height: 100%;
-        background: none;
-        border:0;
+.mainContainer {
+    display: flex;
+    position: absolute;
+    top: 61px;
+    bottom: 0px;
+    overflow: hidden;
+    aside {
+        flex: 0 0 250px;
+        padding-top: 20px;
+        font-size: 16px;
+        overflow-y: auto;
+        width: 250px!important;
+        background-color: #2d2d2d;
+        padding-top: 30px;
+        ::v-deep .el-submenu__title{
+            font-size: 16px;
+            color:#fff;
+            &:hover{
+                background: none;
+            }
+        }
+        ::v-deep .el-menu {
+            height: 100%;
+            border:0;
+            background: none;
+        }
+        ::v-deep .el-submenu .el-menu-item{
+            padding-left:70px!important;
+        }
+        ::v-deep .el-submenu .el-menu .el-submenu .el-submenu__title span{
+            padding-left:30px!important;
+        }
+        /*导航icon*/
+        ::v-deep .el-menu-item{
+            color:#fff;
+            position: relative;
+            font-size: 16px;
+        }
     }
-    ::v-deep .el-menu-item {
-        background-color: #2b2b2b;
+    section.content-container {
+        flex: 1;
+        overflow-y: auto;
     }
 }
+
 </style>

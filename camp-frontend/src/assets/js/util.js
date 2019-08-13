@@ -14,3 +14,9 @@ export function setLocalStorage(key,val){
 export function removeLocalStorage(key) {
     return localStorage.removeItem(key);
 }
+
+//返回月份，从1开始
+export function getMonth(){
+    return ['01','02','03','04','05','06','07','08','09','10','11','12'];
+}
+

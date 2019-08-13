@@ -26,7 +26,19 @@ export default new Router({
     {
       path: '/personal',
       name: 'personal',
-      component: resolve => require(["../views/personal/personal.vue"],resolve)
+      component: resolve => require(["../views/personal/personal.vue"],resolve),
+      children:[
+        
+      ]
+    },
+    {
+      path: '/404',
+      component: resolve => require(['@/views/404.vue'],resolve),
+      hidden:true
+    },
+    {
+      path: "*",
+      redirect:{ path: '/404'}
     }
   ]
 })
