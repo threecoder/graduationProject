@@ -38,6 +38,7 @@
 </template>
 <script>
 import { Encrypt, request } from "@/api/request.js";
+import { setCookie, getCookie, deleteCookie } from "@/assets/js/util.js";
 export default {
   data() {
     let valid = (rule, value, callback) => {
@@ -51,8 +52,8 @@ export default {
     return {
       redirect: this.$route.query.redirect,
       userForm: {
-        username: "",
-        password: "",
+        username: null,
+        password: null,
         registerFlag: false
       },
       rules: {
@@ -75,17 +76,23 @@ export default {
         password: Encrypt(this.userForm.password)
       };
       console.log(params);
-      window.localStorage.setItem("token", 1);
+      // window.localStorage.setItem("token", 1);
       this.$router.push({
         path: this.redirect ? this.redirect : "/personal"
       });
       // request("/campback/login",params,"post").then(res=>{
       // });
+      setCookie(this.userForm);
+      setCookie({ a: "1ad" }, "test");
+      let a = getCookie("test");
+      console.log("a",a);
+      let b = getCookie();
+      console.log("b",b);
     }
   },
   computed: {
-    buttonText(){
-      return this.userForm.registerFlag?"注册":"登陆";
+    buttonText() {
+      return this.userForm.registerFlag ? "注册" : "登陆";
     }
   }
 };
