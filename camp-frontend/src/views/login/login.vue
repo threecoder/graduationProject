@@ -3,11 +3,7 @@
     <h3>证书管理平台</h3>
     <el-form :model="userForm" :rules="rules" ref="loginForm">
       <el-form-item prop="username">
-        <el-input
-          suffix="el-icon-user" 
-          placeholder="请输入账号" 
-          v-model.trim="userForm.username"
-        >
+        <el-input suffix="el-icon-user" placeholder="请输入账号" v-model.trim="userForm.username">
           <template slot="prepend">
             <i class="userIcon"></i>
           </template>
@@ -27,10 +23,11 @@
         </el-input>
       </el-form-item>
       <el-form-item>
-        <!-- <span class="fr cursor" @click="forgetFlag=true">忘记密码</span> -->
+        <el-switch v-model="userForm.registerFlag" active-text="注册" inactive-text="登陆"></el-switch>
+        <span class="fr cursor" @click="forgetFlag=true">忘记密码</span>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="login">登陆</el-button>
+        <el-button type="primary" @click="login">{{buttonText}}</el-button>
       </el-form-item>
     </el-form>
 
@@ -40,27 +37,28 @@
   </div>
 </template>
 <script>
-import {Encrypt,request} from "@/api/request.js"
+import { Encrypt, request } from "@/api/request.js";
 export default {
   data() {
     let valid = (rule, value, callback) => {
       let reg = /^([a-zA-Z0-9]|\_)*$/g;
-      if(!reg.test(value)){
+      if (!reg.test(value)) {
         callback(new Error("账号只能由数字、字母和下划线组成"));
         return false;
       }
       callback();
-    }
+    };
     return {
       redirect: this.$route.query.redirect,
       userForm: {
         username: "",
-        password: ""
+        password: "",
+        registerFlag: false
       },
       rules: {
         username: [
           { required: true, message: "请输入用户名", trigger: "change" },
-          { validator: valid, trigger:"change"}
+          { validator: valid, trigger: "change" }
         ],
         password: [
           { required: true, message: "请输入6-18位密码", trigger: "change" },
@@ -73,18 +71,22 @@ export default {
   methods: {
     login() {
       let params = {
-        username:this.userForm.username,
-        password:Encrypt(this.userForm.password)
-      }
+        username: this.userForm.username,
+        password: Encrypt(this.userForm.password)
+      };
       console.log(params);
-      window.localStorage.setItem("token",1);
+      window.localStorage.setItem("token", 1);
       this.$router.push({
-        path:this.redirect? this.redirect:'/personal'
-      })
+        path: this.redirect ? this.redirect : "/personal"
+      });
       // request("/campback/login",params,"post").then(res=>{
       // });
-    },
-    
+    }
+  },
+  computed: {
+    buttonText(){
+      return this.userForm.registerFlag?"注册":"登陆";
+    }
   }
 };
 </script>

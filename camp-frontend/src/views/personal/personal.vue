@@ -2,10 +2,10 @@
     <el-row class="allContainer">
         <el-col :span="24" class="header">
             <div style="margin-left:250px;width:100%">
-                <h3 @click="toHomePage">协会首页</h3>
+                <h3 class="cursor" @click="toHomePage">协会首页</h3>
                 <div class="infoContainer fr">
                     <span>admin</span>
-                    <span>退出登录</span>
+                    <span class="cursor" @click="logout">退出登录</span>
                 </div>
             </div>
         </el-col>
@@ -18,6 +18,7 @@
                     :router="true"
                     :unique-opened="true"
                     text-color="#fff">
+                    <!-- <navmenu :data="adminList"></navmenu> -->
                     <navmenu :data="menuList"></navmenu>
                 </el-menu>
             </aside>
@@ -44,29 +45,95 @@ export default {
             menuList: [
                 {
                     index: "",
-                    title: "协会介绍",
+                    title: "我的信息",
                     children: [
-                        { index: "/hello", title: "发展历史" },
-                        { index: "/login", title: "师资力量" },
-                        { index: "/personal", title: "品牌价值" }
+                        { index: "/hello", title: "我的资料" }
                     ]
                 },
                 {
-                    index: "/personal/2",
-                    title: "培训课程介绍",
+                    index: "",
+                    title: "我的证书",
+                    // children: [
+                    //     { index: "/personal", title: "个人证书" },
+                    //     { index: "/personal", title: "证书复审" },
+                    //     { index: "/personal", title: "证书变更" }
+                    // ]
+                },
+                {
+                    index: "",
+                    title: "我的培训",
                     children: [
-                        { index: "/personal", title: "往期课程" },
-                        { index: "/personal", title: "正在上课" },
-                        { index: "/personal", title: "近期开课" }
+                        { index: "/personal", title: "个人记录" }
                     ]
                 },
                 {
-                    index: "/personal/3",
-                    title: "协会动态",
+                    index: "",
+                    title: "我的考试",
                     children: [
-                        { index: "/personal", title: "新闻" },
-                        { index: "/personal", title: "活动" },
-                        { index: "/personal", title: "培训" }
+                        { index: "", title: "需要参加的考试"},
+                        { index: "", title: "已完成的考试"}
+                    ]
+                },
+                {
+                    index: "",
+                    title: "我的活动",
+                    children: [
+                        { index: "",title: "可报名活动"},
+                        { index: "",title: "已报名活动"}
+                    ]
+                },
+                {
+                    index: "",
+                    title: "投票",
+                    children: [
+                        { index: "",title: "参与投票" }
+                    ]
+                }
+            ],
+            //会员管理员菜单
+            adminList: [
+                {
+                    index: "",
+                    title: "我的信息",
+                    children: [
+                        {index: "",title: "我的资料"}
+                    ]
+                },
+                {
+                    index: "",
+                    title: "会费管理",
+                    children: [
+                        {index: "", title: "会费缴纳"}
+                    ]
+                },
+                {
+                    index: "",
+                    title: "学员管理",
+                    children: [
+                        {index:"", title:"添加学员"},
+                        {index:"", title:"挂靠关系"}
+                    ]
+                },
+                {
+                    index:"",
+                    title: "培训管理",
+                    children: [
+                        {index:"", title:"报名培训"}
+                    ]
+                },
+                {
+                    index: "",
+                    title: "学员证件",
+                    children: [
+                        {index:"",title:"管理证件"}
+                    ]
+                },
+                {
+                    index:"",
+                    title:"活动报名",
+                    children: [
+                        {index:"",title:"已发布的活动"},
+                        {index:"",title:"已报名的活动"}
                     ]
                 }
             ]
@@ -78,6 +145,10 @@ export default {
     methods:{
         toHomePage(){
             this.$router.push("/");
+        },
+        logout(){
+            window.localStorage.removeItem("token");
+            this.$router.push("/login");
         }
     }
 }
