@@ -75,10 +75,21 @@ export default {
         username: this.userForm.username,
         password: Encrypt(this.userForm.password)
       };
-      console.log(params);
-      request("/campback/login",params,"post").then(res => {
-        console.log(res);
-      })
+      setCookie({a:"1"},"test");
+      setCookie(params,"loginForm");
+      console.log("getall",getCookie());
+      console.log("get",getCookie("loginForm"));
+      deleteCookie("test")
+      console.log("delete1",getCookie());
+      setCookie({a:"1"},"test");
+      deleteCookie()
+      console.log("delete2",getCookie());
+
+
+      // console.log(params);
+      // request("/campback/login",params,"post").then(res => {
+      //   console.log(res);
+      // })
       // window.localStorage.setItem("token", 1);
       this.$router.push({
         path: this.redirect ? this.redirect : "/personal"
