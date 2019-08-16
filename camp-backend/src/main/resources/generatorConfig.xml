@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <!-- 导入配置文件 -->
+    <properties resource="application.properties"/>
+
+    <!-- defaultModelType="flat" 设置复合主键时不单独为主键创建实体 -->
+    <context id="MySql" defaultModelType="flat">
+
+        <!-- 生成的POJO实现java.io.Serializable接口 -->
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
+
+        <!--注释-->
+        <commentGenerator>
+            <!-- 将数据库中表的字段描述信息添加到注释 -->
+            <property name="addRemarkComments" value="true"/>
+            <!-- 是否阻止自动生成注释 true：是 ： false:否 -->
+            <property name="suppressAllComments" value="true"/>
+            <!-- 注释里不添加日期 -->
+            <property name="suppressDate" value="true"/>
+        </commentGenerator>
+
+        <!-- 数据库连接，直接通过${}读取application.properties里的配置 -->
+        <jdbcConnection
+                driverClass="com.mysql.jdbc.Driver"
+                connectionURL="${spring.datasource.url}"
+                userId="${spring.datasource.username}"
+                password="${spring.datasource.password}"/>
+
+        <!-- 生成POJO对象，并将类放到包下 -->
+        <javaModelGenerator targetPackage="com.lutayy.campbackend.pojo" targetProject="./src/main/java">
+            <!-- enableSubPackages属性如果为true，MBG会根据catalog和schema来自动生成子包，
+          	如果为false，直接使用targetPackage属性 -->
+            <property  name="enableSubPackages"  value="true"/>
+        </javaModelGenerator>
+        <!-- 生成mapper xml文件，并放到resources下的mapper文件夹下 -->
+        <sqlMapGenerator targetPackage="mapping"  targetProject="./src/main/resources">
+            <property  name="enableSubPackages"  value="true"/>
+        </sqlMapGenerator>
+
+
+        <!-- 生成mapper xml对应dao接口，放到包下-->
+        <javaClientGenerator targetPackage="com.lutayy.campbackend.dao" targetProject="./src/main/java" type="XMLMAPPER">
+            <property  name="enableSubPackages"  value="true"/>
+        </javaClientGenerator>
+
+        <!-- <table tableName="%">
+                  <generatedKey column="id" sqlStatement="Mysql"/>
+              </table> -->
+
+        <!-- generatedKey标签用来指定自动生成的主键的属性（identity字段或者sequence序列） 该标签还包含两个可选项：-->
+        <!--	identity：当设置为TRUE时，该列会被标记为identity列，并且selectKey标签会被插入insert后面-->
+        <!--	type：type=post且identity=true时，生成的selectKey中order=After…… -->
+
+        <table tableName="student">
+            <generatedKey  column="student_id"  sqlStatement="Mysql"  identity="TRUE"/>
+        </table>
+
+    </context>
+
+</generatorConfiguration>

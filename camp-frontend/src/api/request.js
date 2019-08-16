@@ -21,7 +21,7 @@ export function request(url, data={}, type="post", responseType="json" ) {
             params: type=='get'? data:"",   //使用get时，携带在路径的请求参数
             headers: {
                 ...getHeaders(),
-                'Content-Type': 'appliacation/json;charset=UTF-8'
+                'Content-Type': 'application/json;charset=UTF-8'
             },
             responseType    //浏览器返回的数据类型
         }).then( res => {

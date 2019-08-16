@@ -87,13 +87,13 @@ export default {
 
 
       // console.log(params);
-      // request("/campback/login",params,"post").then(res => {
-      //   console.log(res);
-      // })
+       request("/campback/login",params,"post").then(res => {
+         console.log(res);
+       })
       // window.localStorage.setItem("token", 1);
-      this.$router.push({
-        path: this.redirect ? this.redirect : "/personal"
-      });
+      //this.$router.push({
+      //  path: this.redirect ? this.redirect : "/personal"
+      //});
     }
   },
   computed: {

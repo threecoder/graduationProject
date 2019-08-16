@@ -11,7 +11,7 @@ module.exports = {
             '/campback':{
                 target:'http://localhost:3000',
                 pathRewrite:{
-                    '^/campback':'/campback'
+                    '^/campback':'/'
                 }
             }
         }
