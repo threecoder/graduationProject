@@ -5,6 +5,7 @@ import Axios from 'axios'
 import store from './store'
 import element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import { getCanGoPath} from '@/assets/js/util.js';
 
 Vue.config.productionTip = false
 Vue.prototype.$message = element.Message;
@@ -16,7 +17,7 @@ Vue.use(element);
 //配置路由拦截
 router.beforeEach( (to,from,next) => {
   let token = window.localStorage.getItem("token");
-  let canGoPath = ['/login','/404','/'];
+  let canGoPath = getCanGoPath();
   if(!token && canGoPath.indexOf(to.path)==-1){
     let url = escape(to.fullPath);
     next({

@@ -61,3 +61,11 @@ export function deleteCookie(name){
         setCookie({},name);
     }
 }
+
+export function getCanGoPath(){
+    return [
+        '/login',
+        '/404',
+        '/'
+    ]
+}

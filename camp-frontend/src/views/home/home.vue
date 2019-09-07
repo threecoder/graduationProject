@@ -37,7 +37,7 @@
 export default {
     data(){
         return{
-           fixed:false
+            fixed:false
         }
     },
     mounted(){
