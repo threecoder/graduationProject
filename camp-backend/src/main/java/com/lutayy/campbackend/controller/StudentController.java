@@ -20,7 +20,7 @@ public class StudentController {
     @RequestMapping("/login")
     @ResponseBody
     public JSONObject login(@RequestBody JSONObject jsonObject, HttpServletResponse response) {
-        return studentService.login(jsonObject,response );
+        return studentService.login(jsonObject,response);
     }
 }
 

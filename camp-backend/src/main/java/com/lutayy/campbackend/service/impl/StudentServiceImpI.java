@@ -4,12 +4,15 @@ package com.lutayy.campbackend.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.lutayy.campbackend.common.util.JwtUtil;
 import com.lutayy.campbackend.common.util.Md5;
 import com.lutayy.campbackend.dao.StudentMapper;
 import com.lutayy.campbackend.pojo.Student;
 import com.lutayy.campbackend.pojo.StudentExample;
+import com.lutayy.campbackend.pojo.request.TokenRequest;
 import com.lutayy.campbackend.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +27,9 @@ public class StudentServiceImpI implements StudentService {
     @Autowired
     StudentMapper studentMapper;
 
+    @Value("dnfslaAWRFaWR561wa&%==_+")
+    private String SECRET_KEY;
+
     @Override
     public  JSONObject login(JSONObject jsonObject, HttpServletResponse response){
         String password = jsonObject.getString("password");
@@ -34,13 +40,15 @@ public class StudentServiceImpI implements StudentService {
 
         StudentExample studentExample=new StudentExample();
         StudentExample.Criteria criteria=studentExample.createCriteria();
-        if(phoneoridcard.length()>14){
-            criteria.andStudentIdcardEqualTo(phoneoridcard);
-        }
-        else {
-            criteria.andStudentPhoneEqualTo(phoneoridcard);
-        }
+        criteria.andStudentIdcardEqualTo(phoneoridcard);
         List<Student> students=studentMapper.selectByExample(studentExample);
+        if(students.size()==0){
+            StudentExample studentExample0=new StudentExample();
+            StudentExample.Criteria criteria0=studentExample0.createCriteria();
+            criteria0.andStudentPhoneEqualTo(phoneoridcard);
+            students=studentMapper.selectByExample(studentExample0);
+        }
+
         if(students.size()==0){
             result.put("code","fail");
             result.put("msg","账号不存在！");
@@ -52,31 +60,14 @@ public class StudentServiceImpI implements StudentService {
             result.put("msg","密码错误！");
             return result;
         }
-        Cookie cookie=new Cookie("phone", phoneoridcard);
+        TokenRequest tokenRequest=new TokenRequest();
+        tokenRequest.setName(student.getStudentIdcard());
+        String token = JwtUtil.sign(tokenRequest, 30*60*1000, SECRET_KEY);
+        Cookie cookie=new Cookie("token", token);
         cookie.setPath("/");
-        cookie.setMaxAge(7200);
         response.addCookie(cookie);
         result.put("code","success");
         result.put("msg","登陆成功！");
         return  result;
-    }
-
-    @Override
-    public JSONObject getall(){
-        StudentExample studentExample=new StudentExample();
-        List<Student> students=studentMapper.selectByExample(studentExample);
-        Iterator<Student> studentIterator=students.iterator();
-        JSONArray all=new JSONArray();
-        while(studentIterator.hasNext()){
-            Student student=studentIterator.next();
-            JSONObject data=new JSONObject();
-            data.put("id",student.getStudentId());
-            data.put("name",student.getStudentName());
-            data.put("idcard",student.getStudentIdcard());
-            all.add(data);
-        }
-        JSONObject result=new JSONObject();
-        result.put("all",all);
-        return result;
     }
 }

@@ -3,7 +3,7 @@ package com.lutayy.campbackend.pojo;
 import java.io.Serializable;
 
 public class Student implements Serializable {
-    private String studentId;
+    private Integer studentId;
 
     private String studentPassword;
 
@@ -21,11 +21,11 @@ public class Student implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public String getStudentId() {
+    public Integer getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(String studentId) {
+    public void setStudentId(Integer studentId) {
         this.studentId = studentId;
     }
 

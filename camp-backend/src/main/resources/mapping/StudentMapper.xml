@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lutayy.campbackend.dao.StudentMapper">
   <resultMap id="BaseResultMap" type="com.lutayy.campbackend.pojo.Student">
-    <id column="student_id" jdbcType="VARCHAR" property="studentId" />
+    <id column="student_id" jdbcType="INTEGER" property="studentId" />
     <result column="student_password" jdbcType="VARCHAR" property="studentPassword" />
     <result column="student_idcard" jdbcType="VARCHAR" property="studentIdcard" />
     <result column="student_phone" jdbcType="VARCHAR" property="studentPhone" />
@@ -87,15 +87,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from student
-    where student_id = #{studentId,jdbcType=VARCHAR}
+    where student_id = #{studentId,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from student
-    where student_id = #{studentId,jdbcType=VARCHAR}
+    where student_id = #{studentId,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.lutayy.campbackend.pojo.StudentExample">
     delete from student
@@ -104,7 +104,7 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.lutayy.campbackend.pojo.Student">
-    <selectKey keyProperty="studentId" order="AFTER" resultType="java.lang.String">
+    <selectKey keyProperty="studentId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into student (student_password, student_idcard, student_phone, 
@@ -115,7 +115,7 @@
       #{studentAddress,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.Student">
-    <selectKey keyProperty="studentId" order="AFTER" resultType="java.lang.String">
+    <selectKey keyProperty="studentId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into student
@@ -176,7 +176,7 @@
     update student
     <set>
       <if test="record.studentId != null">
-        student_id = #{record.studentId,jdbcType=VARCHAR},
+        student_id = #{record.studentId,jdbcType=INTEGER},
       </if>
       <if test="record.studentPassword != null">
         student_password = #{record.studentPassword,jdbcType=VARCHAR},
@@ -206,7 +206,7 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update student
-    set student_id = #{record.studentId,jdbcType=VARCHAR},
+    set student_id = #{record.studentId,jdbcType=INTEGER},
       student_password = #{record.studentPassword,jdbcType=VARCHAR},
       student_idcard = #{record.studentIdcard,jdbcType=VARCHAR},
       student_phone = #{record.studentPhone,jdbcType=VARCHAR},
@@ -243,7 +243,7 @@
         student_address = #{studentAddress,jdbcType=VARCHAR},
       </if>
     </set>
-    where student_id = #{studentId,jdbcType=VARCHAR}
+    where student_id = #{studentId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.lutayy.campbackend.pojo.Student">
     update student
@@ -254,6 +254,6 @@
       student_email = #{studentEmail,jdbcType=VARCHAR},
       student_positon = #{studentPositon,jdbcType=VARCHAR},
       student_address = #{studentAddress,jdbcType=VARCHAR}
-    where student_id = #{studentId,jdbcType=VARCHAR}
+    where student_id = #{studentId,jdbcType=INTEGER}
   </update>
 </mapper>
