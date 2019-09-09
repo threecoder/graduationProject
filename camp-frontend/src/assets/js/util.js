@@ -62,10 +62,19 @@ export function deleteCookie(name){
     }
 }
 
+//格式化日期
+export function formatDate(date) {
+    return `${date.getYear()+1900}-${date.getMonth()+1}-${date.getDate()}`;
+}
+
 export function getCanGoPath(){
     return [
         '/login',
         '/404',
-        '/'
+        '/courses/previous',
+        '/courses/now',
+        '/courses/future',
+        '/contact',
+        '/',
     ]
 }

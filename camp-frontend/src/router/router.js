@@ -12,9 +12,14 @@ export default new Router({
       component: resolve => require(["../views/home/home.vue"],resolve),
       children: [
         {
-          path: '/hello',
-          name: 'helloWorld',
-          component: resolve => require(["../components/HelloWorld.vue"],resolve)
+          path: '/courses/:type',
+          name: 'courses',
+          component: resolve => require(["../views/courses/courses.vue"],resolve)
+        },
+        {
+          path: '/contact',
+          name: 'contact',
+          component: resolve => require(['../views/contact.vue'],resolve)
         }
       ]
     },
