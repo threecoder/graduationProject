@@ -117,9 +117,10 @@ export default {
             this.searchPar = par;
             let params = {
                 ...par,
-                ...this.pagination
+                ...this.pagination,
+                type: this.type
             }
-            let res = await getCourses(params, this.type);
+            let res = await getCourses(params);
             list = res.data;
         }
     }
