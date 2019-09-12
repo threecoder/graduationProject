@@ -30,7 +30,7 @@ public class JwtUtil {
     }
 
 
-    public static<T> T unsign(String jwt, Class<T> classT,String SECRET) {
+    public static <T> T unsign(String jwt, Class<T> classT,String SECRET) {
         final JWTVerifier verifier = new JWTVerifier(SECRET);
         try {
             final Map<String,Object> claims= verifier.verify(jwt);

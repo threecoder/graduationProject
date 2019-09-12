@@ -27,7 +27,7 @@ public class StudentServiceImpI implements StudentService {
     @Autowired
     StudentMapper studentMapper;
 
-    @Value("dnfslaAWRFaWR561wa&%==_+")
+    @Value("${SECRET_KEY}")
     private String SECRET_KEY;
 
     @Override
@@ -61,7 +61,7 @@ public class StudentServiceImpI implements StudentService {
             return result;
         }
         TokenRequest tokenRequest=new TokenRequest();
-        tokenRequest.setName(student.getStudentIdcard());
+        tokenRequest.setName(student.getStudentIdcard());//身份证号码作为标识
         String token = JwtUtil.sign(tokenRequest, 30*60*1000, SECRET_KEY);
         Cookie cookie=new Cookie("token", token);
         cookie.setPath("/");
