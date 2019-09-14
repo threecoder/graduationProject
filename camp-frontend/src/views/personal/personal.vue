@@ -26,7 +26,7 @@
                 <el-row>
                     <el-col :span="24" class="">
                         <transition name="fade" mode="out-in">
-                            <router-view />
+                            <router-view :key="$route.path"/>
                         </transition>
                     </el-col>
                 </el-row>
@@ -47,7 +47,7 @@ export default {
                     index: "",
                     title: "我的信息",
                     children: [
-                        { index: "/hello", title: "我的资料" }
+                        { index: "/info", title: "我的资料" }
                     ]
                 },
                 {
@@ -237,6 +237,9 @@ export default {
     section.content-container {
         flex: 1;
         overflow-y: auto;
+        padding: 30px 40px;
+        width: auto;
+        // background-color: #ccc;
     }
 }
 
