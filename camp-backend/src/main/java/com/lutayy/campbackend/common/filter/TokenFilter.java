@@ -16,8 +16,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
-@WebFilter(filterName = "TokenFilter",urlPatterns = "/*")
+//@Component
+//@WebFilter(filterName = "TokenFilter",urlPatterns = "/*")
 public class TokenFilter implements Filter {
 
 

@@ -206,9 +206,9 @@ DROP TABLE IF EXISTS `member`;
 
 CREATE TABLE `member` (
   `member_id` varchar(20) NOT NULL,
+  `member_phone` varchar(20) DEFAULT NULL COMMENT '移动电话',
   `member_password` varchar(20) NOT NULL DEFAULT '123456',
   `member_tel` varchar(20) DEFAULT NULL COMMENT '座机',
-  `member_phone` varchar(20) DEFAULT NULL COMMENT '移动电话',
   `member_address` varchar(100) DEFAULT NULL COMMENT '地址',
   `member_name` varchar(40) DEFAULT NULL COMMENT '单位或机构名称',
   `member_province` varchar(20) DEFAULT NULL COMMENT '会员省份(直辖市)',
@@ -217,7 +217,8 @@ CREATE TABLE `member` (
   `vip_end_date` date DEFAULT NULL COMMENT '会员到期时间',
   `enter_date` date DEFAULT NULL COMMENT '入会时间(非vip)',
   `vip_begin_date` date DEFAULT NULL COMMENT '成为协会会员时间',
-  PRIMARY KEY (`member_id`)
+  PRIMARY KEY (`member_id`),
+  UNIQUE KEY `Phone` (`member_phone`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `member` */
@@ -328,15 +329,20 @@ DROP TABLE IF EXISTS `training`;
 CREATE TABLE `training` (
   `training_id` int(20) NOT NULL AUTO_INCREMENT,
   `training_name` varchar(20) NOT NULL,
-  `training_introduce` text COMMENT '培训介绍',
+  `training_introduce` varchar(500) DEFAULT NULL COMMENT '培训介绍',
   `training_fee_normal` decimal(10,2) DEFAULT NULL COMMENT '培训费用',
   `training_fee_vip` decimal(10,2) DEFAULT NULL COMMENT '协会会员折扣价',
   `training_end_time` datetime DEFAULT NULL COMMENT '培训结束时间',
   `training_start_time` datetime DEFAULT NULL COMMENT '培训开始时间',
+  `post_time` datetime DEFAULT NULL COMMENT '发布时间',
+  `level` tinyint(4) DEFAULT NULL,
+  `training_pic` varchar(300) DEFAULT NULL,
   PRIMARY KEY (`training_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 /*Data for the table `training` */
+
+insert  into `training`(`training_id`,`training_name`,`training_introduce`,`training_fee_normal`,`training_fee_vip`,`training_end_time`,`training_start_time`,`post_time`,`level`,`training_pic`) values (1,'质量检测','示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n示例范文示例范文示例范文示例范文','199.99','199.00','2019-09-28 16:13:03','2019-09-13 16:12:30','2019-09-21 00:41:14',NULL,NULL),(2,'食品安全','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','888.01','699.01','2019-10-03 12:00:00','2019-10-01 12:00:00','2019-07-15 00:41:19',NULL,NULL),(3,'食品监督','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','2000.00','1899.11','2019-09-11 16:14:32','2019-09-05 16:14:25','2020-02-06 00:41:22',NULL,NULL),(4,'网络工程','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','800.90','700.00','2019-10-26 16:14:40','2019-09-11 16:14:36','2019-11-01 00:41:27',NULL,NULL),(5,'产品规范','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','99.99','98.99','2019-11-08 16:14:56','2019-09-29 16:14:44','2019-10-17 00:41:35',NULL,NULL);
 
 /*Table structure for table `training_order` */
 
@@ -392,6 +398,8 @@ CREATE TABLE `training_re_student` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `training_re_student` */
+
+insert  into `training_re_student`(`training_id`,`student_id`,`begin_time`) values (1,1,'2019-09-14 23:20:23'),(1,2,'2019-09-19 23:20:29');
 
 /*Table structure for table `vote` */
 
