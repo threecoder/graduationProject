@@ -85,7 +85,11 @@ public class TrainingServiceImpl implements TrainingService {
             }
         }
         JSONObject result = new JSONObject();
-        result.put("code", "success");
+        if(size==0){
+            result.put("code","fail");
+        }else {
+            result.put("code", "success");
+        }
         result.put("data", data);
         result.put("allNum", size);
         result.put("pageSize",sum);
