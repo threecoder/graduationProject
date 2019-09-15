@@ -300,7 +300,9 @@ CREATE TABLE `student` (
   `student_name` varchar(12) DEFAULT NULL,
   `student_email` varchar(30) DEFAULT NULL,
   `student_positon` varchar(20) DEFAULT NULL COMMENT '职位',
-  `student_address` varchar(200) DEFAULT NULL COMMENT '地址',
+  `student_country` varchar(20) DEFAULT NULL COMMENT '地址',
+  `student_province` varchar(20) DEFAULT NULL,
+  `student_address` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`student_id`),
   UNIQUE KEY `UNIQUE1` (`student_phone`),
   UNIQUE KEY `UNIQUE2` (`student_idcard`)
@@ -308,7 +310,7 @@ CREATE TABLE `student` (
 
 /*Data for the table `student` */
 
-insert  into `student`(`student_id`,`student_password`,`student_idcard`,`student_phone`,`student_name`,`student_email`,`student_positon`,`student_address`) values (1,'123456','445281199708210055','15521054785','张三','11@qq.com',NULL,NULL),(2,'123456','445281199308310037','15521064789','李四','22@qq.com',NULL,NULL),(3,'123456','445281199308310033','15521064781',NULL,NULL,NULL,NULL);
+insert  into `student`(`student_id`,`student_password`,`student_idcard`,`student_phone`,`student_name`,`student_email`,`student_positon`,`student_country`,`student_province`,`student_address`) values (1,'123456','445281199708210055','15521054785','张三','11@qq.com',NULL,NULL,NULL,NULL),(2,'123456','445281199308310037','15521064789','李四','22@qq.com',NULL,NULL,NULL,NULL),(3,'123456','445281199308310033','15521064781',NULL,NULL,NULL,NULL,NULL,NULL);
 
 /*Table structure for table `super_admin` */
 
@@ -335,7 +337,7 @@ CREATE TABLE `training` (
   `training_end_time` datetime DEFAULT NULL COMMENT '培训结束时间',
   `training_start_time` datetime DEFAULT NULL COMMENT '培训开始时间',
   `post_time` datetime DEFAULT NULL COMMENT '发布时间',
-  `level` tinyint(4) DEFAULT NULL,
+  `level` tinyint(4) DEFAULT '1',
   `training_pic` varchar(300) DEFAULT NULL,
   PRIMARY KEY (`training_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
