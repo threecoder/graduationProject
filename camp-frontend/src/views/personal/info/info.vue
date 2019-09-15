@@ -45,7 +45,8 @@
                                 placeholder="请输入具体地址"
                                 :readonly="readOnly"
                             >
-                                <el-select
+                                <v-distpicker province="广东省" city="广州市" area="海珠区" slot="prepend"></v-distpicker>
+                                <!-- <el-select
                                     slot="prepend"
                                     v-model="info.province"
                                     placeholder="请选择省份"
@@ -70,7 +71,7 @@
                                         :label="item.label"
                                         :value="item.value"
                                     ></el-option>
-                                </el-select>
+                                </el-select> -->
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -85,6 +86,8 @@
         <div class="modifyButton">
             <el-button type="primary" round @click="dialogFormVisible=true">修改密码</el-button>
         </div>
+
+        <!-- 修改密码弹出框 -->
         <el-dialog title="修改密码" :visible.sync="dialogFormVisible" width="25%">
             <el-form :model="password">
                 <el-form-item label="原密码" :label-width="formLabelWidth">
@@ -116,7 +119,6 @@ export default {
                 name: null,
                 email: null,
                 position: null,
-                country: null,
                 province: null,
                 city: null,
                 zone: null
@@ -166,9 +168,11 @@ export default {
     ::v-deep .el-input-group__prepend {
         width: 250px;
         margin: 0 !important;
-        .el-select {
-            width: 50%;
-            margin: 0 !important;
+    }
+    ::v-deep .distpicker-address-wrapper {
+        select {
+            border: 0;
+            background-color: #F5F7FA;
         }
     }
     .modifyButton {

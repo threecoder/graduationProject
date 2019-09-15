@@ -3,8 +3,10 @@
         <h3>{{title}}</h3>
         <search-form @searchInfo="searchCourses" />
         <div class="divider"></div>
-        <list :list="list" />
-        <page :total="100" :pageSize="10" :currentPage="1" @curChange="curChange" />
+        <list v-if="list.length!=0" :list="list" />
+        <h3 v-else class="tip">暂无课程</h3>
+        <div class="divider"></div>
+        <page :total="pagination.total" :pageSize="pagination.pageSize" :currentPage="pagination.currentPage" @curChange="curChange" />
     </div>
 </template>
 <script>
@@ -17,7 +19,7 @@ export default {
         return {
             type: this.$route.params.type,
             pagination: {
-                total: null,
+                total: 0,
                 pageSize: 10,
                 currentPage: 1
             },
@@ -88,7 +90,7 @@ export default {
     watch: {
         currentPage() {
             //调用api更新数据
-            console.log("ss");
+            this.searchCourses();
         }
     },
     computed: {
@@ -100,25 +102,10 @@ export default {
             } else if (this.type == "future") {
                 return "近期开课";
             }
-            let obj = {
-                code: 200,
-                data: [
-                    {
-                        url:
-                            "https://img4.mukewang.com/529dc3380001379906000338-240-135.jpg",
-                        title: "初试HTML+CSS",
-                        level: "入门",
-                        viewers: 1063251,
-                        abstract:
-                            "HTML+CSS基础教程8小时带领大家步步深入学习标签用法和意义"
-                    }
-                ]
-            };
-            console.log(JSON.stringify(obj));
         }
     },
     mounted() {
-        console.log(this.type);
+        this.searchCourses();
     },
     methods: {
         curChange(val) {
@@ -136,10 +123,19 @@ export default {
                 type: this.type
             };
             let res = await getCourses(params);
-            this.list = res.data;
+            console.log(res);
+            this.list = res.data.data;
+            this.pagination.total = res.data.allNum;
+            this.pagination.currentPage = res.data.currentPage;
         }
     }
 };
 </script>
 <style lang="scss" scoped>
+.tip {
+    text-align: center;
+    width: 100%;
+    display: block;
+    margin: 100px 0;
+}
 </style>

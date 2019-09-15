@@ -20,13 +20,6 @@ export default new Router({
                     path: '/contact',
                     name: 'contact',
                     component: resolve => require(['../views/contact.vue'], resolve)
-                },
-                {
-                    path: '/index',
-                    component: resolve => Path2D,
-                    children:[
-                        
-                    ]
                 }
             ]
         },
@@ -44,6 +37,11 @@ export default new Router({
                     path: '/info',
                     name: 'info',
                     component: resolve => require(['../views/personal/info/info.vue'], resolve)
+                },
+                {
+                    path: '/examTodo',
+                    name: 'examTodo',
+                    component: resolve => require(['../views/personal/exam/examTodo.vue'], resolve)
                 }
             ]
         },
