@@ -6,6 +6,7 @@ import store from './store'
 import element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import { getCanGoPath } from '@/assets/js/util.js';
+import Distpicker from 'v-distpicker'
 
 Vue.config.productionTip = false
 Vue.prototype.$message = element.Message;
@@ -13,6 +14,7 @@ Vue.prototype.$msbox = element.MessageBox;
 Vue.prototype.confirm = element.MessageBox.confirm;
 
 Vue.use(element);
+Vue.component('v-distpicker',Distpicker) 
 Vue.config.productionTip = false
 //配置路由拦截
 // router.beforeEach((to, from, next) => {

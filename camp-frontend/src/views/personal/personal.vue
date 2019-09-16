@@ -44,7 +44,7 @@ export default {
         return{
             menuList: [
                 {
-                    index: "",
+                    index: "1",
                     title: "我的信息",
                     children: [
                         { index: "/info", title: "我的资料" }
@@ -60,22 +60,22 @@ export default {
                     // ]
                 },
                 {
-                    index: "",
+                    index: "2",
                     title: "我的培训",
                     children: [
                         { index: "/personal", title: "个人记录" }
                     ]
                 },
                 {
-                    index: "",
+                    index: "3",
                     title: "我的考试",
                     children: [
-                        { index: "", title: "需要参加的考试"},
+                        { index: "/examTodo", title: "需要参加的考试"},
                         { index: "", title: "已完成的考试"}
                     ]
                 },
                 {
-                    index: "",
+                    index: "4",
                     title: "我的活动",
                     children: [
                         { index: "",title: "可报名活动"},
@@ -83,7 +83,7 @@ export default {
                     ]
                 },
                 {
-                    index: "",
+                    index: "5",
                     title: "投票",
                     children: [
                         { index: "",title: "参与投票" }
@@ -239,7 +239,7 @@ export default {
         overflow-y: auto;
         padding: 30px 40px;
         width: auto;
-        // background-color: #ccc;
+        background-color: rgb(244, 244, 244);
     }
 }
 
