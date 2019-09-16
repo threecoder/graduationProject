@@ -302,6 +302,7 @@ CREATE TABLE `student` (
   `student_positon` varchar(20) DEFAULT NULL COMMENT '职位',
   `student_country` varchar(20) DEFAULT NULL COMMENT '地址',
   `student_province` varchar(20) DEFAULT NULL,
+  `student_city` varchar(20) DEFAULT NULL,
   `student_address` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`student_id`),
   UNIQUE KEY `UNIQUE1` (`student_phone`),
@@ -310,7 +311,7 @@ CREATE TABLE `student` (
 
 /*Data for the table `student` */
 
-insert  into `student`(`student_id`,`student_password`,`student_idcard`,`student_phone`,`student_name`,`student_email`,`student_positon`,`student_country`,`student_province`,`student_address`) values (1,'123456','445281199708210055','15521054785','张三','11@qq.com',NULL,NULL,NULL,NULL),(2,'123456','445281199308310037','15521064789','李四','22@qq.com',NULL,NULL,NULL,NULL),(3,'123456','445281199308310033','15521064781',NULL,NULL,NULL,NULL,NULL,NULL);
+insert  into `student`(`student_id`,`student_password`,`student_idcard`,`student_phone`,`student_name`,`student_email`,`student_positon`,`student_country`,`student_province`,`student_city`,`student_address`) values (1,'123456','445281199308310056','15521054785','张三','12@qq.com','经理','中国','广东','广州','番禺大学城华南理工大学'),(2,'123456','445281199308310037','15521064789','李四','22@qq.com',NULL,NULL,NULL,NULL,NULL),(3,'123456','445281199308310033','15521064781',NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
 /*Table structure for table `super_admin` */
 
