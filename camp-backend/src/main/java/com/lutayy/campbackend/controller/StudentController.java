@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.sql.SQLClientInfoException;
 import java.util.Map;
 
 @Controller
@@ -38,5 +39,6 @@ public class StudentController {
     public JSONObject setNewPassword(@RequestBody JSONObject jsonObject){
         return null;
     }
+
 }
 
