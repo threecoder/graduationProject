@@ -17,6 +17,12 @@ public class Student implements Serializable {
 
     private String studentPositon;
 
+    private String studentCountry;
+
+    private String studentProvince;
+
+    private String studentCity;
+
     private String studentAddress;
 
     private static final long serialVersionUID = 1L;
@@ -75,6 +81,30 @@ public class Student implements Serializable {
 
     public void setStudentPositon(String studentPositon) {
         this.studentPositon = studentPositon;
+    }
+
+    public String getStudentCountry() {
+        return studentCountry;
+    }
+
+    public void setStudentCountry(String studentCountry) {
+        this.studentCountry = studentCountry;
+    }
+
+    public String getStudentProvince() {
+        return studentProvince;
+    }
+
+    public void setStudentProvince(String studentProvince) {
+        this.studentProvince = studentProvince;
+    }
+
+    public String getStudentCity() {
+        return studentCity;
+    }
+
+    public void setStudentCity(String studentCity) {
+        this.studentCity = studentCity;
     }
 
     public String getStudentAddress() {

@@ -155,17 +155,22 @@ DROP TABLE IF EXISTS `exam`;
 
 CREATE TABLE `exam` (
   `exam_id` int(20) NOT NULL AUTO_INCREMENT,
+  `exam_name` varchar(30) DEFAULT NULL,
   `training_id` int(20) DEFAULT NULL COMMENT '所属培训id',
   `exam_num` smallint(4) DEFAULT NULL COMMENT '题目数量',
   `exam_pass` smallint(4) DEFAULT NULL COMMENT '考试及格分数',
-  `exam_length_hour` smallint(4) DEFAULT NULL COMMENT '考试时长(小时)',
   `exam_length_min` tinyint(4) DEFAULT NULL COMMENT '考试时长(分钟)',
+  `exam_start_time` time DEFAULT NULL,
+  `exam_end_time` time DEFAULT NULL,
+  `exam_date` date DEFAULT NULL,
   PRIMARY KEY (`exam_id`),
   KEY `training_id` (`training_id`),
   CONSTRAINT `exam_ibfk_1` FOREIGN KEY (`training_id`) REFERENCES `training` (`training_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 /*Data for the table `exam` */
+
+insert  into `exam`(`exam_id`,`exam_name`,`training_id`,`exam_num`,`exam_pass`,`exam_length_min`,`exam_start_time`,`exam_end_time`,`exam_date`) values (1,'质量测试',1,20,60,60,'12:00:00','14:00:00','2019-09-26'),(2,'食品测试',2,20,55,80,'13:00:00','15:00:00','2019-10-01'),(3,'监督测试',3,20,65,70,'14:00:00','16:00:00','2019-09-22'),(4,'网络建设',4,30,60,60,'18:00:00','20:00:00','2019-11-22');
 
 /*Table structure for table `exam_re_question` */
 
@@ -191,7 +196,7 @@ CREATE TABLE `exam_re_student` (
   `exam_id` int(11) DEFAULT NULL,
   `student_id` int(11) DEFAULT NULL,
   `score` int(6) DEFAULT NULL COMMENT '考试分数',
-  `remaining_times` tinyint(4) DEFAULT '2' COMMENT '可重考剩余次数',
+  `remaining_times` tinyint(4) DEFAULT '3' COMMENT '可重考剩余次数',
   KEY `exam_id` (`exam_id`),
   KEY `student_id` (`student_id`),
   CONSTRAINT `exam_re_student_ibfk_1` FOREIGN KEY (`exam_id`) REFERENCES `exam` (`exam_id`),
@@ -199,6 +204,8 @@ CREATE TABLE `exam_re_student` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `exam_re_student` */
+
+insert  into `exam_re_student`(`exam_id`,`student_id`,`score`,`remaining_times`) values (1,1,55,2),(2,1,45,2),(1,2,34,2),(3,1,NULL,3),(4,1,NULL,3);
 
 /*Table structure for table `member` */
 
@@ -302,6 +309,7 @@ CREATE TABLE `student` (
   `student_positon` varchar(20) DEFAULT NULL COMMENT '职位',
   `student_country` varchar(20) DEFAULT NULL COMMENT '地址',
   `student_province` varchar(20) DEFAULT NULL,
+  `student_city` varchar(20) DEFAULT NULL,
   `student_address` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`student_id`),
   UNIQUE KEY `UNIQUE1` (`student_phone`),
@@ -310,7 +318,7 @@ CREATE TABLE `student` (
 
 /*Data for the table `student` */
 
-insert  into `student`(`student_id`,`student_password`,`student_idcard`,`student_phone`,`student_name`,`student_email`,`student_positon`,`student_country`,`student_province`,`student_address`) values (1,'123456','445281199708210055','15521054785','张三','11@qq.com',NULL,NULL,NULL,NULL),(2,'123456','445281199308310037','15521064789','李四','22@qq.com',NULL,NULL,NULL,NULL),(3,'123456','445281199308310033','15521064781',NULL,NULL,NULL,NULL,NULL,NULL);
+insert  into `student`(`student_id`,`student_password`,`student_idcard`,`student_phone`,`student_name`,`student_email`,`student_positon`,`student_country`,`student_province`,`student_city`,`student_address`) values (1,'123456','445281199308310056','15521054785','张三','12@qq.com','经理','中国','广东','广州','番禺大学城华南理工大学'),(2,'123456','445281199308310037','15521064789','李四','22@qq.com',NULL,NULL,NULL,NULL,NULL),(3,'123456','445281199308310033','15521064781',NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
 /*Table structure for table `super_admin` */
 

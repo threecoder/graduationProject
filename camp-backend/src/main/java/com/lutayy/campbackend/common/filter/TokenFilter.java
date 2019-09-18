@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.lutayy.campbackend.common.util.JwtUtil;
 import com.lutayy.campbackend.pojo.request.TokenRequest;
+import com.sun.deploy.net.cookie.CookieUnavailableException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -69,7 +70,7 @@ public class TokenFilter implements Filter {
          */
         TokenRequest tokenRequest=JwtUtil.unsign(token,TokenRequest.class,SECRET_KEY);
         if(tokenRequest!=null){
-            String idcard=tokenRequest.getName();
+            String id=tokenRequest.getName();
             Map<String, String[]> map = new HashMap<String, String[]>(request.getParameterMap());
             ParameterRequestWrapper requestWrapper;
             String method=request.getMethod().toLowerCase();
@@ -80,23 +81,24 @@ public class TokenFilter implements Filter {
                 if (jsonObject == null) {
                     jsonObject = new JSONObject();
                 }
-                jsonObject.put("idcard", idcard);
+                jsonObject.put("id", id);
                 requestWrapper.setBody(jsonObject.toJSONString().getBytes());
                 request = requestWrapper;
             } else if (method.equals("get")) {
-                map.put("idcard", new String[]{idcard});
+                map.put("id", new String[]{id});
                 requestWrapper = new ParameterRequestWrapper(request, map);
                 request = requestWrapper;
             }
             String token2 = JwtUtil.sign(tokenRequest, 30*60*1000, SECRET_KEY);
             Cookie cookie=new Cookie("token", token2);
+            //cookie.setMaxAge(3600);
             cookie.setPath("/");
             response.addCookie(cookie);
         } else{
             resMessage.put("code","error");
             resMessage.put("msg","请重新登陆！");
-            response.getWriter().write(resMessage.toJSONString());
             response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(resMessage.toJSONString());
             return;
         }
         chain.doFilter(request, resp);
