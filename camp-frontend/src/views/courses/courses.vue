@@ -132,6 +132,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+h3 {
+    margin: 20px 0 30px;
+}
 .tip {
     text-align: center;
     width: 100%;
