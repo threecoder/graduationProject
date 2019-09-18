@@ -18,7 +18,7 @@
 </template>
 <script>
 export default {
-    props: ["examName","date","startTime","endTime","Min","belong","grade"]
+    props: ["examName","date","startTime","endTime","Min","belong","grade","examId"]
 }
 </script>
 <style lang="scss" scoped>
