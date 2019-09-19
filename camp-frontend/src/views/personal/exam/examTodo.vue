@@ -6,7 +6,16 @@
             <span v-else class="panel-title">已经作答过的试卷</span>
             <div class="all-exam-container">
                 <div class="single-exam-container" v-for="(item,i) in examList" :key="i">
-                    <single-exam :examName="item.examName" :date="item.date" :startTime="item.startTime" :endTime="item.endTime" :belong="item.belong" :min="item.min" :grade="item.grade"/>
+                    <single-exam 
+                        :examName="item.examName" 
+                        :date="item.date" 
+                        :startTime="item.startTime" 
+                        :endTime="item.endTime" 
+                        :belong="item.belong" 
+                        :min="item.min" 
+                        :grade="item.grade" 
+                        :examId="item.examId" 
+                    />
                 </div>
             </div>
         </div>
@@ -24,6 +33,7 @@ export default {
         return {
             examList: [
                 {
+                    examId:"1",
                     examName:"考试名称",
                     date:"2016-10-10",
                     startTime: "14:00:00",

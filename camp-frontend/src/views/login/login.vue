@@ -101,11 +101,12 @@ export default {
             };
 
             request("/campback/login", params, "post").then(res => {
-                console.log(res);
+                // console.log(res);
+                this.$message.success(res.msg)
                 this.$router.push({
                     path: this.redirect ? this.redirect : "/personal"
                 });
-            });
+            }).catch(error=>{});
         }
     },
     computed: {

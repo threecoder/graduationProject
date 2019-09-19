@@ -33,14 +33,16 @@ router.beforeEach((to, from, next) => {
 //http response 拦截器
 Axios.interceptors.response.use(
     response => {
-        if(response.headers['content-type'] == 'application/json;charset=UTF-') {
-            if(response.code == 'success') {
-                return response;
-            }else if(response.code == 'error'){
+        if(response.headers["content-type"] == 'application/json;charset=UTF-8') {
+            if(response.data.code == 'success') {
+                return response.data;
+            }else if(response.data.code == 'error'){
+                mainProcess.$message.warning("请先登录您的账号");
                 router.push({path:'/login'});
-                return Promise.reject(response);
+                return Promise.reject(response.data);
             }else{
-                element.Message.error(response.msg);
+                console.log(response);
+                mainProcess.$message.error(response.data.msg);
                 return Promise.reject(response);
             }
         }else{
@@ -49,7 +51,7 @@ Axios.interceptors.response.use(
     },
     error => {
         if(error.code == 'ECONNABORTED' && error.message.indexOf('timeout')!= -1){
-            element.Message.error("网络异常，请求超时");
+            this.$message.error("网络异常，请求超时");
             return Promise.reject();
         }
         if(!error.response){
@@ -58,7 +60,7 @@ Axios.interceptors.response.use(
         return Promise.reject(error);
     }
 )
-new Vue({
+const mainProcess = new Vue({
     router,
     store,
     render: h => h(App)
