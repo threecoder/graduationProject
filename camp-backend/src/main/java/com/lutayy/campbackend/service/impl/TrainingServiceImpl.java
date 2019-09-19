@@ -57,7 +57,7 @@ public class TrainingServiceImpl implements TrainingService {
         trainingExample.setOrderByClause("post_time DESC");
         List<Training> trainings=trainingMapper.selectByExample(trainingExample);
         int size=trainings.size();
-        JSONArray data = new JSONArray();
+        JSONArray list = new JSONArray();
         int i=1;//计数
         int sum=0;//每页数目;
         for(Training training:trainings){
@@ -78,22 +78,26 @@ public class TrainingServiceImpl implements TrainingService {
             data0.put("viewers",studentNums);
             data0.put("url",training.getTrainingPic());
             data0.put("level",training.getLevel());
-            data.add(data0);
+            list.add(data0);
             sum++;
             if(sum==pageSize){
                 break;
             }
         }
         JSONObject result = new JSONObject();
+        JSONObject data=new JSONObject();
+        data.put("list", list);
+        data.put("allNum", size);
+        data.put("pageSize",sum);
+        data.put("currentPage", currentPage);
+        result.put("data", data);
         if(size==0){
             result.put("code","fail");
+            result.put("msg","无结果");
         }else {
             result.put("code", "success");
+            result.put("msg", "查询成功!");
         }
-        result.put("data", data);
-        result.put("allNum", size);
-        result.put("pageSize",sum);
-        result.put("currentPage", currentPage);
         return result;
     }
 
