@@ -30,6 +30,19 @@ CREATE TABLE `activity` (
 
 /*Data for the table `activity` */
 
+/*Table structure for table `alipay_log` */
+
+DROP TABLE IF EXISTS `alipay_log`;
+
+CREATE TABLE `alipay_log` (
+  `pay_order_id` varchar(50) NOT NULL COMMENT '支付订单编号',
+  `create_time` datetime DEFAULT NULL,
+  `amount` decimal(10,2) DEFAULT NULL COMMENT '金额',
+  PRIMARY KEY (`pay_order_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `alipay_log` */
+
 /*Table structure for table `as_admin` */
 
 DROP TABLE IF EXISTS `as_admin`;
@@ -85,7 +98,9 @@ CREATE TABLE `certificate_change_order` (
   `member_id` varchar(20) DEFAULT NULL COMMENT '如果为会员的订单此处应不为空',
   `order_price` decimal(10,2) DEFAULT NULL COMMENT '订单金额',
   `order_begin_time` datetime DEFAULT NULL COMMENT '订单生成时间',
-  `state` tinyint(1) DEFAULT NULL COMMENT '0为未付款，1为已付款',
+  `payment_state` tinyint(1) DEFAULT NULL COMMENT '0为未付款，1为已付款',
+  `create_time` datetime DEFAULT NULL COMMENT '订单创建时间',
+  `close` tinyint(1) DEFAULT '0' COMMENT '1为订单关闭',
   PRIMARY KEY (`certificate_change_order_id`),
   KEY `certificate_id` (`certificate_id`),
   KEY `student_id` (`student_id`),
@@ -123,7 +138,9 @@ CREATE TABLE `certificate_recheck_order` (
   `student_id` int(11) DEFAULT NULL,
   `order_price` decimal(10,2) DEFAULT NULL COMMENT '订单金额',
   `order_begin_time` datetime DEFAULT NULL COMMENT '订单生成时间',
-  `state` tinyint(1) DEFAULT NULL COMMENT '0为未付款，1为已付款',
+  `payment_state` tinyint(1) DEFAULT NULL COMMENT '0为未付款，1为已付款',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `close` tinyint(1) DEFAULT NULL COMMENT '1为订单关闭',
   PRIMARY KEY (`certificate_recheck_order_id`),
   KEY `certificate_id` (`certificate_id`),
   KEY `student_id` (`student_id`),
@@ -179,7 +196,6 @@ DROP TABLE IF EXISTS `exam_re_question`;
 CREATE TABLE `exam_re_question` (
   `exam_id` int(11) DEFAULT NULL,
   `question_id` int(11) DEFAULT NULL,
-  `type` tinyint(1) DEFAULT NULL COMMENT '0为单选，1为多选',
   KEY `question_id` (`question_id`),
   KEY `exam_id` (`exam_id`),
   CONSTRAINT `exam_re_question_ibfk_1` FOREIGN KEY (`question_id`) REFERENCES `question` (`question_id`),
@@ -187,6 +203,8 @@ CREATE TABLE `exam_re_question` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `exam_re_question` */
+
+insert  into `exam_re_question`(`exam_id`,`question_id`) values (1,1),(1,2),(1,3),(1,4);
 
 /*Table structure for table `exam_re_student` */
 
@@ -263,6 +281,25 @@ CREATE TABLE `news` (
 
 /*Data for the table `news` */
 
+/*Table structure for table `payment` */
+
+DROP TABLE IF EXISTS `payment`;
+
+CREATE TABLE `payment` (
+  `payment_id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) DEFAULT NULL COMMENT '订单类型',
+  `order_type` tinyint(4) NOT NULL COMMENT '3种类型，1为培训缴费，2为证书改动缴费，3为证书复核缴费',
+  `third_party_id` varchar(50) DEFAULT NULL COMMENT '第三方支付订单号',
+  `third_party_type` tinyint(4) DEFAULT NULL COMMENT '1为微信支付，2为支付宝支付，3为银行卡转账，4为线下支付',
+  `create_time` datetime DEFAULT NULL COMMENT '支付完成时间',
+  `amount` decimal(10,2) DEFAULT NULL COMMENT '支付金额',
+  `pay_or_not` tinyint(1) DEFAULT '0' COMMENT '1为已付款',
+  `receive_or_not` tinyint(1) DEFAULT '0' COMMENT '1为已收款',
+  PRIMARY KEY (`payment_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `payment` */
+
 /*Table structure for table `question` */
 
 DROP TABLE IF EXISTS `question`;
@@ -276,24 +313,18 @@ CREATE TABLE `question` (
   `choice_b` varchar(30) DEFAULT NULL COMMENT '选项B',
   `choice_c` varchar(30) DEFAULT NULL COMMENT '...',
   `choice_d` varchar(30) DEFAULT NULL,
-  `choice_e` varchar(30) DEFAULT NULL,
-  `choice_f` varchar(30) DEFAULT NULL,
-  `choice_g` varchar(30) DEFAULT NULL,
-  `choice_h` varchar(30) DEFAULT NULL,
   `right_choice_one` tinyint(4) DEFAULT NULL COMMENT '正确选项',
   `right_choice_two` tinyint(4) DEFAULT NULL COMMENT '1~8 1代表A',
   `right_choice_three` tinyint(4) DEFAULT NULL COMMENT '1~8 2代表B',
   `right_choice_four` tinyint(4) DEFAULT NULL COMMENT '1~8 3代表C',
-  `right_choice_five` tinyint(4) DEFAULT NULL COMMENT '...',
-  `right_choice_six` tinyint(4) DEFAULT NULL,
-  `right_choice_seven` tinyint(4) DEFAULT NULL,
-  `right_choice_eight` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`question_id`),
   KEY `training_id` (`training_id`),
   CONSTRAINT `question_ibfk_1` FOREIGN KEY (`training_id`) REFERENCES `training` (`training_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 /*Data for the table `question` */
+
+insert  into `question`(`question_id`,`training_id`,`question_state`,`type`,`choice_a`,`choice_b`,`choice_c`,`choice_d`,`right_choice_one`,`right_choice_two`,`right_choice_three`,`right_choice_four`) values (1,1,'以下属于物理层的设备是',0,'中继器','以太网交换机','桥','网关',1,NULL,NULL,NULL),(2,1,' 在以太网中，是根据___地址来区分不同的设备的.',0,'LLC地址','MAC地址','IP地址','IPX地址',2,NULL,NULL,NULL),(3,1,'下面哪种LAN 是应用CSMA/CD协议的',0,'令牌环','FDDI','ETHERNET','NOVELL',3,NULL,NULL,NULL),(4,1,'在路由器上可以出现的端口是',1,'Console端口','AUX端口','PCI端口','RJ45端口',1,2,4,NULL);
 
 /*Table structure for table `student` */
 
@@ -366,7 +397,9 @@ CREATE TABLE `training_order` (
   `student_id` int(11) DEFAULT NULL COMMENT '学员订单则不为空',
   `order_price` decimal(10,2) DEFAULT NULL COMMENT '订单金额',
   `order_begin_time` datetime DEFAULT NULL COMMENT '订单生成时间',
-  `state` tinyint(1) DEFAULT '0' COMMENT '0为未付款，1为已付款',
+  `payment_state` tinyint(1) DEFAULT '0' COMMENT '0为未付款，1为已付款',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `close` tinyint(1) DEFAULT '0' COMMENT '1为订单关闭',
   PRIMARY KEY (`training_order_id`),
   KEY `training_id` (`training_id`),
   KEY `member_id` (`member_id`),
@@ -475,6 +508,19 @@ CREATE TABLE `web_mail` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `web_mail` */
+
+/*Table structure for table `wxpay_log` */
+
+DROP TABLE IF EXISTS `wxpay_log`;
+
+CREATE TABLE `wxpay_log` (
+  `pay_order_id` varchar(50) NOT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `amount` decimal(10,2) DEFAULT NULL,
+  PRIMARY KEY (`pay_order_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `wxpay_log` */
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
