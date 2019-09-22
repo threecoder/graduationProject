@@ -46,8 +46,12 @@ export default new Router({
             ]
         },
         {
-            path: "/examIndex",
+            path: "/examIndex/:id",
             component: resolve => require(['@/views/personal/exam/examIndex.vue'], resolve)
+        },
+        {
+            path: "/exam/:id",
+            component: resolve => require(['@/views/personal/exam/exam.vue'], resolve)
         },
         {
             path: '/404',

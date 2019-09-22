@@ -16,13 +16,24 @@
                         <li><p>如果遇到考试异常，在考试时间内可以重新进入考试</p></li>
                     </ul>
                 </div>
-                <el-button class="button" type='primary'>进 入 考 试</el-button>
+                <el-button class="button" type='primary' @click="toExamIndex">进 入 考 试</el-button>
             </div>
         </div>
     </div>
 </template>
 <script>
-export default {};
+export default {
+    data(){
+        return {
+            examId: this.$router.id
+        }
+    },
+    methods: {
+        toExamIndex(){
+            this.$router.push({path:`/exam/${this.examId}`});
+        }
+    }
+};
 </script>
 <style lang="scss" scoped>
 .all-container {
@@ -48,6 +59,7 @@ export default {};
         }
     }
     .content {
+        font-size: 18px;
         h3 {
             color: rgb(64, 158, 255);
             font-weight: 400;
@@ -75,6 +87,7 @@ export default {};
         .button {
             min-width: 300px;
             height: 50px;
+            font-size: 18px;
         }
     }
 }
