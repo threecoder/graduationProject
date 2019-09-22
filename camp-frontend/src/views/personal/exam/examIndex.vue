@@ -2,17 +2,17 @@
     <div class="all-container">
         <div class="index-container">
             <div class="header">
-                <h1>课程名</h1>
+                <h1>{{examInfo.courseName}}</h1>
             </div>
             <div class="divider"></div>
             <div class="content">
                 <div>
-                    <h3>考试名称</h3>
+                    <h3>{{examInfo.examName}}</h3>
                     <h4>考试说明</h4>
                     <ul>
-                        <li><p>考试次数：剩余3次</p></li>
-                        <li><p>考试时长：2小时</p></li>
-                        <li><p>及格分数：60分</p></li>
+                        <li><p>考试次数：剩余{{examInfo.remainTimes}}次</p></li>
+                        <li><p>考试时长：{{examInfo.timeLength}}分钟</p></li>
+                        <li><p>及格分数：{{examInfo.pass}}分</p></li>
                         <li><p>如果遇到考试异常，在考试时间内可以重新进入考试</p></li>
                     </ul>
                 </div>
@@ -22,13 +22,30 @@
     </div>
 </template>
 <script>
+import { getExamIndexInfo } from '@/api/modules/exam.js'
 export default {
     data(){
         return {
-            examId: this.$router.id
+            examId: this.$route.params.id,
+            examInfo: {
+                courseName: "课程名称",
+                examName: "考试名称",
+                remainTimes: 3,
+                timeLength: 120,
+                pass: 60,
+            }
         }
     },
+    mounted(){
+        this.getIndexInfoByExamId();
+    },
     methods: {
+        async getIndexInfoByExamId(){
+            let res = await getExamIndexInfo(this.examId);
+            if(res){
+                this.examInfo = res.data;
+            }
+        },
         toExamIndex(){
             this.$router.push({path:`/exam/${this.examId}`});
         }

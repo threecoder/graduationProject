@@ -9,7 +9,7 @@
         </p>
         <ul v-if="type==1">
             <li v-for="(item,i) in arr" :key="i">
-                <el-radio v-model="choice[index-1]" :label="i+1">{{item}}</el-radio>
+                <el-radio v-model="choice[index-1]" :label="i+1">{{getWord(i)}}{{item}}</el-radio>
             </li>
         </ul>
         <template v-else>
@@ -43,6 +43,20 @@ export default {
                     this.choice[this.index-1].push(t+1);
                 }
             });
+        },
+        getWord(i){
+            switch(i){
+                case 0:
+                    return "A.";
+                case 1:
+                    return "B.";
+                case 2:
+                    return "C.";
+                case 3:
+                    return "D.";
+                default:
+                    return "";
+            }
         }
     }
 };

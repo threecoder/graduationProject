@@ -71,7 +71,7 @@ export default {
                     title: "我的考试",
                     children: [
                         { index: "/examTodo", title: "需要参加的考试"},
-                        { index: "", title: "已完成的考试"}
+                        { index: "/examDone", title: "已完成的考试"}
                     ]
                 },
                 {

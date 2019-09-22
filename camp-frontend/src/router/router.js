@@ -42,6 +42,11 @@ export default new Router({
                     path: '/examTodo',
                     name: 'examTodo',
                     component: resolve => require(['../views/personal/exam/examTodo.vue'], resolve)
+                },
+                {
+                    path: '/examDone',
+                    name: 'examDone',
+                    component: resolve => require(['../views/personal/exam/examDone.vue'], resolve)
                 }
             ]
         },
@@ -52,6 +57,10 @@ export default new Router({
         {
             path: "/exam/:id",
             component: resolve => require(['@/views/personal/exam/exam.vue'], resolve)
+        },
+        {
+            path: '/examDetail/:id',
+            component: resolve => require(['@/views/personal/exam/examDetail.vue'], resolve)
         },
         {
             path: '/404',

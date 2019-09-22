@@ -81,7 +81,7 @@ export default {
     .el-menu-item {
         margin: 0 1.5%;
     }
-    z-index: 999999;
+    z-index: 999;
 }
 .fixed {
     position: fixed;
