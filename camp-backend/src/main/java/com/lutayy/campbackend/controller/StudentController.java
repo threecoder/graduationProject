@@ -11,6 +11,7 @@ import java.sql.SQLClientInfoException;
 import java.util.Map;
 
 @Controller
+@RequestMapping("/student")
 public class StudentController {
 
     @Autowired

@@ -121,6 +121,7 @@ public class ExamServiceImpl implements ExamService {
         JSONObject data=new JSONObject();
         data.put("courseName", training.getTrainingName());
         data.put("examName", exam.getExamName());
+        data.put("timeLength", exam.getExamLengthMin());
         data.put("remainTimes", examReStudent.getRemainingTimes());
         data.put("pass", exam.getExamPass());//及格分数
         result.put("code", "success");

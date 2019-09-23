@@ -36,7 +36,7 @@ public class TokenFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse)resp;
         String url =request.getRequestURI();
 
-        if (url.contains("/register")||url.contains("/login")||url.contains(".")||url.equals("/")){
+        if (url.contains("/register")||url.contains("/login")||url.contains("/index")||url.contains(".")||url.equals("/")){
             chain.doFilter(request, response);
             return;
         }
@@ -50,6 +50,7 @@ public class TokenFilter implements Filter {
             resMessage.put("msg","未登录");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write(resMessage.toJSONString());
+            response.setContentType("application/json;charset=UTF-8");
             return;
         }
         for(int i=0;i<cookies.length;i++){
@@ -63,6 +64,7 @@ public class TokenFilter implements Filter {
             resMessage.put("msg","请重新登陆！");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write(resMessage.toJSONString());
+            response.setContentType("application/json;charset=UTF-8");
             return;
         }
         /**
@@ -99,6 +101,7 @@ public class TokenFilter implements Filter {
             resMessage.put("msg","请重新登陆！");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write(resMessage.toJSONString());
+            response.setContentType("application/json;charset=UTF-8");
             return;
         }
         chain.doFilter(request, resp);

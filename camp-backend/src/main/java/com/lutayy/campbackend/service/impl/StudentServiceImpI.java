@@ -95,6 +95,7 @@ public class StudentServiceImpI implements StudentService {
         data.put("position", student.getStudentPositon());
         data.put("province", student.getStudentProvince());
         data.put("city", student.getStudentCity());
+        data.put("area", student.getStudentArea());
         data.put("zone", student.getStudentAddress());
         result.put("code","success");
         result.put("msg", "查询成功！");
@@ -111,6 +112,7 @@ public class StudentServiceImpI implements StudentService {
         String position=jsonObject.getString("position");
         String province=jsonObject.getString("province");
         String city=jsonObject.getString("city");
+        String area=jsonObject.getString("area");
         String address=jsonObject.getString("zone");
 
         JSONObject result=new JSONObject();
@@ -152,6 +154,7 @@ public class StudentServiceImpI implements StudentService {
         }
         student.setStudentAddress(address);
         student.setStudentCity(city);
+        student.setStudentArea(area);
         student.setStudentProvince(province);
         student.setStudentEmail(email);
         student.setStudentName(name);
@@ -163,6 +166,7 @@ public class StudentServiceImpI implements StudentService {
             cookie.setMaxAge(0);
             cookie.setPath("/");
             response.addCookie(cookie);
+            response.setContentType("application/json;charset=UTF-8");
             result.put("code", "success");
             result.put("msg","信息修改成功，请重新登录！");
         }else{

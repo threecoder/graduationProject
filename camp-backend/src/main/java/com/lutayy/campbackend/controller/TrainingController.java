@@ -15,7 +15,7 @@ public class TrainingController {
     @Autowired
     TrainingService trainingService;
 
-    @RequestMapping("/getCourses")
+    @RequestMapping("/index/getCourses")
     @ResponseBody
     public JSONObject getCourses(@RequestBody JSONObject jsonObject){
 

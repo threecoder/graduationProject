@@ -794,6 +794,76 @@ public class StudentExample {
             return (Criteria) this;
         }
 
+        public Criteria andStudentAreaIsNull() {
+            addCriterion("student_area is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentAreaIsNotNull() {
+            addCriterion("student_area is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentAreaEqualTo(String value) {
+            addCriterion("student_area =", value, "studentArea");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentAreaNotEqualTo(String value) {
+            addCriterion("student_area <>", value, "studentArea");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentAreaGreaterThan(String value) {
+            addCriterion("student_area >", value, "studentArea");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentAreaGreaterThanOrEqualTo(String value) {
+            addCriterion("student_area >=", value, "studentArea");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentAreaLessThan(String value) {
+            addCriterion("student_area <", value, "studentArea");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentAreaLessThanOrEqualTo(String value) {
+            addCriterion("student_area <=", value, "studentArea");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentAreaLike(String value) {
+            addCriterion("student_area like", value, "studentArea");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentAreaNotLike(String value) {
+            addCriterion("student_area not like", value, "studentArea");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentAreaIn(List<String> values) {
+            addCriterion("student_area in", values, "studentArea");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentAreaNotIn(List<String> values) {
+            addCriterion("student_area not in", values, "studentArea");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentAreaBetween(String value1, String value2) {
+            addCriterion("student_area between", value1, value2, "studentArea");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentAreaNotBetween(String value1, String value2) {
+            addCriterion("student_area not between", value1, value2, "studentArea");
+            return (Criteria) this;
+        }
+
         public Criteria andStudentAddressIsNull() {
             addCriterion("student_address is null");
             return (Criteria) this;

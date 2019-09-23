@@ -23,6 +23,8 @@ public class Student implements Serializable {
 
     private String studentCity;
 
+    private String studentArea;
+
     private String studentAddress;
 
     private static final long serialVersionUID = 1L;
@@ -105,6 +107,14 @@ public class Student implements Serializable {
 
     public void setStudentCity(String studentCity) {
         this.studentCity = studentCity;
+    }
+
+    public String getStudentArea() {
+        return studentArea;
+    }
+
+    public void setStudentArea(String studentArea) {
+        this.studentArea = studentArea;
     }
 
     public String getStudentAddress() {
