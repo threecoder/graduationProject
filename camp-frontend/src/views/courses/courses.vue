@@ -23,7 +23,12 @@ export default {
                 pageSize: 10,
                 currentPage: 1
             },
-            searchPar: null,
+            searchPar: {
+                keyWord:"",
+                date:null,
+                startDate:"",
+                endDate:""
+            },
             list: [
                 {
                     url:
@@ -105,7 +110,7 @@ export default {
         }
     },
     mounted() {
-        this.searchCourses();
+        // this.searchCourses();
     },
     methods: {
         curChange(val) {
@@ -116,15 +121,14 @@ export default {
             if (par) {
                 this.searchPar = par;
             }
-            this.searchPar = par;
             let params = {
-                ...par,
+                ...this.searchPar,
                 ...this.pagination,
                 type: this.type
             };
             let res = await getCourses(params);
             console.log(res);
-            this.list = res.data.data;
+            this.list = res.data.list;
             this.pagination.total = res.data.allNum;
             this.pagination.currentPage = res.data.currentPage;
         }

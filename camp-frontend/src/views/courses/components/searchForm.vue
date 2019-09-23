@@ -33,8 +33,10 @@ export default {
     data() {
         return {
             searchParams: {
-                keyWord:null,
-                date:null
+                keyWord:"",
+                date:null,
+                startDate:"",
+                endDate:""
             }
         };
     },
@@ -47,7 +49,7 @@ export default {
                 par.startDate = formatDate(this.searchParams.date[0]),
                 par.endDate = formatDate(this.searchParams.date[1])
             }else{
-                par.startDate = par.endDate = null;
+                par.startDate = par.endDate = "";
             }
             this.$emit("searchInfo",par);
         }

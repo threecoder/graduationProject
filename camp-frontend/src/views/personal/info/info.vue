@@ -3,7 +3,7 @@
         <h2>个人信息</h2>
         <div>
             <span class="panel-title">基本信息</span>
-            <el-form :model="info">
+            <el-form :model="info" v-loading="loading">
                 <el-row :gutter="40">
                     <el-col :span="8">
                         <el-form-item label-position="top" label="身份证号码">
@@ -40,38 +40,22 @@
                     <el-col :span="12">
                         <el-form-item label-position="top" label="地址">
                             <el-input
+                                id="zone-input"
                                 v-model="info.zone"
                                 class="input-with-select"
                                 placeholder="请输入具体地址"
                                 :readonly="readOnly"
                             >
-                                <v-distpicker province="广东省" city="广州市" area="海珠区" slot="prepend"></v-distpicker>
-                                <!-- <el-select
-                                    slot="prepend"
-                                    v-model="info.province"
-                                    placeholder="请选择省份"
+                                <v-distpicker
+                                    v-on:province="changeProvince"
+                                    v-on:city="changeCity"
+                                    v-on:area="changeArea"
                                     :disabled="readOnly"
-                                >
-                                    <el-option
-                                        v-for="item in provinceOptions"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value"
-                                    ></el-option>
-                                </el-select>
-                                <el-select
+                                    :province="info.province"
+                                    :city="info.city"
+                                    :area="info.area"
                                     slot="prepend"
-                                    v-model="info.city"
-                                    placeholder="请选择城市"
-                                    :disabled="readOnly"
-                                >
-                                    <el-option
-                                        v-for="item in cityOptions"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value"
-                                    ></el-option>
-                                </el-select> -->
+                                ></v-distpicker>
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -97,7 +81,11 @@
                     <el-input v-model="password.newPassword" autocomplete="off" type="password"></el-input>
                 </el-form-item>
                 <el-form-item label="确认新密码" :label-width="formLabelWidth">
-                    <el-input v-model="password.newPasswordAgain" autocomplete="off" type="password"></el-input>
+                    <el-input
+                        v-model="password.newPasswordAgain"
+                        autocomplete="off"
+                        type="password"
+                    ></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -121,43 +109,66 @@ export default {
                 position: null,
                 province: null,
                 city: null,
+                area: null,
                 zone: null
             },
             readOnly: true,
             provinceOptions: [],
             cityOptions: [],
             dialogFormVisible: false,
-            formLabelWidth: '120px',
+            formLabelWidth: "120px",
             password: {
                 oldPassword: null,
                 newPassword: null,
                 newPasswordAgain: null
-            }
+            },
+            loading:false,
+            confirmLoading: false
         };
     },
-    watch:{
-        dialogFormVisible(){
-            if(this.dialogFormVisible == false){
+    watch: {
+        dialogFormVisible() {
+            if (this.dialogFormVisible == false) {
                 this.password = {
                     oldPassword: null,
                     newPassword: null,
                     newPasswordAgain: null
-                }
+                };
             }
         }
     },
+    mounted() {
+        this.getUserInfo();
+    },
     methods: {
         async getUserInfo() {
+            this.loading = true;
             let res = await getInfo();
             this.info = res.data;
+            this.loading = false;
         },
         async setUserInfo() {
+            this.confirmLoading = true;
             let res = await setInfo(this.info);
             this.$message.success(res.msg);
+            this.readOnly = true;
+            this.confirmLoading = false;
         },
-        async setNewPassword(){
+        async setNewPassword() {
+            this.confirmLoading = true;
             let res = await setPassword(this.password);
             this.$message.success(res.msg);
+            this.dialogFormVisible = false;
+            this.confirmLoading = false;
+        },
+        changeProvince(val) {
+            this.info.province = val.value;
+        },
+        changeCity(val) {
+            this.info.city = val.value;
+        },
+        changeArea(val) {
+            this.info.city = val.value;
         }
     }
 };
@@ -172,13 +183,16 @@ export default {
     ::v-deep .distpicker-address-wrapper {
         select {
             border: 0;
-            background-color: #F5F7FA;
+            background-color: #f5f7fa;
         }
     }
     .modifyButton {
         position: absolute;
         top: 35px;
         right: 5%;
+    }
+    ::v-deep #zone-input {
+        min-width: 300px!important;
     }
 }
 </style>

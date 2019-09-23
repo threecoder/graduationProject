@@ -57,6 +57,7 @@ Axios.interceptors.response.use(
         if(!error.response){
             element.Message.error("服务器异常");
         }
+        mainProcess.$message.error("请求出错啦");
         return Promise.reject(error);
     }
 )
