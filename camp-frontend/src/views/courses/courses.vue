@@ -110,7 +110,7 @@ export default {
         }
     },
     mounted() {
-        // this.searchCourses();
+        this.searchCourses();
     },
     methods: {
         curChange(val) {

@@ -57,7 +57,9 @@ export default {
                 if (res) {
                     this.examList = res.data;
                 }
-            } catch (error) {}
+            } catch (error) {
+                this.$message.error("获取已完成试卷失败，请刷新重试")
+            }
         }
     }
 };

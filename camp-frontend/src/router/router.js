@@ -47,6 +47,11 @@ export default new Router({
                     path: '/examDone',
                     name: 'examDone',
                     component: resolve => require(['../views/personal/exam/examDone.vue'], resolve)
+                },
+                {
+                    path: '/activities/:id',
+                    name: 'activities',
+                    component: resolve => require(['../views/personal/activities/joinable.vue'], resolve)
                 }
             ]
         },
