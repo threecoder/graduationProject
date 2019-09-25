@@ -24,11 +24,73 @@ CREATE TABLE `activity` (
   `activity_id` int(11) NOT NULL AUTO_INCREMENT,
   `activity_fee` decimal(10,2) DEFAULT NULL COMMENT '活动价格',
   `activity_name` varchar(20) DEFAULT NULL COMMENT '活动名称',
-  `activity_introduction` text COMMENT '活动介绍',
+  `activity_introduction` varchar(1000) DEFAULT NULL COMMENT '活动介绍',
+  `activity_date` datetime DEFAULT NULL COMMENT '活动开始时间',
+  `activity_length_min` int(11) DEFAULT NULL COMMENT '活动时长(分钟)',
+  `contacts` varchar(50) DEFAULT NULL COMMENT '联系人 联系方式',
+  `activity_address` varchar(200) DEFAULT NULL COMMENT '活动地址',
   PRIMARY KEY (`activity_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `activity` */
+
+/*Table structure for table `activity_order` */
+
+DROP TABLE IF EXISTS `activity_order`;
+
+CREATE TABLE `activity_order` (
+  `activity_order_id` varchar(20) NOT NULL,
+  `activity_id` int(11) DEFAULT NULL,
+  `order_type` tinyint(1) DEFAULT NULL COMMENT '0为会员下的订单，1为学员下的订单',
+  `member_id` varchar(20) DEFAULT NULL COMMENT '会员订单则不为空',
+  `student_id` int(11) DEFAULT NULL COMMENT '学员订单则不为空',
+  `order_price` decimal(10,2) DEFAULT NULL COMMENT '订单金额',
+  `order_begin_time` datetime DEFAULT NULL,
+  `payment_state` tinyint(1) DEFAULT NULL COMMENT '0为未付款，1为已付款',
+  `close` tinyint(1) DEFAULT '0' COMMENT '1为订单关闭',
+  PRIMARY KEY (`activity_order_id`),
+  KEY `activity_id` (`activity_id`),
+  KEY `member_id` (`member_id`),
+  KEY `student_id` (`student_id`),
+  CONSTRAINT `activity_order_ibfk_1` FOREIGN KEY (`activity_id`) REFERENCES `activity` (`activity_id`),
+  CONSTRAINT `activity_order_ibfk_2` FOREIGN KEY (`member_id`) REFERENCES `member` (`member_id`),
+  CONSTRAINT `activity_order_ibfk_3` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `activity_order` */
+
+/*Table structure for table `activity_order_student` */
+
+DROP TABLE IF EXISTS `activity_order_student`;
+
+CREATE TABLE `activity_order_student` (
+  `activity_order_id` varchar(20) DEFAULT NULL,
+  `student_id` int(11) DEFAULT NULL,
+  KEY `activity_order_id` (`activity_order_id`),
+  KEY `student_id` (`student_id`),
+  CONSTRAINT `activity_order_student_ibfk_1` FOREIGN KEY (`activity_order_id`) REFERENCES `activity_order` (`activity_order_id`),
+  CONSTRAINT `activity_order_student_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `activity_order_student` */
+
+/*Table structure for table `activity_student` */
+
+DROP TABLE IF EXISTS `activity_student`;
+
+CREATE TABLE `activity_student` (
+  `activity_id` int(11) DEFAULT NULL,
+  `student_id` int(11) DEFAULT NULL,
+  `apply_time` datetime DEFAULT NULL COMMENT '报名时间',
+  `is_success` tinyint(1) DEFAULT NULL COMMENT '1为报名成功',
+  `seat_number` varchar(15) DEFAULT NULL COMMENT '座位号',
+  KEY `student_id` (`student_id`),
+  KEY `activity_id` (`activity_id`),
+  CONSTRAINT `activity_student_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`),
+  CONSTRAINT `activity_student_ibfk_2` FOREIGN KEY (`activity_id`) REFERENCES `activity` (`activity_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `activity_student` */
 
 /*Table structure for table `alipay_log` */
 
@@ -99,7 +161,6 @@ CREATE TABLE `certificate_change_order` (
   `order_price` decimal(10,2) DEFAULT NULL COMMENT '订单金额',
   `order_begin_time` datetime DEFAULT NULL COMMENT '订单生成时间',
   `payment_state` tinyint(1) DEFAULT NULL COMMENT '0为未付款，1为已付款',
-  `create_time` datetime DEFAULT NULL COMMENT '订单创建时间',
   `close` tinyint(1) DEFAULT '0' COMMENT '1为订单关闭',
   PRIMARY KEY (`certificate_change_order_id`),
   KEY `certificate_id` (`certificate_id`),
@@ -139,7 +200,6 @@ CREATE TABLE `certificate_recheck_order` (
   `order_price` decimal(10,2) DEFAULT NULL COMMENT '订单金额',
   `order_begin_time` datetime DEFAULT NULL COMMENT '订单生成时间',
   `payment_state` tinyint(1) DEFAULT NULL COMMENT '0为未付款，1为已付款',
-  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `close` tinyint(1) DEFAULT NULL COMMENT '1为订单关闭',
   PRIMARY KEY (`certificate_recheck_order_id`),
   KEY `certificate_id` (`certificate_id`),
@@ -187,24 +247,48 @@ CREATE TABLE `exam` (
 
 /*Data for the table `exam` */
 
-insert  into `exam`(`exam_id`,`exam_name`,`training_id`,`exam_num`,`exam_pass`,`exam_length_min`,`exam_start_time`,`exam_end_time`,`exam_date`) values (1,'质量测试',1,20,60,60,'12:00:00','14:00:00','2019-09-26'),(2,'食品测试',2,20,55,80,'13:00:00','15:00:00','2019-10-01'),(3,'监督测试',3,20,65,70,'14:00:00','16:00:00','2019-09-22'),(4,'网络建设',4,30,60,60,'18:00:00','20:00:00','2019-11-22');
+insert  into `exam`(`exam_id`,`exam_name`,`training_id`,`exam_num`,`exam_pass`,`exam_length_min`,`exam_start_time`,`exam_end_time`,`exam_date`) values (1,'质量测试',1,20,55,60,'12:00:00','14:00:00','2019-09-26'),(2,'食品测试',2,20,55,80,'13:00:00','15:00:00','2019-10-01'),(3,'监督测试',3,20,65,70,'14:00:00','16:00:00','2019-09-22'),(4,'网络建设',4,30,60,60,'18:00:00','20:00:00','2019-11-22');
+
+/*Table structure for table `exam_question_student_answer` */
+
+DROP TABLE IF EXISTS `exam_question_student_answer`;
+
+CREATE TABLE `exam_question_student_answer` (
+  `exam_id` int(11) NOT NULL COMMENT '学生试题答案表',
+  `question_id` int(11) NOT NULL,
+  `student_id` int(11) NOT NULL,
+  `answer_one` tinyint(4) DEFAULT NULL,
+  `answer_two` tinyint(4) DEFAULT NULL,
+  `answer_three` tinyint(4) DEFAULT NULL,
+  `answer_four` tinyint(4) DEFAULT NULL,
+  PRIMARY KEY (`exam_id`,`question_id`,`student_id`),
+  KEY `student_id` (`student_id`),
+  CONSTRAINT `exam_question_student_answer_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`),
+  CONSTRAINT `exam_question_student_answer_ibfk_3` FOREIGN KEY (`exam_id`, `question_id`) REFERENCES `exam_re_question` (`exam_id`, `question_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `exam_question_student_answer` */
+
+insert  into `exam_question_student_answer`(`exam_id`,`question_id`,`student_id`,`answer_one`,`answer_two`,`answer_three`,`answer_four`) values (1,1,1,1,NULL,NULL,NULL),(1,2,1,3,NULL,NULL,NULL),(1,3,1,2,NULL,NULL,NULL),(1,4,1,1,4,3,NULL);
 
 /*Table structure for table `exam_re_question` */
 
 DROP TABLE IF EXISTS `exam_re_question`;
 
 CREATE TABLE `exam_re_question` (
-  `exam_id` int(11) DEFAULT NULL,
-  `question_id` int(11) DEFAULT NULL,
+  `exam_id` int(11) NOT NULL,
+  `question_id` int(11) NOT NULL,
+  `score` int(11) DEFAULT NULL COMMENT '题目在该试卷中的分数',
+  `question_index` int(11) DEFAULT NULL COMMENT '题目在该试卷中的序号',
+  PRIMARY KEY (`exam_id`,`question_id`),
   KEY `question_id` (`question_id`),
-  KEY `exam_id` (`exam_id`),
-  CONSTRAINT `exam_re_question_ibfk_1` FOREIGN KEY (`question_id`) REFERENCES `question` (`question_id`),
-  CONSTRAINT `exam_re_question_ibfk_2` FOREIGN KEY (`exam_id`) REFERENCES `exam` (`exam_id`)
+  CONSTRAINT `exam_re_question_ibfk_1` FOREIGN KEY (`exam_id`) REFERENCES `exam` (`exam_id`),
+  CONSTRAINT `exam_re_question_ibfk_2` FOREIGN KEY (`question_id`) REFERENCES `question` (`question_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `exam_re_question` */
 
-insert  into `exam_re_question`(`exam_id`,`question_id`) values (1,1),(1,2),(1,3),(1,4);
+insert  into `exam_re_question`(`exam_id`,`question_id`,`score`,`question_index`) values (1,1,5,1),(1,2,6,2),(1,3,7,3),(1,4,7,4);
 
 /*Table structure for table `exam_re_student` */
 
@@ -215,6 +299,7 @@ CREATE TABLE `exam_re_student` (
   `student_id` int(11) DEFAULT NULL,
   `score` int(6) DEFAULT NULL COMMENT '考试分数',
   `remaining_times` tinyint(4) DEFAULT '3' COMMENT '可重考剩余次数',
+  `is_invalid` tinyint(1) DEFAULT '0' COMMENT '1为无效(考试不通过)',
   KEY `exam_id` (`exam_id`),
   KEY `student_id` (`student_id`),
   CONSTRAINT `exam_re_student_ibfk_1` FOREIGN KEY (`exam_id`) REFERENCES `exam` (`exam_id`),
@@ -223,7 +308,7 @@ CREATE TABLE `exam_re_student` (
 
 /*Data for the table `exam_re_student` */
 
-insert  into `exam_re_student`(`exam_id`,`student_id`,`score`,`remaining_times`) values (1,1,55,2),(2,1,45,2),(1,2,34,2),(3,1,NULL,3),(4,1,NULL,3);
+insert  into `exam_re_student`(`exam_id`,`student_id`,`score`,`remaining_times`,`is_invalid`) values (1,1,55,2,0),(1,2,34,1,0),(2,1,41,0,0),(4,1,56,1,0);
 
 /*Table structure for table `member` */
 
@@ -399,7 +484,6 @@ CREATE TABLE `training_order` (
   `order_price` decimal(10,2) DEFAULT NULL COMMENT '订单金额',
   `order_begin_time` datetime DEFAULT NULL COMMENT '订单生成时间',
   `payment_state` tinyint(1) DEFAULT '0' COMMENT '0为未付款，1为已付款',
-  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `close` tinyint(1) DEFAULT '0' COMMENT '1为订单关闭',
   PRIMARY KEY (`training_order_id`),
   KEY `training_id` (`training_id`),
@@ -435,6 +519,7 @@ CREATE TABLE `training_re_student` (
   `training_id` int(11) DEFAULT NULL,
   `student_id` int(11) DEFAULT NULL,
   `begin_time` datetime DEFAULT NULL COMMENT '报名时间',
+  `is_invalid` tinyint(1) DEFAULT '0' COMMENT '1为无效(考试不通过)',
   KEY `training_id` (`training_id`),
   KEY `student_id` (`student_id`),
   CONSTRAINT `training_re_student_ibfk_1` FOREIGN KEY (`training_id`) REFERENCES `training` (`training_id`),
@@ -443,7 +528,7 @@ CREATE TABLE `training_re_student` (
 
 /*Data for the table `training_re_student` */
 
-insert  into `training_re_student`(`training_id`,`student_id`,`begin_time`) values (1,1,'2019-09-14 23:20:23'),(1,2,'2019-09-19 23:20:29');
+insert  into `training_re_student`(`training_id`,`student_id`,`begin_time`,`is_invalid`) values (1,1,'2019-09-14 23:20:23',0),(1,2,'2019-09-19 23:20:29',0);
 
 /*Table structure for table `vote` */
 
