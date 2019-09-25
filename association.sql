@@ -29,10 +29,14 @@ CREATE TABLE `activity` (
   `activity_length_min` int(11) DEFAULT NULL COMMENT '活动时长(分钟)',
   `contacts` varchar(50) DEFAULT NULL COMMENT '联系人 联系方式',
   `activity_address` varchar(200) DEFAULT NULL COMMENT '活动地址',
+  `open_time` datetime DEFAULT NULL COMMENT '开放报名时间',
+  `close_time` datetime DEFAULT NULL COMMENT '关闭报名时间',
   PRIMARY KEY (`activity_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 /*Data for the table `activity` */
+
+insert  into `activity`(`activity_id`,`activity_fee`,`activity_name`,`activity_introduction`,`activity_date`,`activity_length_min`,`contacts`,`activity_address`,`open_time`,`close_time`) values (1,'188.88','垃圾分类讲解','  今年夏天，垃圾分类无疑是最火的话题。作为全国46个垃圾分类试点城市之一，长沙市围绕垃圾分类开展了形式多样、内容丰富的宣传活动，趣味游戏、知识宣讲、在线答题、儿童手抄报……一场全民参与、声势浩大的“全民生活垃圾分类之旅”让环保理念深植人心。','2019-10-01 20:00:00',60,'王先生 13332122312','广东省广州市华南理工大学大学城校区','2019-09-25 20:00:00','2019-10-09 02:32:42'),(2,'299.99','英语角','  我们的英语俱乐部旨在为大家创造一个英语的交流环境，让所有想学英语，想说好英语的人们，在这样一个极具特色的氛围中学好英语，在外语老师的引导下，大家会积极交流，大胆开口说，培养纯正的外语语感，让你更加自信说英语，并结交更多的外国友人，避免找个好工作， 而因为英语困惑自己~~~~','2019-09-30 15:00:00',120,'李先生 13332122312','广东省广州市华南理工大学大学城校区','2019-09-25 13:00:00','2019-09-26 00:32:46'),(3,'199.99','“拥抱春天，播种绿色”植树节活动','  植树节是按照法律规定宣传保护树木，并组织动员群众积极参加以植树造林为活动内容的节日。按时间长短可分为植树日、植树周和植树月，共称为国际植树节。提倡通过这种活动，激发人们爱林造林的热情、意识到环保的重要性。',NULL,NULL,'李先生 13332122312','广东省广州市华南理工大学大学城校区','2019-09-24 02:28:46','2019-09-30 02:32:52');
 
 /*Table structure for table `activity_order` */
 
@@ -82,7 +86,7 @@ CREATE TABLE `activity_student` (
   `activity_id` int(11) DEFAULT NULL,
   `student_id` int(11) DEFAULT NULL,
   `apply_time` datetime DEFAULT NULL COMMENT '报名时间',
-  `is_success` tinyint(1) DEFAULT NULL COMMENT '1为报名成功',
+  `is_success` tinyint(1) DEFAULT '0' COMMENT '1为报名成功',
   `seat_number` varchar(15) DEFAULT NULL COMMENT '座位号',
   KEY `student_id` (`student_id`),
   KEY `activity_id` (`activity_id`),
@@ -91,6 +95,8 @@ CREATE TABLE `activity_student` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `activity_student` */
+
+insert  into `activity_student`(`activity_id`,`student_id`,`apply_time`,`is_success`,`seat_number`) values (1,1,'2019-09-25 01:39:09',0,''),(2,1,'2019-09-24 01:39:49',1,'A10');
 
 /*Table structure for table `alipay_log` */
 
@@ -359,6 +365,7 @@ CREATE TABLE `news` (
   `description` text COMMENT '简介',
   `content` text COMMENT '内容',
   `post_time` datetime DEFAULT NULL COMMENT '发布时间',
+  `type` varchar(10) DEFAULT NULL COMMENT '新闻类别',
   PRIMARY KEY (`news_id`),
   KEY `as_admin_id` (`as_admin_id`),
   CONSTRAINT `news_ibfk_1` FOREIGN KEY (`as_admin_id`) REFERENCES `as_admin` (`as_admin_id`)
