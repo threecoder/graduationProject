@@ -14,8 +14,7 @@ Vue.prototype.$msbox = element.MessageBox;
 Vue.prototype.confirm = element.MessageBox.confirm;
 
 Vue.use(element);
-Vue.component('v-distpicker',Distpicker) 
-Vue.config.productionTip = false
+Vue.component('v-distpicker',Distpicker)
 //配置路由拦截
 router.beforeEach((to, from, next) => {
     let token = document.cookie.indexOf("token");
@@ -41,7 +40,6 @@ Axios.interceptors.response.use(
                 router.push({path:'/login'});
                 return Promise.reject(response.data);
             }else{
-                console.log(response);
                 mainProcess.$message.error(response.data.msg);
                 return Promise.reject(response);
             }
@@ -57,7 +55,6 @@ Axios.interceptors.response.use(
         if(!error.response){
             element.Message.error("服务器异常");
         }
-        mainProcess.$message.error("请求出错啦");
         return Promise.reject(error);
     }
 )

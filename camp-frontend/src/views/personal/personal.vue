@@ -78,8 +78,8 @@ export default {
                     index: "4",
                     title: "我的活动",
                     children: [
-                        { index: "",title: "可报名活动"},
-                        { index: "",title: "已报名活动"}
+                        { index: "/activities/0",title: "可报名活动"},
+                        { index: "/activities/1",title: "已报名活动"}
                     ]
                 },
                 {

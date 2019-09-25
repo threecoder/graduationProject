@@ -100,7 +100,7 @@ export default {
                 password: Encrypt(this.userForm.password)
             };
 
-            request("/campback/login", params, "post").then(res => {
+            request("/campback/student/login", params, "post").then(res => {
                 // console.log(res);
                 this.$message.success(res.msg)
                 this.$router.push({
