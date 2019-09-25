@@ -223,6 +223,126 @@ public class ExamReQuestionExample {
             addCriterion("question_id not between", value1, value2, "questionId");
             return (Criteria) this;
         }
+
+        public Criteria andScoreIsNull() {
+            addCriterion("score is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andScoreIsNotNull() {
+            addCriterion("score is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andScoreEqualTo(Integer value) {
+            addCriterion("score =", value, "score");
+            return (Criteria) this;
+        }
+
+        public Criteria andScoreNotEqualTo(Integer value) {
+            addCriterion("score <>", value, "score");
+            return (Criteria) this;
+        }
+
+        public Criteria andScoreGreaterThan(Integer value) {
+            addCriterion("score >", value, "score");
+            return (Criteria) this;
+        }
+
+        public Criteria andScoreGreaterThanOrEqualTo(Integer value) {
+            addCriterion("score >=", value, "score");
+            return (Criteria) this;
+        }
+
+        public Criteria andScoreLessThan(Integer value) {
+            addCriterion("score <", value, "score");
+            return (Criteria) this;
+        }
+
+        public Criteria andScoreLessThanOrEqualTo(Integer value) {
+            addCriterion("score <=", value, "score");
+            return (Criteria) this;
+        }
+
+        public Criteria andScoreIn(List<Integer> values) {
+            addCriterion("score in", values, "score");
+            return (Criteria) this;
+        }
+
+        public Criteria andScoreNotIn(List<Integer> values) {
+            addCriterion("score not in", values, "score");
+            return (Criteria) this;
+        }
+
+        public Criteria andScoreBetween(Integer value1, Integer value2) {
+            addCriterion("score between", value1, value2, "score");
+            return (Criteria) this;
+        }
+
+        public Criteria andScoreNotBetween(Integer value1, Integer value2) {
+            addCriterion("score not between", value1, value2, "score");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionIndexIsNull() {
+            addCriterion("question_index is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionIndexIsNotNull() {
+            addCriterion("question_index is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionIndexEqualTo(Integer value) {
+            addCriterion("question_index =", value, "questionIndex");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionIndexNotEqualTo(Integer value) {
+            addCriterion("question_index <>", value, "questionIndex");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionIndexGreaterThan(Integer value) {
+            addCriterion("question_index >", value, "questionIndex");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionIndexGreaterThanOrEqualTo(Integer value) {
+            addCriterion("question_index >=", value, "questionIndex");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionIndexLessThan(Integer value) {
+            addCriterion("question_index <", value, "questionIndex");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionIndexLessThanOrEqualTo(Integer value) {
+            addCriterion("question_index <=", value, "questionIndex");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionIndexIn(List<Integer> values) {
+            addCriterion("question_index in", values, "questionIndex");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionIndexNotIn(List<Integer> values) {
+            addCriterion("question_index not in", values, "questionIndex");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionIndexBetween(Integer value1, Integer value2) {
+            addCriterion("question_index between", value1, value2, "questionIndex");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionIndexNotBetween(Integer value1, Integer value2) {
+            addCriterion("question_index not between", value1, value2, "questionIndex");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

@@ -11,6 +11,8 @@ public class ExamReStudent implements Serializable {
 
     private Byte remainingTimes;
 
+    private Boolean isInvalid;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getExamId() {
@@ -43,5 +45,13 @@ public class ExamReStudent implements Serializable {
 
     public void setRemainingTimes(Byte remainingTimes) {
         this.remainingTimes = remainingTimes;
+    }
+
+    public Boolean getIsInvalid() {
+        return isInvalid;
+    }
+
+    public void setIsInvalid(Boolean isInvalid) {
+        this.isInvalid = isInvalid;
     }
 }

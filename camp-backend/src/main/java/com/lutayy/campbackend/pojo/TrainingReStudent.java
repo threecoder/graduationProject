@@ -10,6 +10,8 @@ public class TrainingReStudent implements Serializable {
 
     private Date beginTime;
 
+    private Boolean isInvalid;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getTrainingId() {
@@ -34,5 +36,13 @@ public class TrainingReStudent implements Serializable {
 
     public void setBeginTime(Date beginTime) {
         this.beginTime = beginTime;
+    }
+
+    public Boolean getIsInvalid() {
+        return isInvalid;
+    }
+
+    public void setIsInvalid(Boolean isInvalid) {
+        this.isInvalid = isInvalid;
     }
 }

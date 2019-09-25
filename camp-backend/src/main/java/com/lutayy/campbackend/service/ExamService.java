@@ -10,7 +10,11 @@ public interface ExamService {
 
     JSONObject getTodoExamList(String idcard);
 
+    JSONObject getDoneExamList(String idcard);
+
     JSONObject getExamInfo(JSONObject jsonObject);
 
     JSONObject getExamQuestions(JSONObject jsonObject);
+
+    JSONObject getExamDetail(JSONObject jsonObject);
 }

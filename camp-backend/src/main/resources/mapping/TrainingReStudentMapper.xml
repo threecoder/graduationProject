@@ -5,6 +5,7 @@
     <result column="training_id" jdbcType="INTEGER" property="trainingId" />
     <result column="student_id" jdbcType="INTEGER" property="studentId" />
     <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime" />
+    <result column="is_invalid" jdbcType="BIT" property="isInvalid" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -65,7 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    training_id, student_id, begin_time
+    training_id, student_id, begin_time, is_invalid
   </sql>
   <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.TrainingReStudentExample" resultMap="BaseResultMap">
     select
@@ -88,10 +89,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.lutayy.campbackend.pojo.TrainingReStudent">
-    insert into training_re_student (training_id, student_id, begin_time
-      )
-    values (#{trainingId,jdbcType=INTEGER}, #{studentId,jdbcType=INTEGER}, #{beginTime,jdbcType=TIMESTAMP}
-      )
+    insert into training_re_student (training_id, student_id, begin_time, 
+      is_invalid)
+    values (#{trainingId,jdbcType=INTEGER}, #{studentId,jdbcType=INTEGER}, #{beginTime,jdbcType=TIMESTAMP}, 
+      #{isInvalid,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.TrainingReStudent">
     insert into training_re_student
@@ -105,6 +106,9 @@
       <if test="beginTime != null">
         begin_time,
       </if>
+      <if test="isInvalid != null">
+        is_invalid,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="trainingId != null">
@@ -115,6 +119,9 @@
       </if>
       <if test="beginTime != null">
         #{beginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isInvalid != null">
+        #{isInvalid,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -136,6 +143,9 @@
       <if test="record.beginTime != null">
         begin_time = #{record.beginTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.isInvalid != null">
+        is_invalid = #{record.isInvalid,jdbcType=BIT},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -145,7 +155,8 @@
     update training_re_student
     set training_id = #{record.trainingId,jdbcType=INTEGER},
       student_id = #{record.studentId,jdbcType=INTEGER},
-      begin_time = #{record.beginTime,jdbcType=TIMESTAMP}
+      begin_time = #{record.beginTime,jdbcType=TIMESTAMP},
+      is_invalid = #{record.isInvalid,jdbcType=BIT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

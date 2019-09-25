@@ -3,14 +3,14 @@ package com.lutayy.campbackend.pojo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExamReStudentExample {
+public class ExamQuestionStudentAnswerExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public ExamReStudentExample() {
+    public ExamQuestionStudentAnswerExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -164,6 +164,66 @@ public class ExamReStudentExample {
             return (Criteria) this;
         }
 
+        public Criteria andQuestionIdIsNull() {
+            addCriterion("question_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionIdIsNotNull() {
+            addCriterion("question_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionIdEqualTo(Integer value) {
+            addCriterion("question_id =", value, "questionId");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionIdNotEqualTo(Integer value) {
+            addCriterion("question_id <>", value, "questionId");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionIdGreaterThan(Integer value) {
+            addCriterion("question_id >", value, "questionId");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("question_id >=", value, "questionId");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionIdLessThan(Integer value) {
+            addCriterion("question_id <", value, "questionId");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionIdLessThanOrEqualTo(Integer value) {
+            addCriterion("question_id <=", value, "questionId");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionIdIn(List<Integer> values) {
+            addCriterion("question_id in", values, "questionId");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionIdNotIn(List<Integer> values) {
+            addCriterion("question_id not in", values, "questionId");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionIdBetween(Integer value1, Integer value2) {
+            addCriterion("question_id between", value1, value2, "questionId");
+            return (Criteria) this;
+        }
+
+        public Criteria andQuestionIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("question_id not between", value1, value2, "questionId");
+            return (Criteria) this;
+        }
+
         public Criteria andStudentIdIsNull() {
             addCriterion("student_id is null");
             return (Criteria) this;
@@ -224,183 +284,243 @@ public class ExamReStudentExample {
             return (Criteria) this;
         }
 
-        public Criteria andScoreIsNull() {
-            addCriterion("score is null");
+        public Criteria andAnswerOneIsNull() {
+            addCriterion("answer_one is null");
             return (Criteria) this;
         }
 
-        public Criteria andScoreIsNotNull() {
-            addCriterion("score is not null");
+        public Criteria andAnswerOneIsNotNull() {
+            addCriterion("answer_one is not null");
             return (Criteria) this;
         }
 
-        public Criteria andScoreEqualTo(Integer value) {
-            addCriterion("score =", value, "score");
+        public Criteria andAnswerOneEqualTo(Byte value) {
+            addCriterion("answer_one =", value, "answerOne");
             return (Criteria) this;
         }
 
-        public Criteria andScoreNotEqualTo(Integer value) {
-            addCriterion("score <>", value, "score");
+        public Criteria andAnswerOneNotEqualTo(Byte value) {
+            addCriterion("answer_one <>", value, "answerOne");
             return (Criteria) this;
         }
 
-        public Criteria andScoreGreaterThan(Integer value) {
-            addCriterion("score >", value, "score");
+        public Criteria andAnswerOneGreaterThan(Byte value) {
+            addCriterion("answer_one >", value, "answerOne");
             return (Criteria) this;
         }
 
-        public Criteria andScoreGreaterThanOrEqualTo(Integer value) {
-            addCriterion("score >=", value, "score");
+        public Criteria andAnswerOneGreaterThanOrEqualTo(Byte value) {
+            addCriterion("answer_one >=", value, "answerOne");
             return (Criteria) this;
         }
 
-        public Criteria andScoreLessThan(Integer value) {
-            addCriterion("score <", value, "score");
+        public Criteria andAnswerOneLessThan(Byte value) {
+            addCriterion("answer_one <", value, "answerOne");
             return (Criteria) this;
         }
 
-        public Criteria andScoreLessThanOrEqualTo(Integer value) {
-            addCriterion("score <=", value, "score");
+        public Criteria andAnswerOneLessThanOrEqualTo(Byte value) {
+            addCriterion("answer_one <=", value, "answerOne");
             return (Criteria) this;
         }
 
-        public Criteria andScoreIn(List<Integer> values) {
-            addCriterion("score in", values, "score");
+        public Criteria andAnswerOneIn(List<Byte> values) {
+            addCriterion("answer_one in", values, "answerOne");
             return (Criteria) this;
         }
 
-        public Criteria andScoreNotIn(List<Integer> values) {
-            addCriterion("score not in", values, "score");
+        public Criteria andAnswerOneNotIn(List<Byte> values) {
+            addCriterion("answer_one not in", values, "answerOne");
             return (Criteria) this;
         }
 
-        public Criteria andScoreBetween(Integer value1, Integer value2) {
-            addCriterion("score between", value1, value2, "score");
+        public Criteria andAnswerOneBetween(Byte value1, Byte value2) {
+            addCriterion("answer_one between", value1, value2, "answerOne");
             return (Criteria) this;
         }
 
-        public Criteria andScoreNotBetween(Integer value1, Integer value2) {
-            addCriterion("score not between", value1, value2, "score");
+        public Criteria andAnswerOneNotBetween(Byte value1, Byte value2) {
+            addCriterion("answer_one not between", value1, value2, "answerOne");
             return (Criteria) this;
         }
 
-        public Criteria andRemainingTimesIsNull() {
-            addCriterion("remaining_times is null");
+        public Criteria andAnswerTwoIsNull() {
+            addCriterion("answer_two is null");
             return (Criteria) this;
         }
 
-        public Criteria andRemainingTimesIsNotNull() {
-            addCriterion("remaining_times is not null");
+        public Criteria andAnswerTwoIsNotNull() {
+            addCriterion("answer_two is not null");
             return (Criteria) this;
         }
 
-        public Criteria andRemainingTimesEqualTo(Byte value) {
-            addCriterion("remaining_times =", value, "remainingTimes");
+        public Criteria andAnswerTwoEqualTo(Byte value) {
+            addCriterion("answer_two =", value, "answerTwo");
             return (Criteria) this;
         }
 
-        public Criteria andRemainingTimesNotEqualTo(Byte value) {
-            addCriterion("remaining_times <>", value, "remainingTimes");
+        public Criteria andAnswerTwoNotEqualTo(Byte value) {
+            addCriterion("answer_two <>", value, "answerTwo");
             return (Criteria) this;
         }
 
-        public Criteria andRemainingTimesGreaterThan(Byte value) {
-            addCriterion("remaining_times >", value, "remainingTimes");
+        public Criteria andAnswerTwoGreaterThan(Byte value) {
+            addCriterion("answer_two >", value, "answerTwo");
             return (Criteria) this;
         }
 
-        public Criteria andRemainingTimesGreaterThanOrEqualTo(Byte value) {
-            addCriterion("remaining_times >=", value, "remainingTimes");
+        public Criteria andAnswerTwoGreaterThanOrEqualTo(Byte value) {
+            addCriterion("answer_two >=", value, "answerTwo");
             return (Criteria) this;
         }
 
-        public Criteria andRemainingTimesLessThan(Byte value) {
-            addCriterion("remaining_times <", value, "remainingTimes");
+        public Criteria andAnswerTwoLessThan(Byte value) {
+            addCriterion("answer_two <", value, "answerTwo");
             return (Criteria) this;
         }
 
-        public Criteria andRemainingTimesLessThanOrEqualTo(Byte value) {
-            addCriterion("remaining_times <=", value, "remainingTimes");
+        public Criteria andAnswerTwoLessThanOrEqualTo(Byte value) {
+            addCriterion("answer_two <=", value, "answerTwo");
             return (Criteria) this;
         }
 
-        public Criteria andRemainingTimesIn(List<Byte> values) {
-            addCriterion("remaining_times in", values, "remainingTimes");
+        public Criteria andAnswerTwoIn(List<Byte> values) {
+            addCriterion("answer_two in", values, "answerTwo");
             return (Criteria) this;
         }
 
-        public Criteria andRemainingTimesNotIn(List<Byte> values) {
-            addCriterion("remaining_times not in", values, "remainingTimes");
+        public Criteria andAnswerTwoNotIn(List<Byte> values) {
+            addCriterion("answer_two not in", values, "answerTwo");
             return (Criteria) this;
         }
 
-        public Criteria andRemainingTimesBetween(Byte value1, Byte value2) {
-            addCriterion("remaining_times between", value1, value2, "remainingTimes");
+        public Criteria andAnswerTwoBetween(Byte value1, Byte value2) {
+            addCriterion("answer_two between", value1, value2, "answerTwo");
             return (Criteria) this;
         }
 
-        public Criteria andRemainingTimesNotBetween(Byte value1, Byte value2) {
-            addCriterion("remaining_times not between", value1, value2, "remainingTimes");
+        public Criteria andAnswerTwoNotBetween(Byte value1, Byte value2) {
+            addCriterion("answer_two not between", value1, value2, "answerTwo");
             return (Criteria) this;
         }
 
-        public Criteria andIsInvalidIsNull() {
-            addCriterion("is_invalid is null");
+        public Criteria andAnswerThreeIsNull() {
+            addCriterion("answer_three is null");
             return (Criteria) this;
         }
 
-        public Criteria andIsInvalidIsNotNull() {
-            addCriterion("is_invalid is not null");
+        public Criteria andAnswerThreeIsNotNull() {
+            addCriterion("answer_three is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIsInvalidEqualTo(Boolean value) {
-            addCriterion("is_invalid =", value, "isInvalid");
+        public Criteria andAnswerThreeEqualTo(Byte value) {
+            addCriterion("answer_three =", value, "answerThree");
             return (Criteria) this;
         }
 
-        public Criteria andIsInvalidNotEqualTo(Boolean value) {
-            addCriterion("is_invalid <>", value, "isInvalid");
+        public Criteria andAnswerThreeNotEqualTo(Byte value) {
+            addCriterion("answer_three <>", value, "answerThree");
             return (Criteria) this;
         }
 
-        public Criteria andIsInvalidGreaterThan(Boolean value) {
-            addCriterion("is_invalid >", value, "isInvalid");
+        public Criteria andAnswerThreeGreaterThan(Byte value) {
+            addCriterion("answer_three >", value, "answerThree");
             return (Criteria) this;
         }
 
-        public Criteria andIsInvalidGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("is_invalid >=", value, "isInvalid");
+        public Criteria andAnswerThreeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("answer_three >=", value, "answerThree");
             return (Criteria) this;
         }
 
-        public Criteria andIsInvalidLessThan(Boolean value) {
-            addCriterion("is_invalid <", value, "isInvalid");
+        public Criteria andAnswerThreeLessThan(Byte value) {
+            addCriterion("answer_three <", value, "answerThree");
             return (Criteria) this;
         }
 
-        public Criteria andIsInvalidLessThanOrEqualTo(Boolean value) {
-            addCriterion("is_invalid <=", value, "isInvalid");
+        public Criteria andAnswerThreeLessThanOrEqualTo(Byte value) {
+            addCriterion("answer_three <=", value, "answerThree");
             return (Criteria) this;
         }
 
-        public Criteria andIsInvalidIn(List<Boolean> values) {
-            addCriterion("is_invalid in", values, "isInvalid");
+        public Criteria andAnswerThreeIn(List<Byte> values) {
+            addCriterion("answer_three in", values, "answerThree");
             return (Criteria) this;
         }
 
-        public Criteria andIsInvalidNotIn(List<Boolean> values) {
-            addCriterion("is_invalid not in", values, "isInvalid");
+        public Criteria andAnswerThreeNotIn(List<Byte> values) {
+            addCriterion("answer_three not in", values, "answerThree");
             return (Criteria) this;
         }
 
-        public Criteria andIsInvalidBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_invalid between", value1, value2, "isInvalid");
+        public Criteria andAnswerThreeBetween(Byte value1, Byte value2) {
+            addCriterion("answer_three between", value1, value2, "answerThree");
             return (Criteria) this;
         }
 
-        public Criteria andIsInvalidNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_invalid not between", value1, value2, "isInvalid");
+        public Criteria andAnswerThreeNotBetween(Byte value1, Byte value2) {
+            addCriterion("answer_three not between", value1, value2, "answerThree");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnswerFourIsNull() {
+            addCriterion("answer_four is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnswerFourIsNotNull() {
+            addCriterion("answer_four is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnswerFourEqualTo(Byte value) {
+            addCriterion("answer_four =", value, "answerFour");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnswerFourNotEqualTo(Byte value) {
+            addCriterion("answer_four <>", value, "answerFour");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnswerFourGreaterThan(Byte value) {
+            addCriterion("answer_four >", value, "answerFour");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnswerFourGreaterThanOrEqualTo(Byte value) {
+            addCriterion("answer_four >=", value, "answerFour");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnswerFourLessThan(Byte value) {
+            addCriterion("answer_four <", value, "answerFour");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnswerFourLessThanOrEqualTo(Byte value) {
+            addCriterion("answer_four <=", value, "answerFour");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnswerFourIn(List<Byte> values) {
+            addCriterion("answer_four in", values, "answerFour");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnswerFourNotIn(List<Byte> values) {
+            addCriterion("answer_four not in", values, "answerFour");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnswerFourBetween(Byte value1, Byte value2) {
+            addCriterion("answer_four between", value1, value2, "answerFour");
+            return (Criteria) this;
+        }
+
+        public Criteria andAnswerFourNotBetween(Byte value1, Byte value2) {
+            addCriterion("answer_four not between", value1, value2, "answerFour");
             return (Criteria) this;
         }
     }

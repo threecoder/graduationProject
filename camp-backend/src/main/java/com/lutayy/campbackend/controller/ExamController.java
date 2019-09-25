@@ -29,6 +29,12 @@ public class ExamController {
         return examService.getTodoExamList(idcard);
     }
 
+    @RequestMapping("/getDoneExamList")
+    @ResponseBody
+    public Object getDoneExamList(@RequestParam("id") String idcard){
+        return examService.getDoneExamList(idcard);
+    }
+
     @RequestMapping("/getExamInfo")
     @ResponseBody
     public JSONObject getExamInfo(@RequestBody JSONObject jsonObject){
@@ -40,5 +46,12 @@ public class ExamController {
     public JSONObject getExamQuestions(@RequestBody JSONObject jsonObject){
         return examService.getExamQuestions(jsonObject);
     }
+
+    @RequestMapping("/getExamDetail")
+    @ResponseBody
+    public JSONObject getExamDetail(@RequestBody JSONObject jsonObject){
+        return examService.getExamDetail(jsonObject);
+    }
+
 
 }

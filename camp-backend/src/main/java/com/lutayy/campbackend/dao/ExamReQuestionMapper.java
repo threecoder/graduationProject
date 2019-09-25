@@ -10,13 +10,21 @@ public interface ExamReQuestionMapper {
 
     int deleteByExample(ExamReQuestionExample example);
 
+    int deleteByPrimaryKey(@Param("examId") Integer examId, @Param("questionId") Integer questionId);
+
     int insert(ExamReQuestion record);
 
     int insertSelective(ExamReQuestion record);
 
     List<ExamReQuestion> selectByExample(ExamReQuestionExample example);
 
+    ExamReQuestion selectByPrimaryKey(@Param("examId") Integer examId, @Param("questionId") Integer questionId);
+
     int updateByExampleSelective(@Param("record") ExamReQuestion record, @Param("example") ExamReQuestionExample example);
 
     int updateByExample(@Param("record") ExamReQuestion record, @Param("example") ExamReQuestionExample example);
+
+    int updateByPrimaryKeySelective(ExamReQuestion record);
+
+    int updateByPrimaryKey(ExamReQuestion record);
 }
