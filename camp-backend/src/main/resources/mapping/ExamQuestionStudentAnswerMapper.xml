@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lutayy.campbackend.dao.ExamQuestionStudentAnswerMapper">
+  <resultMap id="BaseResultMap" type="com.lutayy.campbackend.pojo.ExamQuestionStudentAnswer">
+    <id column="exam_id" jdbcType="INTEGER" property="examId" />
+    <id column="question_id" jdbcType="INTEGER" property="questionId" />
+    <id column="student_id" jdbcType="INTEGER" property="studentId" />
+    <result column="answer_one" jdbcType="TINYINT" property="answerOne" />
+    <result column="answer_two" jdbcType="TINYINT" property="answerTwo" />
+    <result column="answer_three" jdbcType="TINYINT" property="answerThree" />
+    <result column="answer_four" jdbcType="TINYINT" property="answerFour" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    exam_id, question_id, student_id, answer_one, answer_two, answer_three, answer_four
+  </sql>
+  <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.ExamQuestionStudentAnswerExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from exam_question_student_answer
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from exam_question_student_answer
+    where exam_id = #{examId,jdbcType=INTEGER}
+      and question_id = #{questionId,jdbcType=INTEGER}
+      and student_id = #{studentId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from exam_question_student_answer
+    where exam_id = #{examId,jdbcType=INTEGER}
+      and question_id = #{questionId,jdbcType=INTEGER}
+      and student_id = #{studentId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.lutayy.campbackend.pojo.ExamQuestionStudentAnswerExample">
+    delete from exam_question_student_answer
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lutayy.campbackend.pojo.ExamQuestionStudentAnswer">
+    insert into exam_question_student_answer (exam_id, question_id, student_id, 
+      answer_one, answer_two, answer_three, 
+      answer_four)
+    values (#{examId,jdbcType=INTEGER}, #{questionId,jdbcType=INTEGER}, #{studentId,jdbcType=INTEGER}, 
+      #{answerOne,jdbcType=TINYINT}, #{answerTwo,jdbcType=TINYINT}, #{answerThree,jdbcType=TINYINT}, 
+      #{answerFour,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.ExamQuestionStudentAnswer">
+    insert into exam_question_student_answer
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="examId != null">
+        exam_id,
+      </if>
+      <if test="questionId != null">
+        question_id,
+      </if>
+      <if test="studentId != null">
+        student_id,
+      </if>
+      <if test="answerOne != null">
+        answer_one,
+      </if>
+      <if test="answerTwo != null">
+        answer_two,
+      </if>
+      <if test="answerThree != null">
+        answer_three,
+      </if>
+      <if test="answerFour != null">
+        answer_four,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="examId != null">
+        #{examId,jdbcType=INTEGER},
+      </if>
+      <if test="questionId != null">
+        #{questionId,jdbcType=INTEGER},
+      </if>
+      <if test="studentId != null">
+        #{studentId,jdbcType=INTEGER},
+      </if>
+      <if test="answerOne != null">
+        #{answerOne,jdbcType=TINYINT},
+      </if>
+      <if test="answerTwo != null">
+        #{answerTwo,jdbcType=TINYINT},
+      </if>
+      <if test="answerThree != null">
+        #{answerThree,jdbcType=TINYINT},
+      </if>
+      <if test="answerFour != null">
+        #{answerFour,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lutayy.campbackend.pojo.ExamQuestionStudentAnswerExample" resultType="java.lang.Long">
+    select count(*) from exam_question_student_answer
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update exam_question_student_answer
+    <set>
+      <if test="record.examId != null">
+        exam_id = #{record.examId,jdbcType=INTEGER},
+      </if>
+      <if test="record.questionId != null">
+        question_id = #{record.questionId,jdbcType=INTEGER},
+      </if>
+      <if test="record.studentId != null">
+        student_id = #{record.studentId,jdbcType=INTEGER},
+      </if>
+      <if test="record.answerOne != null">
+        answer_one = #{record.answerOne,jdbcType=TINYINT},
+      </if>
+      <if test="record.answerTwo != null">
+        answer_two = #{record.answerTwo,jdbcType=TINYINT},
+      </if>
+      <if test="record.answerThree != null">
+        answer_three = #{record.answerThree,jdbcType=TINYINT},
+      </if>
+      <if test="record.answerFour != null">
+        answer_four = #{record.answerFour,jdbcType=TINYINT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update exam_question_student_answer
+    set exam_id = #{record.examId,jdbcType=INTEGER},
+      question_id = #{record.questionId,jdbcType=INTEGER},
+      student_id = #{record.studentId,jdbcType=INTEGER},
+      answer_one = #{record.answerOne,jdbcType=TINYINT},
+      answer_two = #{record.answerTwo,jdbcType=TINYINT},
+      answer_three = #{record.answerThree,jdbcType=TINYINT},
+      answer_four = #{record.answerFour,jdbcType=TINYINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lutayy.campbackend.pojo.ExamQuestionStudentAnswer">
+    update exam_question_student_answer
+    <set>
+      <if test="answerOne != null">
+        answer_one = #{answerOne,jdbcType=TINYINT},
+      </if>
+      <if test="answerTwo != null">
+        answer_two = #{answerTwo,jdbcType=TINYINT},
+      </if>
+      <if test="answerThree != null">
+        answer_three = #{answerThree,jdbcType=TINYINT},
+      </if>
+      <if test="answerFour != null">
+        answer_four = #{answerFour,jdbcType=TINYINT},
+      </if>
+    </set>
+    where exam_id = #{examId,jdbcType=INTEGER}
+      and question_id = #{questionId,jdbcType=INTEGER}
+      and student_id = #{studentId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lutayy.campbackend.pojo.ExamQuestionStudentAnswer">
+    update exam_question_student_answer
+    set answer_one = #{answerOne,jdbcType=TINYINT},
+      answer_two = #{answerTwo,jdbcType=TINYINT},
+      answer_three = #{answerThree,jdbcType=TINYINT},
+      answer_four = #{answerFour,jdbcType=TINYINT}
+    where exam_id = #{examId,jdbcType=INTEGER}
+      and question_id = #{questionId,jdbcType=INTEGER}
+      and student_id = #{studentId,jdbcType=INTEGER}
+  </update>
+</mapper>

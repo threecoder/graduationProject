@@ -2,7 +2,7 @@
     <el-col :span="24" class="mt30">
         <el-pagination
             background
-            layout="total, prev, pager, next, jumper"
+            layout="total, prev, pager, next"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="currentPage"

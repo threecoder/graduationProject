@@ -3,25 +3,32 @@
         <h3>{{title}}</h3>
         <search-form @searchInfo="searchCourses" />
         <div class="divider"></div>
-        <list :list="list" />
-        <page :total="100" :pageSize="10" :currentPage="1" @curChange="curChange" />
+        <list v-if="list.length!=0" :list="list" />
+        <h3 v-else class="tip">暂无课程</h3>
+        <div class="divider"></div>
+        <page :total="pagination.total" :pageSize="pagination.pageSize" :currentPage="pagination.currentPage" @curChange="curChange" />
     </div>
 </template>
 <script>
 import searchForm from "./components/searchForm.vue";
 import list from "./components/list.vue";
-import page from '@/components/page.vue';
-import {getCourses} from '@/api/modules/courses.js';
+import page from "@/components/page.vue";
+import { getCourses } from "@/api/modules/courses.js";
 export default {
     data() {
         return {
             type: this.$route.params.type,
             pagination: {
-                total:null,
+                total: 0,
                 pageSize: 10,
                 currentPage: 1
             },
-            searchPar: null,
+            searchPar: {
+                keyWord:"",
+                date:null,
+                startDate:"",
+                endDate:""
+            },
             list: [
                 {
                     url:
@@ -85,46 +92,57 @@ export default {
         list,
         page
     },
-    watch:{
-        currentPage(){
+    watch: {
+        currentPage() {
             //调用api更新数据
-            console.log("ss")
+            this.searchCourses();
         }
     },
-    computed:{
-        title(){
-            if(this.type=='previous'){
+    computed: {
+        title() {
+            if (this.type == "previous") {
                 return "往期课程";
-            }else if(this.type=="now"){
+            } else if (this.type == "now") {
                 return "正在上课";
-            }else if(this.type=="future"){
+            } else if (this.type == "future") {
                 return "近期开课";
             }
         }
     },
     mounted() {
-        console.log(this.type);
+        this.searchCourses();
     },
     methods: {
-        curChange(val){
+        curChange(val) {
             this.pagination.currentPage = val;
             this.searchCourses();
         },
-        async searchCourses(par){
-            if(par){
+        async searchCourses(par) {
+            if (par) {
                 this.searchPar = par;
             }
-            this.searchPar = par;
             let params = {
-                ...par,
+                ...this.searchPar,
                 ...this.pagination,
                 type: this.type
-            }
+            };
             let res = await getCourses(params);
-            list = res.data;
+            console.log(res);
+            this.list = res.data.list;
+            this.pagination.total = res.data.allNum;
+            this.pagination.currentPage = res.data.currentPage;
         }
     }
 };
 </script>
 <style lang="scss" scoped>
+h3 {
+    margin: 20px 0 30px;
+}
+.tip {
+    text-align: center;
+    width: 100%;
+    display: block;
+    margin: 100px 0;
+}
 </style>

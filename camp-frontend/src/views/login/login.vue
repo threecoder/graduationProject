@@ -88,28 +88,25 @@ export default {
     },
     methods: {
         login() {
+            if (
+                this.userForm.username == null ||
+                this.userForm.password == null
+            ) {
+                this.$message.error("账号或者密码不能为空");
+                return false;
+            }
             let params = {
                 username: this.userForm.username,
                 password: Encrypt(this.userForm.password)
             };
-            setCookie({ a: "1" }, "test");
-            setCookie(params, "loginForm");
-            console.log("getall", getCookie());
-            console.log("get", getCookie("loginForm"));
-            deleteCookie("test");
-            console.log("delete1", getCookie());
-            setCookie({ a: "1" }, "test");
-            deleteCookie();
-            console.log("delete2", getCookie());
 
-            // console.log(params);
-            request("/campback/login", params, "post").then(res => {
-                console.log(res);
-            });
-            // window.localStorage.setItem("token", 1);
-            //this.$router.push({
-            //  path: this.redirect ? this.redirect : "/personal"
-            //});
+            request("/campback/student/login", params, "post").then(res => {
+                // console.log(res);
+                this.$message.success(res.msg)
+                this.$router.push({
+                    path: this.redirect ? this.redirect : "/personal"
+                });
+            }).catch(error=>{});
         }
     },
     computed: {

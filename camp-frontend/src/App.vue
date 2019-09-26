@@ -6,4 +6,7 @@
 
 <style lang="scss">
 @import './assets/css/common.css';
+#app {
+  height: 100%;
+}
 </style>

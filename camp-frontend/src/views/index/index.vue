@@ -39,13 +39,16 @@ export default {
         return{
             msg:"这里是首页",
             newscardname:{
-                name:"协会新闻"
+                name:"协会新闻",
+                link:""
             },
             dynamiccardname:{
-                name:"协会动态"
+                name:"协会动态",
+                link:""
             },
             imgcardname:{
-                name:"协会优秀成果展示"
+                name:"协会优秀成果展示",
+                link:""
             },
             clist:[
                 {

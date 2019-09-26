@@ -1,0 +1,96 @@
+<template>
+    <div>
+        <h2>需完成的考试</h2>
+        <div class="switcher">
+            <el-button :class="{'active':flag}" @click="flag=true">未作答</el-button>
+            <el-button :class="{'active':!flag}" @click="flag=false">已作答</el-button>
+        </div>
+        <div>
+            <span v-if="flag" class="panel-title">还未作答的试卷</span>
+            <span v-else class="panel-title">已经作答过的试卷</span>
+            <div class="all-exam-container">
+                <div class="single-exam-container" v-for="(item,i) in examList" :key="i">
+                    <single-exam 
+                        :examName="item.examName" 
+                        :date="item.date" 
+                        :startTime="item.startTime" 
+                        :endTime="item.endTime" 
+                        :belong="item.belong" 
+                        :min="item.min" 
+                        :grade="item.grade" 
+                        :examId="item.examId" 
+                    />
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+import { getTodoExam,getHalfExam } from '@/api/modules/exam.js'
+import singleExam from './components/singleExam.vue';
+import page from '@/components/page.vue'
+export default {
+    components: {
+        singleExam,page
+    },
+    data(){
+        return {
+            examList: [
+                // {
+                //     examId:"1",
+                //     examName:"考试名称",
+                //     date:"2016-10-10",
+                //     startTime: "14:00:00",
+                //     endTime: "16:00:00",
+                //     min: "120分钟",
+                //     belong: "HTML入门",
+                //     grade:null
+                // }
+            ],
+            flag: true,
+        }
+    },
+    watch: {
+        flag() {
+            this.getExamList();
+        }
+    },
+    mounted(){
+        this.getExamList();
+    },
+    methods: {
+        async getExamList(){
+            let res = null;
+            if(this.flag){
+                res = await getTodoExam();
+            }else{
+                res = await getHalfExam();
+            }
+            if(res){
+                this.examList = res.data;
+            }
+        }
+    }
+}
+</script>
+<style lang="scss" scoped>
+.all-exam-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    .single-exam-container {
+        margin: 10px;
+        width: 30%;
+    }
+}
+.switcher {
+    overflow: hidden;
+    float: right;
+    .active {
+        background-color: rgb(58,180,255);
+        color: #fff;
+    }
+}
+</style>

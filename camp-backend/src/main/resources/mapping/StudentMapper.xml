@@ -9,6 +9,10 @@
     <result column="student_name" jdbcType="VARCHAR" property="studentName" />
     <result column="student_email" jdbcType="VARCHAR" property="studentEmail" />
     <result column="student_positon" jdbcType="VARCHAR" property="studentPositon" />
+    <result column="student_country" jdbcType="VARCHAR" property="studentCountry" />
+    <result column="student_province" jdbcType="VARCHAR" property="studentProvince" />
+    <result column="student_city" jdbcType="VARCHAR" property="studentCity" />
+    <result column="student_area" jdbcType="VARCHAR" property="studentArea" />
     <result column="student_address" jdbcType="VARCHAR" property="studentAddress" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -71,7 +75,7 @@
   </sql>
   <sql id="Base_Column_List">
     student_id, student_password, student_idcard, student_phone, student_name, student_email, 
-    student_positon, student_address
+    student_positon, student_country, student_province, student_city, student_area, student_address
   </sql>
   <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.StudentExample" resultMap="BaseResultMap">
     select
@@ -109,10 +113,12 @@
     </selectKey>
     insert into student (student_password, student_idcard, student_phone, 
       student_name, student_email, student_positon, 
-      student_address)
+      student_country, student_province, student_city, 
+      student_area, student_address)
     values (#{studentPassword,jdbcType=VARCHAR}, #{studentIdcard,jdbcType=VARCHAR}, #{studentPhone,jdbcType=VARCHAR}, 
       #{studentName,jdbcType=VARCHAR}, #{studentEmail,jdbcType=VARCHAR}, #{studentPositon,jdbcType=VARCHAR}, 
-      #{studentAddress,jdbcType=VARCHAR})
+      #{studentCountry,jdbcType=VARCHAR}, #{studentProvince,jdbcType=VARCHAR}, #{studentCity,jdbcType=VARCHAR}, 
+      #{studentArea,jdbcType=VARCHAR}, #{studentAddress,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.Student">
     <selectKey keyProperty="studentId" order="AFTER" resultType="java.lang.Integer">
@@ -138,6 +144,18 @@
       <if test="studentPositon != null">
         student_positon,
       </if>
+      <if test="studentCountry != null">
+        student_country,
+      </if>
+      <if test="studentProvince != null">
+        student_province,
+      </if>
+      <if test="studentCity != null">
+        student_city,
+      </if>
+      <if test="studentArea != null">
+        student_area,
+      </if>
       <if test="studentAddress != null">
         student_address,
       </if>
@@ -160,6 +178,18 @@
       </if>
       <if test="studentPositon != null">
         #{studentPositon,jdbcType=VARCHAR},
+      </if>
+      <if test="studentCountry != null">
+        #{studentCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="studentProvince != null">
+        #{studentProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="studentCity != null">
+        #{studentCity,jdbcType=VARCHAR},
+      </if>
+      <if test="studentArea != null">
+        #{studentArea,jdbcType=VARCHAR},
       </if>
       <if test="studentAddress != null">
         #{studentAddress,jdbcType=VARCHAR},
@@ -196,6 +226,18 @@
       <if test="record.studentPositon != null">
         student_positon = #{record.studentPositon,jdbcType=VARCHAR},
       </if>
+      <if test="record.studentCountry != null">
+        student_country = #{record.studentCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="record.studentProvince != null">
+        student_province = #{record.studentProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="record.studentCity != null">
+        student_city = #{record.studentCity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.studentArea != null">
+        student_area = #{record.studentArea,jdbcType=VARCHAR},
+      </if>
       <if test="record.studentAddress != null">
         student_address = #{record.studentAddress,jdbcType=VARCHAR},
       </if>
@@ -213,6 +255,10 @@
       student_name = #{record.studentName,jdbcType=VARCHAR},
       student_email = #{record.studentEmail,jdbcType=VARCHAR},
       student_positon = #{record.studentPositon,jdbcType=VARCHAR},
+      student_country = #{record.studentCountry,jdbcType=VARCHAR},
+      student_province = #{record.studentProvince,jdbcType=VARCHAR},
+      student_city = #{record.studentCity,jdbcType=VARCHAR},
+      student_area = #{record.studentArea,jdbcType=VARCHAR},
       student_address = #{record.studentAddress,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -239,6 +285,18 @@
       <if test="studentPositon != null">
         student_positon = #{studentPositon,jdbcType=VARCHAR},
       </if>
+      <if test="studentCountry != null">
+        student_country = #{studentCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="studentProvince != null">
+        student_province = #{studentProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="studentCity != null">
+        student_city = #{studentCity,jdbcType=VARCHAR},
+      </if>
+      <if test="studentArea != null">
+        student_area = #{studentArea,jdbcType=VARCHAR},
+      </if>
       <if test="studentAddress != null">
         student_address = #{studentAddress,jdbcType=VARCHAR},
       </if>
@@ -253,6 +311,10 @@
       student_name = #{studentName,jdbcType=VARCHAR},
       student_email = #{studentEmail,jdbcType=VARCHAR},
       student_positon = #{studentPositon,jdbcType=VARCHAR},
+      student_country = #{studentCountry,jdbcType=VARCHAR},
+      student_province = #{studentProvince,jdbcType=VARCHAR},
+      student_city = #{studentCity,jdbcType=VARCHAR},
+      student_area = #{studentArea,jdbcType=VARCHAR},
       student_address = #{studentAddress,jdbcType=VARCHAR}
     where student_id = #{studentId,jdbcType=INTEGER}
   </update>

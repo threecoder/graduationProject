@@ -1,0 +1,109 @@
+package com.lutayy.campbackend.pojo;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
+
+public class Activity implements Serializable {
+    private Integer activityId;
+
+    private BigDecimal activityFee;
+
+    private String activityName;
+
+    private String activityIntroduction;
+
+    private Date activityDate;
+
+    private Integer activityLengthMin;
+
+    private String contacts;
+
+    private String activityAddress;
+
+    private Date openTime;
+
+    private Date closeTime;
+
+    private static final long serialVersionUID = 1L;
+
+    public Integer getActivityId() {
+        return activityId;
+    }
+
+    public void setActivityId(Integer activityId) {
+        this.activityId = activityId;
+    }
+
+    public BigDecimal getActivityFee() {
+        return activityFee;
+    }
+
+    public void setActivityFee(BigDecimal activityFee) {
+        this.activityFee = activityFee;
+    }
+
+    public String getActivityName() {
+        return activityName;
+    }
+
+    public void setActivityName(String activityName) {
+        this.activityName = activityName;
+    }
+
+    public String getActivityIntroduction() {
+        return activityIntroduction;
+    }
+
+    public void setActivityIntroduction(String activityIntroduction) {
+        this.activityIntroduction = activityIntroduction;
+    }
+
+    public Date getActivityDate() {
+        return activityDate;
+    }
+
+    public void setActivityDate(Date activityDate) {
+        this.activityDate = activityDate;
+    }
+
+    public Integer getActivityLengthMin() {
+        return activityLengthMin;
+    }
+
+    public void setActivityLengthMin(Integer activityLengthMin) {
+        this.activityLengthMin = activityLengthMin;
+    }
+
+    public String getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(String contacts) {
+        this.contacts = contacts;
+    }
+
+    public String getActivityAddress() {
+        return activityAddress;
+    }
+
+    public void setActivityAddress(String activityAddress) {
+        this.activityAddress = activityAddress;
+    }
+
+    public Date getOpenTime() {
+        return openTime;
+    }
+
+    public void setOpenTime(Date openTime) {
+        this.openTime = openTime;
+    }
+
+    public Date getCloseTime() {
+        return closeTime;
+    }
+
+    public void setCloseTime(Date closeTime) {
+        this.closeTime = closeTime;
+    }
+}
