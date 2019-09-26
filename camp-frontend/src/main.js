@@ -15,18 +15,18 @@ Vue.prototype.confirm = element.MessageBox.confirm;
 Vue.use(element);
 
 //配置路由拦截
-router.beforeEach( (to,from,next) => {
-  let token = window.localStorage.getItem("token");
-  let canGoPath = getCanGoPath();
-  if(!token && canGoPath.indexOf(to.path)==-1){
-    let url = escape(to.fullPath);
-    next({
-      path:`/login?redirect=${url}`
-    })
-  }else{
-    next();
-  }
-})
+// router.beforeEach( (to,from,next) => {
+//   let token = window.localStorage.getItem("token");
+//   let canGoPath = getCanGoPath();
+//   if(!token && canGoPath.indexOf(to.path)==-1){
+//     let url = escape(to.fullPath);
+//     next({
+//       path:`/login?redirect=${url}`
+//     })
+//   }else{
+//     next();
+//   }
+// })
 
 new Vue({
   router,

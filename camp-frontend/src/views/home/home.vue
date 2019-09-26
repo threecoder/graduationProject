@@ -10,12 +10,12 @@
             text-color="#fff"
             active-text-color="rgb(25,80,139)"
         >
-            <el-menu-item class="one" index>首页</el-menu-item>
+            <el-menu-item class="one" index="/index">首页</el-menu-item>
             <el-submenu index="1">
                 <template slot="title">协会介绍</template>
-                <el-menu-item index>发展历史</el-menu-item>
-                <el-menu-item index>师资力量</el-menu-item>
-                <el-menu-item index>品牌价值</el-menu-item>
+                <el-menu-item index="/brief">协会简介</el-menu-item>
+                <el-menu-item index="/constitution">协会章程</el-menu-item>
+                <el-menu-item index="/framework">组织架构</el-menu-item>
             </el-submenu>
             <el-submenu index="2">
                 <template slot="title">培训课程</template>

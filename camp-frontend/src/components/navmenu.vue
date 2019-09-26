@@ -23,9 +23,9 @@ export default {
           index: "",
           title: "协会介绍",
           children: [
-            { index: "", title: "发展历史" },
-            { index: "", title: "师资力量" },
-            { index: "1.3", title: "品牌价值" }
+            { index: "", title: "协会简介" },
+            { index: "", title: "协会章程" },
+            { index: "1.3", title: "组织结构" }
           ]
         },
         {

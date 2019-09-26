@@ -12,6 +12,11 @@ export default new Router({
       component: resolve => require(["../views/home/home.vue"],resolve),
       children: [
         {
+          path:'/index',
+          name:'index',
+          component: resolve => require(['../views/index/index.vue'],resolve)
+        },
+        {
           path: '/courses/:type',
           name: 'courses',
           component: resolve => require(["../views/courses/courses.vue"],resolve)
@@ -20,6 +25,28 @@ export default new Router({
           path: '/contact',
           name: 'contact',
           component: resolve => require(['../views/contact.vue'],resolve)
+        },
+        {
+          path:'/introduction',
+          name:'introduction',
+          component: resolve => require(["../views/introduction/introduction.vue"],resolve),
+          children:[
+            {
+              path:'/brief',
+              name:'brief',
+              component: resolve =>require(["../views/introduction/components/brief.vue"],resolve)
+            },
+            {
+              path:'/constitution',
+              name:'constitution',
+              component: resolve =>require(["../views/introduction/components/constitution.vue"],resolve)
+            },
+            {
+              path:'/framework',
+              name:'framework',
+              component: resolve =>require(["../views/introduction/components/framework.vue"],resolve)
+            }
+          ]
         }
       ]
     },
