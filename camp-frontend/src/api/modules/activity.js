@@ -6,7 +6,7 @@ export const joinActivties = activityId => {
     return request('/campback/student/joinActivity', { activityId }, 'post', 'json');
 }
 export const getsignedActivities = () => {
-    return request("/campback/student/getsignedActivities", {}, 'get', 'json');
+    return request("/campback/student/getSignedActivities", {}, 'get', 'json');
 }
 export const getSeatNum = activityId => {
     return request("/campback/student/getSeatNum", { activityId }, 'post', 'json');

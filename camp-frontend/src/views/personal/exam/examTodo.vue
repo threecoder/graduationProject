@@ -8,17 +8,17 @@
         <div>
             <span v-if="flag" class="panel-title">还未作答的试卷</span>
             <span v-else class="panel-title">已经作答过的试卷</span>
-            <div class="all-exam-container">
+            <div class="all-exam-container" :loading="loading">
                 <div class="single-exam-container" v-for="(item,i) in examList" :key="i">
-                    <single-exam 
-                        :examName="item.examName" 
-                        :date="item.date" 
-                        :startTime="item.startTime" 
-                        :endTime="item.endTime" 
-                        :belong="item.belong" 
-                        :min="item.min" 
-                        :grade="item.grade" 
-                        :examId="item.examId" 
+                    <single-exam
+                        :examName="item.examName"
+                        :date="item.date"
+                        :startTime="item.startTime"
+                        :endTime="item.endTime"
+                        :belong="item.belong"
+                        :min="item.min"
+                        :grade="item.grade"
+                        :examId="item.examId"
                     />
                 </div>
             </div>
@@ -26,14 +26,15 @@
     </div>
 </template>
 <script>
-import { getTodoExam,getHalfExam } from '@/api/modules/exam.js'
-import singleExam from './components/singleExam.vue';
-import page from '@/components/page.vue'
+import { getTodoExam, getHalfExam } from "@/api/modules/exam.js";
+import singleExam from "./components/singleExam.vue";
+import page from "@/components/page.vue";
 export default {
     components: {
-        singleExam,page
+        singleExam,
+        page
     },
-    data(){
+    data() {
         return {
             examList: [
                 // {
@@ -48,30 +49,38 @@ export default {
                 // }
             ],
             flag: true,
-        }
+            loading: false
+        };
     },
     watch: {
         flag() {
+            this.examList = [];
             this.getExamList();
         }
     },
-    mounted(){
+    mounted() {
         this.getExamList();
     },
     methods: {
-        async getExamList(){
-            let res = null;
-            if(this.flag){
-                res = await getTodoExam();
-            }else{
-                res = await getHalfExam();
-            }
-            if(res){
-                this.examList = res.data;
+        async getExamList() {
+            this.loading = true;
+            try {
+                let res = null;
+                if (this.flag) {
+                    res = await getTodoExam();
+                } else {
+                    res = await getHalfExam();
+                }
+                if (res) {
+                    this.examList = res.data;
+                }
+                this.loading = false;
+            } catch (error) {
+                this.loading = false;
             }
         }
     }
-}
+};
 </script>
 <style lang="scss" scoped>
 .all-exam-container {
@@ -89,7 +98,7 @@ export default {
     overflow: hidden;
     float: right;
     .active {
-        background-color: rgb(58,180,255);
+        background-color: rgb(58, 180, 255);
         color: #fff;
     }
 }
