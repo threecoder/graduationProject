@@ -20,7 +20,7 @@
                         <el-button @click="checkDetail(row)">详情</el-button>
                         <el-button v-if="type==1 && row.status=='未支付'" @click="pay">支付</el-button>
                         <el-button v-if="type==0" @click="join(row)">报名</el-button>
-                        <el-button v-if="type==1 && row.status=='已支付'" @click="checkSEAT(row)" >座位号</el-button>
+                        <el-button v-if="type==1 && row.status=='已支付'" @click="checkSEAT(row)">座位号</el-button>
                     </div>
                 </el-table-column>
             </m-table>
@@ -34,7 +34,7 @@
             </div>
             <div class="divider"></div>
             <div class="activity-detail">
-                <p v-for="(item,i) in drwaerInfo.introduciotn" :key="i">{{item}}</p>
+                <p v-for="(item,i) in drwaerInfo.introduce" :key="i">{{item}}</p>
                 <p>如有疑问，请联系：{{drwaerInfo.contacts}}。</p>
             </div>
             <div class="drawer-footer">
@@ -53,7 +53,9 @@
 import mTable from "../../../components/mTable.vue";
 import {
     getJoinableActivities,
-    joinActivties
+    joinActivties,
+    getsignedActivities,
+    getSeatNum
 } from "@/api/modules/activity.js";
 export default {
     components: {
@@ -68,7 +70,13 @@ export default {
                 { prop: "date", label: "举办时间" },
                 { prop: "address", label: "地点" },
                 { prop: "fee", label: "费用" },
-                { prop: "opera", label: "操作", fixed: "right",width:200, slot: "oper" }
+                {
+                    prop: "opera",
+                    label: "操作",
+                    fixed: "right",
+                    width: 200,
+                    slot: "oper"
+                }
             ],
             tableData: [
                 {
@@ -118,8 +126,7 @@ export default {
                     ],
                     status: "已完结",
                     contacts: "唐先生 13535789321"
-                },
-                
+                }
             ],
             tableAttr: {
                 stripe: true
@@ -142,42 +149,42 @@ export default {
     },
     methods: {
         async init() {
-            console.log(this.type)
-            if(this.type == 1){
-                let t = this.tableConfig.pop();
-                this.tableConfig.push({prop: "status",label: "状态"},t);
-            }
             try {
-                let res = await getJoinableActivities();
+                let res = null;
+                if (this.type == 1) {
+                    let t = this.tableConfig.pop();
+                    this.tableConfig.push({ prop: "status", label: "状态" }, t);
+                    res = await getsignedActivities();
+                } else {
+                    res = await getJoinableActivities();
+                }
                 this.tableData = res.data;
-            } catch (error) {
-                this.$message.error("获取活动信息失败，请刷新重试");
-            }
+            } catch (error) {}
         },
         async join(params) {
             try {
                 this.joinLoading = true;
                 let id = params ? params.id : this.drwaerInfo.id;
                 let res = await joinActivties(id);
-                this.$message.success("")
+                this.$message.success("报名成功");
                 this.joinLoading = false;
             } catch (error) {
-                this.$message.error("报名失败")
                 this.joinLoading = false;
             }
-
-            setTimeout(() => {
-            }, 1000);
         },
         checkDetail(row) {
             this.drawer = true;
             this.drwaerInfo = row;
+            console.log(this.drwaerInfo);
         },
-        pay(){
+        pay() {},
+        async checkSEAT(row) {
+            try {
+                console.log(row);
+                let res = await getSeatNum(row.id);
 
-        },
-        checkSEAT(){
-            
+                console.log(res, "ss");
+            } catch (error) {}
         }
     }
 };
