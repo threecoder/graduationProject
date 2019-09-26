@@ -1,10 +1,10 @@
 import { request } from "../request.js"
 export const setInfo = par => {
-    return request("/campback/setUserInfo", par, "post", "json");
+    return request("/campback/student/setUserInfo", par, "post", "json");
 }
 export const getInfo = ()=> {
-    return request('/campback/getUserInfo',{},'get','json');
+    return request('/campback/student/getUserInfo',{},'get','json');
 }
 export const setPassword = par => {
-    return request('/campback/setNewPassword', par, 'post', 'json');
+    return request('/campback/student/setNewPassword', par, 'post', 'json');
 }

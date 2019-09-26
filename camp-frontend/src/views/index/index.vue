@@ -236,7 +236,7 @@ export default {
         }
     }
     .imgcard{
-        float: right;
+        float: left;
         width: 350px;
         margin-right: 30px;
     }

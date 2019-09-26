@@ -3,7 +3,7 @@
         <h2>个人信息</h2>
         <div>
             <span class="panel-title">基本信息</span>
-            <el-form :model="info" v-loading="loading">
+            <el-form :model="info" :loading="loading">
                 <el-row :gutter="40">
                     <el-col :span="8">
                         <el-form-item label-position="top" label="身份证号码">
