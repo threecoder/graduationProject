@@ -17,12 +17,6 @@ public class StudentController {
     @Autowired
     StudentService studentService;
 
-    @RequestMapping("/login")
-    @ResponseBody
-    public JSONObject login(@RequestBody JSONObject jsonObject, HttpServletResponse response) {
-        return studentService.login(jsonObject,response);
-    }
-
     @RequestMapping("/getUserInfo")
     @ResponseBody
     public Object getUserInfo(@RequestParam("id") String idcard){
