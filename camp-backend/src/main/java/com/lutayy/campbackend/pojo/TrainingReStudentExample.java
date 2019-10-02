@@ -105,6 +105,76 @@ public class TrainingReStudentExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
+        public Criteria andApplyIdIsNull() {
+            addCriterion("apply_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyIdIsNotNull() {
+            addCriterion("apply_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyIdEqualTo(String value) {
+            addCriterion("apply_id =", value, "applyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyIdNotEqualTo(String value) {
+            addCriterion("apply_id <>", value, "applyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyIdGreaterThan(String value) {
+            addCriterion("apply_id >", value, "applyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyIdGreaterThanOrEqualTo(String value) {
+            addCriterion("apply_id >=", value, "applyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyIdLessThan(String value) {
+            addCriterion("apply_id <", value, "applyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyIdLessThanOrEqualTo(String value) {
+            addCriterion("apply_id <=", value, "applyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyIdLike(String value) {
+            addCriterion("apply_id like", value, "applyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyIdNotLike(String value) {
+            addCriterion("apply_id not like", value, "applyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyIdIn(List<String> values) {
+            addCriterion("apply_id in", values, "applyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyIdNotIn(List<String> values) {
+            addCriterion("apply_id not in", values, "applyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyIdBetween(String value1, String value2) {
+            addCriterion("apply_id between", value1, value2, "applyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyIdNotBetween(String value1, String value2) {
+            addCriterion("apply_id not between", value1, value2, "applyId");
+            return (Criteria) this;
+        }
+
         public Criteria andTrainingIdIsNull() {
             addCriterion("training_id is null");
             return (Criteria) this;
@@ -342,6 +412,66 @@ public class TrainingReStudentExample {
 
         public Criteria andIsInvalidNotBetween(Boolean value1, Boolean value2) {
             addCriterion("is_invalid not between", value1, value2, "isInvalid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDoneIsNull() {
+            addCriterion("is_done is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDoneIsNotNull() {
+            addCriterion("is_done is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDoneEqualTo(Boolean value) {
+            addCriterion("is_done =", value, "isDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDoneNotEqualTo(Boolean value) {
+            addCriterion("is_done <>", value, "isDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDoneGreaterThan(Boolean value) {
+            addCriterion("is_done >", value, "isDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDoneGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_done >=", value, "isDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDoneLessThan(Boolean value) {
+            addCriterion("is_done <", value, "isDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDoneLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_done <=", value, "isDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDoneIn(List<Boolean> values) {
+            addCriterion("is_done in", values, "isDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDoneNotIn(List<Boolean> values) {
+            addCriterion("is_done not in", values, "isDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDoneBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_done between", value1, value2, "isDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDoneNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_done not between", value1, value2, "isDone");
             return (Criteria) this;
         }
     }

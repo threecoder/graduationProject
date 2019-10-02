@@ -745,6 +745,186 @@ public class ActivityExample {
             addCriterion("close_time not between", value1, value2, "closeTime");
             return (Criteria) this;
         }
+
+        public Criteria andMaxNumIsNull() {
+            addCriterion("max_num is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxNumIsNotNull() {
+            addCriterion("max_num is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxNumEqualTo(Integer value) {
+            addCriterion("max_num =", value, "maxNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxNumNotEqualTo(Integer value) {
+            addCriterion("max_num <>", value, "maxNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxNumGreaterThan(Integer value) {
+            addCriterion("max_num >", value, "maxNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxNumGreaterThanOrEqualTo(Integer value) {
+            addCriterion("max_num >=", value, "maxNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxNumLessThan(Integer value) {
+            addCriterion("max_num <", value, "maxNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxNumLessThanOrEqualTo(Integer value) {
+            addCriterion("max_num <=", value, "maxNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxNumIn(List<Integer> values) {
+            addCriterion("max_num in", values, "maxNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxNumNotIn(List<Integer> values) {
+            addCriterion("max_num not in", values, "maxNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxNumBetween(Integer value1, Integer value2) {
+            addCriterion("max_num between", value1, value2, "maxNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxNumNotBetween(Integer value1, Integer value2) {
+            addCriterion("max_num not between", value1, value2, "maxNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaWidthIsNull() {
+            addCriterion("area_width is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaWidthIsNotNull() {
+            addCriterion("area_width is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaWidthEqualTo(Integer value) {
+            addCriterion("area_width =", value, "areaWidth");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaWidthNotEqualTo(Integer value) {
+            addCriterion("area_width <>", value, "areaWidth");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaWidthGreaterThan(Integer value) {
+            addCriterion("area_width >", value, "areaWidth");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaWidthGreaterThanOrEqualTo(Integer value) {
+            addCriterion("area_width >=", value, "areaWidth");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaWidthLessThan(Integer value) {
+            addCriterion("area_width <", value, "areaWidth");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaWidthLessThanOrEqualTo(Integer value) {
+            addCriterion("area_width <=", value, "areaWidth");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaWidthIn(List<Integer> values) {
+            addCriterion("area_width in", values, "areaWidth");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaWidthNotIn(List<Integer> values) {
+            addCriterion("area_width not in", values, "areaWidth");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaWidthBetween(Integer value1, Integer value2) {
+            addCriterion("area_width between", value1, value2, "areaWidth");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaWidthNotBetween(Integer value1, Integer value2) {
+            addCriterion("area_width not between", value1, value2, "areaWidth");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaLengthIsNull() {
+            addCriterion("area_length is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaLengthIsNotNull() {
+            addCriterion("area_length is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaLengthEqualTo(Integer value) {
+            addCriterion("area_length =", value, "areaLength");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaLengthNotEqualTo(Integer value) {
+            addCriterion("area_length <>", value, "areaLength");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaLengthGreaterThan(Integer value) {
+            addCriterion("area_length >", value, "areaLength");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaLengthGreaterThanOrEqualTo(Integer value) {
+            addCriterion("area_length >=", value, "areaLength");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaLengthLessThan(Integer value) {
+            addCriterion("area_length <", value, "areaLength");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaLengthLessThanOrEqualTo(Integer value) {
+            addCriterion("area_length <=", value, "areaLength");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaLengthIn(List<Integer> values) {
+            addCriterion("area_length in", values, "areaLength");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaLengthNotIn(List<Integer> values) {
+            addCriterion("area_length not in", values, "areaLength");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaLengthBetween(Integer value1, Integer value2) {
+            addCriterion("area_length between", value1, value2, "areaLength");
+            return (Criteria) this;
+        }
+
+        public Criteria andAreaLengthNotBetween(Integer value1, Integer value2) {
+            addCriterion("area_length not between", value1, value2, "areaLength");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

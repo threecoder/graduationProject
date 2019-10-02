@@ -105,6 +105,76 @@ public class ActivityStudentExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
+        public Criteria andApplyNumberIsNull() {
+            addCriterion("apply_number is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyNumberIsNotNull() {
+            addCriterion("apply_number is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyNumberEqualTo(String value) {
+            addCriterion("apply_number =", value, "applyNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyNumberNotEqualTo(String value) {
+            addCriterion("apply_number <>", value, "applyNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyNumberGreaterThan(String value) {
+            addCriterion("apply_number >", value, "applyNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyNumberGreaterThanOrEqualTo(String value) {
+            addCriterion("apply_number >=", value, "applyNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyNumberLessThan(String value) {
+            addCriterion("apply_number <", value, "applyNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyNumberLessThanOrEqualTo(String value) {
+            addCriterion("apply_number <=", value, "applyNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyNumberLike(String value) {
+            addCriterion("apply_number like", value, "applyNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyNumberNotLike(String value) {
+            addCriterion("apply_number not like", value, "applyNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyNumberIn(List<String> values) {
+            addCriterion("apply_number in", values, "applyNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyNumberNotIn(List<String> values) {
+            addCriterion("apply_number not in", values, "applyNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyNumberBetween(String value1, String value2) {
+            addCriterion("apply_number between", value1, value2, "applyNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyNumberNotBetween(String value1, String value2) {
+            addCriterion("apply_number not between", value1, value2, "applyNumber");
+            return (Criteria) this;
+        }
+
         public Criteria andActivityIdIsNull() {
             addCriterion("activity_id is null");
             return (Criteria) this;
@@ -412,6 +482,66 @@ public class ActivityStudentExample {
 
         public Criteria andSeatNumberNotBetween(String value1, String value2) {
             addCriterion("seat_number not between", value1, value2, "seatNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidIsNull() {
+            addCriterion("is_invalid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidIsNotNull() {
+            addCriterion("is_invalid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidEqualTo(Boolean value) {
+            addCriterion("is_invalid =", value, "isInvalid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidNotEqualTo(Boolean value) {
+            addCriterion("is_invalid <>", value, "isInvalid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidGreaterThan(Boolean value) {
+            addCriterion("is_invalid >", value, "isInvalid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_invalid >=", value, "isInvalid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidLessThan(Boolean value) {
+            addCriterion("is_invalid <", value, "isInvalid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_invalid <=", value, "isInvalid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidIn(List<Boolean> values) {
+            addCriterion("is_invalid in", values, "isInvalid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidNotIn(List<Boolean> values) {
+            addCriterion("is_invalid not in", values, "isInvalid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_invalid between", value1, value2, "isInvalid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_invalid not between", value1, value2, "isInvalid");
             return (Criteria) this;
         }
     }

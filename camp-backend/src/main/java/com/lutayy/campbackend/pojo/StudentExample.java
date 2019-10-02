@@ -1,6 +1,7 @@
 package com.lutayy.campbackend.pojo;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class StudentExample {
@@ -931,6 +932,136 @@ public class StudentExample {
 
         public Criteria andStudentAddressNotBetween(String value1, String value2) {
             addCriterion("student_address not between", value1, value2, "studentAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyIsNull() {
+            addCriterion("company is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyIsNotNull() {
+            addCriterion("company is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyEqualTo(String value) {
+            addCriterion("company =", value, "company");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyNotEqualTo(String value) {
+            addCriterion("company <>", value, "company");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyGreaterThan(String value) {
+            addCriterion("company >", value, "company");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyGreaterThanOrEqualTo(String value) {
+            addCriterion("company >=", value, "company");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyLessThan(String value) {
+            addCriterion("company <", value, "company");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyLessThanOrEqualTo(String value) {
+            addCriterion("company <=", value, "company");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyLike(String value) {
+            addCriterion("company like", value, "company");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyNotLike(String value) {
+            addCriterion("company not like", value, "company");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyIn(List<String> values) {
+            addCriterion("company in", values, "company");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyNotIn(List<String> values) {
+            addCriterion("company not in", values, "company");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyBetween(String value1, String value2) {
+            addCriterion("company between", value1, value2, "company");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompanyNotBetween(String value1, String value2) {
+            addCriterion("company not between", value1, value2, "company");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterTimeIsNull() {
+            addCriterion("enter_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterTimeIsNotNull() {
+            addCriterion("enter_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterTimeEqualTo(Date value) {
+            addCriterion("enter_time =", value, "enterTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterTimeNotEqualTo(Date value) {
+            addCriterion("enter_time <>", value, "enterTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterTimeGreaterThan(Date value) {
+            addCriterion("enter_time >", value, "enterTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("enter_time >=", value, "enterTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterTimeLessThan(Date value) {
+            addCriterion("enter_time <", value, "enterTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterTimeLessThanOrEqualTo(Date value) {
+            addCriterion("enter_time <=", value, "enterTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterTimeIn(List<Date> values) {
+            addCriterion("enter_time in", values, "enterTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterTimeNotIn(List<Date> values) {
+            addCriterion("enter_time not in", values, "enterTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterTimeBetween(Date value1, Date value2) {
+            addCriterion("enter_time between", value1, value2, "enterTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnterTimeNotBetween(Date value1, Date value2) {
+            addCriterion("enter_time not between", value1, value2, "enterTime");
             return (Criteria) this;
         }
     }

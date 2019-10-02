@@ -123,13 +123,16 @@ public class StudentServiceImpI implements StudentService {
             cookie.setPath("/");
             response.addCookie(cookie);
             response.setContentType("application/json;charset=UTF-8");
-            result.put("code", "success");
             result.put("msg","信息修改成功，请重新登录！");
         }else{
-            result.put("code", "success");
             result.put("msg","信息修改成功！");
         }
-        studentMapper.updateByPrimaryKey(student);
+        if(studentMapper.updateByPrimaryKeySelective(student)>0){
+            result.put("code", "success");
+        }else {
+            result.put("code", "fail");
+            result.put("msg", "系统繁忙，请稍后尝试");
+        }
         return result;
     }
 

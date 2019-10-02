@@ -2,7 +2,10 @@ package com.lutayy.campbackend.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.lutayy.campbackend.common.util.OrderIdGenerator;
+import com.lutayy.campbackend.common.util.UUIDUtil;
 import com.lutayy.campbackend.dao.ActivityMapper;
+import com.lutayy.campbackend.dao.ActivityOrderMapper;
 import com.lutayy.campbackend.dao.ActivityStudentMapper;
 import com.lutayy.campbackend.dao.StudentMapper;
 import com.lutayy.campbackend.pojo.*;
@@ -21,6 +24,8 @@ public class ActivityServiceImpl implements ActivityService {
     ActivityMapper activityMapper;
     @Autowired
     ActivityStudentMapper activityStudentMapper;
+    @Autowired
+    ActivityOrderMapper activityOrderMapper;
     @Autowired
     StudentMapper studentMapper;
 
@@ -165,15 +170,50 @@ public class ActivityServiceImpl implements ActivityService {
             result.put("msg", "已报名此活动");
             return result;
         }
+        ActivityStudentExample activityStudentExample0=new ActivityStudentExample();
+        ActivityStudentExample.Criteria criteria0=activityStudentExample0.createCriteria();
+        criteria0.andActivityIdEqualTo(activityId).andIsInvalidEqualTo(false);
+        List<ActivityStudent> activityStudents0=activityStudentMapper.selectByExample(activityStudentExample0);
+        if(activityStudents0.size()>=activity.getMaxNum()){
+            result.put("code", "fail");
+            result.put("msg", "活动人数已满");
+            return result;
+        }
 
         ActivityStudent activityStudent=new ActivityStudent();
+        String applyNumber= UUIDUtil.getActivityApplyNumber(activityId);//生成报名编号
+        //排重
+        while(activityStudentMapper.selectByPrimaryKey(applyNumber)!=null){
+            applyNumber= UUIDUtil.getActivityApplyNumber(activityId);
+        }
+        activityStudent.setApplyNumber(applyNumber);
         activityStudent.setActivityId(activityId);
         activityStudent.setStudentId(studentId);
         activityStudent.setIsSuccess(false);
         activityStudent.setApplyTime(new Date());
         if(activityStudentMapper.insert(activityStudent)>0){
-            result.put("code", "success");
-            result.put("msg", "报名成功！待支付");
+            String orderId=OrderIdGenerator.getUniqueId();
+            //订单号生成并查重（查重如非高并发系统基本上可以省略）
+            while(activityOrderMapper.selectByPrimaryKey(orderId)!=null){
+                orderId=OrderIdGenerator.getUniqueId();
+            }
+            ActivityOrder activityOrder=new ActivityOrder();
+            activityOrder.setActivityOrderId(orderId);
+            activityOrder.setActivityId(activityId);
+            activityOrder.setStudentId(studentId);
+            activityOrder.setOrderType(true);//"1"即学生提交的订单
+            activityOrder.setOrderPrice(activity.getActivityFee());
+            activityOrder.setOrderBeginTime(new Date());
+            activityOrder.setPaymentState(false);
+            activityOrder.setClose(false);
+            if(activityOrderMapper.insert(activityOrder)>0){
+                result.put("code", "success");
+                result.put("msg", "报名成功!待支付");
+            }else{
+                result.put("code", "fail");
+                result.put("msg", "订单生成失败!");
+                activityStudentMapper.deleteByExample(activityStudentExample);
+            }
             return result;
         }else {
             result.put("code", "fail");

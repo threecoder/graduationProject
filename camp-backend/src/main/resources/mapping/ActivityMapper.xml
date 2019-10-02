@@ -12,6 +12,9 @@
     <result column="activity_address" jdbcType="VARCHAR" property="activityAddress" />
     <result column="open_time" jdbcType="TIMESTAMP" property="openTime" />
     <result column="close_time" jdbcType="TIMESTAMP" property="closeTime" />
+    <result column="max_num" jdbcType="INTEGER" property="maxNum" />
+    <result column="area_width" jdbcType="INTEGER" property="areaWidth" />
+    <result column="area_length" jdbcType="INTEGER" property="areaLength" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -73,7 +76,7 @@
   </sql>
   <sql id="Base_Column_List">
     activity_id, activity_fee, activity_name, activity_introduction, activity_date, activity_length_min, 
-    contacts, activity_address, open_time, close_time
+    contacts, activity_address, open_time, close_time, max_num, area_width, area_length
   </sql>
   <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.ActivityExample" resultMap="BaseResultMap">
     select
@@ -111,11 +114,13 @@
     </selectKey>
     insert into activity (activity_fee, activity_name, activity_introduction, 
       activity_date, activity_length_min, contacts, 
-      activity_address, open_time, close_time
+      activity_address, open_time, close_time, 
+      max_num, area_width, area_length
       )
     values (#{activityFee,jdbcType=DECIMAL}, #{activityName,jdbcType=VARCHAR}, #{activityIntroduction,jdbcType=VARCHAR}, 
       #{activityDate,jdbcType=TIMESTAMP}, #{activityLengthMin,jdbcType=INTEGER}, #{contacts,jdbcType=VARCHAR}, 
-      #{activityAddress,jdbcType=VARCHAR}, #{openTime,jdbcType=TIMESTAMP}, #{closeTime,jdbcType=TIMESTAMP}
+      #{activityAddress,jdbcType=VARCHAR}, #{openTime,jdbcType=TIMESTAMP}, #{closeTime,jdbcType=TIMESTAMP}, 
+      #{maxNum,jdbcType=INTEGER}, #{areaWidth,jdbcType=INTEGER}, #{areaLength,jdbcType=INTEGER}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.Activity">
@@ -151,6 +156,15 @@
       <if test="closeTime != null">
         close_time,
       </if>
+      <if test="maxNum != null">
+        max_num,
+      </if>
+      <if test="areaWidth != null">
+        area_width,
+      </if>
+      <if test="areaLength != null">
+        area_length,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="activityFee != null">
@@ -179,6 +193,15 @@
       </if>
       <if test="closeTime != null">
         #{closeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="maxNum != null">
+        #{maxNum,jdbcType=INTEGER},
+      </if>
+      <if test="areaWidth != null">
+        #{areaWidth,jdbcType=INTEGER},
+      </if>
+      <if test="areaLength != null">
+        #{areaLength,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -221,6 +244,15 @@
       <if test="record.closeTime != null">
         close_time = #{record.closeTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.maxNum != null">
+        max_num = #{record.maxNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.areaWidth != null">
+        area_width = #{record.areaWidth,jdbcType=INTEGER},
+      </if>
+      <if test="record.areaLength != null">
+        area_length = #{record.areaLength,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -237,7 +269,10 @@
       contacts = #{record.contacts,jdbcType=VARCHAR},
       activity_address = #{record.activityAddress,jdbcType=VARCHAR},
       open_time = #{record.openTime,jdbcType=TIMESTAMP},
-      close_time = #{record.closeTime,jdbcType=TIMESTAMP}
+      close_time = #{record.closeTime,jdbcType=TIMESTAMP},
+      max_num = #{record.maxNum,jdbcType=INTEGER},
+      area_width = #{record.areaWidth,jdbcType=INTEGER},
+      area_length = #{record.areaLength,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -272,6 +307,15 @@
       <if test="closeTime != null">
         close_time = #{closeTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="maxNum != null">
+        max_num = #{maxNum,jdbcType=INTEGER},
+      </if>
+      <if test="areaWidth != null">
+        area_width = #{areaWidth,jdbcType=INTEGER},
+      </if>
+      <if test="areaLength != null">
+        area_length = #{areaLength,jdbcType=INTEGER},
+      </if>
     </set>
     where activity_id = #{activityId,jdbcType=INTEGER}
   </update>
@@ -285,7 +329,10 @@
       contacts = #{contacts,jdbcType=VARCHAR},
       activity_address = #{activityAddress,jdbcType=VARCHAR},
       open_time = #{openTime,jdbcType=TIMESTAMP},
-      close_time = #{closeTime,jdbcType=TIMESTAMP}
+      close_time = #{closeTime,jdbcType=TIMESTAMP},
+      max_num = #{maxNum,jdbcType=INTEGER},
+      area_width = #{areaWidth,jdbcType=INTEGER},
+      area_length = #{areaLength,jdbcType=INTEGER}
     where activity_id = #{activityId,jdbcType=INTEGER}
   </update>
 </mapper>
