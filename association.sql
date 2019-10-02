@@ -31,12 +31,15 @@ CREATE TABLE `activity` (
   `activity_address` varchar(200) DEFAULT NULL COMMENT '活动地址',
   `open_time` datetime DEFAULT NULL COMMENT '开放报名时间',
   `close_time` datetime DEFAULT NULL COMMENT '关闭报名时间',
+  `max_num` int(11) DEFAULT NULL COMMENT '活动可容纳最大人数',
+  `area_width` int(11) DEFAULT NULL COMMENT '场地矩形行座位数',
+  `area_length` int(11) DEFAULT NULL COMMENT '场地矩形列座位数',
   PRIMARY KEY (`activity_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 /*Data for the table `activity` */
 
-insert  into `activity`(`activity_id`,`activity_fee`,`activity_name`,`activity_introduction`,`activity_date`,`activity_length_min`,`contacts`,`activity_address`,`open_time`,`close_time`) values (1,'188.88','垃圾分类讲解','  今年夏天，垃圾分类无疑是最火的话题。作为全国46个垃圾分类试点城市之一，长沙市围绕垃圾分类开展了形式多样、内容丰富的宣传活动，趣味游戏、知识宣讲、在线答题、儿童手抄报……一场全民参与、声势浩大的“全民生活垃圾分类之旅”让环保理念深植人心。','2019-10-01 20:00:00',60,'王先生 13332122312','广东省广州市华南理工大学大学城校区','2019-09-25 20:00:00','2019-10-09 02:32:42'),(2,'299.99','英语角','  我们的英语俱乐部旨在为大家创造一个英语的交流环境，让所有想学英语，想说好英语的人们，在这样一个极具特色的氛围中学好英语，在外语老师的引导下，大家会积极交流，大胆开口说，培养纯正的外语语感，让你更加自信说英语，并结交更多的外国友人，避免找个好工作， 而因为英语困惑自己~~~~','2019-09-30 15:00:00',120,'李先生 13332122312','广东省广州市华南理工大学大学城校区','2019-09-25 13:00:00','2019-09-26 00:32:46'),(3,'199.99','“拥抱春天，播种绿色”植树节活动','  植树节是按照法律规定宣传保护树木，并组织动员群众积极参加以植树造林为活动内容的节日。按时间长短可分为植树日、植树周和植树月，共称为国际植树节。提倡通过这种活动，激发人们爱林造林的热情、意识到环保的重要性。',NULL,NULL,'李先生 13332122312','广东省广州市华南理工大学大学城校区','2019-09-24 02:28:46','2019-09-30 02:32:52');
+insert  into `activity`(`activity_id`,`activity_fee`,`activity_name`,`activity_introduction`,`activity_date`,`activity_length_min`,`contacts`,`activity_address`,`open_time`,`close_time`,`max_num`,`area_width`,`area_length`) values (1,'188.88','垃圾分类讲解','  今年夏天，垃圾分类无疑是最火的话题。作为全国46个垃圾分类试点城市之一，长沙市围绕垃圾分类开展了形式多样、内容丰富的宣传活动，趣味游戏、知识宣讲、在线答题、儿童手抄报……一场全民参与、声势浩大的“全民生活垃圾分类之旅”让环保理念深植人心。','2019-10-01 20:00:00',60,'王先生 13332122312','广东省广州市华南理工大学大学城校区','2019-09-25 20:00:00','2019-10-09 02:32:42',NULL,NULL,NULL),(2,'299.99','英语角','  我们的英语俱乐部旨在为大家创造一个英语的交流环境，让所有想学英语，想说好英语的人们，在这样一个极具特色的氛围中学好英语，在外语老师的引导下，大家会积极交流，大胆开口说，培养纯正的外语语感，让你更加自信说英语，并结交更多的外国友人，避免找个好工作， 而因为英语困惑自己~~~~','2019-09-30 15:00:00',120,'李先生 13332122312','广东省广州市华南理工大学大学城校区','2019-09-25 13:00:00','2019-09-26 00:32:46',NULL,NULL,NULL),(3,'199.99','“拥抱春天，播种绿色”植树节活动','  植树节是按照法律规定宣传保护树木，并组织动员群众积极参加以植树造林为活动内容的节日。按时间长短可分为植树日、植树周和植树月，共称为国际植树节。提倡通过这种活动，激发人们爱林造林的热情、意识到环保的重要性。',NULL,NULL,'李先生 13332122312','广东省广州市华南理工大学大学城校区','2019-09-24 02:28:46','2019-09-30 02:32:52',NULL,NULL,NULL);
 
 /*Table structure for table `activity_order` */
 
@@ -50,7 +53,7 @@ CREATE TABLE `activity_order` (
   `student_id` int(11) DEFAULT NULL COMMENT '学员订单则不为空',
   `order_price` decimal(10,2) DEFAULT NULL COMMENT '订单金额',
   `order_begin_time` datetime DEFAULT NULL,
-  `payment_state` tinyint(1) DEFAULT NULL COMMENT '0为未付款，1为已付款',
+  `payment_state` tinyint(1) DEFAULT '0' COMMENT '0为未付款，1为已付款',
   `close` tinyint(1) DEFAULT '0' COMMENT '1为订单关闭',
   PRIMARY KEY (`activity_order_id`),
   KEY `activity_id` (`activity_id`),
@@ -62,6 +65,8 @@ CREATE TABLE `activity_order` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `activity_order` */
+
+insert  into `activity_order`(`activity_order_id`,`activity_id`,`order_type`,`member_id`,`student_id`,`order_price`,`order_begin_time`,`payment_state`,`close`) values ('20191001145853382363',1,1,NULL,1,'188.88','2019-10-01 14:58:54',0,0);
 
 /*Table structure for table `activity_order_student` */
 
@@ -78,51 +83,83 @@ CREATE TABLE `activity_order_student` (
 
 /*Data for the table `activity_order_student` */
 
+/*Table structure for table `activity_seat` */
+
+DROP TABLE IF EXISTS `activity_seat`;
+
+CREATE TABLE `activity_seat` (
+  `activity_id` int(11) DEFAULT NULL COMMENT '活动id',
+  `x_index` int(11) DEFAULT NULL COMMENT '横坐标',
+  `y_index` int(11) DEFAULT NULL COMMENT '纵坐标',
+  `is_lock` tinyint(1) DEFAULT '0' COMMENT '1:锁定座位',
+  `is_occupied` tinyint(1) DEFAULT '1' COMMENT '0:空座 1:已有人',
+  `seat_number` varchar(20) DEFAULT NULL COMMENT '座位号(Y行X座)',
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '座位主键',
+  PRIMARY KEY (`id`),
+  KEY `activity_id` (`activity_id`),
+  CONSTRAINT `activity_seat_ibfk_1` FOREIGN KEY (`activity_id`) REFERENCES `activity` (`activity_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `activity_seat` */
+
 /*Table structure for table `activity_student` */
 
 DROP TABLE IF EXISTS `activity_student`;
 
 CREATE TABLE `activity_student` (
+  `apply_number` varchar(20) NOT NULL COMMENT '报名编号',
   `activity_id` int(11) DEFAULT NULL,
   `student_id` int(11) DEFAULT NULL,
   `apply_time` datetime DEFAULT NULL COMMENT '报名时间',
   `is_success` tinyint(1) DEFAULT '0' COMMENT '1为报名成功',
+  `seat_id` int(11) DEFAULT NULL COMMENT '活动座位表外键',
   `seat_number` varchar(15) DEFAULT NULL COMMENT '座位号',
+  `is_invalid` tinyint(1) DEFAULT '0' COMMENT '0:报名编号有效 1:失效（订单失效）',
+  PRIMARY KEY (`apply_number`),
   KEY `student_id` (`student_id`),
   KEY `activity_id` (`activity_id`),
+  KEY `seat_id` (`seat_id`),
   CONSTRAINT `activity_student_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`),
-  CONSTRAINT `activity_student_ibfk_2` FOREIGN KEY (`activity_id`) REFERENCES `activity` (`activity_id`)
+  CONSTRAINT `activity_student_ibfk_2` FOREIGN KEY (`activity_id`) REFERENCES `activity` (`activity_id`),
+  CONSTRAINT `activity_student_ibfk_3` FOREIGN KEY (`seat_id`) REFERENCES `activity_seat` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `activity_student` */
 
-insert  into `activity_student`(`activity_id`,`student_id`,`apply_time`,`is_success`,`seat_number`) values (1,1,'2019-09-25 01:39:09',0,''),(2,1,'2019-09-24 01:39:49',1,'A10');
+insert  into `activity_student`(`apply_number`,`activity_id`,`student_id`,`apply_time`,`is_success`,`seat_id`,`seat_number`,`is_invalid`) values ('a1_84701a',1,1,'2019-10-01 14:58:54',0,NULL,NULL,NULL);
 
-/*Table structure for table `alipay_log` */
+/*Table structure for table `admin` */
 
-DROP TABLE IF EXISTS `alipay_log`;
+DROP TABLE IF EXISTS `admin`;
 
-CREATE TABLE `alipay_log` (
-  `pay_order_id` varchar(50) NOT NULL COMMENT '支付订单编号',
-  `create_time` datetime DEFAULT NULL,
-  `amount` decimal(10,2) DEFAULT NULL COMMENT '金额',
-  PRIMARY KEY (`pay_order_id`)
+CREATE TABLE `admin` (
+  `admin_id` varchar(20) NOT NULL,
+  `admin_password` varchar(20) DEFAULT NULL,
+  `permission_value` tinyint(1) DEFAULT '0' COMMENT '0位普通管理员，1为审核管理员',
+  `is_locked` tinyint(1) DEFAULT '0' COMMENT '状态：0正常，1锁定',
+  `admin_name` varchar(10) DEFAULT NULL COMMENT '管理员名',
+  PRIMARY KEY (`admin_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-/*Data for the table `alipay_log` */
+/*Data for the table `admin` */
 
-/*Table structure for table `as_admin` */
+/*Table structure for table `admin_log` */
 
-DROP TABLE IF EXISTS `as_admin`;
+DROP TABLE IF EXISTS `admin_log`;
 
-CREATE TABLE `as_admin` (
-  `as_admin_id` varchar(20) NOT NULL,
-  `as_admin_password` varchar(20) DEFAULT NULL,
-  `access` tinyint(1) DEFAULT '0' COMMENT '是否是审核管理员',
-  PRIMARY KEY (`as_admin_id`)
+CREATE TABLE `admin_log` (
+  `log_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '日志编号',
+  `description` varchar(50) DEFAULT NULL COMMENT '操作描述',
+  `time` datetime DEFAULT NULL COMMENT '操作时间',
+  `request_url` varchar(40) DEFAULT NULL COMMENT '请求地址',
+  `request_method` varchar(10) DEFAULT NULL COMMENT '请求方式',
+  `respond` varchar(500) DEFAULT NULL COMMENT '返回结果',
+  `admin_name` varchar(10) DEFAULT NULL COMMENT '操作人',
+  `admin_id` int(11) DEFAULT NULL COMMENT '操作人id',
+  PRIMARY KEY (`log_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-/*Data for the table `as_admin` */
+/*Data for the table `admin_log` */
 
 /*Table structure for table `association` */
 
@@ -130,7 +167,7 @@ DROP TABLE IF EXISTS `association`;
 
 CREATE TABLE `association` (
   `association_name` varchar(30) DEFAULT NULL COMMENT '协会名称',
-  `association_introduce` text COMMENT '协会介绍'
+  `association_introduce` varchar(1000) DEFAULT NULL COMMENT '协会介绍'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `association` */
@@ -142,17 +179,50 @@ DROP TABLE IF EXISTS `certificate`;
 CREATE TABLE `certificate` (
   `certificate_id` int(11) NOT NULL AUTO_INCREMENT,
   `training_id` int(11) DEFAULT NULL COMMENT '证书所属培训',
-  `certificate_length_month` tinyint(4) DEFAULT NULL COMMENT '证书有效时长(月)',
   `certificate_length_day` tinyint(4) DEFAULT NULL COMMENT '证书有效时长(天)',
   `certificate_module` varchar(200) DEFAULT NULL COMMENT '证书模板url',
   `certificate_name` varchar(100) DEFAULT NULL COMMENT '证书名',
   `certificate_content` varchar(300) DEFAULT NULL COMMENT '证书内容',
+  `recheck_fee` decimal(10,2) DEFAULT NULL COMMENT '证书复审费用',
   PRIMARY KEY (`certificate_id`),
   KEY `training_id` (`training_id`),
   CONSTRAINT `certificate_ibfk_1` FOREIGN KEY (`training_id`) REFERENCES `training` (`training_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `certificate` */
+
+/*Table structure for table `certificate_change_line` */
+
+DROP TABLE IF EXISTS `certificate_change_line`;
+
+CREATE TABLE `certificate_change_line` (
+  `re_id` int(11) DEFAULT NULL,
+  `change_description` varchar(50) DEFAULT NULL COMMENT '变更描述',
+  `op_user_type` tinyint(1) DEFAULT NULL COMMENT '0:学员申请 1:会员申请',
+  `student_id` int(11) DEFAULT NULL,
+  `member_id` varchar(20) DEFAULT NULL COMMENT '若为学员申请则置null',
+  KEY `re_id` (`re_id`),
+  CONSTRAINT `certificate_change_line_ibfk_1` FOREIGN KEY (`re_id`) REFERENCES `certificate_re_student` (`re_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `certificate_change_line` */
+
+/*Table structure for table `certificate_change_log` */
+
+DROP TABLE IF EXISTS `certificate_change_log`;
+
+CREATE TABLE `certificate_change_log` (
+  `log_id` int(11) NOT NULL AUTO_INCREMENT,
+  `re_id` int(11) DEFAULT NULL COMMENT '证书——学生 唯一id',
+  `op_description` varchar(50) DEFAULT NULL COMMENT '操作描述',
+  `op_time` datetime DEFAULT NULL COMMENT '操作时间',
+  `is_success` tinyint(1) DEFAULT NULL COMMENT '1:操作成功 0操作失败',
+  `op_user_type` varchar(20) DEFAULT NULL COMMENT '操作人类型(student/member/admin)',
+  `op_user_id` varchar(20) DEFAULT NULL COMMENT '操作人id',
+  PRIMARY KEY (`log_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `certificate_change_log` */
 
 /*Table structure for table `certificate_change_order` */
 
@@ -182,11 +252,14 @@ CREATE TABLE `certificate_change_order` (
 DROP TABLE IF EXISTS `certificate_re_student`;
 
 CREATE TABLE `certificate_re_student` (
+  `re_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键',
   `certificate_id` int(11) DEFAULT NULL,
   `student_id` int(11) DEFAULT NULL,
-  `certificate_end_date` date DEFAULT NULL COMMENT '证书有效期',
+  `certificate_end_date` date DEFAULT NULL COMMENT '证书失效日期',
   `certificate_begin_date` date DEFAULT NULL COMMENT '证书生效日期',
   `member_name` varchar(30) DEFAULT NULL COMMENT '所属单位',
+  `recheckable` tinyint(1) DEFAULT '1' COMMENT '0:不可再申请复审',
+  PRIMARY KEY (`re_id`),
   KEY `certificate_id` (`certificate_id`),
   KEY `student_id` (`student_id`),
   CONSTRAINT `certificate_re_student_ibfk_1` FOREIGN KEY (`certificate_id`) REFERENCES `certificate` (`certificate_id`),
@@ -194,6 +267,37 @@ CREATE TABLE `certificate_re_student` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `certificate_re_student` */
+
+/*Table structure for table `certificate_recheck_line` */
+
+DROP TABLE IF EXISTS `certificate_recheck_line`;
+
+CREATE TABLE `certificate_recheck_line` (
+  `re_id` int(11) DEFAULT NULL COMMENT '证书——学生 唯一id',
+  KEY `re_id` (`re_id`),
+  CONSTRAINT `certificate_recheck_line_ibfk_1` FOREIGN KEY (`re_id`) REFERENCES `certificate_re_student` (`re_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `certificate_recheck_line` */
+
+/*Table structure for table `certificate_recheck_log` */
+
+DROP TABLE IF EXISTS `certificate_recheck_log`;
+
+CREATE TABLE `certificate_recheck_log` (
+  `log_id` int(11) NOT NULL AUTO_INCREMENT,
+  `re_id` int(11) DEFAULT NULL COMMENT '证书——学生 唯一id',
+  `op_description` varchar(50) DEFAULT NULL COMMENT '操作描述',
+  `op_time` datetime DEFAULT NULL COMMENT '操作时间',
+  `is_success` tinyint(1) DEFAULT NULL COMMENT '1:操作成功 0操作失败',
+  `op_user_type` varchar(20) DEFAULT NULL COMMENT '操作人类型(student/admin)',
+  `op_user_id` varchar(20) DEFAULT NULL COMMENT '操作人id',
+  PRIMARY KEY (`log_id`),
+  KEY `re_id` (`re_id`),
+  CONSTRAINT `certificate_recheck_log_ibfk_1` FOREIGN KEY (`re_id`) REFERENCES `certificate_re_student` (`re_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `certificate_recheck_log` */
 
 /*Table structure for table `certificate_recheck_order` */
 
@@ -301,20 +405,52 @@ insert  into `exam_re_question`(`exam_id`,`question_id`,`score`,`question_index`
 DROP TABLE IF EXISTS `exam_re_student`;
 
 CREATE TABLE `exam_re_student` (
+  `report_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '成绩单编号',
   `exam_id` int(11) DEFAULT NULL,
   `student_id` int(11) DEFAULT NULL,
   `score` int(6) DEFAULT NULL COMMENT '考试分数',
   `remaining_times` tinyint(4) DEFAULT '3' COMMENT '可重考剩余次数',
   `is_invalid` tinyint(1) DEFAULT '0' COMMENT '1为无效(考试不通过)',
+  `is_verify` tinyint(1) DEFAULT '0' COMMENT '0:未审核 1:已审核',
+  `in_line` tinyblob COMMENT '0:不在审核队列里 1:在审核队列里',
+  `not_pass_reason` varchar(100) DEFAULT NULL COMMENT '审核不通过理由',
+  `not_pass_times` int(11) DEFAULT NULL COMMENT '审核不通过次数，被驳回一次+1',
+  PRIMARY KEY (`report_id`),
   KEY `exam_id` (`exam_id`),
   KEY `student_id` (`student_id`),
   CONSTRAINT `exam_re_student_ibfk_1` FOREIGN KEY (`exam_id`) REFERENCES `exam` (`exam_id`),
   CONSTRAINT `exam_re_student_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 /*Data for the table `exam_re_student` */
 
-insert  into `exam_re_student`(`exam_id`,`student_id`,`score`,`remaining_times`,`is_invalid`) values (1,1,55,2,0),(1,2,34,1,0),(2,1,41,0,0),(4,1,56,1,0);
+insert  into `exam_re_student`(`report_id`,`exam_id`,`student_id`,`score`,`remaining_times`,`is_invalid`,`is_verify`,`in_line`,`not_pass_reason`,`not_pass_times`) values (1,1,1,55,2,0,0,NULL,NULL,NULL),(2,1,2,34,1,0,0,NULL,NULL,NULL),(3,2,1,41,0,0,0,NULL,NULL,NULL),(4,4,1,56,1,0,0,NULL,NULL,NULL);
+
+/*Table structure for table `exam_report_op_log` */
+
+DROP TABLE IF EXISTS `exam_report_op_log`;
+
+CREATE TABLE `exam_report_op_log` (
+  `log_id` int(11) DEFAULT NULL COMMENT '日志编号',
+  `report_id` int(11) DEFAULT NULL COMMENT '成绩单编号',
+  `admin_id` varchar(20) DEFAULT NULL COMMENT '操作管理员id',
+  `op_description` varchar(50) DEFAULT NULL COMMENT '操作描述',
+  `op_time` datetime DEFAULT NULL COMMENT '操作时间',
+  `is_success` tinyint(1) DEFAULT '1' COMMENT '1:操作成功 0操作失败'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `exam_report_op_log` */
+
+/*Table structure for table `exam_report_verify` */
+
+DROP TABLE IF EXISTS `exam_report_verify`;
+
+CREATE TABLE `exam_report_verify` (
+  `report_id` int(11) DEFAULT NULL,
+  `admin_id` varchar(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `exam_report_verify` */
 
 /*Table structure for table `member` */
 
@@ -323,21 +459,26 @@ DROP TABLE IF EXISTS `member`;
 CREATE TABLE `member` (
   `member_id` varchar(20) NOT NULL,
   `member_phone` varchar(20) DEFAULT NULL COMMENT '移动电话',
+  `member_email` varchar(50) DEFAULT NULL COMMENT '电子邮箱',
   `member_password` varchar(20) NOT NULL DEFAULT '123456',
   `member_tel` varchar(20) DEFAULT NULL COMMENT '座机',
-  `member_address` varchar(100) DEFAULT NULL COMMENT '地址',
   `member_name` varchar(40) DEFAULT NULL COMMENT '单位或机构名称',
+  `is_vip` tinyint(1) DEFAULT '0' COMMENT '是否为协会会员',
+  `enter_date` date DEFAULT NULL COMMENT '入会时间(非vip)',
+  `vip_end_date` date DEFAULT NULL COMMENT '会员到期时间',
+  `vip_begin_date` date DEFAULT NULL COMMENT '成为协会会员时间',
+  `member_country` varchar(20) DEFAULT NULL,
   `member_province` varchar(20) DEFAULT NULL COMMENT '会员省份(直辖市)',
   `member_city` varchar(20) DEFAULT NULL COMMENT '会员所在市',
-  `vip` tinyint(1) DEFAULT '0' COMMENT '是否为协会会员',
-  `vip_end_date` date DEFAULT NULL COMMENT '会员到期时间',
-  `enter_date` date DEFAULT NULL COMMENT '入会时间(非vip)',
-  `vip_begin_date` date DEFAULT NULL COMMENT '成为协会会员时间',
+  `member_area` varchar(20) DEFAULT NULL COMMENT '所在区镇',
+  `member_address` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`member_id`),
   UNIQUE KEY `Phone` (`member_phone`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `member` */
+
+insert  into `member`(`member_id`,`member_phone`,`member_email`,`member_password`,`member_tel`,`member_name`,`is_vip`,`enter_date`,`vip_end_date`,`vip_begin_date`,`member_country`,`member_province`,`member_city`,`member_area`,`member_address`) values ('mb_ca33eae307ae4','15521065462',NULL,'123456','222102312','AA股份有限公司',0,'2019-09-19',NULL,NULL,'中国','广东省','广州市','番禺区','大学城华南理工大学');
 
 /*Table structure for table `member_re_student` */
 
@@ -354,6 +495,24 @@ CREATE TABLE `member_re_student` (
 
 /*Data for the table `member_re_student` */
 
+/*Table structure for table `member_subscription_order` */
+
+DROP TABLE IF EXISTS `member_subscription_order`;
+
+CREATE TABLE `member_subscription_order` (
+  `subscription_order_id` varchar(20) NOT NULL COMMENT '协会会员会费订单',
+  `member_id` varchar(20) DEFAULT NULL COMMENT '会员Id',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `fee` decimal(10,2) DEFAULT NULL COMMENT '费用',
+  `payment_state` tinyint(1) DEFAULT '0' COMMENT '0:未付款 1:已付款',
+  `close` tinyint(1) DEFAULT '0' COMMENT '0:订单有效/待支付 1:订单关闭/完成',
+  PRIMARY KEY (`subscription_order_id`),
+  KEY `member_id` (`member_id`),
+  CONSTRAINT `member_subscription_order_ibfk_1` FOREIGN KEY (`member_id`) REFERENCES `member` (`member_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `member_subscription_order` */
+
 /*Table structure for table `news` */
 
 DROP TABLE IF EXISTS `news`;
@@ -368,7 +527,7 @@ CREATE TABLE `news` (
   `type` varchar(10) DEFAULT NULL COMMENT '新闻类别',
   PRIMARY KEY (`news_id`),
   KEY `as_admin_id` (`as_admin_id`),
-  CONSTRAINT `news_ibfk_1` FOREIGN KEY (`as_admin_id`) REFERENCES `as_admin` (`as_admin_id`)
+  CONSTRAINT `news_ibfk_1` FOREIGN KEY (`as_admin_id`) REFERENCES `admin` (`admin_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `news` */
@@ -428,13 +587,15 @@ CREATE TABLE `student` (
   `student_idcard` varchar(20) DEFAULT NULL COMMENT '身份证号码',
   `student_phone` varchar(20) DEFAULT NULL,
   `student_name` varchar(12) DEFAULT NULL,
-  `student_email` varchar(30) DEFAULT NULL,
+  `student_email` varchar(50) DEFAULT NULL,
   `student_positon` varchar(20) DEFAULT NULL COMMENT '职位',
   `student_country` varchar(20) DEFAULT NULL COMMENT '地址',
   `student_province` varchar(20) DEFAULT NULL,
   `student_city` varchar(20) DEFAULT NULL,
   `student_area` varchar(20) DEFAULT NULL COMMENT '所在区镇',
   `student_address` varchar(200) DEFAULT NULL,
+  `company` varchar(30) DEFAULT NULL COMMENT '所属机构',
+  `enter_time` datetime DEFAULT NULL COMMENT '入会时间',
   PRIMARY KEY (`student_id`),
   UNIQUE KEY `UNIQUE1` (`student_phone`),
   UNIQUE KEY `UNIQUE2` (`student_idcard`)
@@ -442,19 +603,27 @@ CREATE TABLE `student` (
 
 /*Data for the table `student` */
 
-insert  into `student`(`student_id`,`student_password`,`student_idcard`,`student_phone`,`student_name`,`student_email`,`student_positon`,`student_country`,`student_province`,`student_city`,`student_area`,`student_address`) values (1,'123456','445281199308310056','15521054785','张三','12@qq.com','经理','中国','广东省','广州市','番禺区','大学城华南理工大学'),(2,'123456','445281199308310037','15521064789','李四','22@qq.com',NULL,NULL,NULL,NULL,NULL,NULL),(3,'123456','445281199308310033','15521064781',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert  into `student`(`student_id`,`student_password`,`student_idcard`,`student_phone`,`student_name`,`student_email`,`student_positon`,`student_country`,`student_province`,`student_city`,`student_area`,`student_address`,`company`,`enter_time`) values (1,'123456','445281199308310056','15521054785','张三','11@qq.com','经理','中国','广东省','广州市','番禺区','大学城华南理工大学',NULL,NULL),(2,'123456','445281199308310037','15521064789','李四','22@qq.com',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(3,'123456','445281199308310033','15521064781',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
-/*Table structure for table `super_admin` */
+/*Table structure for table `system_parameter` */
 
-DROP TABLE IF EXISTS `super_admin`;
+DROP TABLE IF EXISTS `system_parameter`;
 
-CREATE TABLE `super_admin` (
-  `su_id` varchar(20) NOT NULL DEFAULT 'root',
-  `su_password` varchar(20) NOT NULL DEFAULT '000000',
-  PRIMARY KEY (`su_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `system_parameter` (
+  `para_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '方案编号',
+  `key` varchar(50) DEFAULT NULL COMMENT '参数名称',
+  `value` varchar(200) DEFAULT NULL COMMENT '参数内容',
+  `value_type` varchar(20) DEFAULT NULL COMMENT '参数数据类型:String,Integer,BigDecimal,Date...',
+  `flag` tinyint(1) DEFAULT '1' COMMENT '1:启用/0:停用',
+  `description` varchar(200) DEFAULT NULL COMMENT '参数描述',
+  `modify_time` datetime DEFAULT NULL COMMENT '最后一次修改时间',
+  PRIMARY KEY (`para_id`),
+  UNIQUE KEY `key` (`key`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
-/*Data for the table `super_admin` */
+/*Data for the table `system_parameter` */
+
+insert  into `system_parameter`(`para_id`,`key`,`value`,`value_type`,`flag`,`description`,`modify_time`) values (1,'stu_tran_permission','1','Interge',1,'学员培训权限 0:关闭 1:开放',NULL),(2,'activity_order_length','60','Interge',1,'活动报名订单有效时长 单位:min',NULL),(3,NULL,NULL,NULL,1,NULL,NULL);
 
 /*Table structure for table `training` */
 
@@ -523,10 +692,13 @@ CREATE TABLE `training_order_student` (
 DROP TABLE IF EXISTS `training_re_student`;
 
 CREATE TABLE `training_re_student` (
+  `apply_id` varchar(20) NOT NULL COMMENT '报名编号',
   `training_id` int(11) DEFAULT NULL,
   `student_id` int(11) DEFAULT NULL,
   `begin_time` datetime DEFAULT NULL COMMENT '报名时间',
+  `is_done` tinyint(1) DEFAULT '0' COMMENT '1:完成培训 0:未完成',
   `is_invalid` tinyint(1) DEFAULT '0' COMMENT '1为无效(考试不通过)',
+  PRIMARY KEY (`apply_id`),
   KEY `training_id` (`training_id`),
   KEY `student_id` (`student_id`),
   CONSTRAINT `training_re_student_ibfk_1` FOREIGN KEY (`training_id`) REFERENCES `training` (`training_id`),
@@ -534,8 +706,6 @@ CREATE TABLE `training_re_student` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `training_re_student` */
-
-insert  into `training_re_student`(`training_id`,`student_id`,`begin_time`,`is_invalid`) values (1,1,'2019-09-14 23:20:23',0),(1,2,'2019-09-19 23:20:29',0);
 
 /*Table structure for table `vote` */
 
@@ -591,7 +761,7 @@ CREATE TABLE `web_mail` (
   `type` tinyint(1) DEFAULT NULL COMMENT '0发给会员，1发给学员',
   `student_id` int(11) DEFAULT NULL,
   `member_id` varchar(20) DEFAULT NULL,
-  `message_content` text COMMENT '信息内容',
+  `message_content` varchar(1000) DEFAULT NULL COMMENT '信息内容',
   `send_time` datetime DEFAULT NULL COMMENT '站内信发送时间',
   PRIMARY KEY (`mail_id`),
   KEY `member_id` (`member_id`),
@@ -601,19 +771,6 @@ CREATE TABLE `web_mail` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `web_mail` */
-
-/*Table structure for table `wxpay_log` */
-
-DROP TABLE IF EXISTS `wxpay_log`;
-
-CREATE TABLE `wxpay_log` (
-  `pay_order_id` varchar(50) NOT NULL,
-  `create_time` datetime DEFAULT NULL,
-  `amount` decimal(10,2) DEFAULT NULL,
-  PRIMARY KEY (`pay_order_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `wxpay_log` */
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
