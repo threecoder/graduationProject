@@ -4,7 +4,7 @@
         <h2 v-else>公司信息</h2>
         <div>
             <span class="panel-title">基本信息</span>
-            <el-form v-if="idTyp==0" :model="info" :loading="loading">
+            <el-form v-if="idType==0" :model="info" :loading="loading">
                 <el-row :gutter="40">
                     <el-col :span="8">
                         <el-form-item label-position="top" label="身份证号码">
@@ -171,7 +171,7 @@ import { getLocalStorage } from "@/assets/js/util.js"
 export default {
     data() {
         return {
-            idTyp: null,
+            idType: null,
             info: {
                 idNum: null,
                 phone: null,

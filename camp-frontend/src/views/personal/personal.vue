@@ -4,7 +4,7 @@
             <div style="margin-left:250px;width:100%">
                 <h3 class="cursor" @click="toHomePage">协会首页</h3>
                 <div class="infoContainer fr">
-                    <span>admin</span>
+                    <span>{{name}}</span>
                     <span class="cursor" @click="logout">退出登录</span>
                 </div>
             </div>
@@ -35,7 +35,8 @@
     </el-row>
 </template>
 <script>
-import navmenu from '../../components/navmenu.vue'
+import navmenu from '../../components/navmenu.vue';
+import { getLocalStorage } from '@/assets/js/util.js';
 export default {
     mounted(){
         // document.getElementsByTagName("aside")[0].style.height = window.innerHeight+'px';
@@ -107,28 +108,30 @@ export default {
                     ]
                 },
                 {
-                    index:"",
+                    index:"3",
                     title: "培训管理",
                     children: [
-                        {index:"", title:"报名培训"}
+                        { index: "/training/0",title: "可报名培训"},
+                        { index: "/training/1",title: "已报名培训"}
                     ]
                 },
                 {
-                    index: "",
+                    index: "4",
                     title: "学员证件",
                     children: [
                         {index:"",title:"管理证件"}
                     ]
                 },
                 {
-                    index:"4",
+                    index:"5",
                     title:"活动报名",
                     children: [
                         { index: "/activities/0",title: "可报名活动"},
                         { index: "/activities/1",title: "已报名活动"}
                     ]
                 }
-            ]
+            ],
+            name: getLocalStorage("user").name
         }
     },
     components:{
