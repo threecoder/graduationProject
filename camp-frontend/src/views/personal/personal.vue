@@ -19,7 +19,7 @@
                     :unique-opened="true"
                     text-color="#fff">
                     <!-- <navmenu :data="adminList"></navmenu> -->
-                    <navmenu :data="menuList"></navmenu>
+                    <navmenu :data="adminList"></navmenu>
                 </el-menu>
             </aside>
             <section class="content-container">
@@ -90,28 +90,20 @@ export default {
                     ]
                 }
             ],
-            //会员管理员菜单
+            //会员菜单
             adminList: [
                 {
-                    index: "",
+                    index: "1",
                     title: "我的信息",
                     children: [
-                        {index: "",title: "我的资料"}
+                        {index: "/info",title: "我的资料"}
                     ]
                 },
                 {
-                    index: "",
-                    title: "会费管理",
-                    children: [
-                        {index: "", title: "会费缴纳"}
-                    ]
-                },
-                {
-                    index: "",
+                    index: "2",
                     title: "学员管理",
                     children: [
-                        {index:"", title:"添加学员"},
-                        {index:"", title:"挂靠关系"}
+                        {index:"/management", title:"挂靠关系"}
                     ]
                 },
                 {
@@ -129,11 +121,11 @@ export default {
                     ]
                 },
                 {
-                    index:"",
+                    index:"4",
                     title:"活动报名",
                     children: [
-                        {index:"",title:"已发布的活动"},
-                        {index:"",title:"已报名的活动"}
+                        { index: "/activities/0",title: "可报名活动"},
+                        { index: "/activities/1",title: "已报名活动"}
                     ]
                 }
             ]

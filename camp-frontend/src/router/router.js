@@ -80,6 +80,11 @@ export default new Router({
                     path: '/activities/:id',
                     name: 'activities',
                     component: resolve => require(['../views/personal/activities/joinable.vue'], resolve)
+                },
+                {
+                    path: '/management',
+                    name: 'management',
+                    component: resolve => require(['../views/personal/relationship/management.vue'], resolve)
                 }
             ]
         },

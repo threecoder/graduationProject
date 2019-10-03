@@ -1,6 +1,8 @@
 //封装请求的方法
 import Axios from 'axios'
-import md5 from 'js-md5'
+import md5 from 'js-md5';
+import fileDownload from 'js-file-download';
+
 
 const SALT = "6e6s4xswqsD25WEWQ3sShLJOK";
 
@@ -59,4 +61,15 @@ export function Encrypt(value){
         return null;
     }
     return md5.hex(value).toUpperCase();
+}
+
+//导出文件
+/**
+*res: 文件流
+**/
+export function download(res){
+    // 处理返回的文件流
+    let disposition = res.headers['content-disposition'];
+    let filename = decodeURI(disposition.split("filename=")[1]);
+    fileDownload(res.data, filename);
 }

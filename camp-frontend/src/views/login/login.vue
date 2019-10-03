@@ -42,7 +42,7 @@
 </template>
 <script>
 import { Encrypt, request } from "@/api/request.js";
-import { setCookie, getCookie, deleteCookie } from "@/assets/js/util.js";
+import { setLocalStorage  } from "@/assets/js/util.js";
 export default {
     data() {
         let valid = (rule, value, callback) => {
@@ -101,11 +101,11 @@ export default {
             };
 
             request("/campback/student/login", params, "post").then(res => {
-                // console.log(res);
                 this.$message.success(res.msg)
                 this.$router.push({
                     path: this.redirect ? this.redirect : "/personal"
                 });
+                setLocalStorage("user",res.data);
             }).catch(error=>{});
         }
     },

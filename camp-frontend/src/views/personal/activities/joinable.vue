@@ -4,10 +4,10 @@
         <h2 v-else>已经报名的活动</h2>
         <div class="table-container">
             <m-table
-                :data="tableData"
-                :tableConfig="tableConfig"
-                :loading="loading"
-                :tableAttr="tableAttr"
+                :data="activityTable.tableData"
+                :tableConfig="activityTable.tableConfig"
+                :loading="activityTable.loading"
+                :tableAttr="activityTable.tableAttr"
             >
                 <el-table-column
                     align="center"
@@ -19,7 +19,11 @@
                     <div slot-scope="{ row }">
                         <el-button @click="checkDetail(row)">详情</el-button>
                         <el-button v-if="type==1 && row.status=='未支付'" @click="pay">支付</el-button>
-                        <el-button v-if="type==0" @click="join(row)">报名</el-button>
+                        <el-button v-if="type==0 && idType==0" @click="studentJoin(row)">报名</el-button>
+                        <el-button
+                            v-if="type==0 && idType==1"
+                            @click="studentList.listFlag = true;studentList.id=row.id"
+                        >报名</el-button>
                         <el-button v-if="type==1 && row.status=='已支付'" @click="checkSEAT(row)">座位号</el-button>
                     </div>
                 </el-table-column>
@@ -40,98 +44,127 @@
             <div class="drawer-footer">
                 <el-button @click="drawer = false">取 消</el-button>
                 <el-button
-                    v-if="type==0"
+                    v-if="type==0 && idType==0"
                     type="primary"
-                    @click="join(null)"
+                    @click="studentJoin(null)"
+                    :loading="joinLoading"
+                >{{ joinLoading ? '提交中 ...' : '立即报名' }}</el-button>
+                <el-button
+                    v-if="type==0 && idType==1"
+                    type="primary"
+                    @click="studentList.listFlag=true;drawer=false;studentList.id=drwaerInfo.id"
                     :loading="joinLoading"
                 >{{ joinLoading ? '提交中 ...' : '立即报名' }}</el-button>
             </div>
         </el-drawer>
+
+        <el-dialog
+            title="选择人员"
+            v-if="studentList.listFlag"
+            :visible.sync="studentList.listFlag"
+            width="40%"
+        >
+            <list :tableData="studentList.list" @selectChange="selectChange" />
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="studentList.listFlag = false">取 消</el-button>
+                <el-button type="primary" @click="memberJoin">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 <script>
 import mTable from "../../../components/mTable.vue";
+import list from "./studentList.vue";
+import { getLocalStorage } from "@/assets/js/util.js"
 import {
     getJoinableActivities,
-    joinActivties,
+    studentJoinActivties,
     getsignedActivities,
-    getSeatNum
+    getSeatNum,
+    getList,
+    memberJoinActivity
 } from "@/api/modules/activity.js";
 export default {
     components: {
-        mTable
+        mTable,
+        list
     },
     data() {
         return {
+            idType: null,
             type: this.$route.params.id,
-            tableConfig: [
-                { prop: "id", label: "活动序号", width: "100" },
-                { prop: "name", label: "活动名称" },
-                { prop: "date", label: "举办时间" },
-                { prop: "address", label: "地点" },
-                { prop: "fee", label: "费用" },
-                {
-                    prop: "opera",
-                    label: "操作",
-                    fixed: "right",
-                    width: 200,
-                    slot: "oper"
-                }
-            ],
-            tableData: [
-                {
-                    id: 1,
-                    name: "活动测试",
-                    date: "2016-10-10 14:00:00-16:00:00",
-                    address: "广州市番禺区小谷围街道华南理工大学",
-                    fee: 1000,
-                    introduciotn: [
-                        `企业网站的作用是展示企业网站，
+            activityTable: {
+                tableConfig: [
+                    { prop: "id", label: "活动序号", width: "100" },
+                    { prop: "name", label: "活动名称" },
+                    { prop: "date", label: "举办时间" },
+                    { prop: "address", label: "地点" },
+                    { prop: "fee", label: "费用" },
+                    {
+                        prop: "opera",
+                        label: "操作",
+                        fixed: "right",
+                        width: 200,
+                        slot: "oper"
+                    }
+                ],
+                tableData: [
+                    {
+                        id: 1,
+                        name: "活动测试",
+                        date: "2016-10-10 14:00:00-16:00:00",
+                        address: "广州市番禺区小谷围街道华南理工大学",
+                        fee: 1000,
+                        introduciotn: [
+                            `企业网站的作用是展示企业网站，
                     为企业提供产品展示、企业宣传、形象建设、
                     联系企业等方面提供了重要信息渠道，企业如果能够做好网站宣传和网络口碑建设，
                     那么用户转化率就会大大提高，企业客户资源的源源不断带给我们企业的将会是订单，
                     所以企业网站建设不能只是摆设性的搭建一个域名、空间和程序，需要融合企业文化和企业精华到网站中。`
-                    ],
-                    status: "未支付",
-                    contacts: "唐先生 13535789321"
+                        ],
+                        status: "未支付",
+                        contacts: "唐先生 13535789321"
+                    },
+                    {
+                        id: 2,
+                        name: "活动测试",
+                        date: "2016-11-11 14:00:00-16:00:00",
+                        address: "广州市番禺区小谷围街道华南理工大学",
+                        fee: 1000,
+                        introduciotn: [
+                            `企业网站的作用是展示企业网站，
+                    为企业提供产品展示、企业宣传、形象建设、
+                    联系企业等方面提供了重要信息渠道，企业如果能够做好网站宣传和网络口碑建设，
+                    那么用户转化率就会大大提高，企业客户资源的源源不断带给我们企业的将会是订单，
+                    所以企业网站建设不能只是摆设性的搭建一个域名、空间和程序，需要融合企业文化和企业精华到网站中。`
+                        ],
+                        status: "已支付",
+                        contacts: "唐先生 13535789321"
+                    },
+                    {
+                        id: 3,
+                        name: "活动测试",
+                        date: "2016-10-10 14:00:00-16:00:00",
+                        address: "广州市番禺区小谷围街道华南理工大学",
+                        fee: 1000,
+                        introduciotn: [
+                            `企业网站的作用是展示企业网站，
+                    为企业提供产品展示、企业宣传、形象建设、
+                    联系企业等方面提供了重要信息渠道，企业如果能够做好网站宣传和网络口碑建设，
+                    那么用户转化率就会大大提高，企业客户资源的源源不断带给我们企业的将会是订单，
+                    所以企业网站建设不能只是摆设性的搭建一个域名、空间和程序，需要融合企业文化和企业精华到网站中。`
+                        ],
+                        status: "已完结",
+                        contacts: "唐先生 13535789321"
+                    }
+                ],
+                tableAttr: {
+                    stripe: true
                 },
-                {
-                    id: 2,
-                    name: "活动测试",
-                    date: "2016-11-11 14:00:00-16:00:00",
-                    address: "广州市番禺区小谷围街道华南理工大学",
-                    fee: 1000,
-                    introduciotn: [
-                        `企业网站的作用是展示企业网站，
-                    为企业提供产品展示、企业宣传、形象建设、
-                    联系企业等方面提供了重要信息渠道，企业如果能够做好网站宣传和网络口碑建设，
-                    那么用户转化率就会大大提高，企业客户资源的源源不断带给我们企业的将会是订单，
-                    所以企业网站建设不能只是摆设性的搭建一个域名、空间和程序，需要融合企业文化和企业精华到网站中。`
-                    ],
-                    status: "已支付",
-                    contacts: "唐先生 13535789321"
-                },
-                {
-                    id: 3,
-                    name: "活动测试",
-                    date: "2016-10-10 14:00:00-16:00:00",
-                    address: "广州市番禺区小谷围街道华南理工大学",
-                    fee: 1000,
-                    introduciotn: [
-                        `企业网站的作用是展示企业网站，
-                    为企业提供产品展示、企业宣传、形象建设、
-                    联系企业等方面提供了重要信息渠道，企业如果能够做好网站宣传和网络口碑建设，
-                    那么用户转化率就会大大提高，企业客户资源的源源不断带给我们企业的将会是订单，
-                    所以企业网站建设不能只是摆设性的搭建一个域名、空间和程序，需要融合企业文化和企业精华到网站中。`
-                    ],
-                    status: "已完结",
-                    contacts: "唐先生 13535789321"
-                }
-            ],
-            tableAttr: {
-                stripe: true
+                loading: false
             },
             drwaerInfo: {
+                id: null,
                 name: null,
                 date: null,
                 address: null,
@@ -139,16 +172,157 @@ export default {
                 introduciotn: [],
                 contacts: "唐先生 13535789321"
             },
-            loading: false,
             drawer: false,
-            joinLoading: false
+            joinLoading: false,
+            studentList: {
+                id: null,
+                listFlag: false,
+                data: [],
+                list: [
+                    {
+                        name: "1",
+                        idNum: "445122222222",
+                        phone: "15222222",
+                        position: "经理"
+                    },
+                    {
+                        name: "2",
+                        idNum: "445122222222",
+                        phone: "15222222",
+                        position: "经理"
+                    },
+                    {
+                        name: "3",
+                        idNum: "445122222222",
+                        phone: "15222222",
+                        position: "经理"
+                    },
+                    {
+                        name: "4",
+                        idNum: "445122222222",
+                        phone: "15222222",
+                        position: "经理"
+                    },
+                    {
+                        name: "5",
+                        idNum: "445122222222",
+                        phone: "15222222",
+                        position: "经理"
+                    },
+                    {
+                        name: "ss",
+                        idNum: "445122222222",
+                        phone: "15222222",
+                        position: "经理"
+                    },
+                    {
+                        name: "ss",
+                        idNum: "445122222222",
+                        phone: "15222222",
+                        position: "经理"
+                    },
+                    {
+                        name: "ss",
+                        idNum: "445122222222",
+                        phone: "15222222",
+                        position: "经理"
+                    },
+                    {
+                        name: "ss",
+                        idNum: "445122222222",
+                        phone: "15222222",
+                        position: "经理"
+                    },
+                    {
+                        name: "ss",
+                        idNum: "445122222222",
+                        phone: "15222222",
+                        position: "经理"
+                    },
+                    {
+                        name: "ss",
+                        idNum: "445122222222",
+                        phone: "15222222",
+                        position: "经理"
+                    },
+                    {
+                        name: "ss",
+                        idNum: "445122222222",
+                        phone: "15222222",
+                        position: "经理"
+                    },
+                    {
+                        name: "ss",
+                        idNum: "445122222222",
+                        phone: "15222222",
+                        position: "经理"
+                    },
+                    {
+                        name: "ss",
+                        idNum: "445122222222",
+                        phone: "15222222",
+                        position: "经理"
+                    },
+                    {
+                        name: "ss",
+                        idNum: "445122222222",
+                        phone: "15222222",
+                        position: "经理"
+                    },
+                    {
+                        name: "ss",
+                        idNum: "445122222222",
+                        phone: "15222222",
+                        position: "经理"
+                    },
+                    {
+                        name: "ss",
+                        idNum: "445122222222",
+                        phone: "15222222",
+                        position: "经理"
+                    },
+                    {
+                        name: "ss",
+                        idNum: "445122222222",
+                        phone: "15222222",
+                        position: "经理"
+                    },
+                    {
+                        name: "ss",
+                        idNum: "445122222222",
+                        phone: "15222222",
+                        position: "经理"
+                    },
+                    {
+                        name: "ss",
+                        idNum: "445122222222",
+                        phone: "15222222",
+                        position: "经理"
+                    },
+                    {
+                        name: "ss",
+                        idNum: "445122222222",
+                        phone: "15222222",
+                        position: "经理"
+                    }
+                ]
+            }
         };
+    },
+    watch: {
+        "studentList.listFlag": {
+            handler() {
+                this.studentList.data.length = 0;
+            }
+        }
     },
     mounted() {
         this.init();
+        this.getStudentList();
     },
     methods: {
         async init() {
+            this.idType = getLocalStorage("user").idType;
             try {
                 let res = null;
                 if (this.type == 1) {
@@ -161,7 +335,7 @@ export default {
                 this.tableData = res.data;
             } catch (error) {}
         },
-        async join(params) {
+        async studentJoin(params) {
             try {
                 this.joinLoading = true;
                 let id = params ? params.id : this.drwaerInfo.id;
@@ -172,19 +346,39 @@ export default {
                 this.joinLoading = false;
             }
         },
+        async getStudentList() {
+            try {
+                let res = await getList();
+                this.studentList.list = res.data;
+            } catch (error) {}
+        },
+        async memberJoin(id) {
+            if (this.studentList.data.length == 0) {
+                this.$message.error("报名人数不能为0");
+                return false;
+            }
+            try {
+                let par = {
+                    idNums: this.studentList.data,
+                    activityId: this.studentList.id
+                };
+                let res = await memberJoinActivity();
+                this.$message.success("报名成功");
+            } catch (error) {}
+        },
         checkDetail(row) {
             this.drawer = true;
             this.drwaerInfo = row;
-            console.log(this.drwaerInfo);
         },
         pay() {},
         async checkSEAT(row) {
             try {
-                console.log(row);
                 let res = await getSeatNum(row.id);
-
-                console.log(res, "ss");
             } catch (error) {}
+        },
+        selectChange(val) {
+            this.studentList.data = val.map(val => val.idNum);
+            console.log("父节点", this.studentList.data);
         }
     }
 };
@@ -235,5 +429,10 @@ export default {
             // flex: 1;
         }
     }
+}
+.list-container {
+    padding: 20px;
+    width: 60%;
+    height: 500px;
 }
 </style>
