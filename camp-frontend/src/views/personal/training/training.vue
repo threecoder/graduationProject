@@ -1,7 +1,7 @@
 <template>
     <div>
-        <h2 v-if="type==0">可参与的活动</h2>
-        <h2 v-else>已经报名的活动</h2>
+        <h2 v-if="type==0">可参与的培训</h2>
+        <h2 v-else>已经报名的培训</h2>
         <div class="table-container">
             <m-table
                 :data="activityTable.tableData"
@@ -17,24 +17,24 @@
                     class="myoper"
                 >
                     <div slot-scope="{ row }">
-                        <el-button @click="checkDetail(row)">详情</el-button>
+                        <el-button @click="checkDetail(row)">培训详情</el-button>
                         <el-button v-if="type==1 && row.status=='未支付'" @click="pay">支付</el-button>
-                        <el-button v-if="type==0 && idType==0" @click="studentJoin(row)">报名</el-button>
+                        <!-- <el-button v-if="type==0 && idType==0" @click="studentJoin(row)">报名</el-button> -->
                         <el-button
                             v-if="type==0 && idType==1"
                             @click="studentList.listFlag = true;studentList.id=row.id"
                         >报名</el-button>
-                        <el-button v-if="type==1 && row.status=='已支付'" @click="checkSEAT(row)">座位号</el-button>
+                        <!-- <el-button v-if="type==1 && row.status=='已支付'" @click="checkSEAT(row)">座位号</el-button> -->
                     </div>
                 </el-table-column>
             </m-table>
         </div>
 
-        <el-drawer class="drawer-container" title="活动详情" :visible.sync="drawer" size="30%">
+        <el-drawer class="drawer-container" title="培训详情" :visible.sync="drawer" size="30%">
             <div class="tac">
                 <h3>{{drwaerInfo.name}}</h3>
-                <p>活动时间：{{drwaerInfo.date}}</p>
-                <p>活动地点：{{drwaerInfo.address}}</p>
+                <p>培训时间：{{drwaerInfo.date}}</p>
+                <p>培训地点：{{drwaerInfo.address}}</p>
             </div>
             <div class="divider"></div>
             <div class="activity-detail">
@@ -43,12 +43,12 @@
             </div>
             <div class="drawer-footer">
                 <el-button @click="drawer = false">取 消</el-button>
-                <el-button
+                <!-- <el-button
                     v-if="type==0 && idType==0"
                     type="primary"
                     @click="studentJoin(null)"
                     :loading="joinLoading"
-                >{{ joinLoading ? '提交中 ...' : '立即报名' }}</el-button>
+                >{{ joinLoading ? '提交中 ...' : '立即报名' }}</el-button>-->
                 <el-button
                     v-if="type==0 && idType==1"
                     type="primary"
@@ -74,16 +74,15 @@
 </template>
 <script>
 import mTable from "../../../components/mTable.vue";
-import list from "./studentList.vue";
+import list from "../activities/studentList";
 import { getLocalStorage } from "@/assets/js/util.js";
+import { getList } from "@/api/modules/activity.js";
 import {
-    getJoinableActivities,
-    studentJoinActivties,
-    getsignedActivities,
-    getSeatNum,
-    getList,
-    memberJoinActivity
-} from "@/api/modules/activity.js";
+    getJoinableTraining,
+    studentJoinTraining,
+    getsignedTraining,
+    memberJoinTraining
+} from "@/api/modules/training.js";
 export default {
     components: {
         mTable,
@@ -95,8 +94,8 @@ export default {
             type: this.$route.params.id,
             activityTable: {
                 tableConfig: [
-                    { prop: "id", label: "活动序号", width: "100" },
-                    { prop: "name", label: "活动名称" },
+                    { prop: "id", label: "培训序号", width: "100" },
+                    { prop: "name", label: "培训名称" },
                     { prop: "date", label: "举办时间" },
                     { prop: "address", label: "地点" },
                     { prop: "fee", label: "费用" },
@@ -111,7 +110,7 @@ export default {
                 tableData: [
                     {
                         id: 1,
-                        name: "活动测试",
+                        name: "培训测试",
                         date: "2016-10-10 14:00:00-16:00:00",
                         address: "广州市番禺区小谷围街道华南理工大学",
                         fee: 1000,
@@ -127,7 +126,7 @@ export default {
                     },
                     {
                         id: 2,
-                        name: "活动测试",
+                        name: "培训测试",
                         date: "2016-11-11 14:00:00-16:00:00",
                         address: "广州市番禺区小谷围街道华南理工大学",
                         fee: 1000,
@@ -143,7 +142,7 @@ export default {
                     },
                     {
                         id: 3,
-                        name: "活动测试",
+                        name: "培训测试",
                         date: "2016-10-10 14:00:00-16:00:00",
                         address: "广州市番禺区小谷围街道华南理工大学",
                         fee: 1000,
@@ -318,7 +317,7 @@ export default {
     },
     mounted() {
         this.init();
-        this.getStudentList();
+        // this.getStudentList();
     },
     methods: {
         async init() {
@@ -327,27 +326,30 @@ export default {
                 let res = null;
                 if (this.type == 1) {
                     let t = this.activityTable.tableConfig.pop();
-                    this.activityTable.tableConfig.push({ prop: "status", label: "状态" }, t);
-                    res = await getsignedActivities();
+                    this.activityTable.tableConfig.push(
+                        { prop: "status", label: "状态" },
+                        t
+                    );
+                    res = await getsignedTraining();
                 } else {
-                    res = await getJoinableActivities();
+                    res = await getJoinableTraining();
                 }
                 this.activityTable.tableData = res.data;
             } catch (error) {
-                console.log(error)
+                console.log(error);
             }
         },
-        async studentJoin(params) {
-            try {
-                this.joinLoading = true;
-                let id = params ? params.id : this.drwaerInfo.id;
-                let res = await joinActivties(id);
-                this.$message.success("报名成功");
-                this.joinLoading = false;
-            } catch (error) {
-                this.joinLoading = false;
-            }
-        },
+        // async studentJoin(params) {
+        //     try {
+        //         this.joinLoading = true;
+        //         let id = params ? params.id : this.drwaerInfo.id;
+        //         let res = await joinActivties(id);
+        //         this.$message.success("报名成功");
+        //         this.joinLoading = false;
+        //     } catch (error) {
+        //         this.joinLoading = false;
+        //     }
+        // },
         async getStudentList() {
             try {
                 let res = await getList();
@@ -362,9 +364,9 @@ export default {
             try {
                 let par = {
                     idNums: this.studentList.data,
-                    activityId: this.studentList.id
+                    trainingId: this.studentList.id
                 };
-                let res = await memberJoinActivity();
+                let res = await memberJoinTraining();
                 this.$message.success("报名成功");
             } catch (error) {}
         },
@@ -373,11 +375,11 @@ export default {
             this.drwaerInfo = row;
         },
         pay() {},
-        async checkSEAT(row) {
-            try {
-                let res = await getSeatNum(row.id);
-            } catch (error) {}
-        },
+        // async checkSEAT(row) {
+        //     try {
+        //         let res = await getSeatNum(row.id);
+        //     } catch (error) {}
+        // },
         selectChange(val) {
             this.studentList.data = val.map(val => val.idNum);
             console.log("父节点", this.studentList.data);

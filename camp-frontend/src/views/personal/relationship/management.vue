@@ -187,7 +187,6 @@ export default {
     },
     methods: {
         curChange(val) {
-            console.log(val);
             this.form.curChange = val;
         },
         async search() {
@@ -228,11 +227,9 @@ export default {
     padding: 20px;
     margin: 30px 0 10px;
 }
-.table-container {
-}
 .modifyButton {
     position: absolute;
-    top: 35px;
+    top: 70px;
     right: 5%;
 }
 .el-dialog {

@@ -85,6 +85,11 @@ export default new Router({
                     path: '/management',
                     name: 'management',
                     component: resolve => require(['../views/personal/relationship/management.vue'], resolve)
+                },
+                {
+                    path: '/training/:id',
+                    name: 'training',
+                    component: resolve => require(['../views/personal/training/training.vue'], resolve)
                 }
             ]
         },
