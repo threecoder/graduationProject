@@ -25,6 +25,12 @@ public class Activity implements Serializable {
 
     private Date closeTime;
 
+    private Integer maxNum;
+
+    private Integer areaWidth;
+
+    private Integer areaLength;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getActivityId() {
@@ -105,5 +111,29 @@ public class Activity implements Serializable {
 
     public void setCloseTime(Date closeTime) {
         this.closeTime = closeTime;
+    }
+
+    public Integer getMaxNum() {
+        return maxNum;
+    }
+
+    public void setMaxNum(Integer maxNum) {
+        this.maxNum = maxNum;
+    }
+
+    public Integer getAreaWidth() {
+        return areaWidth;
+    }
+
+    public void setAreaWidth(Integer areaWidth) {
+        this.areaWidth = areaWidth;
+    }
+
+    public Integer getAreaLength() {
+        return areaLength;
+    }
+
+    public void setAreaLength(Integer areaLength) {
+        this.areaLength = areaLength;
     }
 }

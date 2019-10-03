@@ -1,6 +1,7 @@
 package com.lutayy.campbackend.pojo;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Student implements Serializable {
     private Integer studentId;
@@ -26,6 +27,10 @@ public class Student implements Serializable {
     private String studentArea;
 
     private String studentAddress;
+
+    private String company;
+
+    private Date enterTime;
 
     private static final long serialVersionUID = 1L;
 
@@ -123,5 +128,21 @@ public class Student implements Serializable {
 
     public void setStudentAddress(String studentAddress) {
         this.studentAddress = studentAddress;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public Date getEnterTime() {
+        return enterTime;
+    }
+
+    public void setEnterTime(Date enterTime) {
+        this.enterTime = enterTime;
     }
 }

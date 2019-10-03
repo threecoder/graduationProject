@@ -27,50 +27,6 @@ public class StudentServiceImpI implements StudentService {
     @Autowired
     StudentMapper studentMapper;
 
-    @Value("${SECRET_KEY}")
-    private String SECRET_KEY;
-
-    @Override
-    public JSONObject login(JSONObject jsonObject, HttpServletResponse response){
-        String password = jsonObject.getString("password");
-        //手机号码或身份证号登录
-        String phoneoridcard = jsonObject.getString("username");
-
-        JSONObject result =new JSONObject();
-
-        StudentExample studentExample=new StudentExample();
-        StudentExample.Criteria criteria=studentExample.createCriteria();
-        criteria.andStudentIdcardEqualTo(phoneoridcard);
-        List<Student> students=studentMapper.selectByExample(studentExample);
-        if(students.size()==0){
-            StudentExample studentExample0=new StudentExample();
-            StudentExample.Criteria criteria0=studentExample0.createCriteria();
-            criteria0.andStudentPhoneEqualTo(phoneoridcard);
-            students=studentMapper.selectByExample(studentExample0);
-        }
-
-        if(students.size()==0){
-            result.put("code","fail");
-            result.put("msg","账号不存在！");
-            return result;
-        }
-        Student student=students.get(0);
-        if(!password.equals(Md5.digest(student.getStudentPassword()))){
-            result.put("code","fail");
-            result.put("msg","密码错误！");
-            return result;
-        }
-        TokenRequest tokenRequest=new TokenRequest();
-        tokenRequest.setName(student.getStudentIdcard());//身份证号码作为标识
-        String token = JwtUtil.sign(tokenRequest, 30*60*1000, SECRET_KEY);
-        Cookie cookie=new Cookie("token", token);
-        //cookie.setMaxAge(3600);
-        cookie.setPath("/");
-        response.addCookie(cookie);
-        result.put("code","success");
-        result.put("msg","登陆成功！");
-        return  result;
-    }
 
     @Override
     public JSONObject getUserInfo(String idcard) {
@@ -167,13 +123,16 @@ public class StudentServiceImpI implements StudentService {
             cookie.setPath("/");
             response.addCookie(cookie);
             response.setContentType("application/json;charset=UTF-8");
-            result.put("code", "success");
             result.put("msg","信息修改成功，请重新登录！");
         }else{
-            result.put("code", "success");
             result.put("msg","信息修改成功！");
         }
-        studentMapper.updateByPrimaryKey(student);
+        if(studentMapper.updateByPrimaryKeySelective(student)>0){
+            result.put("code", "success");
+        }else {
+            result.put("code", "fail");
+            result.put("msg", "系统繁忙，请稍后尝试");
+        }
         return result;
     }
 
