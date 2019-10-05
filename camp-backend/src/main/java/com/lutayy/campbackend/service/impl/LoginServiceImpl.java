@@ -5,6 +5,8 @@ import com.lutayy.campbackend.common.util.JwtUtil;
 import com.lutayy.campbackend.common.util.Md5;
 import com.lutayy.campbackend.dao.MemberMapper;
 import com.lutayy.campbackend.dao.StudentMapper;
+import com.lutayy.campbackend.pojo.Member;
+import com.lutayy.campbackend.pojo.MemberExample;
 import com.lutayy.campbackend.pojo.Student;
 import com.lutayy.campbackend.pojo.StudentExample;
 import com.lutayy.campbackend.pojo.request.TokenRequest;
@@ -38,7 +40,28 @@ public class LoginServiceImpl implements LoginService {
         //手机号码或身份证号登录
         String id = jsonObject.getString("username");
         if(id.substring(0, 3).equals("mb_")){
-            data.put("name", "");
+            Member member=memberMapper.selectByPrimaryKey(id);
+            if(member==null){
+                result.put("code","fail");
+                result.put("msg","账号不存在！");
+                result.put("data", null);
+                return result;
+            }
+            if(!password.equals(Md5.digest(member.getMemberPassword()))){
+                result.put("code","fail");
+                result.put("msg","密码错误！");
+                result.put("data", null);
+                return result;
+            }
+            TokenRequest tokenRequest=new TokenRequest();
+            tokenRequest.setName(id);
+            tokenRequest.setRole("member");
+            String token = JwtUtil.sign(tokenRequest, 30*60*1000, SECRET_KEY);
+            Cookie cookie=new Cookie("token", token);
+            //cookie.setMaxAge(3600);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+            data.put("name", member.getMemberName());
             data.put("type", 1);
         }else{
             StudentExample studentExample=new StudentExample();
@@ -67,6 +90,7 @@ public class LoginServiceImpl implements LoginService {
             }
             TokenRequest tokenRequest=new TokenRequest();
             tokenRequest.setName(student.getStudentIdcard());//身份证号码作为标识
+            tokenRequest.setRole("student");
             String token = JwtUtil.sign(tokenRequest, 30*60*1000, SECRET_KEY);
             Cookie cookie=new Cookie("token", token);
             //cookie.setMaxAge(3600);

@@ -35,10 +35,16 @@ public class ActivityServiceImpl implements ActivityService {
         StudentExample.Criteria criteria=studentExample.createCriteria();
         criteria.andStudentIdcardEqualTo(idcard);
         List<Student> students=studentMapper.selectByExample(studentExample);
+        if(students.size()==0){
+            return -1;
+        }
         Student student=students.get(0);
         return student.getStudentId();
     }
 
+    /**
+     * 学员中心的活动管理
+     * **/
     @Override
     public JSONObject getJoinableActivities() {
         JSONObject result=new JSONObject();
@@ -147,7 +153,7 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public JSONObject joinActivity(JSONObject jsonObject) {
+    public JSONObject studentJoinActivity(JSONObject jsonObject) {
         JSONObject result=new JSONObject();
 
         String idcard=jsonObject.getString("id");
@@ -197,6 +203,9 @@ public class ActivityServiceImpl implements ActivityService {
             while(activityOrderMapper.selectByPrimaryKey(orderId)!=null){
                 orderId=OrderIdGenerator.getUniqueId();
             }
+            /**
+             * 由学员自行报名，对应的订单，无须插入 订单——学生表
+             * **/
             ActivityOrder activityOrder=new ActivityOrder();
             activityOrder.setActivityOrderId(orderId);
             activityOrder.setActivityId(activityId);
@@ -214,11 +223,25 @@ public class ActivityServiceImpl implements ActivityService {
                 result.put("msg", "订单生成失败!");
                 activityStudentMapper.deleteByExample(activityStudentExample);
             }
-            return result;
         }else {
             result.put("code", "fail");
             result.put("msg", "报名失败，请稍后尝试");
-            return result;
         }
+        return result;
+    }
+
+    /**
+     * 会员中心的活动管理
+     * **/
+    @Override
+    public JSONObject memberJoinActivity(JSONObject jsonObject) {
+        JSONObject result=new JSONObject();
+        String id=jsonObject.getString("id");
+        int activityId=jsonObject.getInteger("activityId");
+        JSONArray idNums=jsonObject.getJSONArray("idNums");
+        for(int i=0;i<idNums.size();i++){
+            System.out.println(idNums.getString(i));
+        }
+        return null;
     }
 }

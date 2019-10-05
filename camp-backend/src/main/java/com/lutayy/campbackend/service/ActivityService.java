@@ -10,6 +10,7 @@ public interface ActivityService {
 
     JSONObject getSeatNum(String idcard,int activityId);
 
-    JSONObject joinActivity(JSONObject jsonObject);
+    JSONObject studentJoinActivity(JSONObject jsonObject);
 
+    JSONObject memberJoinActivity(JSONObject jsonObject);
 }
