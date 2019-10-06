@@ -80,7 +80,6 @@ public class StudentServiceImpI implements StudentService {
         List<Student> students=studentMapper.selectByExample(studentExample);
         if(students.size()==0){
             result.put("code", "fail");
-            result.put("data","");
             result.put("msg","用户不存在！");
             return result;
         }

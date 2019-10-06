@@ -272,6 +272,76 @@ public class MemberExample {
             return (Criteria) this;
         }
 
+        public Criteria andMemberEmailIsNull() {
+            addCriterion("member_email is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberEmailIsNotNull() {
+            addCriterion("member_email is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberEmailEqualTo(String value) {
+            addCriterion("member_email =", value, "memberEmail");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberEmailNotEqualTo(String value) {
+            addCriterion("member_email <>", value, "memberEmail");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberEmailGreaterThan(String value) {
+            addCriterion("member_email >", value, "memberEmail");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberEmailGreaterThanOrEqualTo(String value) {
+            addCriterion("member_email >=", value, "memberEmail");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberEmailLessThan(String value) {
+            addCriterion("member_email <", value, "memberEmail");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberEmailLessThanOrEqualTo(String value) {
+            addCriterion("member_email <=", value, "memberEmail");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberEmailLike(String value) {
+            addCriterion("member_email like", value, "memberEmail");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberEmailNotLike(String value) {
+            addCriterion("member_email not like", value, "memberEmail");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberEmailIn(List<String> values) {
+            addCriterion("member_email in", values, "memberEmail");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberEmailNotIn(List<String> values) {
+            addCriterion("member_email not in", values, "memberEmail");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberEmailBetween(String value1, String value2) {
+            addCriterion("member_email between", value1, value2, "memberEmail");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberEmailNotBetween(String value1, String value2) {
+            addCriterion("member_email not between", value1, value2, "memberEmail");
+            return (Criteria) this;
+        }
+
         public Criteria andMemberPasswordIsNull() {
             addCriterion("member_password is null");
             return (Criteria) this;

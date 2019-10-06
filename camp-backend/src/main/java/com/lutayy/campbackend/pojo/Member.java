@@ -8,6 +8,8 @@ public class Member implements Serializable {
 
     private String memberPhone;
 
+    private String memberEmail;
+
     private String memberPassword;
 
     private String memberTel;
@@ -48,6 +50,14 @@ public class Member implements Serializable {
 
     public void setMemberPhone(String memberPhone) {
         this.memberPhone = memberPhone;
+    }
+
+    public String getMemberEmail() {
+        return memberEmail;
+    }
+
+    public void setMemberEmail(String memberEmail) {
+        this.memberEmail = memberEmail;
     }
 
     public String getMemberPassword() {

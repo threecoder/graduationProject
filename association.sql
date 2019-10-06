@@ -39,7 +39,7 @@ CREATE TABLE `activity` (
 
 /*Data for the table `activity` */
 
-insert  into `activity`(`activity_id`,`activity_fee`,`activity_name`,`activity_introduction`,`activity_date`,`activity_length_min`,`contacts`,`activity_address`,`open_time`,`close_time`,`max_num`,`area_width`,`area_length`) values (1,'188.88','垃圾分类讲解','  今年夏天，垃圾分类无疑是最火的话题。作为全国46个垃圾分类试点城市之一，长沙市围绕垃圾分类开展了形式多样、内容丰富的宣传活动，趣味游戏、知识宣讲、在线答题、儿童手抄报……一场全民参与、声势浩大的“全民生活垃圾分类之旅”让环保理念深植人心。','2019-10-01 20:00:00',60,'王先生 13332122312','广东省广州市华南理工大学大学城校区','2019-09-25 20:00:00','2019-10-09 02:32:42',NULL,NULL,NULL),(2,'299.99','英语角','  我们的英语俱乐部旨在为大家创造一个英语的交流环境，让所有想学英语，想说好英语的人们，在这样一个极具特色的氛围中学好英语，在外语老师的引导下，大家会积极交流，大胆开口说，培养纯正的外语语感，让你更加自信说英语，并结交更多的外国友人，避免找个好工作， 而因为英语困惑自己~~~~','2019-09-30 15:00:00',120,'李先生 13332122312','广东省广州市华南理工大学大学城校区','2019-09-25 13:00:00','2019-09-26 00:32:46',NULL,NULL,NULL),(3,'199.99','“拥抱春天，播种绿色”植树节活动','  植树节是按照法律规定宣传保护树木，并组织动员群众积极参加以植树造林为活动内容的节日。按时间长短可分为植树日、植树周和植树月，共称为国际植树节。提倡通过这种活动，激发人们爱林造林的热情、意识到环保的重要性。',NULL,NULL,'李先生 13332122312','广东省广州市华南理工大学大学城校区','2019-09-24 02:28:46','2019-09-30 02:32:52',NULL,NULL,NULL);
+insert  into `activity`(`activity_id`,`activity_fee`,`activity_name`,`activity_introduction`,`activity_date`,`activity_length_min`,`contacts`,`activity_address`,`open_time`,`close_time`,`max_num`,`area_width`,`area_length`) values (1,'188.88','垃圾分类讲解','  今年夏天，垃圾分类无疑是最火的话题。作为全国46个垃圾分类试点城市之一，长沙市围绕垃圾分类开展了形式多样、内容丰富的宣传活动，趣味游戏、知识宣讲、在线答题、儿童手抄报……一场全民参与、声势浩大的“全民生活垃圾分类之旅”让环保理念深植人心。','2019-10-01 20:00:00',60,'王先生 13332122312','广东省广州市华南理工大学大学城校区','2019-09-25 20:00:00','2019-10-09 02:32:42',NULL,NULL,NULL),(2,'299.99','英语角','  我们的英语俱乐部旨在为大家创造一个英语的交流环境，让所有想学英语，想说好英语的人们，在这样一个极具特色的氛围中学好英语，在外语老师的引导下，大家会积极交流，大胆开口说，培养纯正的外语语感，让你更加自信说英语，并结交更多的外国友人，避免找个好工作， 而因为英语困惑自己~~~~','2019-09-30 15:00:00',120,'李先生 13332122312','广东省广州市华南理工大学大学城校区','2019-09-25 13:00:00','2019-10-19 00:32:46',NULL,NULL,NULL),(3,'199.99','“拥抱春天，播种绿色”植树节活动','  植树节是按照法律规定宣传保护树木，并组织动员群众积极参加以植树造林为活动内容的节日。按时间长短可分为植树日、植树周和植树月，共称为国际植树节。提倡通过这种活动，激发人们爱林造林的热情、意识到环保的重要性。',NULL,NULL,'李先生 13332122312','广东省广州市华南理工大学大学城校区','2019-09-24 02:28:46','2019-09-30 02:32:52',NULL,NULL,NULL);
 
 /*Table structure for table `activity_order` */
 
@@ -463,7 +463,7 @@ CREATE TABLE `member` (
   `member_password` varchar(20) NOT NULL DEFAULT '123456',
   `member_tel` varchar(20) DEFAULT NULL COMMENT '座机',
   `member_name` varchar(40) DEFAULT NULL COMMENT '单位或机构名称',
-  `is_vip` tinyint(1) DEFAULT '0' COMMENT '是否为协会会员',
+  `is_vip` tinyint(1) DEFAULT '0' COMMENT '是否为协会会员 0:否 1:是',
   `enter_date` date DEFAULT NULL COMMENT '入会时间(非vip)',
   `vip_end_date` date DEFAULT NULL COMMENT '会员到期时间',
   `vip_begin_date` date DEFAULT NULL COMMENT '成为协会会员时间',
@@ -478,7 +478,7 @@ CREATE TABLE `member` (
 
 /*Data for the table `member` */
 
-insert  into `member`(`member_id`,`member_phone`,`member_email`,`member_password`,`member_tel`,`member_name`,`is_vip`,`enter_date`,`vip_end_date`,`vip_begin_date`,`member_country`,`member_province`,`member_city`,`member_area`,`member_address`) values ('mb_ca33eae307ae4','15521065462',NULL,'123456','222102312','AA股份有限公司',0,'2019-09-19',NULL,NULL,'中国','广东省','广州市','番禺区','大学城华南理工大学');
+insert  into `member`(`member_id`,`member_phone`,`member_email`,`member_password`,`member_tel`,`member_name`,`is_vip`,`enter_date`,`vip_end_date`,`vip_begin_date`,`member_country`,`member_province`,`member_city`,`member_area`,`member_address`) values ('mb_ca33eae307ae4','15521065463','12345@163.com','123456','222102312','BB股份有限公司',0,'2019-09-19',NULL,NULL,'中国','江苏省','南京市','鼓楼区','南京大学');
 
 /*Table structure for table `member_re_student` */
 
@@ -487,13 +487,15 @@ DROP TABLE IF EXISTS `member_re_student`;
 CREATE TABLE `member_re_student` (
   `member_id` varchar(20) DEFAULT NULL,
   `student_id` int(11) DEFAULT NULL,
-  KEY `member_id` (`member_id`),
+  UNIQUE KEY `member_id` (`member_id`,`student_id`),
   KEY `student_id` (`student_id`),
   CONSTRAINT `member_re_student_ibfk_1` FOREIGN KEY (`member_id`) REFERENCES `member` (`member_id`),
   CONSTRAINT `member_re_student_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `member_re_student` */
+
+insert  into `member_re_student`(`member_id`,`student_id`) values ('mb_ca33eae307ae4',1);
 
 /*Table structure for table `member_subscription_order` */
 
@@ -599,11 +601,11 @@ CREATE TABLE `student` (
   PRIMARY KEY (`student_id`),
   UNIQUE KEY `UNIQUE1` (`student_phone`),
   UNIQUE KEY `UNIQUE2` (`student_idcard`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
 /*Data for the table `student` */
 
-insert  into `student`(`student_id`,`student_password`,`student_idcard`,`student_phone`,`student_name`,`student_email`,`student_positon`,`student_country`,`student_province`,`student_city`,`student_area`,`student_address`,`company`,`enter_time`) values (1,'123456','445281199308310056','15521054785','张三','11@qq.com','经理','中国','广东省','广州市','番禺区','大学城华南理工大学',NULL,NULL),(2,'123456','445281199308310037','15521064789','李四','22@qq.com',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(3,'123456','445281199308310033','15521064781',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert  into `student`(`student_id`,`student_password`,`student_idcard`,`student_phone`,`student_name`,`student_email`,`student_positon`,`student_country`,`student_province`,`student_city`,`student_area`,`student_address`,`company`,`enter_time`) values (1,'123456','445281199308310056','15521054785','张三','11@qq.com','经理','中国','广东省','广州市','番禺区','大学城华南理工大学',NULL,NULL),(2,'123456','445281199308310037','15521064789','李四','22@qq.com',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(8,'123456','445281199707774569','13112114587','王建国',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(15,'123456','445281199302210226','15989250477','张四',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
 /*Table structure for table `system_parameter` */
 

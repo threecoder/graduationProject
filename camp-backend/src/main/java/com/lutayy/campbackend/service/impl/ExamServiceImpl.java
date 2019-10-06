@@ -35,6 +35,9 @@ public class ExamServiceImpl implements ExamService {
         StudentExample.Criteria criteria=studentExample.createCriteria();
         criteria.andStudentIdcardEqualTo(idcard);
         List<Student> students=studentMapper.selectByExample(studentExample);
+        if(students.size()==0){
+            return -1;
+        }
         Student student=students.get(0);
         return student.getStudentId();
     }

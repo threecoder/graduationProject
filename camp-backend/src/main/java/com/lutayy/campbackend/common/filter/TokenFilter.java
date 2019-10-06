@@ -40,7 +40,7 @@ public class TokenFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
-        System.out.println("--- "+url+"未被过滤 ---");
+        System.out.println("student: --- "+url+"未被过滤 ---");
         Cookie[] cookies = request.getCookies();
         String token = null;
 
@@ -72,6 +72,26 @@ public class TokenFilter implements Filter {
          */
         TokenRequest tokenRequest=JwtUtil.unsign(token,TokenRequest.class,SECRET_KEY);
         if(tokenRequest!=null){
+            if(url.contains("/student")){
+                if(tokenRequest.getRole()==null||!tokenRequest.getRole().equals("student") ){
+                    resMessage.put("code","error");
+                    resMessage.put("msg","未登录");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write(resMessage.toJSONString());
+                    response.setContentType("application/json;charset=UTF-8");
+                    return;
+                }
+            }
+            if(url.contains("/member")){
+                if(tokenRequest.getRole()==null||!tokenRequest.getRole().equals("member") ){
+                    resMessage.put("code","error");
+                    resMessage.put("msg","未登录");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write(resMessage.toJSONString());
+                    response.setContentType("application/json;charset=UTF-8");
+                    return;
+                }
+            }
             String id=tokenRequest.getName();
             Map<String, String[]> map = new HashMap<String, String[]>(request.getParameterMap());
             ParameterRequestWrapper requestWrapper;
