@@ -52,6 +52,11 @@ export default new Router({
             ]
         },
         {
+            path:'/adminLogin',
+            name:'adminLogin',
+            component: resolve => require(["../views/admin/login.vue"], resolve),
+        },
+        {
             path: '/login',
             name: 'login',
             component: Login
@@ -90,6 +95,23 @@ export default new Router({
                     path: '/training/:id',
                     name: 'training',
                     component: resolve => require(['../views/personal/training/training.vue'], resolve)
+                }
+            ]
+        },
+        {
+            path: '/admin',
+            name: 'admin',
+            component: resolve => require(['../views/admin/mainView.vue'], resolve),
+            children: [
+                {
+                    path:'/publicActivity',
+                    name: 'publicActivity',
+                    component: resolve => require(['../views/admin/activity/activityPublish.vue'], resolve) 
+                },
+                {
+                    path: '/activitiesList',
+                    name: 'activitiesList',
+                    component: resolve => require(['../views/admin/activity/activitiesList.vue'], resolve)
                 }
             ]
         },

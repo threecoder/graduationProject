@@ -91,7 +91,7 @@ export default {
     },
     data() {
         return {
-            idType: null,
+            idType: getLocalStorage("user").idType,
             type: this.$route.params.id,
             activityTable: {
                 tableConfig: [
@@ -318,30 +318,34 @@ export default {
     },
     mounted() {
         this.init();
-        this.getStudentList();
+        if (this.idType == 1) {
+            this.getStudentList();
+        }
     },
     methods: {
         async init() {
-            this.idType = getLocalStorage("user").idType;
             try {
                 let res = null;
                 if (this.type == 1) {
                     let t = this.activityTable.tableConfig.pop();
-                    this.activityTable.tableConfig.push({ prop: "status", label: "状态" }, t);
+                    this.activityTable.tableConfig.push(
+                        { prop: "status", label: "状态" },
+                        t
+                    );
                     res = await getsignedActivities();
                 } else {
                     res = await getJoinableActivities();
                 }
                 this.activityTable.tableData = res.data;
             } catch (error) {
-                console.log(error)
+                console.log(error);
             }
         },
         async studentJoin(params) {
             try {
                 this.joinLoading = true;
                 let id = params ? params.id : this.drwaerInfo.id;
-                let res = await joinActivties(id);
+                let res = await studentJoinActivties(id);
                 this.$message.success("报名成功");
                 this.joinLoading = false;
             } catch (error) {
