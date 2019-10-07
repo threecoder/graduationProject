@@ -4,11 +4,16 @@ package com.lutayy.campbackend.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.lutayy.campbackend.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 
 @Controller
 @RequestMapping("/member")
@@ -51,5 +56,17 @@ public class MemberController {
     @ResponseBody
     public JSONObject deleteOneStudent(@RequestBody JSONObject jsonObject){
         return memberService.deleteOneStudent(jsonObject);
+    }
+
+    @RequestMapping("/getTemplate")
+    @ResponseBody
+    public ResponseEntity<byte[]> getTemplate(HttpServletRequest request){
+        return memberService.getStudentTemplate(request);
+    }
+
+    @RequestMapping("/importStudentByFile")
+    @ResponseBody
+    public JSONObject importStudentByFile(HttpServletRequest request){
+        return memberService.importStudentByFile(request);
     }
 }
