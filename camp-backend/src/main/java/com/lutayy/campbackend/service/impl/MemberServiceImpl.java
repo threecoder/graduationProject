@@ -360,7 +360,7 @@ public class MemberServiceImpl implements MemberService {
             return result;
         }
         String memberId = tokenRequest.getName();
-        System.out.println(memberId);
+        //System.out.println(memberId);
         Member member=memberMapper.selectByPrimaryKey(memberId);
         result.put("code", "fail");
         if(member==null){
@@ -413,6 +413,8 @@ public class MemberServiceImpl implements MemberService {
                             memberReStudent.setStudentId(studentCheck.getStudentId());
                             memberReStudent.setMemberId(memberId);
                             memberReStudentMapper.insert(memberReStudent);
+                            studentCheck.setCompany(member.getMemberName());
+                            studentMapper.updateByPrimaryKeySelective(studentCheck);
                             continue;
                         }
                         existTagTip+=student.getStudentName()+"("+student.getStudentIdcard()+")；";
@@ -422,6 +424,7 @@ public class MemberServiceImpl implements MemberService {
                     if(getStudentIdFromPhone(student.getStudentPhone())!=null){
                         student.setStudentPhone(null);
                     }
+                    student.setCompany(member.getMemberName());
                     studentMapper.insertSelective(student);
                     MemberReStudent memberReStudent=new MemberReStudent();
                     memberReStudent.setStudentId(getStudentIdFromIdCard(student.getStudentIdcard()).getStudentId());
@@ -446,7 +449,7 @@ public class MemberServiceImpl implements MemberService {
             result.put("code", "success");
             result.put("msg", msg);
             return result;
-        }catch (IOException e){
+        }catch (Exception e){
             result.put("msg", "导入异常，请检查格式");
             return result;
         }
@@ -464,5 +467,46 @@ public class MemberServiceImpl implements MemberService {
         if(value != null&&!value.equals(""))
             student.setStudentPhone(value);
         return student;
+    }
+
+    @Override
+    public JSONObject getStudentList(String memberId) {
+        JSONObject result=new JSONObject();
+        Member member=memberMapper.selectByPrimaryKey(memberId);
+        if(member==null){
+            result.put("code", "fail");
+            result.put("msg","用户不存在!");
+            result.put("data", null);
+            return result;
+        }
+        JSONArray data=new JSONArray();
+        MemberReStudentExample memberReStudentExample=new MemberReStudentExample();
+        MemberReStudentExample.Criteria criteria=memberReStudentExample.createCriteria();
+        criteria.andMemberIdEqualTo(memberId);
+        List<MemberReStudent> memberReStudents=memberReStudentMapper.selectByExample(memberReStudentExample);
+        if(memberReStudents.size()==0){
+            result.put("code", "fail");
+            result.put("msg","名下无学员");
+            result.put("data", null);
+            return result;
+        }
+        for(MemberReStudent memberReStudent:memberReStudents){
+            JSONObject object=new JSONObject();
+            Student student=studentMapper.selectByPrimaryKey(memberReStudent.getStudentId());
+            object.put("name", student.getStudentName());
+            object.put("idNum", student.getStudentIdcard());
+            object.put("phone", student.getStudentPhone());
+            object.put("position", student.getStudentPositon());
+            object.put("email", student.getStudentEmail());
+            object.put("province", student.getStudentProvince());
+            object.put("city", student.getStudentCity());
+            object.put("area", student.getStudentArea());
+            object.put("zone", student.getStudentAddress());
+            data.add(object);
+        }
+        result.put("code", "success");
+        result.put("msg","学员列表获取成功");
+        result.put("data", data);
+        return result;
     }
 }

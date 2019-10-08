@@ -42,6 +42,33 @@ public class ActivityServiceImpl implements ActivityService {
         return student.getStudentId();
     }
 
+    private Student getStudentByIdcard(String idcard){
+        StudentExample studentExample=new StudentExample();
+        StudentExample.Criteria criteria=studentExample.createCriteria();
+        criteria.andStudentIdcardEqualTo(idcard);
+        List<Student> students=studentMapper.selectByExample(studentExample);
+        if(students.size()==0){
+            return null;
+        }
+        return students.get(0);
+    }
+
+    /**
+     *  学员活动报名记录查询
+     *  有有效报名记录返回1，无则返回0
+     * **/
+    private int checkStudentActiviy(int studentId,int activityId){
+        ActivityStudentExample activityStudentExample=new ActivityStudentExample();
+        ActivityStudentExample.Criteria criteria=activityStudentExample.createCriteria();
+        criteria.andStudentIdEqualTo(studentId).andActivityIdEqualTo(activityId).andIsSuccessEqualTo(true);
+        List<ActivityStudent> activityStudents=activityStudentMapper.selectByExample(activityStudentExample);
+        if(activityStudents.size()==0){
+            return 0;
+        }else {
+            return 1;
+        }
+    }
+
     /**
      * 学员中心的活动管理
      * **/
@@ -169,7 +196,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         ActivityStudentExample activityStudentExample=new ActivityStudentExample();
         ActivityStudentExample.Criteria criteria=activityStudentExample.createCriteria();
-        criteria.andStudentIdEqualTo(studentId).andActivityIdEqualTo(activityId);
+        criteria.andStudentIdEqualTo(studentId).andActivityIdEqualTo(activityId).andIsSuccessEqualTo(true);
         List<ActivityStudent> activityStudents=activityStudentMapper.selectByExample(activityStudentExample);
         if(activityStudents.size()!=0){
             result.put("code", "fail");
@@ -204,7 +231,7 @@ public class ActivityServiceImpl implements ActivityService {
                 orderId=OrderIdGenerator.getUniqueId();
             }
             /**
-             * 由学员自行报名，对应的订单，无须插入 订单——学生表
+             * 由学员自行报名，对应的订单，无须插入“订单—学生”表
              * **/
             ActivityOrder activityOrder=new ActivityOrder();
             activityOrder.setActivityOrderId(orderId);
@@ -239,9 +266,23 @@ public class ActivityServiceImpl implements ActivityService {
         String id=jsonObject.getString("id");
         int activityId=jsonObject.getInteger("activityId");
         JSONArray idNums=jsonObject.getJSONArray("idNums");
+        if(activityMapper.selectByPrimaryKey(activityId)==null){
+            result.put("code", "fail");
+            result.put("msg", "系统中没有该活动");
+            return result;
+        }
+        int existTotalCount=0;
+        String existTagTip="";
         for(int i=0;i<idNums.size();i++){
-            System.out.println(idNums.getString(i));
+            Student student=getStudentByIdcard(idNums.getString(i));
+            if(checkStudentActiviy(student.getStudentId(), activityId)!=0){
+                existTotalCount+=1;
+                existTagTip+=student.getStudentName()+"("+idNums.getString(i)+")";
+                continue;
+            }
+
         }
         return null;
     }
+
 }

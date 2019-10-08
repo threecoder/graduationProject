@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lutayy.campbackend.dao.TrainingMapper">
+  <resultMap id="BaseResultMap" type="com.lutayy.campbackend.pojo.Training">
+    <id column="training_id" jdbcType="INTEGER" property="trainingId" />
+    <result column="training_name" jdbcType="VARCHAR" property="trainingName" />
+    <result column="training_introduce" jdbcType="VARCHAR" property="trainingIntroduce" />
+    <result column="training_fee_normal" jdbcType="DECIMAL" property="trainingFeeNormal" />
+    <result column="training_fee_vip" jdbcType="DECIMAL" property="trainingFeeVip" />
+    <result column="training_end_time" jdbcType="TIMESTAMP" property="trainingEndTime" />
+    <result column="training_start_time" jdbcType="TIMESTAMP" property="trainingStartTime" />
+    <result column="post_time" jdbcType="TIMESTAMP" property="postTime" />
+    <result column="level" jdbcType="TINYINT" property="level" />
+    <result column="training_pic" jdbcType="VARCHAR" property="trainingPic" />
+    <result column="training_address" jdbcType="VARCHAR" property="trainingAddress" />
+    <result column="contacts" jdbcType="VARCHAR" property="contacts" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    training_id, training_name, training_introduce, training_fee_normal, training_fee_vip, 
+    training_end_time, training_start_time, post_time, level, training_pic, training_address, 
+    contacts
+  </sql>
+  <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.TrainingExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from training
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from training
+    where training_id = #{trainingId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from training
+    where training_id = #{trainingId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.lutayy.campbackend.pojo.TrainingExample">
+    delete from training
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lutayy.campbackend.pojo.Training">
+    <selectKey keyProperty="trainingId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into training (training_name, training_introduce, 
+      training_fee_normal, training_fee_vip, training_end_time, 
+      training_start_time, post_time, level, 
+      training_pic, training_address, contacts
+      )
+    values (#{trainingName,jdbcType=VARCHAR}, #{trainingIntroduce,jdbcType=VARCHAR}, 
+      #{trainingFeeNormal,jdbcType=DECIMAL}, #{trainingFeeVip,jdbcType=DECIMAL}, #{trainingEndTime,jdbcType=TIMESTAMP}, 
+      #{trainingStartTime,jdbcType=TIMESTAMP}, #{postTime,jdbcType=TIMESTAMP}, #{level,jdbcType=TINYINT}, 
+      #{trainingPic,jdbcType=VARCHAR}, #{trainingAddress,jdbcType=VARCHAR}, #{contacts,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.Training">
+    <selectKey keyProperty="trainingId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into training
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="trainingName != null">
+        training_name,
+      </if>
+      <if test="trainingIntroduce != null">
+        training_introduce,
+      </if>
+      <if test="trainingFeeNormal != null">
+        training_fee_normal,
+      </if>
+      <if test="trainingFeeVip != null">
+        training_fee_vip,
+      </if>
+      <if test="trainingEndTime != null">
+        training_end_time,
+      </if>
+      <if test="trainingStartTime != null">
+        training_start_time,
+      </if>
+      <if test="postTime != null">
+        post_time,
+      </if>
+      <if test="level != null">
+        level,
+      </if>
+      <if test="trainingPic != null">
+        training_pic,
+      </if>
+      <if test="trainingAddress != null">
+        training_address,
+      </if>
+      <if test="contacts != null">
+        contacts,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="trainingName != null">
+        #{trainingName,jdbcType=VARCHAR},
+      </if>
+      <if test="trainingIntroduce != null">
+        #{trainingIntroduce,jdbcType=VARCHAR},
+      </if>
+      <if test="trainingFeeNormal != null">
+        #{trainingFeeNormal,jdbcType=DECIMAL},
+      </if>
+      <if test="trainingFeeVip != null">
+        #{trainingFeeVip,jdbcType=DECIMAL},
+      </if>
+      <if test="trainingEndTime != null">
+        #{trainingEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="trainingStartTime != null">
+        #{trainingStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="postTime != null">
+        #{postTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="level != null">
+        #{level,jdbcType=TINYINT},
+      </if>
+      <if test="trainingPic != null">
+        #{trainingPic,jdbcType=VARCHAR},
+      </if>
+      <if test="trainingAddress != null">
+        #{trainingAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="contacts != null">
+        #{contacts,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lutayy.campbackend.pojo.TrainingExample" resultType="java.lang.Long">
+    select count(*) from training
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update training
+    <set>
+      <if test="record.trainingId != null">
+        training_id = #{record.trainingId,jdbcType=INTEGER},
+      </if>
+      <if test="record.trainingName != null">
+        training_name = #{record.trainingName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.trainingIntroduce != null">
+        training_introduce = #{record.trainingIntroduce,jdbcType=VARCHAR},
+      </if>
+      <if test="record.trainingFeeNormal != null">
+        training_fee_normal = #{record.trainingFeeNormal,jdbcType=DECIMAL},
+      </if>
+      <if test="record.trainingFeeVip != null">
+        training_fee_vip = #{record.trainingFeeVip,jdbcType=DECIMAL},
+      </if>
+      <if test="record.trainingEndTime != null">
+        training_end_time = #{record.trainingEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.trainingStartTime != null">
+        training_start_time = #{record.trainingStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.postTime != null">
+        post_time = #{record.postTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.level != null">
+        level = #{record.level,jdbcType=TINYINT},
+      </if>
+      <if test="record.trainingPic != null">
+        training_pic = #{record.trainingPic,jdbcType=VARCHAR},
+      </if>
+      <if test="record.trainingAddress != null">
+        training_address = #{record.trainingAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contacts != null">
+        contacts = #{record.contacts,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update training
+    set training_id = #{record.trainingId,jdbcType=INTEGER},
+      training_name = #{record.trainingName,jdbcType=VARCHAR},
+      training_introduce = #{record.trainingIntroduce,jdbcType=VARCHAR},
+      training_fee_normal = #{record.trainingFeeNormal,jdbcType=DECIMAL},
+      training_fee_vip = #{record.trainingFeeVip,jdbcType=DECIMAL},
+      training_end_time = #{record.trainingEndTime,jdbcType=TIMESTAMP},
+      training_start_time = #{record.trainingStartTime,jdbcType=TIMESTAMP},
+      post_time = #{record.postTime,jdbcType=TIMESTAMP},
+      level = #{record.level,jdbcType=TINYINT},
+      training_pic = #{record.trainingPic,jdbcType=VARCHAR},
+      training_address = #{record.trainingAddress,jdbcType=VARCHAR},
+      contacts = #{record.contacts,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lutayy.campbackend.pojo.Training">
+    update training
+    <set>
+      <if test="trainingName != null">
+        training_name = #{trainingName,jdbcType=VARCHAR},
+      </if>
+      <if test="trainingIntroduce != null">
+        training_introduce = #{trainingIntroduce,jdbcType=VARCHAR},
+      </if>
+      <if test="trainingFeeNormal != null">
+        training_fee_normal = #{trainingFeeNormal,jdbcType=DECIMAL},
+      </if>
+      <if test="trainingFeeVip != null">
+        training_fee_vip = #{trainingFeeVip,jdbcType=DECIMAL},
+      </if>
+      <if test="trainingEndTime != null">
+        training_end_time = #{trainingEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="trainingStartTime != null">
+        training_start_time = #{trainingStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="postTime != null">
+        post_time = #{postTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="level != null">
+        level = #{level,jdbcType=TINYINT},
+      </if>
+      <if test="trainingPic != null">
+        training_pic = #{trainingPic,jdbcType=VARCHAR},
+      </if>
+      <if test="trainingAddress != null">
+        training_address = #{trainingAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="contacts != null">
+        contacts = #{contacts,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where training_id = #{trainingId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lutayy.campbackend.pojo.Training">
+    update training
+    set training_name = #{trainingName,jdbcType=VARCHAR},
+      training_introduce = #{trainingIntroduce,jdbcType=VARCHAR},
+      training_fee_normal = #{trainingFeeNormal,jdbcType=DECIMAL},
+      training_fee_vip = #{trainingFeeVip,jdbcType=DECIMAL},
+      training_end_time = #{trainingEndTime,jdbcType=TIMESTAMP},
+      training_start_time = #{trainingStartTime,jdbcType=TIMESTAMP},
+      post_time = #{postTime,jdbcType=TIMESTAMP},
+      level = #{level,jdbcType=TINYINT},
+      training_pic = #{trainingPic,jdbcType=VARCHAR},
+      training_address = #{trainingAddress,jdbcType=VARCHAR},
+      contacts = #{contacts,jdbcType=VARCHAR}
+    where training_id = #{trainingId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -355,63 +355,63 @@ public class TrainingReStudentExample {
             return (Criteria) this;
         }
 
-        public Criteria andIsInvalidIsNull() {
-            addCriterion("is_invalid is null");
+        public Criteria andIsApplySuccessIsNull() {
+            addCriterion("is_apply_success is null");
             return (Criteria) this;
         }
 
-        public Criteria andIsInvalidIsNotNull() {
-            addCriterion("is_invalid is not null");
+        public Criteria andIsApplySuccessIsNotNull() {
+            addCriterion("is_apply_success is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIsInvalidEqualTo(Boolean value) {
-            addCriterion("is_invalid =", value, "isInvalid");
+        public Criteria andIsApplySuccessEqualTo(Boolean value) {
+            addCriterion("is_apply_success =", value, "isApplySuccess");
             return (Criteria) this;
         }
 
-        public Criteria andIsInvalidNotEqualTo(Boolean value) {
-            addCriterion("is_invalid <>", value, "isInvalid");
+        public Criteria andIsApplySuccessNotEqualTo(Boolean value) {
+            addCriterion("is_apply_success <>", value, "isApplySuccess");
             return (Criteria) this;
         }
 
-        public Criteria andIsInvalidGreaterThan(Boolean value) {
-            addCriterion("is_invalid >", value, "isInvalid");
+        public Criteria andIsApplySuccessGreaterThan(Boolean value) {
+            addCriterion("is_apply_success >", value, "isApplySuccess");
             return (Criteria) this;
         }
 
-        public Criteria andIsInvalidGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("is_invalid >=", value, "isInvalid");
+        public Criteria andIsApplySuccessGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_apply_success >=", value, "isApplySuccess");
             return (Criteria) this;
         }
 
-        public Criteria andIsInvalidLessThan(Boolean value) {
-            addCriterion("is_invalid <", value, "isInvalid");
+        public Criteria andIsApplySuccessLessThan(Boolean value) {
+            addCriterion("is_apply_success <", value, "isApplySuccess");
             return (Criteria) this;
         }
 
-        public Criteria andIsInvalidLessThanOrEqualTo(Boolean value) {
-            addCriterion("is_invalid <=", value, "isInvalid");
+        public Criteria andIsApplySuccessLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_apply_success <=", value, "isApplySuccess");
             return (Criteria) this;
         }
 
-        public Criteria andIsInvalidIn(List<Boolean> values) {
-            addCriterion("is_invalid in", values, "isInvalid");
+        public Criteria andIsApplySuccessIn(List<Boolean> values) {
+            addCriterion("is_apply_success in", values, "isApplySuccess");
             return (Criteria) this;
         }
 
-        public Criteria andIsInvalidNotIn(List<Boolean> values) {
-            addCriterion("is_invalid not in", values, "isInvalid");
+        public Criteria andIsApplySuccessNotIn(List<Boolean> values) {
+            addCriterion("is_apply_success not in", values, "isApplySuccess");
             return (Criteria) this;
         }
 
-        public Criteria andIsInvalidBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_invalid between", value1, value2, "isInvalid");
+        public Criteria andIsApplySuccessBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_apply_success between", value1, value2, "isApplySuccess");
             return (Criteria) this;
         }
 
-        public Criteria andIsInvalidNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_invalid not between", value1, value2, "isInvalid");
+        public Criteria andIsApplySuccessNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_apply_success not between", value1, value2, "isApplySuccess");
             return (Criteria) this;
         }
 
@@ -472,6 +472,66 @@ public class TrainingReStudentExample {
 
         public Criteria andIsDoneNotBetween(Boolean value1, Boolean value2) {
             addCriterion("is_done not between", value1, value2, "isDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidIsNull() {
+            addCriterion("is_invalid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidIsNotNull() {
+            addCriterion("is_invalid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidEqualTo(Boolean value) {
+            addCriterion("is_invalid =", value, "isInvalid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidNotEqualTo(Boolean value) {
+            addCriterion("is_invalid <>", value, "isInvalid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidGreaterThan(Boolean value) {
+            addCriterion("is_invalid >", value, "isInvalid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_invalid >=", value, "isInvalid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidLessThan(Boolean value) {
+            addCriterion("is_invalid <", value, "isInvalid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_invalid <=", value, "isInvalid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidIn(List<Boolean> values) {
+            addCriterion("is_invalid in", values, "isInvalid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidNotIn(List<Boolean> values) {
+            addCriterion("is_invalid not in", values, "isInvalid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_invalid between", value1, value2, "isInvalid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_invalid not between", value1, value2, "isInvalid");
             return (Criteria) this;
         }
     }

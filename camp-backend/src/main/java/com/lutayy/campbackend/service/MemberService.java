@@ -24,4 +24,6 @@ public interface MemberService {
     ResponseEntity<byte[]> getStudentTemplate(HttpServletRequest request);
 
     JSONObject importStudentByFile(HttpServletRequest request);
+
+    JSONObject getStudentList(String memberId);
 }

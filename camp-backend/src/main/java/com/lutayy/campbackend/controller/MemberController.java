@@ -69,4 +69,10 @@ public class MemberController {
     public JSONObject importStudentByFile(HttpServletRequest request){
         return memberService.importStudentByFile(request);
     }
+
+    @RequestMapping("/getStudentList")
+    @ResponseBody
+    public Object getStudentList(@RequestParam("id") String memberId){
+        return memberService.getStudentList(memberId);
+    }
 }

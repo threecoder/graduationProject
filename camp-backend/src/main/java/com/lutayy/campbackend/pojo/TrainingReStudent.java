@@ -12,9 +12,11 @@ public class TrainingReStudent implements Serializable {
 
     private Date beginTime;
 
-    private Boolean isInvalid;
+    private Boolean isApplySuccess;
 
     private Boolean isDone;
+
+    private Boolean isInvalid;
 
     private static final long serialVersionUID = 1L;
 
@@ -50,12 +52,12 @@ public class TrainingReStudent implements Serializable {
         this.beginTime = beginTime;
     }
 
-    public Boolean getIsInvalid() {
-        return isInvalid;
+    public Boolean getIsApplySuccess() {
+        return isApplySuccess;
     }
 
-    public void setIsInvalid(Boolean isInvalid) {
-        this.isInvalid = isInvalid;
+    public void setIsApplySuccess(Boolean isApplySuccess) {
+        this.isApplySuccess = isApplySuccess;
     }
 
     public Boolean getIsDone() {
@@ -64,5 +66,13 @@ public class TrainingReStudent implements Serializable {
 
     public void setIsDone(Boolean isDone) {
         this.isDone = isDone;
+    }
+
+    public Boolean getIsInvalid() {
+        return isInvalid;
+    }
+
+    public void setIsInvalid(Boolean isInvalid) {
+        this.isInvalid = isInvalid;
     }
 }
