@@ -478,7 +478,7 @@ CREATE TABLE `member` (
 
 /*Data for the table `member` */
 
-insert  into `member`(`member_id`,`member_phone`,`member_email`,`member_password`,`member_tel`,`member_name`,`is_vip`,`enter_date`,`vip_end_date`,`vip_begin_date`,`member_country`,`member_province`,`member_city`,`member_area`,`member_address`) values ('mb_ca33eae307ae4','15521065463','12345@163.com','123456','222102312','BB股份有限公司',0,'2019-09-19',NULL,NULL,'中国','江苏省','南京市','鼓楼区','南京大学');
+insert  into `member`(`member_id`,`member_phone`,`member_email`,`member_password`,`member_tel`,`member_name`,`is_vip`,`enter_date`,`vip_end_date`,`vip_begin_date`,`member_country`,`member_province`,`member_city`,`member_area`,`member_address`) values ('mb_ca33eae307ae4','15521065463','12345@163.com','123456','222102312','BB股份有限公司',1,'2019-09-19',NULL,NULL,'中国','江苏省','南京市','鼓楼区','南京大学');
 
 /*Table structure for table `member_re_student` */
 
@@ -495,7 +495,7 @@ CREATE TABLE `member_re_student` (
 
 /*Data for the table `member_re_student` */
 
-insert  into `member_re_student`(`member_id`,`student_id`) values ('mb_ca33eae307ae4',1);
+insert  into `member_re_student`(`member_id`,`student_id`) values ('mb_ca33eae307ae4',1),('mb_ca33eae307ae4',8),('mb_ca33eae307ae4',38),('mb_ca33eae307ae4',39);
 
 /*Table structure for table `member_subscription_order` */
 
@@ -601,11 +601,11 @@ CREATE TABLE `student` (
   PRIMARY KEY (`student_id`),
   UNIQUE KEY `UNIQUE1` (`student_phone`),
   UNIQUE KEY `UNIQUE2` (`student_idcard`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
 
 /*Data for the table `student` */
 
-insert  into `student`(`student_id`,`student_password`,`student_idcard`,`student_phone`,`student_name`,`student_email`,`student_positon`,`student_country`,`student_province`,`student_city`,`student_area`,`student_address`,`company`,`enter_time`) values (1,'123456','445281199308310056','15521054785','张三','11@qq.com','经理','中国','广东省','广州市','番禺区','大学城华南理工大学',NULL,NULL),(2,'123456','445281199308310037','15521064789','李四','22@qq.com',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(8,'123456','445281199707774569','13112114587','王建国',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(15,'123456','445281199302210226','15989250477','张四',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert  into `student`(`student_id`,`student_password`,`student_idcard`,`student_phone`,`student_name`,`student_email`,`student_positon`,`student_country`,`student_province`,`student_city`,`student_area`,`student_address`,`company`,`enter_time`) values (1,'123456','445281199308310056','15521054785','张三','11@qq.com','经理','中国','广东省','广州市','番禺区','大学城华南理工大学',NULL,NULL),(2,'123456','445281199308310037','15521064789','李四','22@qq.com',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(8,'123456','445281199707774569','13112114587','王建国',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL),(38,'123456','4342323432','15521065436','张英语',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL),(39,'123456','134455','15521065326','李数学',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL);
 
 /*Table structure for table `system_parameter` */
 
@@ -642,12 +642,14 @@ CREATE TABLE `training` (
   `post_time` datetime DEFAULT NULL COMMENT '发布时间',
   `level` tinyint(4) DEFAULT '1',
   `training_pic` varchar(300) DEFAULT NULL,
+  `training_address` varchar(200) DEFAULT NULL COMMENT '培训地点',
+  `contacts` varchar(50) DEFAULT NULL COMMENT '联系人 联系方式',
   PRIMARY KEY (`training_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 /*Data for the table `training` */
 
-insert  into `training`(`training_id`,`training_name`,`training_introduce`,`training_fee_normal`,`training_fee_vip`,`training_end_time`,`training_start_time`,`post_time`,`level`,`training_pic`) values (1,'质量检测','示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n示例范文示例范文示例范文示例范文','199.99','199.00','2019-09-28 16:13:03','2019-09-13 16:12:30','2019-09-21 00:41:14',1,NULL),(2,'食品安全','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','888.01','699.01','2019-10-03 12:00:00','2019-10-01 12:00:00','2019-07-15 00:41:19',2,NULL),(3,'食品监督','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','2000.00','1899.11','2019-09-11 16:14:32','2019-09-05 16:14:25','2020-02-06 00:41:22',1,NULL),(4,'网络工程','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','800.90','700.00','2019-10-26 16:14:40','2019-09-11 16:14:36','2019-11-01 00:41:27',3,NULL),(5,'产品规范','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','99.99','98.99','2019-11-08 16:14:56','2019-09-29 16:14:44','2019-10-17 00:41:35',1,NULL);
+insert  into `training`(`training_id`,`training_name`,`training_introduce`,`training_fee_normal`,`training_fee_vip`,`training_end_time`,`training_start_time`,`post_time`,`level`,`training_pic`,`training_address`,`contacts`) values (1,'质量检测','示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n示例范文示例范文示例范文示例范文','199.99','199.00','2019-09-28 16:13:03','2019-09-13 16:12:30','2019-09-21 00:41:14',1,NULL,NULL,NULL),(2,'食品安全','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','888.01','699.01','2019-10-03 12:00:00','2019-10-01 12:00:00','2019-07-15 00:41:19',2,NULL,NULL,NULL),(3,'食品监督','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','2000.00','1899.11','2019-09-11 16:14:32','2019-09-05 16:14:25','2020-02-06 00:41:22',1,NULL,NULL,NULL),(4,'网络工程','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','800.90','700.00','2019-10-26 16:14:40','2019-09-11 16:14:36','2019-11-01 00:41:27',3,NULL,NULL,NULL),(5,'产品规范','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','99.99','98.99','2019-11-08 16:14:56','2019-09-29 16:14:44','2019-10-17 00:41:35',1,NULL,NULL,NULL);
 
 /*Table structure for table `training_order` */
 
@@ -698,6 +700,7 @@ CREATE TABLE `training_re_student` (
   `training_id` int(11) DEFAULT NULL,
   `student_id` int(11) DEFAULT NULL,
   `begin_time` datetime DEFAULT NULL COMMENT '报名时间',
+  `is_apply_success` tinyint(1) DEFAULT '0' COMMENT '1:报名成功',
   `is_done` tinyint(1) DEFAULT '0' COMMENT '1:完成培训 0:未完成',
   `is_invalid` tinyint(1) DEFAULT '0' COMMENT '1为无效(考试不通过)',
   PRIMARY KEY (`apply_id`),
@@ -708,6 +711,8 @@ CREATE TABLE `training_re_student` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `training_re_student` */
+
+insert  into `training_re_student`(`apply_id`,`training_id`,`student_id`,`begin_time`,`is_apply_success`,`is_done`,`is_invalid`) values ('2312',2,2,NULL,0,0,0),('342315',5,38,NULL,0,0,0),('45453',3,38,NULL,0,0,0),('5635',1,8,NULL,0,0,0);
 
 /*Table structure for table `vote` */
 
