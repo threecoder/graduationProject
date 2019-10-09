@@ -355,63 +355,63 @@ public class ActivityStudentExample {
             return (Criteria) this;
         }
 
-        public Criteria andIsSuccessIsNull() {
-            addCriterion("is_success is null");
+        public Criteria andSeatIdIsNull() {
+            addCriterion("seat_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andIsSuccessIsNotNull() {
-            addCriterion("is_success is not null");
+        public Criteria andSeatIdIsNotNull() {
+            addCriterion("seat_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIsSuccessEqualTo(Boolean value) {
-            addCriterion("is_success =", value, "isSuccess");
+        public Criteria andSeatIdEqualTo(Integer value) {
+            addCriterion("seat_id =", value, "seatId");
             return (Criteria) this;
         }
 
-        public Criteria andIsSuccessNotEqualTo(Boolean value) {
-            addCriterion("is_success <>", value, "isSuccess");
+        public Criteria andSeatIdNotEqualTo(Integer value) {
+            addCriterion("seat_id <>", value, "seatId");
             return (Criteria) this;
         }
 
-        public Criteria andIsSuccessGreaterThan(Boolean value) {
-            addCriterion("is_success >", value, "isSuccess");
+        public Criteria andSeatIdGreaterThan(Integer value) {
+            addCriterion("seat_id >", value, "seatId");
             return (Criteria) this;
         }
 
-        public Criteria andIsSuccessGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("is_success >=", value, "isSuccess");
+        public Criteria andSeatIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("seat_id >=", value, "seatId");
             return (Criteria) this;
         }
 
-        public Criteria andIsSuccessLessThan(Boolean value) {
-            addCriterion("is_success <", value, "isSuccess");
+        public Criteria andSeatIdLessThan(Integer value) {
+            addCriterion("seat_id <", value, "seatId");
             return (Criteria) this;
         }
 
-        public Criteria andIsSuccessLessThanOrEqualTo(Boolean value) {
-            addCriterion("is_success <=", value, "isSuccess");
+        public Criteria andSeatIdLessThanOrEqualTo(Integer value) {
+            addCriterion("seat_id <=", value, "seatId");
             return (Criteria) this;
         }
 
-        public Criteria andIsSuccessIn(List<Boolean> values) {
-            addCriterion("is_success in", values, "isSuccess");
+        public Criteria andSeatIdIn(List<Integer> values) {
+            addCriterion("seat_id in", values, "seatId");
             return (Criteria) this;
         }
 
-        public Criteria andIsSuccessNotIn(List<Boolean> values) {
-            addCriterion("is_success not in", values, "isSuccess");
+        public Criteria andSeatIdNotIn(List<Integer> values) {
+            addCriterion("seat_id not in", values, "seatId");
             return (Criteria) this;
         }
 
-        public Criteria andIsSuccessBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_success between", value1, value2, "isSuccess");
+        public Criteria andSeatIdBetween(Integer value1, Integer value2) {
+            addCriterion("seat_id between", value1, value2, "seatId");
             return (Criteria) this;
         }
 
-        public Criteria andIsSuccessNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_success not between", value1, value2, "isSuccess");
+        public Criteria andSeatIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("seat_id not between", value1, value2, "seatId");
             return (Criteria) this;
         }
 
@@ -482,66 +482,6 @@ public class ActivityStudentExample {
 
         public Criteria andSeatNumberNotBetween(String value1, String value2) {
             addCriterion("seat_number not between", value1, value2, "seatNumber");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsInvalidIsNull() {
-            addCriterion("is_invalid is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsInvalidIsNotNull() {
-            addCriterion("is_invalid is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsInvalidEqualTo(Boolean value) {
-            addCriterion("is_invalid =", value, "isInvalid");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsInvalidNotEqualTo(Boolean value) {
-            addCriterion("is_invalid <>", value, "isInvalid");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsInvalidGreaterThan(Boolean value) {
-            addCriterion("is_invalid >", value, "isInvalid");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsInvalidGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("is_invalid >=", value, "isInvalid");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsInvalidLessThan(Boolean value) {
-            addCriterion("is_invalid <", value, "isInvalid");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsInvalidLessThanOrEqualTo(Boolean value) {
-            addCriterion("is_invalid <=", value, "isInvalid");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsInvalidIn(List<Boolean> values) {
-            addCriterion("is_invalid in", values, "isInvalid");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsInvalidNotIn(List<Boolean> values) {
-            addCriterion("is_invalid not in", values, "isInvalid");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsInvalidBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_invalid between", value1, value2, "isInvalid");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsInvalidNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_invalid not between", value1, value2, "isInvalid");
             return (Criteria) this;
         }
     }

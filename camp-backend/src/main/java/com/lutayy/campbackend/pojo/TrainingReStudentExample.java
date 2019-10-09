@@ -355,66 +355,6 @@ public class TrainingReStudentExample {
             return (Criteria) this;
         }
 
-        public Criteria andIsApplySuccessIsNull() {
-            addCriterion("is_apply_success is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsApplySuccessIsNotNull() {
-            addCriterion("is_apply_success is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsApplySuccessEqualTo(Boolean value) {
-            addCriterion("is_apply_success =", value, "isApplySuccess");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsApplySuccessNotEqualTo(Boolean value) {
-            addCriterion("is_apply_success <>", value, "isApplySuccess");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsApplySuccessGreaterThan(Boolean value) {
-            addCriterion("is_apply_success >", value, "isApplySuccess");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsApplySuccessGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("is_apply_success >=", value, "isApplySuccess");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsApplySuccessLessThan(Boolean value) {
-            addCriterion("is_apply_success <", value, "isApplySuccess");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsApplySuccessLessThanOrEqualTo(Boolean value) {
-            addCriterion("is_apply_success <=", value, "isApplySuccess");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsApplySuccessIn(List<Boolean> values) {
-            addCriterion("is_apply_success in", values, "isApplySuccess");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsApplySuccessNotIn(List<Boolean> values) {
-            addCriterion("is_apply_success not in", values, "isApplySuccess");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsApplySuccessBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_apply_success between", value1, value2, "isApplySuccess");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsApplySuccessNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_apply_success not between", value1, value2, "isApplySuccess");
-            return (Criteria) this;
-        }
-
         public Criteria andIsDoneIsNull() {
             addCriterion("is_done is null");
             return (Criteria) this;

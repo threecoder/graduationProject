@@ -12,11 +12,9 @@ public class ActivityStudent implements Serializable {
 
     private Date applyTime;
 
-    private Boolean isSuccess;
+    private Integer seatId;
 
     private String seatNumber;
-
-    private Boolean isInvalid;
 
     private static final long serialVersionUID = 1L;
 
@@ -52,12 +50,12 @@ public class ActivityStudent implements Serializable {
         this.applyTime = applyTime;
     }
 
-    public Boolean getIsSuccess() {
-        return isSuccess;
+    public Integer getSeatId() {
+        return seatId;
     }
 
-    public void setIsSuccess(Boolean isSuccess) {
-        this.isSuccess = isSuccess;
+    public void setSeatId(Integer seatId) {
+        this.seatId = seatId;
     }
 
     public String getSeatNumber() {
@@ -66,13 +64,5 @@ public class ActivityStudent implements Serializable {
 
     public void setSeatNumber(String seatNumber) {
         this.seatNumber = seatNumber;
-    }
-
-    public Boolean getIsInvalid() {
-        return isInvalid;
-    }
-
-    public void setIsInvalid(Boolean isInvalid) {
-        this.isInvalid = isInvalid;
     }
 }

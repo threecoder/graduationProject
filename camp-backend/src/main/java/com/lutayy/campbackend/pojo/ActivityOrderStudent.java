@@ -7,6 +7,8 @@ public class ActivityOrderStudent implements Serializable {
 
     private Integer studentId;
 
+    private Boolean isPaid;
+
     private static final long serialVersionUID = 1L;
 
     public String getActivityOrderId() {
@@ -23,5 +25,13 @@ public class ActivityOrderStudent implements Serializable {
 
     public void setStudentId(Integer studentId) {
         this.studentId = studentId;
+    }
+
+    public Boolean getIsPaid() {
+        return isPaid;
+    }
+
+    public void setIsPaid(Boolean isPaid) {
+        this.isPaid = isPaid;
     }
 }
