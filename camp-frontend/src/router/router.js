@@ -112,6 +112,11 @@ export default new Router({
                     path: '/activitiesList',
                     name: 'activitiesList',
                     component: resolve => require(['../views/admin/activity/activitiesList.vue'], resolve)
+                },
+                {
+                    path: '/question',
+                    name: 'question',
+                    component: resolve => require(['../views/admin/exam/question.vue'], resolve)
                 }
             ]
         },

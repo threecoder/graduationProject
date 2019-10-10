@@ -91,7 +91,7 @@ export default {
     },
     data() {
         return {
-            idType: getLocalStorage("user").idType,
+            idType: getLocalStorage("user").type,
             type: this.$route.params.id,
             activityTable: {
                 tableConfig: [
