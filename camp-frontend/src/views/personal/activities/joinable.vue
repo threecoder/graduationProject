@@ -19,7 +19,18 @@
                     <div slot-scope="{ row }">
                         <el-button @click="checkDetail(row)">详情</el-button>
                         <el-button v-if="type==1 && row.status=='未支付'" @click="pay">支付</el-button>
-                        <el-button v-if="type==0 && idType==0" @click="studentJoin(row)">报名</el-button>
+                        <el-button v-if="type==0 && idType==0" @click="dialogVisible = true">报名</el-button>
+                        <el-dialog
+                            title="提示"
+                            :visible.sync="dialogVisible"
+                            :modal-append-to-body="false"
+                            width="30%">
+                            <span>您确定报名这个活动吗？</span>
+                            <span slot="footer" class="dialog-footer">
+                                <el-button type="primary" @click="studentJoin(row) , dialogVisible = false">确定</el-button>
+                                <el-button @click="dialogVisible = false">取消</el-button>
+                            </span>
+                        </el-dialog>
                         <el-button
                             v-if="type==0 && idType==1"
                             @click="studentList.listFlag = true;studentList.id=row.id"
@@ -92,7 +103,7 @@ export default {
     data() {
         return {
             idType: null,
-            type: this.$route.params.id,
+            type: this.$route.params.id,      
             activityTable: {
                 tableConfig: [
                     { prop: "id", label: "活动序号", width: "100" },
@@ -174,6 +185,7 @@ export default {
             },
             drawer: false,
             joinLoading: false,
+            dialogVisible: false,
             studentList: {
                 id: null,
                 listFlag: false,
@@ -341,7 +353,7 @@ export default {
             try {
                 this.joinLoading = true;
                 let id = params ? params.id : this.drwaerInfo.id;
-                let res = await joinActivties(id);
+                let res = await studentJoinActivties(id);
                 this.$message.success("报名成功");
                 this.joinLoading = false;
             } catch (error) {

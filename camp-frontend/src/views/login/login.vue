@@ -100,13 +100,13 @@ export default {
                 password: Encrypt(this.userForm.password)
             };
 
-            request("/campback/student/login", params, "post").then(res => {
+            request("/campback/login", params, "post").then(res => {
                 this.$message.success(res.msg)
                 this.$router.push({
                     path: this.redirect ? this.redirect : "/personal"
                 });
                 // setLocalStorage("user",res.data);
-                setLocalStorage("user",{name:"张三",idType:1});
+                setLocalStorage("user",{name:"张三",idType:0});
             }).catch(error=>{});
         }
     },

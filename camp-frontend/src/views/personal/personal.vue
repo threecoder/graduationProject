@@ -19,7 +19,7 @@
                     :unique-opened="true"
                     text-color="#fff">
                     <!-- <navmenu :data="adminList"></navmenu> -->
-                    <navmenu :data="adminList"></navmenu>
+                    <navmenu :data="menuList"></navmenu>
                 </el-menu>
             </aside>
             <section class="content-container">
@@ -64,7 +64,8 @@ export default {
                     index: "2",
                     title: "我的培训",
                     children: [
-                        { index: "/personal", title: "个人记录" }
+                        { index: "/training/0", title: "可报名的培训" },
+                        { index: "/training/1", title: "已报名的培训" }
                     ]
                 },
                 {
@@ -79,15 +80,16 @@ export default {
                     index: "4",
                     title: "我的活动",
                     children: [
-                        { index: "/activities/0",title: "可报名活动"},
-                        { index: "/activities/1",title: "已报名活动"}
+                        { index: "/activities/0",title: "可报名的活动"},
+                        { index: "/activities/1",title: "已报名的活动"}
                     ]
                 },
                 {
                     index: "5",
                     title: "投票",
                     children: [
-                        { index: "",title: "参与投票" }
+                        { index: "/vote/0",title: "全部投票" },
+                        { index: "/vote/1",title: "我参与的投票" }
                     ]
                 }
             ],

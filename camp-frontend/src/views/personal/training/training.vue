@@ -4,10 +4,10 @@
         <h2 v-else>已经报名的培训</h2>
         <div class="table-container">
             <m-table
-                :data="activityTable.tableData"
-                :tableConfig="activityTable.tableConfig"
-                :loading="activityTable.loading"
-                :tableAttr="activityTable.tableAttr"
+                :data="trainingTable.tableData"
+                :tableConfig="trainingTable.tableConfig"
+                :loading="trainingTable.loading"
+                :tableAttr="trainingTable.tableAttr"
             >
                 <el-table-column
                     align="center"
@@ -19,12 +19,23 @@
                     <div slot-scope="{ row }">
                         <el-button @click="checkDetail(row)">培训详情</el-button>
                         <el-button v-if="type==1 && row.status=='未支付'" @click="pay">支付</el-button>
-                        <!-- <el-button v-if="type==0 && idType==0" @click="studentJoin(row)">报名</el-button> -->
+                        <el-button v-if="type==0 && idType==0" @click="dialogVisible = true">报名</el-button>
+                        <el-dialog
+                            title="提示"
+                            :visible.sync="dialogVisible"
+                            :modal-append-to-body="false"
+                            width="30%">
+                            <span>您确定报名这个培训吗？</span>
+                            <span slot="footer" class="dialog-footer">
+                                <el-button type="primary" @click="studentJoin(row) , dialogVisible = false">确定</el-button>
+                                <el-button @click="dialogVisible = false">取消</el-button>
+                            </span>
+                        </el-dialog>
                         <el-button
                             v-if="type==0 && idType==1"
                             @click="studentList.listFlag = true;studentList.id=row.id"
                         >报名</el-button>
-                        <!-- <el-button v-if="type==1 && row.status=='已支付'" @click="checkSEAT(row)">座位号</el-button> -->
+                        <el-button v-if="type==1 && row.status=='已支付'" @click="checkSEAT(row)">座位号</el-button>
                     </div>
                 </el-table-column>
             </m-table>
@@ -43,12 +54,12 @@
             </div>
             <div class="drawer-footer">
                 <el-button @click="drawer = false">取 消</el-button>
-                <!-- <el-button
+                <el-button
                     v-if="type==0 && idType==0"
                     type="primary"
                     @click="studentJoin(null)"
                     :loading="joinLoading"
-                >{{ joinLoading ? '提交中 ...' : '立即报名' }}</el-button>-->
+                >{{ joinLoading ? '提交中 ...' : '立即报名' }}</el-button>
                 <el-button
                     v-if="type==0 && idType==1"
                     type="primary"
@@ -92,7 +103,8 @@ export default {
         return {
             idType: null,
             type: this.$route.params.id,
-            activityTable: {
+            dialogVisible: false,
+            trainingTable: {
                 tableConfig: [
                     { prop: "id", label: "培训序号", width: "100" },
                     { prop: "name", label: "培训名称" },
@@ -103,7 +115,7 @@ export default {
                         prop: "opera",
                         label: "操作",
                         fixed: "right",
-                        width: 200,
+                        width: 220,
                         slot: "oper"
                     }
                 ],
@@ -317,7 +329,7 @@ export default {
     },
     mounted() {
         this.init();
-        // this.getStudentList();
+        this.getStudentList();
     },
     methods: {
         async init() {
@@ -325,8 +337,8 @@ export default {
             try {
                 let res = null;
                 if (this.type == 1) {
-                    let t = this.activityTable.tableConfig.pop();
-                    this.activityTable.tableConfig.push(
+                    let t = this.trainingTable.tableConfig.pop();
+                    this.trainingTable.tableConfig.push(
                         { prop: "status", label: "状态" },
                         t
                     );
@@ -334,22 +346,22 @@ export default {
                 } else {
                     res = await getJoinableTraining();
                 }
-                this.activityTable.tableData = res.data;
+                this.trainingTable.tableData = res.data;
             } catch (error) {
                 console.log(error);
             }
         },
-        // async studentJoin(params) {
-        //     try {
-        //         this.joinLoading = true;
-        //         let id = params ? params.id : this.drwaerInfo.id;
-        //         let res = await joinActivties(id);
-        //         this.$message.success("报名成功");
-        //         this.joinLoading = false;
-        //     } catch (error) {
-        //         this.joinLoading = false;
-        //     }
-        // },
+        async studentJoin(params) {
+            try {
+                this.joinLoading = true;
+                let id = params ? params.id : this.drwaerInfo.id;
+                let res = await studentJoinTraining(id);
+                this.$message.success("报名成功");
+                this.joinLoading = false;
+            } catch (error) {
+                this.joinLoading = false;
+            }
+        },
         async getStudentList() {
             try {
                 let res = await getList();
@@ -375,11 +387,11 @@ export default {
             this.drwaerInfo = row;
         },
         pay() {},
-        // async checkSEAT(row) {
-        //     try {
-        //         let res = await getSeatNum(row.id);
-        //     } catch (error) {}
-        // },
+        async checkSEAT(row) {
+            try {
+                let res = await getSeatNum(row.id);
+            } catch (error) {}
+        },
         selectChange(val) {
             this.studentList.data = val.map(val => val.idNum);
             console.log("父节点", this.studentList.data);
