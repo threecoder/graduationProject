@@ -48,7 +48,7 @@ public class StudentServiceImpI implements StudentService {
         data.put("phone", student.getStudentPhone());
         data.put("name",student.getStudentName());
         data.put("email",student.getStudentEmail());
-        data.put("position", student.getStudentPositon());
+        data.put("position", student.getStudentPosition());
         data.put("province", student.getStudentProvince());
         data.put("city", student.getStudentCity());
         data.put("area", student.getStudentArea());
@@ -113,7 +113,7 @@ public class StudentServiceImpI implements StudentService {
         student.setStudentProvince(province);
         student.setStudentEmail(email);
         student.setStudentName(name);
-        student.setStudentPositon(position);
+        student.setStudentPosition(position);
         student.setStudentPhone(phone);
         if(!idNum.equals(student.getStudentIdcard())){
             student.setStudentIdcard(idNum);

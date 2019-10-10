@@ -10,6 +10,7 @@ import com.lutayy.campbackend.dao.StudentMapper;
 import com.lutayy.campbackend.pojo.*;
 import com.lutayy.campbackend.pojo.request.TokenRequest;
 import com.lutayy.campbackend.service.MemberService;
+import com.lutayy.campbackend.service.SQLConn.MemberStudentSQLConn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -23,6 +24,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -496,7 +498,7 @@ public class MemberServiceImpl implements MemberService {
             object.put("name", student.getStudentName());
             object.put("idNum", student.getStudentIdcard());
             object.put("phone", student.getStudentPhone());
-            object.put("position", student.getStudentPositon());
+            object.put("position", student.getStudentPosition());
             object.put("email", student.getStudentEmail());
             object.put("province", student.getStudentProvince());
             object.put("city", student.getStudentCity());
@@ -507,6 +509,67 @@ public class MemberServiceImpl implements MemberService {
         result.put("code", "success");
         result.put("msg","学员列表获取成功");
         result.put("data", data);
+        return result;
+    }
+
+    @Override
+    public JSONObject getStudentListByCondition(JSONObject jsonObject) {
+        JSONObject result=new JSONObject();
+        String memberId=jsonObject.getString("id");
+
+        String phone=jsonObject.getString("phone");
+        String name=jsonObject.getString("name");
+        String idNum=jsonObject.getString("idNum");
+        Integer currentPage=jsonObject.getInteger("currentPage");
+        Integer pageSize=jsonObject.getInteger("pageSize");
+        if(pageSize==null){
+            pageSize=10;
+        }
+        if(currentPage==null){
+            currentPage=1;
+        }
+        List<Student> students= MemberStudentSQLConn.getStudentsFromMemberReStudent(memberId, phone, idNum, name);
+        JSONObject data=new JSONObject();
+        JSONArray list=new JSONArray();
+        int totalNum=students.size();
+        if(totalNum==0){
+            data.put("list", null);
+            data.put("currentPage", "1");
+            data.put("total", totalNum);
+            result.put("data", data);
+            result.put("code", "fail");
+            result.put("msg", "名下没有符合条件的学员");
+            return result;
+        }
+        int i=1;//计数
+        int sum=0;//每页数目计数
+        for(Student student:students){
+            if(i<=pageSize*(currentPage-1)){
+                i++;
+                continue;
+            }
+            JSONObject object=new JSONObject();
+            object.put("name", student.getStudentName());
+            object.put("idNum", student.getStudentIdcard());
+            object.put("phone", student.getStudentPhone());
+            object.put("position", student.getStudentPosition());
+            object.put("email", student.getStudentEmail());
+            object.put("province", student.getStudentProvince());
+            object.put("city", student.getStudentCity());
+            object.put("area", student.getStudentArea());
+            object.put("zone", student.getStudentAddress());
+            list.add(object);
+            sum++;
+            if(sum==pageSize){
+                break;
+            }
+        }
+        data.put("list", list);
+        data.put("currentPage", currentPage);
+        data.put("total", totalNum);
+        result.put("data", data);
+        result.put("code", "success");
+        result.put("msg", "获取学员列表成功");
         return result;
     }
 }

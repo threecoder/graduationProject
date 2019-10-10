@@ -515,73 +515,73 @@ public class StudentExample {
             return (Criteria) this;
         }
 
-        public Criteria andStudentPositonIsNull() {
-            addCriterion("student_positon is null");
+        public Criteria andStudentPositionIsNull() {
+            addCriterion("student_position is null");
             return (Criteria) this;
         }
 
-        public Criteria andStudentPositonIsNotNull() {
-            addCriterion("student_positon is not null");
+        public Criteria andStudentPositionIsNotNull() {
+            addCriterion("student_position is not null");
             return (Criteria) this;
         }
 
-        public Criteria andStudentPositonEqualTo(String value) {
-            addCriterion("student_positon =", value, "studentPositon");
+        public Criteria andStudentPositionEqualTo(String value) {
+            addCriterion("student_position =", value, "studentPosition");
             return (Criteria) this;
         }
 
-        public Criteria andStudentPositonNotEqualTo(String value) {
-            addCriterion("student_positon <>", value, "studentPositon");
+        public Criteria andStudentPositionNotEqualTo(String value) {
+            addCriterion("student_position <>", value, "studentPosition");
             return (Criteria) this;
         }
 
-        public Criteria andStudentPositonGreaterThan(String value) {
-            addCriterion("student_positon >", value, "studentPositon");
+        public Criteria andStudentPositionGreaterThan(String value) {
+            addCriterion("student_position >", value, "studentPosition");
             return (Criteria) this;
         }
 
-        public Criteria andStudentPositonGreaterThanOrEqualTo(String value) {
-            addCriterion("student_positon >=", value, "studentPositon");
+        public Criteria andStudentPositionGreaterThanOrEqualTo(String value) {
+            addCriterion("student_position >=", value, "studentPosition");
             return (Criteria) this;
         }
 
-        public Criteria andStudentPositonLessThan(String value) {
-            addCriterion("student_positon <", value, "studentPositon");
+        public Criteria andStudentPositionLessThan(String value) {
+            addCriterion("student_position <", value, "studentPosition");
             return (Criteria) this;
         }
 
-        public Criteria andStudentPositonLessThanOrEqualTo(String value) {
-            addCriterion("student_positon <=", value, "studentPositon");
+        public Criteria andStudentPositionLessThanOrEqualTo(String value) {
+            addCriterion("student_position <=", value, "studentPosition");
             return (Criteria) this;
         }
 
-        public Criteria andStudentPositonLike(String value) {
-            addCriterion("student_positon like", value, "studentPositon");
+        public Criteria andStudentPositionLike(String value) {
+            addCriterion("student_position like", value, "studentPosition");
             return (Criteria) this;
         }
 
-        public Criteria andStudentPositonNotLike(String value) {
-            addCriterion("student_positon not like", value, "studentPositon");
+        public Criteria andStudentPositionNotLike(String value) {
+            addCriterion("student_position not like", value, "studentPosition");
             return (Criteria) this;
         }
 
-        public Criteria andStudentPositonIn(List<String> values) {
-            addCriterion("student_positon in", values, "studentPositon");
+        public Criteria andStudentPositionIn(List<String> values) {
+            addCriterion("student_position in", values, "studentPosition");
             return (Criteria) this;
         }
 
-        public Criteria andStudentPositonNotIn(List<String> values) {
-            addCriterion("student_positon not in", values, "studentPositon");
+        public Criteria andStudentPositionNotIn(List<String> values) {
+            addCriterion("student_position not in", values, "studentPosition");
             return (Criteria) this;
         }
 
-        public Criteria andStudentPositonBetween(String value1, String value2) {
-            addCriterion("student_positon between", value1, value2, "studentPositon");
+        public Criteria andStudentPositionBetween(String value1, String value2) {
+            addCriterion("student_position between", value1, value2, "studentPosition");
             return (Criteria) this;
         }
 
-        public Criteria andStudentPositonNotBetween(String value1, String value2) {
-            addCriterion("student_positon not between", value1, value2, "studentPositon");
+        public Criteria andStudentPositionNotBetween(String value1, String value2) {
+            addCriterion("student_position not between", value1, value2, "studentPosition");
             return (Criteria) this;
         }
 

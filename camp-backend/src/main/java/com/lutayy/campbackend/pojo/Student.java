@@ -16,7 +16,7 @@ public class Student implements Serializable {
 
     private String studentEmail;
 
-    private String studentPositon;
+    private String studentPosition;
 
     private String studentCountry;
 
@@ -82,12 +82,12 @@ public class Student implements Serializable {
         this.studentEmail = studentEmail;
     }
 
-    public String getStudentPositon() {
-        return studentPositon;
+    public String getStudentPosition() {
+        return studentPosition;
     }
 
-    public void setStudentPositon(String studentPositon) {
-        this.studentPositon = studentPositon;
+    public void setStudentPosition(String studentPosition) {
+        this.studentPosition = studentPosition;
     }
 
     public String getStudentCountry() {
