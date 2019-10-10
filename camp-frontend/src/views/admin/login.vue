@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <h3>证书管理平台</h3>
+        <h3>证书管理平台管理系统</h3>
         <el-form :model="userForm" :rules="rules" ref="loginForm">
             <el-form-item prop="username">
                 <el-input
@@ -27,7 +27,6 @@
                 </el-input>
             </el-form-item>
             <el-form-item>
-                <el-switch v-model="userForm.registerFlag" active-text="注册" inactive-text="登陆"></el-switch>
                 <span class="fr cursor" @click="forgetFlag=true">忘记密码</span>
             </el-form-item>
             <el-form-item>
@@ -100,12 +99,13 @@ export default {
                 password: Encrypt(this.userForm.password)
             };
 
-            request("/campback/login", params, "post").then(res => {
+            request("/campback/student/login", params, "post").then(res => {
                 this.$message.success(res.msg)
                 this.$router.push({
                     path: this.redirect ? this.redirect : "/personal"
                 });
-                setLocalStorage("user",res.data);
+                // setLocalStorage("user",res.data);
+                setLocalStorage("user",{name:"张三",idType:1});
             }).catch(error=>{});
         }
     },
@@ -121,11 +121,10 @@ export default {
     text-align: center;
     width: 68%;
     margin: 0 auto;
-
     overflow: hidden;
     h3 {
         margin: 150px 0 100px;
-        color: rgb(64, 158, 255);
+        color: orange;
     }
     .el-form {
         margin: 0 auto;
@@ -134,13 +133,13 @@ export default {
             padding: 0 10px;
         }
         .userIcon {
-            background: url("./images/user.png") no-repeat center center;
+            background: url("../login/images/user.png") no-repeat center center;
             display: inline-block;
             width: 40px;
             height: 30px;
         }
         .pasIcon {
-            background: url("./images/psw.png") no-repeat center center;
+            background: url("../login/images/psw.png") no-repeat center center;
             display: inline-block;
             width: 40px;
             height: 30px;
@@ -151,6 +150,8 @@ export default {
         .el-button {
             width: 100%;
             margin-top: 20px;
+            background-color: orange;
+            border: 0;
         }
     }
 }

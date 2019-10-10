@@ -11,33 +11,38 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping("/student")
 public class ActivityController {
 
     @Autowired
     ActivityService activityService;
 
-    @RequestMapping("/getJoinableActivities")
+    @RequestMapping("/student/getJoinableActivities")
     @ResponseBody
     public Object getJoinableActivities(){
         return activityService.getJoinableActivities();
     }
 
-    @RequestMapping("/getSignedActivities")
+    @RequestMapping("/student/getSignedActivities")
     @ResponseBody
     public Object getSignedActivities(@RequestParam("id") String idcard){
         return activityService.getSignedActivities(idcard);
     }
 
-    @RequestMapping("/getSeatNum")
+    @RequestMapping("/student/getSeatNum")
     @ResponseBody
     public Object getSeatNum(@RequestParam("id") String idcard,@RequestParam("activityId") int activityId){
         return activityService.getSeatNum(idcard,activityId);
     }
 
-    @RequestMapping("/joinActivity")
+    @RequestMapping("/student/joinActivity")
     @ResponseBody
-    public JSONObject joinActivity(@RequestBody JSONObject jsonObject){
-        return activityService.joinActivity(jsonObject);
+    public JSONObject studentJoinActivity(@RequestBody JSONObject jsonObject){
+        return activityService.studentJoinActivity(jsonObject);
+    }
+
+    @RequestMapping("/member/joinActivity")
+    @ResponseBody
+    public JSONObject memberJoinActivity(@RequestBody JSONObject jsonObject){
+        return activityService.memberJoinActivity(jsonObject);
     }
 }

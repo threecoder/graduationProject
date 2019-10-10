@@ -1,23 +1,21 @@
 package com.lutayy.campbackend.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonAlias;
+import com.lutayy.campbackend.dao.MemberMapper;
 import com.lutayy.campbackend.dao.TrainingMapper;
 import com.lutayy.campbackend.dao.TrainingReStudentMapper;
-import com.lutayy.campbackend.pojo.Training;
-import com.lutayy.campbackend.pojo.TrainingExample;
-import com.lutayy.campbackend.pojo.TrainingReStudent;
-import com.lutayy.campbackend.pojo.TrainingReStudentExample;
+import com.lutayy.campbackend.pojo.*;
+import com.lutayy.campbackend.service.SQLConn.TrainingStudentSQLConn;
 import com.lutayy.campbackend.service.TrainingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,7 +26,13 @@ public class TrainingServiceImpl implements TrainingService {
     TrainingMapper trainingMapper;
     @Autowired
     TrainingReStudentMapper trainingReStudentMapper;
+    @Autowired
+    MemberMapper memberMapper;
 
+    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
+            "yyyy-MM-dd HH:mm:ss");
+
+    /** 学员中心接口 **/
     @Override
     public JSONObject getCourses(JSONObject jsonObject) {
         String keyword=jsonObject.getString("keyWord");
@@ -101,5 +105,95 @@ public class TrainingServiceImpl implements TrainingService {
         return result;
     }
 
+    /** 会员中心接口 **/
+    @Override
+    public JSONObject getJoinableTraining(String id) {
+        JSONObject result=new JSONObject();
+
+        TrainingExample trainingExample=new TrainingExample();
+        TrainingExample.Criteria criteria=trainingExample.createCriteria();
+        criteria.andTrainingStartTimeLessThan(new Date()).andTrainingEndTimeGreaterThan(new Date());
+        List<Training> trainings=trainingMapper.selectByExample(trainingExample);
+        if(trainings.size()==0){
+            result.put("code", "fail");
+            result.put("msg", "无可报名培训");
+            result.put("data", null);
+            return result;
+        }
+        int isVip=0;
+        Member member=memberMapper.selectByPrimaryKey(id);
+        if(member!=null){
+            if(member.getIsVip()==true){
+                isVip=1;
+            }
+        }
+        JSONArray data=new JSONArray();
+        for(Training training:trainings){
+            JSONObject object=new JSONObject();
+            object.put("id", training.getTrainingId());
+            object.put("name", training.getTrainingName());
+            object.put("date", simpleDateFormat.format(training.getTrainingStartTime())+"----"+simpleDateFormat.format(training.getTrainingEndTime()));
+            object.put("address", training.getTrainingAddress());
+            JSONArray introduction=new JSONArray();
+            introduction.add(training.getTrainingIntroduce());
+            object.put("introduction", introduction);
+            if(isVip==0){
+                object.put("fee", training.getTrainingFeeNormal());
+            }else {
+                object.put("fee", training.getTrainingFeeVip());
+            }
+            object.put("contacts", training.getContacts());
+            data.add(object);
+        }
+        result.put("code", "success");
+        result.put("msg", "获取可报名培训成功");
+        result.put("data", data);
+        return result;
+    }
+
+    @Override
+    public JSONObject getMemberSignedTraining(String id) {
+        JSONObject result=new JSONObject();
+        List<Integer> trainingIds=TrainingStudentSQLConn.getTrainingIdByMemberId(id);
+        if(trainingIds.size()==0){
+            result.put("code", "fail");
+            result.put("msg", "暂无学员报名培训");
+            result.put("data", null);
+        }
+        List<Training> trainings=new ArrayList<Training>();
+        for(int i=0;i<trainingIds.size();i++){
+            trainings.add(trainingMapper.selectByPrimaryKey(trainingIds.get(i)));
+        }
+        Collections.sort(trainings);
+        int isVip=0;
+        Member member=memberMapper.selectByPrimaryKey(id);
+        if(member!=null){
+            if(member.getIsVip()==true){
+                isVip=1;
+            }
+        }
+        JSONArray data=new JSONArray();
+        for(Training training:trainings){
+            JSONObject object=new JSONObject();
+            object.put("id", training.getTrainingId());
+            object.put("name", training.getTrainingName());
+            object.put("date", simpleDateFormat.format(training.getTrainingStartTime())+"----"+simpleDateFormat.format(training.getTrainingEndTime()));
+            object.put("address", training.getTrainingAddress());
+            JSONArray introduction=new JSONArray();
+            introduction.add(training.getTrainingIntroduce());
+            object.put("introduction", introduction);
+            if(isVip==0){
+                object.put("fee", training.getTrainingFeeNormal());
+            }else {
+                object.put("fee", training.getTrainingFeeVip());
+            }
+            object.put("contacts", training.getContacts());
+            data.add(object);
+        }
+        result.put("code", "success");
+        result.put("msg", "获取可报名培训成功");
+        result.put("data", data);
+        return result;
+    }
 }
 

@@ -64,7 +64,20 @@ export function deleteCookie(name) {
 
 //格式化日期
 export function formatDate(date) {
-    return `${date.getYear() + 1900}-${date.getMonth() + 1}-${date.getDate()}`;
+    let y = date.getYear() + 1900,
+        m = (date.getMonth() + 1).toString().padStart(2,"0"),
+        d = date.getDate().toString().padStart(2,"0");
+    return `${y}-${m}-${d}`;
+}
+//格式化时间
+export function formatTime(date) {
+    let h = date.getHours().toString().padStart(2,"0"),
+        min = date.getMinutes().toString().padStart(2,"0"),
+        s = date.getSeconds().toString().padStart(2,"0")
+    return `${h}:${min}:${s}`;
+}
+export function formatDateAndTime(date){
+    return `${formatDate(date)} ${formatTime(date)}`;
 }
 
 export function getCanGoPath() {

@@ -3,14 +3,14 @@ package com.lutayy.campbackend.pojo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivityOrderStudentExample {
+public class MemberReStudentExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public ActivityOrderStudentExample() {
+    public MemberReStudentExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -104,73 +104,73 @@ public class ActivityOrderStudentExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andActivityOrderIdIsNull() {
-            addCriterion("activity_order_id is null");
+        public Criteria andMemberIdIsNull() {
+            addCriterion("member_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andActivityOrderIdIsNotNull() {
-            addCriterion("activity_order_id is not null");
+        public Criteria andMemberIdIsNotNull() {
+            addCriterion("member_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andActivityOrderIdEqualTo(String value) {
-            addCriterion("activity_order_id =", value, "activityOrderId");
+        public Criteria andMemberIdEqualTo(String value) {
+            addCriterion("member_id =", value, "memberId");
             return (Criteria) this;
         }
 
-        public Criteria andActivityOrderIdNotEqualTo(String value) {
-            addCriterion("activity_order_id <>", value, "activityOrderId");
+        public Criteria andMemberIdNotEqualTo(String value) {
+            addCriterion("member_id <>", value, "memberId");
             return (Criteria) this;
         }
 
-        public Criteria andActivityOrderIdGreaterThan(String value) {
-            addCriterion("activity_order_id >", value, "activityOrderId");
+        public Criteria andMemberIdGreaterThan(String value) {
+            addCriterion("member_id >", value, "memberId");
             return (Criteria) this;
         }
 
-        public Criteria andActivityOrderIdGreaterThanOrEqualTo(String value) {
-            addCriterion("activity_order_id >=", value, "activityOrderId");
+        public Criteria andMemberIdGreaterThanOrEqualTo(String value) {
+            addCriterion("member_id >=", value, "memberId");
             return (Criteria) this;
         }
 
-        public Criteria andActivityOrderIdLessThan(String value) {
-            addCriterion("activity_order_id <", value, "activityOrderId");
+        public Criteria andMemberIdLessThan(String value) {
+            addCriterion("member_id <", value, "memberId");
             return (Criteria) this;
         }
 
-        public Criteria andActivityOrderIdLessThanOrEqualTo(String value) {
-            addCriterion("activity_order_id <=", value, "activityOrderId");
+        public Criteria andMemberIdLessThanOrEqualTo(String value) {
+            addCriterion("member_id <=", value, "memberId");
             return (Criteria) this;
         }
 
-        public Criteria andActivityOrderIdLike(String value) {
-            addCriterion("activity_order_id like", value, "activityOrderId");
+        public Criteria andMemberIdLike(String value) {
+            addCriterion("member_id like", value, "memberId");
             return (Criteria) this;
         }
 
-        public Criteria andActivityOrderIdNotLike(String value) {
-            addCriterion("activity_order_id not like", value, "activityOrderId");
+        public Criteria andMemberIdNotLike(String value) {
+            addCriterion("member_id not like", value, "memberId");
             return (Criteria) this;
         }
 
-        public Criteria andActivityOrderIdIn(List<String> values) {
-            addCriterion("activity_order_id in", values, "activityOrderId");
+        public Criteria andMemberIdIn(List<String> values) {
+            addCriterion("member_id in", values, "memberId");
             return (Criteria) this;
         }
 
-        public Criteria andActivityOrderIdNotIn(List<String> values) {
-            addCriterion("activity_order_id not in", values, "activityOrderId");
+        public Criteria andMemberIdNotIn(List<String> values) {
+            addCriterion("member_id not in", values, "memberId");
             return (Criteria) this;
         }
 
-        public Criteria andActivityOrderIdBetween(String value1, String value2) {
-            addCriterion("activity_order_id between", value1, value2, "activityOrderId");
+        public Criteria andMemberIdBetween(String value1, String value2) {
+            addCriterion("member_id between", value1, value2, "memberId");
             return (Criteria) this;
         }
 
-        public Criteria andActivityOrderIdNotBetween(String value1, String value2) {
-            addCriterion("activity_order_id not between", value1, value2, "activityOrderId");
+        public Criteria andMemberIdNotBetween(String value1, String value2) {
+            addCriterion("member_id not between", value1, value2, "memberId");
             return (Criteria) this;
         }
 
@@ -231,66 +231,6 @@ public class ActivityOrderStudentExample {
 
         public Criteria andStudentIdNotBetween(Integer value1, Integer value2) {
             addCriterion("student_id not between", value1, value2, "studentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsPaidIsNull() {
-            addCriterion("is_paid is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsPaidIsNotNull() {
-            addCriterion("is_paid is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsPaidEqualTo(Boolean value) {
-            addCriterion("is_paid =", value, "isPaid");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsPaidNotEqualTo(Boolean value) {
-            addCriterion("is_paid <>", value, "isPaid");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsPaidGreaterThan(Boolean value) {
-            addCriterion("is_paid >", value, "isPaid");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsPaidGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("is_paid >=", value, "isPaid");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsPaidLessThan(Boolean value) {
-            addCriterion("is_paid <", value, "isPaid");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsPaidLessThanOrEqualTo(Boolean value) {
-            addCriterion("is_paid <=", value, "isPaid");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsPaidIn(List<Boolean> values) {
-            addCriterion("is_paid in", values, "isPaid");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsPaidNotIn(List<Boolean> values) {
-            addCriterion("is_paid not in", values, "isPaid");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsPaidBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_paid between", value1, value2, "isPaid");
-            return (Criteria) this;
-        }
-
-        public Criteria andIsPaidNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_paid not between", value1, value2, "isPaid");
             return (Criteria) this;
         }
     }

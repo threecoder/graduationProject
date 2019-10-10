@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.lutayy.campbackend.pojo.Member">
     <id column="member_id" jdbcType="VARCHAR" property="memberId" />
     <result column="member_phone" jdbcType="VARCHAR" property="memberPhone" />
+    <result column="member_email" jdbcType="VARCHAR" property="memberEmail" />
     <result column="member_password" jdbcType="VARCHAR" property="memberPassword" />
     <result column="member_tel" jdbcType="VARCHAR" property="memberTel" />
     <result column="member_name" jdbcType="VARCHAR" property="memberName" />
@@ -76,9 +77,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    member_id, member_phone, member_password, member_tel, member_name, is_vip, enter_date, 
-    vip_end_date, vip_begin_date, member_country, member_province, member_city, member_area, 
-    member_address
+    member_id, member_phone, member_email, member_password, member_tel, member_name, 
+    is_vip, enter_date, vip_end_date, vip_begin_date, member_country, member_province, 
+    member_city, member_area, member_address
   </sql>
   <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.MemberExample" resultMap="BaseResultMap">
     select
@@ -111,28 +112,30 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.lutayy.campbackend.pojo.Member">
-    <selectKey keyProperty="memberId" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into member (member_phone, member_password, member_tel, 
-      member_name, is_vip, enter_date, 
-      vip_end_date, vip_begin_date, member_country, 
-      member_province, member_city, member_area, 
-      member_address)
-    values (#{memberPhone,jdbcType=VARCHAR}, #{memberPassword,jdbcType=VARCHAR}, #{memberTel,jdbcType=VARCHAR}, 
-      #{memberName,jdbcType=VARCHAR}, #{isVip,jdbcType=BIT}, #{enterDate,jdbcType=DATE}, 
-      #{vipEndDate,jdbcType=DATE}, #{vipBeginDate,jdbcType=DATE}, #{memberCountry,jdbcType=VARCHAR}, 
-      #{memberProvince,jdbcType=VARCHAR}, #{memberCity,jdbcType=VARCHAR}, #{memberArea,jdbcType=VARCHAR}, 
-      #{memberAddress,jdbcType=VARCHAR})
+    insert into member (member_id, member_phone, member_email, 
+      member_password, member_tel, member_name, 
+      is_vip, enter_date, vip_end_date, 
+      vip_begin_date, member_country, member_province, 
+      member_city, member_area, member_address
+      )
+    values (#{memberId,jdbcType=VARCHAR}, #{memberPhone,jdbcType=VARCHAR}, #{memberEmail,jdbcType=VARCHAR}, 
+      #{memberPassword,jdbcType=VARCHAR}, #{memberTel,jdbcType=VARCHAR}, #{memberName,jdbcType=VARCHAR}, 
+      #{isVip,jdbcType=BIT}, #{enterDate,jdbcType=DATE}, #{vipEndDate,jdbcType=DATE}, 
+      #{vipBeginDate,jdbcType=DATE}, #{memberCountry,jdbcType=VARCHAR}, #{memberProvince,jdbcType=VARCHAR}, 
+      #{memberCity,jdbcType=VARCHAR}, #{memberArea,jdbcType=VARCHAR}, #{memberAddress,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.Member">
-    <selectKey keyProperty="memberId" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into member
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="memberId != null">
+        member_id,
+      </if>
       <if test="memberPhone != null">
         member_phone,
+      </if>
+      <if test="memberEmail != null">
+        member_email,
       </if>
       <if test="memberPassword != null">
         member_password,
@@ -172,8 +175,14 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="memberId != null">
+        #{memberId,jdbcType=VARCHAR},
+      </if>
       <if test="memberPhone != null">
         #{memberPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="memberEmail != null">
+        #{memberEmail,jdbcType=VARCHAR},
       </if>
       <if test="memberPassword != null">
         #{memberPassword,jdbcType=VARCHAR},
@@ -228,6 +237,9 @@
       <if test="record.memberPhone != null">
         member_phone = #{record.memberPhone,jdbcType=VARCHAR},
       </if>
+      <if test="record.memberEmail != null">
+        member_email = #{record.memberEmail,jdbcType=VARCHAR},
+      </if>
       <if test="record.memberPassword != null">
         member_password = #{record.memberPassword,jdbcType=VARCHAR},
       </if>
@@ -273,6 +285,7 @@
     update member
     set member_id = #{record.memberId,jdbcType=VARCHAR},
       member_phone = #{record.memberPhone,jdbcType=VARCHAR},
+      member_email = #{record.memberEmail,jdbcType=VARCHAR},
       member_password = #{record.memberPassword,jdbcType=VARCHAR},
       member_tel = #{record.memberTel,jdbcType=VARCHAR},
       member_name = #{record.memberName,jdbcType=VARCHAR},
@@ -294,6 +307,9 @@
     <set>
       <if test="memberPhone != null">
         member_phone = #{memberPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="memberEmail != null">
+        member_email = #{memberEmail,jdbcType=VARCHAR},
       </if>
       <if test="memberPassword != null">
         member_password = #{memberPassword,jdbcType=VARCHAR},
@@ -337,6 +353,7 @@
   <update id="updateByPrimaryKey" parameterType="com.lutayy.campbackend.pojo.Member">
     update member
     set member_phone = #{memberPhone,jdbcType=VARCHAR},
+      member_email = #{memberEmail,jdbcType=VARCHAR},
       member_password = #{memberPassword,jdbcType=VARCHAR},
       member_tel = #{memberTel,jdbcType=VARCHAR},
       member_name = #{memberName,jdbcType=VARCHAR},

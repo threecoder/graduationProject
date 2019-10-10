@@ -12,6 +12,8 @@
     <result column="post_time" jdbcType="TIMESTAMP" property="postTime" />
     <result column="level" jdbcType="TINYINT" property="level" />
     <result column="training_pic" jdbcType="VARCHAR" property="trainingPic" />
+    <result column="training_address" jdbcType="VARCHAR" property="trainingAddress" />
+    <result column="contacts" jdbcType="VARCHAR" property="contacts" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -73,7 +75,8 @@
   </sql>
   <sql id="Base_Column_List">
     training_id, training_name, training_introduce, training_fee_normal, training_fee_vip, 
-    training_end_time, training_start_time, post_time, level, training_pic
+    training_end_time, training_start_time, post_time, level, training_pic, training_address, 
+    contacts
   </sql>
   <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.TrainingExample" resultMap="BaseResultMap">
     select
@@ -112,11 +115,13 @@
     insert into training (training_name, training_introduce, 
       training_fee_normal, training_fee_vip, training_end_time, 
       training_start_time, post_time, level, 
-      training_pic)
+      training_pic, training_address, contacts
+      )
     values (#{trainingName,jdbcType=VARCHAR}, #{trainingIntroduce,jdbcType=VARCHAR}, 
       #{trainingFeeNormal,jdbcType=DECIMAL}, #{trainingFeeVip,jdbcType=DECIMAL}, #{trainingEndTime,jdbcType=TIMESTAMP}, 
       #{trainingStartTime,jdbcType=TIMESTAMP}, #{postTime,jdbcType=TIMESTAMP}, #{level,jdbcType=TINYINT}, 
-      #{trainingPic,jdbcType=VARCHAR})
+      #{trainingPic,jdbcType=VARCHAR}, #{trainingAddress,jdbcType=VARCHAR}, #{contacts,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.Training">
     <selectKey keyProperty="trainingId" order="AFTER" resultType="java.lang.Integer">
@@ -151,6 +156,12 @@
       <if test="trainingPic != null">
         training_pic,
       </if>
+      <if test="trainingAddress != null">
+        training_address,
+      </if>
+      <if test="contacts != null">
+        contacts,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="trainingName != null">
@@ -179,6 +190,12 @@
       </if>
       <if test="trainingPic != null">
         #{trainingPic,jdbcType=VARCHAR},
+      </if>
+      <if test="trainingAddress != null">
+        #{trainingAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="contacts != null">
+        #{contacts,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -221,6 +238,12 @@
       <if test="record.trainingPic != null">
         training_pic = #{record.trainingPic,jdbcType=VARCHAR},
       </if>
+      <if test="record.trainingAddress != null">
+        training_address = #{record.trainingAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contacts != null">
+        contacts = #{record.contacts,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -237,7 +260,9 @@
       training_start_time = #{record.trainingStartTime,jdbcType=TIMESTAMP},
       post_time = #{record.postTime,jdbcType=TIMESTAMP},
       level = #{record.level,jdbcType=TINYINT},
-      training_pic = #{record.trainingPic,jdbcType=VARCHAR}
+      training_pic = #{record.trainingPic,jdbcType=VARCHAR},
+      training_address = #{record.trainingAddress,jdbcType=VARCHAR},
+      contacts = #{record.contacts,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -272,6 +297,12 @@
       <if test="trainingPic != null">
         training_pic = #{trainingPic,jdbcType=VARCHAR},
       </if>
+      <if test="trainingAddress != null">
+        training_address = #{trainingAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="contacts != null">
+        contacts = #{contacts,jdbcType=VARCHAR},
+      </if>
     </set>
     where training_id = #{trainingId,jdbcType=INTEGER}
   </update>
@@ -285,7 +316,9 @@
       training_start_time = #{trainingStartTime,jdbcType=TIMESTAMP},
       post_time = #{postTime,jdbcType=TIMESTAMP},
       level = #{level,jdbcType=TINYINT},
-      training_pic = #{trainingPic,jdbcType=VARCHAR}
+      training_pic = #{trainingPic,jdbcType=VARCHAR},
+      training_address = #{trainingAddress,jdbcType=VARCHAR},
+      contacts = #{contacts,jdbcType=VARCHAR}
     where training_id = #{trainingId,jdbcType=INTEGER}
   </update>
 </mapper>

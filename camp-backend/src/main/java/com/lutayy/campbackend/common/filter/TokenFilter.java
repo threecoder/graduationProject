@@ -35,12 +35,13 @@ public class TokenFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest)req;
         HttpServletResponse response = (HttpServletResponse)resp;
         String url =request.getRequestURI();
+        String contentType=request.getContentType();
 
-        if (url.contains("/register")||url.contains("/login")||url.contains("/index")||url.contains(".")||url.equals("/")){
+        if (url.contains("/register")||url.contains("/login")||url.contains("/index")||url.contains(".")||url.equals("/")||contentType.contains("multipart/form-data")){
             chain.doFilter(request, response);
             return;
         }
-        System.out.println("--- "+url+"未被过滤 ---");
+        System.out.println("student: --- "+url+"未被过滤 ---");
         Cookie[] cookies = request.getCookies();
         String token = null;
 
@@ -72,6 +73,26 @@ public class TokenFilter implements Filter {
          */
         TokenRequest tokenRequest=JwtUtil.unsign(token,TokenRequest.class,SECRET_KEY);
         if(tokenRequest!=null){
+            if(url.contains("/student")){
+                if(tokenRequest.getRole()==null||!tokenRequest.getRole().equals("student") ){
+                    resMessage.put("code","error");
+                    resMessage.put("msg","未登录");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write(resMessage.toJSONString());
+                    response.setContentType("application/json;charset=UTF-8");
+                    return;
+                }
+            }
+            if(url.contains("/member")){
+                if(tokenRequest.getRole()==null||!tokenRequest.getRole().equals("member") ){
+                    resMessage.put("code","error");
+                    resMessage.put("msg","未登录");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write(resMessage.toJSONString());
+                    response.setContentType("application/json;charset=UTF-8");
+                    return;
+                }
+            }
             String id=tokenRequest.getName();
             Map<String, String[]> map = new HashMap<String, String[]>(request.getParameterMap());
             ParameterRequestWrapper requestWrapper;

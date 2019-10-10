@@ -218,7 +218,7 @@ export default {
     },
     methods: {
         initType(){
-            this.idType = getLocalStorage("user").idType;
+            this.idType = getLocalStorage("user").type;
         },
         async getUserInfo() {
             try {

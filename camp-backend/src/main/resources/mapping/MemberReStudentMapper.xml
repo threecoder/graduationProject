@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.lutayy.campbackend.dao.ActivityOrderStudentMapper">
-  <resultMap id="BaseResultMap" type="com.lutayy.campbackend.pojo.ActivityOrderStudent">
-    <result column="activity_order_id" jdbcType="VARCHAR" property="activityOrderId" />
+<mapper namespace="com.lutayy.campbackend.dao.MemberReStudentMapper">
+  <resultMap id="BaseResultMap" type="com.lutayy.campbackend.pojo.MemberReStudent">
+    <result column="member_id" jdbcType="VARCHAR" property="memberId" />
     <result column="student_id" jdbcType="INTEGER" property="studentId" />
-    <result column="is_paid" jdbcType="BIT" property="isPaid" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -65,15 +64,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    activity_order_id, student_id, is_paid
+    member_id, student_id
   </sql>
-  <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.ActivityOrderStudentExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.MemberReStudentExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from activity_order_student
+    from member_re_student
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -81,60 +80,49 @@
       order by ${orderByClause}
     </if>
   </select>
-  <delete id="deleteByExample" parameterType="com.lutayy.campbackend.pojo.ActivityOrderStudentExample">
-    delete from activity_order_student
+  <delete id="deleteByExample" parameterType="com.lutayy.campbackend.pojo.MemberReStudentExample">
+    delete from member_re_student
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.lutayy.campbackend.pojo.ActivityOrderStudent">
-    insert into activity_order_student (activity_order_id, student_id, is_paid
-      )
-    values (#{activityOrderId,jdbcType=VARCHAR}, #{studentId,jdbcType=INTEGER}, #{isPaid,jdbcType=BIT}
-      )
+  <insert id="insert" parameterType="com.lutayy.campbackend.pojo.MemberReStudent">
+    insert into member_re_student (member_id, student_id)
+    values (#{memberId,jdbcType=VARCHAR}, #{studentId,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.ActivityOrderStudent">
-    insert into activity_order_student
+  <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.MemberReStudent">
+    insert into member_re_student
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="activityOrderId != null">
-        activity_order_id,
+      <if test="memberId != null">
+        member_id,
       </if>
       <if test="studentId != null">
         student_id,
       </if>
-      <if test="isPaid != null">
-        is_paid,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="activityOrderId != null">
-        #{activityOrderId,jdbcType=VARCHAR},
+      <if test="memberId != null">
+        #{memberId,jdbcType=VARCHAR},
       </if>
       <if test="studentId != null">
         #{studentId,jdbcType=INTEGER},
       </if>
-      <if test="isPaid != null">
-        #{isPaid,jdbcType=BIT},
-      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.lutayy.campbackend.pojo.ActivityOrderStudentExample" resultType="java.lang.Long">
-    select count(*) from activity_order_student
+  <select id="countByExample" parameterType="com.lutayy.campbackend.pojo.MemberReStudentExample" resultType="java.lang.Long">
+    select count(*) from member_re_student
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update activity_order_student
+    update member_re_student
     <set>
-      <if test="record.activityOrderId != null">
-        activity_order_id = #{record.activityOrderId,jdbcType=VARCHAR},
+      <if test="record.memberId != null">
+        member_id = #{record.memberId,jdbcType=VARCHAR},
       </if>
       <if test="record.studentId != null">
         student_id = #{record.studentId,jdbcType=INTEGER},
-      </if>
-      <if test="record.isPaid != null">
-        is_paid = #{record.isPaid,jdbcType=BIT},
       </if>
     </set>
     <if test="_parameter != null">
@@ -142,10 +130,9 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update activity_order_student
-    set activity_order_id = #{record.activityOrderId,jdbcType=VARCHAR},
-      student_id = #{record.studentId,jdbcType=INTEGER},
-      is_paid = #{record.isPaid,jdbcType=BIT}
+    update member_re_student
+    set member_id = #{record.memberId,jdbcType=VARCHAR},
+      student_id = #{record.studentId,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
