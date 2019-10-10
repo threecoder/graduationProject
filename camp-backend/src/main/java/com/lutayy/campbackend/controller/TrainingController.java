@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -18,7 +19,18 @@ public class TrainingController {
     @RequestMapping("/index/getCourses")
     @ResponseBody
     public JSONObject getCourses(@RequestBody JSONObject jsonObject){
-
         return trainingService.getCourses(jsonObject);
+    }
+
+    @RequestMapping("/member/getJoinableTraining")
+    @ResponseBody
+    public Object getJoinableTraining(@RequestParam("id") String id){
+        return trainingService.getJoinableTraining(id);
+    }
+
+    @RequestMapping("/member/getSignedTraining")
+    @ResponseBody
+    public Object getMemberSignedTraining(@RequestParam("id") String id){
+        return trainingService.getMemberSignedTraining(id);
     }
 }

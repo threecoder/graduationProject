@@ -233,6 +233,66 @@ public class ActivityOrderStudentExample {
             addCriterion("student_id not between", value1, value2, "studentId");
             return (Criteria) this;
         }
+
+        public Criteria andIsPaidIsNull() {
+            addCriterion("is_paid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPaidIsNotNull() {
+            addCriterion("is_paid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPaidEqualTo(Boolean value) {
+            addCriterion("is_paid =", value, "isPaid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPaidNotEqualTo(Boolean value) {
+            addCriterion("is_paid <>", value, "isPaid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPaidGreaterThan(Boolean value) {
+            addCriterion("is_paid >", value, "isPaid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPaidGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_paid >=", value, "isPaid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPaidLessThan(Boolean value) {
+            addCriterion("is_paid <", value, "isPaid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPaidLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_paid <=", value, "isPaid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPaidIn(List<Boolean> values) {
+            addCriterion("is_paid in", values, "isPaid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPaidNotIn(List<Boolean> values) {
+            addCriterion("is_paid not in", values, "isPaid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPaidBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_paid between", value1, value2, "isPaid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPaidNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_paid not between", value1, value2, "isPaid");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

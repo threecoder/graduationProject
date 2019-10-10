@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.lutayy.campbackend.pojo.ActivityOrderStudent">
     <result column="activity_order_id" jdbcType="VARCHAR" property="activityOrderId" />
     <result column="student_id" jdbcType="INTEGER" property="studentId" />
+    <result column="is_paid" jdbcType="BIT" property="isPaid" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -64,7 +65,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    activity_order_id, student_id
+    activity_order_id, student_id, is_paid
   </sql>
   <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.ActivityOrderStudentExample" resultMap="BaseResultMap">
     select
@@ -87,8 +88,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.lutayy.campbackend.pojo.ActivityOrderStudent">
-    insert into activity_order_student (activity_order_id, student_id)
-    values (#{activityOrderId,jdbcType=VARCHAR}, #{studentId,jdbcType=INTEGER})
+    insert into activity_order_student (activity_order_id, student_id, is_paid
+      )
+    values (#{activityOrderId,jdbcType=VARCHAR}, #{studentId,jdbcType=INTEGER}, #{isPaid,jdbcType=BIT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.ActivityOrderStudent">
     insert into activity_order_student
@@ -99,6 +102,9 @@
       <if test="studentId != null">
         student_id,
       </if>
+      <if test="isPaid != null">
+        is_paid,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="activityOrderId != null">
@@ -106,6 +112,9 @@
       </if>
       <if test="studentId != null">
         #{studentId,jdbcType=INTEGER},
+      </if>
+      <if test="isPaid != null">
+        #{isPaid,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -124,6 +133,9 @@
       <if test="record.studentId != null">
         student_id = #{record.studentId,jdbcType=INTEGER},
       </if>
+      <if test="record.isPaid != null">
+        is_paid = #{record.isPaid,jdbcType=BIT},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -132,7 +144,8 @@
   <update id="updateByExample" parameterType="map">
     update activity_order_student
     set activity_order_id = #{record.activityOrderId,jdbcType=VARCHAR},
-      student_id = #{record.studentId,jdbcType=INTEGER}
+      student_id = #{record.studentId,jdbcType=INTEGER},
+      is_paid = #{record.isPaid,jdbcType=BIT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

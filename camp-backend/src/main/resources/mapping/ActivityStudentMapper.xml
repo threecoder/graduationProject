@@ -6,9 +6,8 @@
     <result column="activity_id" jdbcType="INTEGER" property="activityId" />
     <result column="student_id" jdbcType="INTEGER" property="studentId" />
     <result column="apply_time" jdbcType="TIMESTAMP" property="applyTime" />
-    <result column="is_success" jdbcType="BIT" property="isSuccess" />
+    <result column="seat_id" jdbcType="INTEGER" property="seatId" />
     <result column="seat_number" jdbcType="VARCHAR" property="seatNumber" />
-    <result column="is_invalid" jdbcType="BIT" property="isInvalid" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    apply_number, activity_id, student_id, apply_time, is_success, seat_number, is_invalid
+    apply_number, activity_id, student_id, apply_time, seat_id, seat_number
   </sql>
   <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.ActivityStudentExample" resultMap="BaseResultMap">
     select
@@ -103,11 +102,11 @@
   </delete>
   <insert id="insert" parameterType="com.lutayy.campbackend.pojo.ActivityStudent">
     insert into activity_student (apply_number, activity_id, student_id, 
-      apply_time, is_success, seat_number, 
-      is_invalid)
+      apply_time, seat_id, seat_number
+      )
     values (#{applyNumber,jdbcType=VARCHAR}, #{activityId,jdbcType=INTEGER}, #{studentId,jdbcType=INTEGER}, 
-      #{applyTime,jdbcType=TIMESTAMP}, #{isSuccess,jdbcType=BIT}, #{seatNumber,jdbcType=VARCHAR}, 
-      #{isInvalid,jdbcType=BIT})
+      #{applyTime,jdbcType=TIMESTAMP}, #{seatId,jdbcType=INTEGER}, #{seatNumber,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.ActivityStudent">
     insert into activity_student
@@ -124,14 +123,11 @@
       <if test="applyTime != null">
         apply_time,
       </if>
-      <if test="isSuccess != null">
-        is_success,
+      <if test="seatId != null">
+        seat_id,
       </if>
       <if test="seatNumber != null">
         seat_number,
-      </if>
-      <if test="isInvalid != null">
-        is_invalid,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -147,14 +143,11 @@
       <if test="applyTime != null">
         #{applyTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="isSuccess != null">
-        #{isSuccess,jdbcType=BIT},
+      <if test="seatId != null">
+        #{seatId,jdbcType=INTEGER},
       </if>
       <if test="seatNumber != null">
         #{seatNumber,jdbcType=VARCHAR},
-      </if>
-      <if test="isInvalid != null">
-        #{isInvalid,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -179,14 +172,11 @@
       <if test="record.applyTime != null">
         apply_time = #{record.applyTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.isSuccess != null">
-        is_success = #{record.isSuccess,jdbcType=BIT},
+      <if test="record.seatId != null">
+        seat_id = #{record.seatId,jdbcType=INTEGER},
       </if>
       <if test="record.seatNumber != null">
         seat_number = #{record.seatNumber,jdbcType=VARCHAR},
-      </if>
-      <if test="record.isInvalid != null">
-        is_invalid = #{record.isInvalid,jdbcType=BIT},
       </if>
     </set>
     <if test="_parameter != null">
@@ -199,9 +189,8 @@
       activity_id = #{record.activityId,jdbcType=INTEGER},
       student_id = #{record.studentId,jdbcType=INTEGER},
       apply_time = #{record.applyTime,jdbcType=TIMESTAMP},
-      is_success = #{record.isSuccess,jdbcType=BIT},
-      seat_number = #{record.seatNumber,jdbcType=VARCHAR},
-      is_invalid = #{record.isInvalid,jdbcType=BIT}
+      seat_id = #{record.seatId,jdbcType=INTEGER},
+      seat_number = #{record.seatNumber,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -218,14 +207,11 @@
       <if test="applyTime != null">
         apply_time = #{applyTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="isSuccess != null">
-        is_success = #{isSuccess,jdbcType=BIT},
+      <if test="seatId != null">
+        seat_id = #{seatId,jdbcType=INTEGER},
       </if>
       <if test="seatNumber != null">
         seat_number = #{seatNumber,jdbcType=VARCHAR},
-      </if>
-      <if test="isInvalid != null">
-        is_invalid = #{isInvalid,jdbcType=BIT},
       </if>
     </set>
     where apply_number = #{applyNumber,jdbcType=VARCHAR}
@@ -235,9 +221,8 @@
     set activity_id = #{activityId,jdbcType=INTEGER},
       student_id = #{studentId,jdbcType=INTEGER},
       apply_time = #{applyTime,jdbcType=TIMESTAMP},
-      is_success = #{isSuccess,jdbcType=BIT},
-      seat_number = #{seatNumber,jdbcType=VARCHAR},
-      is_invalid = #{isInvalid,jdbcType=BIT}
+      seat_id = #{seatId,jdbcType=INTEGER},
+      seat_number = #{seatNumber,jdbcType=VARCHAR}
     where apply_number = #{applyNumber,jdbcType=VARCHAR}
   </update>
 </mapper>
