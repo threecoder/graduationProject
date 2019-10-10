@@ -70,7 +70,7 @@ export default {
                     index: "4",
                     title: "考试管理",
                     children: [
-                        { index: "", title: "试题管理" },
+                        { index: "/question", title: "试题管理" },
                         { index: "", title: "发布考试" },
                         { index: "", title: "已发布的考试" },
                         { index: "", title: "成绩审核" }

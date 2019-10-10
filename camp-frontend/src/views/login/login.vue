@@ -105,8 +105,7 @@ export default {
                 this.$router.push({
                     path: this.redirect ? this.redirect : "/personal"
                 });
-                // setLocalStorage("user",res.data);
-                setLocalStorage("user",{name:"张三",idType:0});
+                setLocalStorage("user",res.data);
             }).catch(error=>{});
         }
     },

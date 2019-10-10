@@ -95,6 +95,11 @@ export default new Router({
                     path: '/training/:id',
                     name: 'training',
                     component: resolve => require(['../views/personal/training/training.vue'], resolve)
+                },
+                {
+                    path:'/vote/:id',
+                    name:'vote',
+                    component: resolve => require(['../views/personal/vote/vote.vue'], resolve)
                 }
             ]
         },
@@ -112,6 +117,11 @@ export default new Router({
                     path: '/activitiesList',
                     name: 'activitiesList',
                     component: resolve => require(['../views/admin/activity/activitiesList.vue'], resolve)
+                },
+                {
+                    path: '/question',
+                    name: 'question',
+                    component: resolve => require(['../views/admin/exam/question.vue'], resolve)
                 }
             ]
         },
