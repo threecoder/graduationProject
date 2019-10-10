@@ -66,7 +66,7 @@ CREATE TABLE `activity_order` (
 
 /*Data for the table `activity_order` */
 
-insert  into `activity_order`(`activity_order_id`,`activity_id`,`order_type`,`member_id`,`student_id`,`order_price`,`order_begin_time`,`payment_state`,`close`) values ('20191001145853382363',1,1,NULL,1,'188.88','2019-10-01 14:58:54',1,0),('20191009144301721429',4,1,NULL,1,'213.22','2019-10-09 14:43:01',0,0),('20191009163126575245',4,0,'mb_ca33eae307ae4',NULL,'426.44','2019-10-09 16:31:27',1,0),('20191009163703148065',4,0,'mb_ca33eae307ae4',NULL,'213.22','2019-10-09 16:37:04',0,0);
+insert  into `activity_order`(`activity_order_id`,`activity_id`,`order_type`,`member_id`,`student_id`,`order_price`,`order_begin_time`,`payment_state`,`close`) values ('20191001145853382363',1,1,NULL,1,'188.88','2019-10-01 14:58:54',1,0),('20191009144301721429',4,1,NULL,1,'213.22','2019-10-09 14:43:01',0,0),('20191009163126575245',4,0,'mb_ca33eae307ae4',NULL,'426.44','2019-10-09 16:31:27',1,0),('20191009163703148065',4,0,'mb_ca33eae307ae4',NULL,'213.22','2019-10-09 16:37:04',0,0),('20191010164121915078',4,0,'mb_ca33eae307ae4',NULL,'426.44','2019-10-10 16:41:22',0,0);
 
 /*Table structure for table `activity_order_student` */
 
@@ -84,7 +84,7 @@ CREATE TABLE `activity_order_student` (
 
 /*Data for the table `activity_order_student` */
 
-insert  into `activity_order_student`(`activity_order_id`,`student_id`,`is_paid`) values ('20191009163126575245',1,1),('20191009163126575245',8,1),('20191009163703148065',2,0);
+insert  into `activity_order_student`(`activity_order_id`,`student_id`,`is_paid`) values ('20191009163126575245',1,1),('20191009163126575245',8,1),('20191009163703148065',2,0),('20191010164121915078',38,0),('20191010164121915078',39,0);
 
 /*Table structure for table `activity_seat` */
 
@@ -496,7 +496,7 @@ CREATE TABLE `member_re_student` (
 
 /*Data for the table `member_re_student` */
 
-insert  into `member_re_student`(`member_id`,`student_id`) values ('mb_ca33eae307ae4',1),('mb_ca33eae307ae4',8),('mb_ca33eae307ae4',38),('mb_ca33eae307ae4',39);
+insert  into `member_re_student`(`member_id`,`student_id`) values ('mb_ca33eae307ae4',1),('mb_ca33eae307ae4',8),('mb_ca33eae307ae4',38),('mb_ca33eae307ae4',39),('mb_ca33eae307ae4',40);
 
 /*Table structure for table `member_subscription_order` */
 
@@ -591,7 +591,7 @@ CREATE TABLE `student` (
   `student_phone` varchar(20) DEFAULT NULL,
   `student_name` varchar(12) DEFAULT NULL,
   `student_email` varchar(50) DEFAULT NULL,
-  `student_positon` varchar(20) DEFAULT NULL COMMENT '职位',
+  `student_position` varchar(20) DEFAULT NULL COMMENT '职位',
   `student_country` varchar(20) DEFAULT NULL COMMENT '地址',
   `student_province` varchar(20) DEFAULT NULL,
   `student_city` varchar(20) DEFAULT NULL,
@@ -602,11 +602,11 @@ CREATE TABLE `student` (
   PRIMARY KEY (`student_id`),
   UNIQUE KEY `UNIQUE1` (`student_phone`),
   UNIQUE KEY `UNIQUE2` (`student_idcard`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8;
 
 /*Data for the table `student` */
 
-insert  into `student`(`student_id`,`student_password`,`student_idcard`,`student_phone`,`student_name`,`student_email`,`student_positon`,`student_country`,`student_province`,`student_city`,`student_area`,`student_address`,`company`,`enter_time`) values (1,'123456','445281199308310056','15521054785','张三','11@qq.com','经理','中国','广东省','广州市','番禺区','大学城华南理工大学',NULL,NULL),(2,'123456','445281199308310037','15521064789','李四','22@qq.com',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(8,'123456','445281199707774569','13112114587','王建国',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL),(38,'123456','4342323432','15521065436','张英语',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL),(39,'123456','134455','15521065326','李数学',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL);
+insert  into `student`(`student_id`,`student_password`,`student_idcard`,`student_phone`,`student_name`,`student_email`,`student_position`,`student_country`,`student_province`,`student_city`,`student_area`,`student_address`,`company`,`enter_time`) values (1,'123456','445281199308310056','15521054785','张三','11@qq.com','经理','中国','广东省','广州市','番禺区','大学城华南理工大学',NULL,NULL),(2,'123456','445281199308310037','15521064789','李四','22@qq.com',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(8,'123456','445281199707774569','13112114587','王建国',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL),(38,'123456','4342323432','15521065436','张英语',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL),(39,'123456','134455','15521065326','李数学',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL),(40,'123456','445281199302210226','15521065416','王建国',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL);
 
 /*Table structure for table `system_parameter` */
 
@@ -622,7 +622,7 @@ CREATE TABLE `system_parameter` (
   `modify_time` datetime DEFAULT NULL COMMENT '最后一次修改时间',
   PRIMARY KEY (`para_id`),
   UNIQUE KEY `key` (`key`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 /*Data for the table `system_parameter` */
 
