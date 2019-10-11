@@ -8,9 +8,11 @@ public interface ActivityService {
 
     JSONObject getSignedActivities(String idcard);
 
-    JSONObject getSeatNum(String idcard,int activityId);
+    JSONObject studentGetSeatNum(String idcard,int activityId);
 
     JSONObject studentJoinActivity(JSONObject jsonObject);
 
     JSONObject memberJoinActivity(JSONObject jsonObject);
+
+    JSONObject memberGetSeatNum(String memberId,int activityId);
 }

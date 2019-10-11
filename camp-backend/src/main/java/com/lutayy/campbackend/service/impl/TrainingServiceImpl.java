@@ -4,16 +4,16 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonAlias;
-import com.lutayy.campbackend.dao.MemberMapper;
-import com.lutayy.campbackend.dao.TrainingMapper;
-import com.lutayy.campbackend.dao.TrainingReStudentMapper;
+import com.lutayy.campbackend.common.util.OrderIdGenerator;
+import com.lutayy.campbackend.dao.*;
 import com.lutayy.campbackend.pojo.*;
 import com.lutayy.campbackend.service.SQLConn.TrainingStudentSQLConn;
 import com.lutayy.campbackend.service.TrainingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.DateFormat;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -28,9 +28,41 @@ public class TrainingServiceImpl implements TrainingService {
     TrainingReStudentMapper trainingReStudentMapper;
     @Autowired
     MemberMapper memberMapper;
+    @Autowired
+    StudentMapper studentMapper;
+    @Autowired
+    TrainingOrderMapper trainingOrderMapper;
+    @Autowired
+    TrainingOrderStudentMapper trainingOrderStudentMapper;
 
     private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
             "yyyy-MM-dd HH:mm:ss");
+
+    private Student getStudentByIdcard(String idcard){
+        StudentExample studentExample=new StudentExample();
+        StudentExample.Criteria criteria=studentExample.createCriteria();
+        criteria.andStudentIdcardEqualTo(idcard);
+        List<Student> students=studentMapper.selectByExample(studentExample);
+        if(students.size()==0){
+            return null;
+        }
+        return students.get(0);
+    }
+    /**
+     *  学员培训报名记录查询
+     *  有有效报名记录返回1，无则返回0
+     **/
+    private int checkStudentTraining(int studentId,int trainingId){
+        TrainingReStudentExample trainingReStudentExample=new TrainingReStudentExample();
+        TrainingReStudentExample.Criteria criteria=trainingReStudentExample.createCriteria();
+        criteria.andStudentIdEqualTo(studentId).andTrainingIdEqualTo(trainingId);
+        List<TrainingReStudent> trainingReStudents=trainingReStudentMapper.selectByExample(trainingReStudentExample);
+        if(trainingReStudents.size()==0){
+            return 0;
+        }else {
+            return 1;
+        }
+    }
 
     /** 学员中心接口 **/
     @Override
@@ -195,5 +227,97 @@ public class TrainingServiceImpl implements TrainingService {
         result.put("data", data);
         return result;
     }
+
+    @Override
+    public JSONObject memberJoinTraining(JSONObject jsonObject) {
+        JSONObject result=new JSONObject();
+        String memberId=jsonObject.getString("id");
+        System.out.println(memberId);
+        int trainingId=jsonObject.getInteger("trainingId");
+        JSONArray idNums=jsonObject.getJSONArray("idNums");
+        Training training=trainingMapper.selectByPrimaryKey(trainingId);
+        if(training==null){
+            result.put("code", "fail");
+            result.put("msg", "系统中没有该培训");
+            return result;
+        }
+
+        String orderId= OrderIdGenerator.getUniqueId();
+        //订单号生成并查重（如非高并发系统基本上可以省略）
+        while(trainingOrderMapper.selectByPrimaryKey(orderId)!=null){
+            orderId=OrderIdGenerator.getUniqueId();
+        }
+        /**
+         * 由会员报名，对应的订单，还需插入“订单—学生”表
+         **/
+        TrainingOrder trainingOrder=new TrainingOrder();
+        trainingOrder.setTrainingOrderId(orderId);
+        trainingOrder.setTrainingId(trainingId);
+        trainingOrder.setOrderType(false);//"0"即会员提交的订单
+        trainingOrder.setMemberId(memberId);
+        trainingOrder.setOrderBeginTime(new Date());
+        trainingOrder.setClose(false);
+        trainingOrder.setPaymentState(false);
+        trainingOrderMapper.insertSelective(trainingOrder);
+        int isVip=0;
+        Member member=memberMapper.selectByPrimaryKey(memberId);
+        if(member!=null){
+            if(member.getIsVip()==true){
+                isVip=1;
+            }
+        }
+        BigDecimal fee = isVip==0 ? training.getTrainingFeeNormal() : training.getTrainingFeeVip();
+
+        int existTotalCount=0;
+        String existTagTip="";
+        int existOrderTotalCount=0;
+        String existOrderTagTip="";
+        for(int i=0;i<idNums.size();i++){
+            Student student=getStudentByIdcard(idNums.getString(i));
+            if(checkStudentTraining(student.getStudentId(), trainingId)!=0){
+                existTotalCount+=1;
+                existTagTip+=student.getStudentName()+"("+idNums.getString(i)+") ";
+                continue;
+            }
+            String checkOrderId=TrainingStudentSQLConn.getTrainingOrderByStudentId(student.getStudentId(),trainingId);
+//            System.out.println(checkOrderId);
+            if(checkOrderId!=null){
+                existOrderTotalCount+=1;
+                existOrderTagTip+=student.getStudentName()+"(订单"+checkOrderId+") ";
+                continue;
+            }
+            //插入“订单—学生”表
+            TrainingOrderStudent trainingOrderStudent=new TrainingOrderStudent();
+            trainingOrderStudent.setTrainingOrderId(orderId);
+            trainingOrderStudent.setStudentId(student.getStudentId());
+            trainingOrderStudentMapper.insertSelective(trainingOrderStudent);
+        }
+        BigDecimal successNums = new BigDecimal(idNums.size() - existTotalCount - existOrderTotalCount);
+//        DecimalFormat decimalFormat=new DecimalFormat("0.00");
+        trainingOrder.setOrderPrice(fee.multiply(successNums));
+        trainingOrderMapper.updateByPrimaryKeySelective(trainingOrder);
+        String msg="尝试为"+idNums.size()+"名学员报名； 成功"+(idNums.size()-existTotalCount-existOrderTotalCount)+"名； ";
+        result.put("code", "success");
+        if(existTotalCount>0){
+            msg+="剔除重复报名"+existTotalCount+"名,分别是:["+existTagTip+"] ";
+        }
+        if(existOrderTotalCount>0){
+            msg+="剔除已存在于该培训未支付订单中的学员"+existOrderTotalCount+"名,分别是:["+existOrderTagTip+"] ";
+        }
+        if(idNums.size() - existTotalCount - existOrderTotalCount < 1){
+            result.put("code", "fail");
+            result.put("data",null);
+            //提交的名单没有报名成功的，删除订单
+            trainingOrderMapper.deleteByPrimaryKey(orderId);
+        }else {
+            result.put("code", "success");
+            result.put("data", orderId);
+            msg+="订单生成成功！订单号："+orderId;
+        }
+        result.put("msg", msg);
+        return result;
+    }
+
+
 }
 

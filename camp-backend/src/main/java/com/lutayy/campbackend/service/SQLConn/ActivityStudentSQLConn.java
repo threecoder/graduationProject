@@ -1,8 +1,14 @@
 package com.lutayy.campbackend.service.SQLConn;
 
+import com.lutayy.campbackend.pojo.ActivityStudent;
 import org.springframework.stereotype.Component;
 
+
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class ActivityStudentSQLConn {
@@ -34,6 +40,48 @@ public class ActivityStudentSQLConn {
         } catch (SQLException e){
             e.printStackTrace();
             return orderId;
+        }
+    }
+    /**
+     * 获取某一活动会员名下的学员的报名信息
+     **/
+    public static List<Map<String,String>> getStudentActivityInfoFromMember(String memberId, int activityId){
+
+//        List<ActivityStudent> activityStudents=new ArrayList<>();
+        List<Map<String,String>> infos=new ArrayList<>();
+
+        Connection conn=null;
+        Statement statement=null;
+        try{
+            conn= DriverManager.getConnection(URL,Name,Pwd);
+            statement=conn.createStatement();
+            String sql="select distinct a.*,s.student_phone,s.student_name from " +
+                    "(student s left join activity_student a on a.student_id=s.student_id) left join member_re_student m on m.student_id=s.student_id "+
+                    "where a.activity_id=" + activityId +
+                    " and m.member_id='"+memberId+"'";
+
+            ResultSet rs=statement.executeQuery(sql);
+            while (rs.next()){
+//                ActivityStudent activityStudent=new ActivityStudent();
+//                activityStudent.setApplyNumber(rs.getString("apply_number"));
+//                activityStudent.setApplyTime(rs.getDate("apply_time"));
+//                activityStudent.setStudentId(rs.getInt("student_id"));
+//                activityStudent.setActivityId(rs.getInt("activity_id"));
+//                activityStudent.setSeatId(rs.getInt("seat_id"));
+//                activityStudent.setSeatNumber(rs.getString("seat_number"));
+//                activityStudents.add(activityStudent);
+                HashMap<String,String> info=new HashMap<>();
+                info.put("name", rs.getString("student_name"));
+                info.put("phone", rs.getString("student_phone"));
+                info.put("seatNumber", "seat_number");
+                info.put("applyNumber", rs.getString("apply_number"));
+                info.put("applyTime", rs.getString("apply_time"));
+                infos.add(info);
+            }
+            return infos;
+        } catch (SQLException e){
+            e.printStackTrace();
+            return infos;
         }
     }
 }

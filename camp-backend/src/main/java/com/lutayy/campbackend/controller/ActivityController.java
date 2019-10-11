@@ -30,8 +30,8 @@ public class ActivityController {
 
     @RequestMapping("/student/getSeatNum")
     @ResponseBody
-    public Object getSeatNum(@RequestParam("id") String idcard,@RequestParam("activityId") int activityId){
-        return activityService.getSeatNum(idcard,activityId);
+    public Object studentGetSeatNum(@RequestParam("id") String idcard,@RequestParam("activityId") int activityId){
+        return activityService.studentGetSeatNum(idcard,activityId);
     }
 
     @RequestMapping("/student/joinActivity")
@@ -44,5 +44,11 @@ public class ActivityController {
     @ResponseBody
     public JSONObject memberJoinActivity(@RequestBody JSONObject jsonObject){
         return activityService.memberJoinActivity(jsonObject);
+    }
+
+    @RequestMapping("/member/getSeatNum")
+    @ResponseBody
+    public Object memberGetSeatNum(@RequestParam("id") String memberId,@RequestParam("activityId") int activityId){
+        return activityService.memberGetSeatNum(memberId,activityId);
     }
 }

@@ -1,14 +1,10 @@
 package com.lutayy.campbackend.service.SQLConn;
 
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.lutayy.campbackend.pojo.Training;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Component
@@ -46,4 +42,30 @@ public class TrainingStudentSQLConn {
         }
     }
 
+    /**
+     * 获取 包含对应学员的 由会员提交的 未支付的有效的订单的 订单号
+     **/
+    public static String getTrainingOrderByStudentId(int studentId, int trainingId){
+
+        String orderId=null;
+
+        Connection conn=null;
+        Statement statement=null;
+        try{
+            conn= DriverManager.getConnection(URL,Name,Pwd);
+            statement=conn.createStatement();
+            String sql="select o.training_order_id from training_order o,training_order_student a " +
+                    "where o.training_order_id=a.training_order_id and a.student_id=" + studentId +
+                    " and o.payment_state=0 and o.close=0 and o.order_type=0 and o.training_id="+trainingId;
+
+            ResultSet rs=statement.executeQuery(sql);
+            while (rs.next()){
+                orderId = rs.getString("training_order_id");
+            }
+            return orderId;
+        } catch (SQLException e){
+            e.printStackTrace();
+            return orderId;
+        }
+    }
 }
