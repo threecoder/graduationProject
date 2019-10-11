@@ -127,7 +127,7 @@ CREATE TABLE `activity_student` (
 
 /*Data for the table `activity_student` */
 
-insert  into `activity_student`(`apply_number`,`activity_id`,`student_id`,`apply_time`,`seat_id`,`seat_number`) values ('34cvsf',4,1,'2019-10-09 16:33:40',NULL,NULL),('asdasd',1,1,'2019-10-09 14:38:36',NULL,NULL),('ssdas1',4,8,'2019-10-09 16:34:09',NULL,NULL);
+insert  into `activity_student`(`apply_number`,`activity_id`,`student_id`,`apply_time`,`seat_id`,`seat_number`) values ('34cvsf',4,1,'2019-10-09 16:33:40',NULL,'1-5'),('asdasd',1,1,'2019-10-09 14:38:36',NULL,'4-6'),('ssdas1',4,8,'2019-10-09 16:34:09',NULL,'1-12');
 
 /*Table structure for table `admin` */
 
@@ -677,6 +677,8 @@ CREATE TABLE `training_order` (
 
 /*Data for the table `training_order` */
 
+insert  into `training_order`(`training_order_id`,`training_id`,`order_type`,`member_id`,`student_id`,`order_price`,`order_begin_time`,`payment_state`,`close`) values ('20191011164356741646',2,0,'mb_ca33eae307ae4',NULL,'1398.02','2019-10-11 16:43:57',1,0),('20191011164411967235',2,0,'mb_ca33eae307ae4',NULL,'699.01','2019-10-11 16:44:12',0,0),('20191011164630774051',2,0,'mb_ca33eae307ae4',NULL,'699.01','2019-10-11 16:46:31',0,0);
+
 /*Table structure for table `training_order_student` */
 
 DROP TABLE IF EXISTS `training_order_student`;
@@ -684,6 +686,7 @@ DROP TABLE IF EXISTS `training_order_student`;
 CREATE TABLE `training_order_student` (
   `training_order_id` varchar(20) DEFAULT NULL,
   `student_id` int(20) DEFAULT NULL,
+  `is_paid` tinyint(1) DEFAULT '0' COMMENT '1:已支付',
   KEY `training_order_id` (`training_order_id`),
   KEY `student_id` (`student_id`),
   CONSTRAINT `training_order_student_ibfk_1` FOREIGN KEY (`training_order_id`) REFERENCES `training_order` (`training_order_id`),
@@ -691,6 +694,8 @@ CREATE TABLE `training_order_student` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `training_order_student` */
+
+insert  into `training_order_student`(`training_order_id`,`student_id`,`is_paid`) values ('20191011164356741646',1,1),('20191011164356741646',8,1),('20191011164411967235',38,0),('20191011164630774051',39,0);
 
 /*Table structure for table `training_re_student` */
 
@@ -712,7 +717,7 @@ CREATE TABLE `training_re_student` (
 
 /*Data for the table `training_re_student` */
 
-insert  into `training_re_student`(`apply_id`,`training_id`,`student_id`,`begin_time`,`is_done`,`is_invalid`) values ('2312',2,2,NULL,0,0),('342315',5,38,NULL,0,0),('45453',3,38,NULL,0,0),('5635',1,8,NULL,0,0);
+insert  into `training_re_student`(`apply_id`,`training_id`,`student_id`,`begin_time`,`is_done`,`is_invalid`) values ('23123123',2,1,'2019-10-11 16:45:27',0,0),('324wsds',2,8,'2019-10-11 16:45:42',0,0);
 
 /*Table structure for table `vote` */
 
