@@ -15,4 +15,8 @@ public interface ActivityService {
     JSONObject memberJoinActivity(JSONObject jsonObject);
 
     JSONObject memberGetSeatNum(String memberId,int activityId);
+
+    JSONObject addNewActivity(JSONObject jsonObject);
+
+    JSONObject adminGetActivityList();
 }

@@ -746,6 +746,66 @@ public class ActivityExample {
             return (Criteria) this;
         }
 
+        public Criteria andPostTimeIsNull() {
+            addCriterion("post_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostTimeIsNotNull() {
+            addCriterion("post_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostTimeEqualTo(Date value) {
+            addCriterion("post_time =", value, "postTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostTimeNotEqualTo(Date value) {
+            addCriterion("post_time <>", value, "postTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostTimeGreaterThan(Date value) {
+            addCriterion("post_time >", value, "postTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("post_time >=", value, "postTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostTimeLessThan(Date value) {
+            addCriterion("post_time <", value, "postTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostTimeLessThanOrEqualTo(Date value) {
+            addCriterion("post_time <=", value, "postTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostTimeIn(List<Date> values) {
+            addCriterion("post_time in", values, "postTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostTimeNotIn(List<Date> values) {
+            addCriterion("post_time not in", values, "postTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostTimeBetween(Date value1, Date value2) {
+            addCriterion("post_time between", value1, value2, "postTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostTimeNotBetween(Date value1, Date value2) {
+            addCriterion("post_time not between", value1, value2, "postTime");
+            return (Criteria) this;
+        }
+
         public Criteria andMaxNumIsNull() {
             addCriterion("max_num is null");
             return (Criteria) this;

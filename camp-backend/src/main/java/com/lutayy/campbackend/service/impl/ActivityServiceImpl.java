@@ -403,4 +403,87 @@ public class ActivityServiceImpl implements ActivityService {
         result.put("msg", "获取学生报名信息成功");
         return result;
     }
+
+    /**
+     * 协会管理员的活动管理
+     * **/
+    @Override
+    public JSONObject addNewActivity(JSONObject jsonObject) {
+        JSONObject result=new JSONObject();
+
+        String name=jsonObject.getString("name");
+        BigDecimal fee=jsonObject.getBigDecimal("fee");
+        String address=jsonObject.getString("address");
+        Date startDate=jsonObject.getDate("date");//活动举行时间
+        float lenHour=jsonObject.getFloat("len");
+        String contacts=jsonObject.getString("contacts");
+        Date openTime=jsonObject.getDate("openTime");//开放报名时间
+        Date closeTime=jsonObject.getDate("closeTime");//关闭报名时间
+        JSONArray description=jsonObject.getJSONArray("desc");
+        String introduction="";
+        for(int i=0;i<description.size();i++){
+            introduction+=description.getString(i)+"\n";
+        }
+        System.out.println(introduction);
+
+        Activity activity=new Activity();
+        activity.setActivityAddress(address);
+        activity.setActivityName(name);
+        activity.setActivityDate(startDate);
+        activity.setActivityFee(fee);
+        activity.setActivityLengthMin((int)(lenHour*60));
+        activity.setOpenTime(openTime);
+        activity.setCloseTime(closeTime);
+        activity.setContacts(contacts);
+        activity.setActivityIntroduction(introduction);
+        activity.setPostTime(new Date());
+        if(activityMapper.insertSelective(activity)>0){
+            result.put("code", "success");
+            result.put("msg", "成功发布活动");
+        } else {
+            result.put("code", "fail");
+            result.put("msg", "系统繁忙，发布失败，请重试");
+        }
+        return result;
+    }
+
+    @Override
+    public JSONObject adminGetActivityList() {
+        JSONObject result=new JSONObject();
+        JSONArray data=new JSONArray();
+
+        ActivityExample activityExample=new ActivityExample();
+        activityExample.setOrderByClause("post_time DESC");
+        List<Activity> activities=activityMapper.selectByExample(activityExample);
+        if(activities.size()==0){
+            result.put("code", "fail");
+            result.put("msg", "系统中暂无已发布活动");
+            result.put("data", null);
+            return result;
+        }
+        for(Activity activity:activities){
+            JSONObject object=new JSONObject();
+            object.put("id", activity.getActivityId());
+            object.put("name", activity.getActivityName());
+            object.put("date", activity.getActivityDate());
+            object.put("openDate", activity.getOpenTime());
+            object.put("address", activity.getActivityAddress());
+            object.put("fee", activity.getActivityFee());
+            JSONArray introduce=new JSONArray();
+            introduce.add(activity.getActivityIntroduction());
+            object.put("introduce",introduce);
+            object.put("contacts", activity.getContacts());
+            /* 获取参与活动的人数 */
+            ActivityStudentExample activityStudentExample=new ActivityStudentExample();
+            ActivityStudentExample.Criteria criteria=activityStudentExample.createCriteria();
+            criteria.andActivityIdEqualTo(activity.getActivityId());
+            List<ActivityStudent> activityStudents=activityStudentMapper.selectByExample(activityStudentExample);
+            object.put("joinNum", activityStudents.size());
+            data.add(object);
+        }
+        result.put("data", data);
+        result.put("code", "success");
+        result.put("msg", "获取已发布培训成功");
+        return result;
+    }
 }

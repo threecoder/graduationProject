@@ -16,7 +16,7 @@ public class ActivityController {
     @Autowired
     ActivityService activityService;
 
-    @RequestMapping("/student/getJoinableActivities")
+    @RequestMapping(value={"/student/getJoinableActivities","/member/getJoinableActivities"})
     @ResponseBody
     public Object getJoinableActivities(){
         return activityService.getJoinableActivities();
@@ -50,5 +50,17 @@ public class ActivityController {
     @ResponseBody
     public Object memberGetSeatNum(@RequestParam("id") String memberId,@RequestParam("activityId") int activityId){
         return activityService.memberGetSeatNum(memberId,activityId);
+    }
+
+    @RequestMapping("/admin/addNewActivity")
+    @ResponseBody
+    public JSONObject addNewActivity(@RequestBody JSONObject jsonObject){
+        return activityService.addNewActivity(jsonObject);
+    }
+
+    @RequestMapping("/admin/getActivityList")
+    @ResponseBody
+    public Object adminGetActivityList(){
+        return activityService.adminGetActivityList();
     }
 }
