@@ -2,7 +2,7 @@ import { request } from '../request.js';
 
 
 //获取学生列表
-export const getStudentList = () => request( '/campback/member/getStudentListByCondition', {}, "get", 'json');
+export const getStudentList = par => request( '/campback/member/getStudentListByCondition', par, "post", 'json');
 
 //删除一个学生的挂靠关系
 export const deleteOneStudent = par => request('/campback/member/deleteOneStudent', par, "post", 'json');

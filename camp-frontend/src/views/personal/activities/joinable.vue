@@ -330,9 +330,9 @@ export default {
     },
     mounted() {
         this.init();
-        // if (this.idType == 1) {
-        //     this.getStudentList();
-        // }
+        if (this.idType == 1) {
+            this.getStudentList();
+        }
     },
     methods: {
         async init() {
@@ -344,9 +344,9 @@ export default {
                         { prop: "status", label: "状态" },
                         t
                     );
-                    res = await getsignedActivities();
+                    res = await getsignedActivities(this.idType);
                 } else {
-                    res = await getJoinableActivities();
+                    res = await getJoinableActivities(this.idType);
                 }
                 this.activityTable.tableData = res.data;
             } catch (error) {
@@ -380,7 +380,7 @@ export default {
                     idNums: this.studentList.data,
                     activityId: this.studentList.id
                 };
-                let res = await memberJoinActivity();
+                let res = await memberJoinActivity(par);
                 this.$message.success("报名成功");
             } catch (error) {}
         },

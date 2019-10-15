@@ -1,12 +1,15 @@
 import { request } from '../request.js';
-export const getJoinableTraining = () => {
-    return request("/campback/student/getJoinableActivities", {}, 'get', 'json');
+export const getJoinableTraining = idType => {
+    let str = idType == 0 ? "/campback/student/getJoinableTraining" : "/campback/member/getJoinableTraining";
+    console.log(idType)
+    return request(str, {}, 'get', 'json');
 }
 export const studentJoinTraining = activityId => {
     return request('/campback/student/joinActivity', { activityId }, 'post', 'json');
 }
-export const getsignedTraining = () => {
-    return request("/campback/student/getSignedActivities", {}, 'get', 'json');
+export const getsignedTraining = idType => {
+    let str = idType == 0 ? "/campback/student/getsignedTraining" : "/campback/member/getsignedTraining";
+    return request(str, {}, 'get', 'json');
 }
 export const getSeatNum = activityId => {
     return request("/campback/student/getSeatNum", { activityId }, 'post', 'json');

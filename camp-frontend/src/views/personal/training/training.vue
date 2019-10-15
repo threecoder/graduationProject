@@ -24,10 +24,14 @@
                             title="提示"
                             :visible.sync="dialogVisible"
                             :modal-append-to-body="false"
-                            width="30%">
+                            width="30%"
+                        >
                             <span>您确定报名这个培训吗？</span>
                             <span slot="footer" class="dialog-footer">
-                                <el-button type="primary" @click="studentJoin(row) , dialogVisible = false">确定</el-button>
+                                <el-button
+                                    type="primary"
+                                    @click="studentJoin(row) , dialogVisible = false"
+                                >确定</el-button>
                                 <el-button @click="dialogVisible = false">取消</el-button>
                             </span>
                         </el-dialog>
@@ -49,7 +53,7 @@
             </div>
             <div class="divider"></div>
             <div class="activity-detail">
-                <p v-for="(item,i) in drwaerInfo.introduce" :key="i">{{item}}</p>
+                <p v-for="(item,i) in drwaerInfo.introduction" :key="i">{{item}}</p>
                 <p>如有疑问，请联系：{{drwaerInfo.contacts}}。</p>
             </div>
             <div class="drawer-footer">
@@ -101,7 +105,7 @@ export default {
     },
     data() {
         return {
-            idType: null,
+            idType: getLocalStorage("user").type,
             type: this.$route.params.id,
             dialogVisible: false,
             trainingTable: {
@@ -329,11 +333,12 @@ export default {
     },
     mounted() {
         this.init();
-        this.getStudentList();
+        if (this.idType == 1) {
+            this.getStudentList();
+        }
     },
     methods: {
         async init() {
-            this.idType = getLocalStorage("user").idType;
             try {
                 let res = null;
                 if (this.type == 1) {
@@ -342,9 +347,9 @@ export default {
                         { prop: "status", label: "状态" },
                         t
                     );
-                    res = await getsignedTraining();
+                    res = await getsignedTraining(this.idType);
                 } else {
-                    res = await getJoinableTraining();
+                    res = await getJoinableTraining(this.idType);
                 }
                 this.trainingTable.tableData = res.data;
             } catch (error) {

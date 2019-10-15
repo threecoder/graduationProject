@@ -202,9 +202,14 @@ export default {
         async search() {
             try {
                 this.loading = true;
+                let t = this.form;
+                t.name = t.name == ""? null:t.name;
+                t.phone = t.phone == ""? null:t.phone;
+                t.idNum = t.idNum == ""? null:t.idNum;
                 let res = await getStudentList(this.form);
                 this.tableData = res.data.list;
                 this.form.total = res.total;
+                this.loading = false;
             } catch (error) {
                 this.loading = false;
             }
@@ -219,6 +224,7 @@ export default {
                 let res = await deleteOneStudent(par);
                 this.$message.success("解除挂靠关系成功");
                 this.buttonLoading = false;
+                this.search();
             } catch (e) {
                 this.buttonLoading = false;
             }
@@ -233,8 +239,10 @@ export default {
                 let res = await addOneStudent(this.newStudent);
                 this.$message.success(res.msg);
                 this.dialogFormVisible = false;
+                this.search();
             } catch (error) {}
         },
+        //获取模板
         async getListTemplate() {
             try {
                 let res = await getTemplate();
