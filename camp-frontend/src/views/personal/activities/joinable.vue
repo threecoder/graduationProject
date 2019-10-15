@@ -330,9 +330,9 @@ export default {
     },
     mounted() {
         this.init();
-        if (this.idType == 1) {
-            this.getStudentList();
-        }
+        // if (this.idType == 1) {
+        //     this.getStudentList();
+        // }
     },
     methods: {
         async init() {

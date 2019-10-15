@@ -26,28 +26,34 @@
                     <span>{{belong}}</span>
                 </p>
                 <p v-if="grade">分数：{{grade}}</p>
-                <el-button
-                    v-if="!type"
-                    type="primary"
-                    round
-                    class="mybutton"
-                    @click="toExamIndex"
-                >开始考试</el-button>
-                <el-button
-                    v-if="type=='done'"
-                    type="primary"
-                    round
-                    class="mybutton"
-                    @click="checkExam"
-                >查看考试</el-button>
-                <el-button
-                    v-if="type=='done'&&grade<60"
-                    type="primary"
-                    round
-                    class="mybutton"
-                    @click="rejoin"
-                    :loading="loading"
-                >重新报名</el-button>
+                <div v-if="idtype!=1">
+                    <el-button
+                        v-if="!type"
+                        type="primary"
+                        round
+                        class="mybutton"
+                        @click="toExamIndex"
+                    >开始考试</el-button>
+                    <el-button
+                        v-if="type=='done'"
+                        type="primary"
+                        round
+                        class="mybutton"
+                        @click="checkExam"
+                    >查看考试</el-button>
+                    <el-button
+                        v-if="type=='done'&&grade<60"
+                        type="primary"
+                        round
+                        class="mybutton"
+                        @click="rejoin"
+                        :loading="loading"
+                    >重新报名</el-button>
+                </div>
+                <div v-if="idtype==1">
+                    <el-button type="primary" round>挑选试题</el-button>
+                    <el-button type="primary" round>发布考试</el-button>
+                </div>
             </div>
         </el-card>
     </div>
@@ -64,7 +70,8 @@ export default {
         "min",
         "belong",
         "grade",
-        "examId"
+        "examId",
+        "idtype"
     ],
     data() {
         return {

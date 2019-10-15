@@ -1,13 +1,12 @@
 <template>
     <div>
-        <h2>需完成的考试</h2>
+        <h3>发布考试</h3>
+        <div class="divider"></div>
         <div class="switcher">
-            <el-button :class="{'active':flag}" @click="flag=true">未作答</el-button>
-            <el-button :class="{'active':!flag}" @click="flag=false">已作答</el-button>
+            <el-button type="primary" @click="newFlag=true">新建考试</el-button>
         </div>
         <div>
-            <span v-if="flag" class="panel-title">还未作答的试卷</span>
-            <span v-else class="panel-title">已经作答过的试卷</span>
+            <span class="panel-title">已有考试</span>
             <div class="all-exam-container" :loading="loading">
                 <div class="single-exam-container" v-for="(item,i) in examList" :key="i">
                     <single-exam
@@ -19,47 +18,59 @@
                         :min="item.min"
                         :grade="item.grade"
                         :examId="item.examId"
+                        :idtype="1"
                     />
                 </div>
             </div>
         </div>
+
+        <el-dialog :visible.sync="newFlag">
+            <exam-publish  @close="newFlag=false"/>
+        </el-dialog>
+        <el-dialog :visible.sync="pickFlag">
+            <pick-question  @close="pickFlag=false"/>
+        </el-dialog>
     </div>
 </template>
 <script>
 import { getTodoExam, getHalfExam } from "@/api/modules/exam.js";
 import singleExam from "@/components/singleExam.vue";
 import page from "@/components/page.vue";
+import examPublish from './components/examPublish';
+import pickQuestion from './components/pickQuestion';
 export default {
     components: {
         singleExam,
-        page
+        page,
+        examPublish,
+        pickQuestion
     },
     data() {
         return {
             examList: [
-                // {
-                //     examId:"1",
-                //     examName:"考试名称",
-                //     date:"2016-10-10",
-                //     startTime: "14:00:00",
-                //     endTime: "16:00:00",
-                //     min: "120分钟",
-                //     belong: "HTML入门",
-                //     grade:null
-                // }
+                {
+                    examId:"1",
+                    examName:"考试名称",
+                    date:"2016-10-10",
+                    startTime: "14:00:00",
+                    endTime: "16:00:00",
+                    min: "120分钟",
+                    belong: "HTML入门",
+                    grade:null
+                }
             ],
-            flag: true,
+            newFlag: true,
+            pickFlag: true,
             loading: false
         };
     },
     watch: {
         flag() {
-            this.examList = [];
-            this.getExamList();
+            // this.examList = [];
         }
     },
     mounted() {
-        this.getExamList();
+        // this.getExamList();
     },
     methods: {
         async getExamList() {

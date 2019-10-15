@@ -122,6 +122,11 @@ export default new Router({
                     path: '/question',
                     name: 'question',
                     component: resolve => require(['../views/admin/exam/question.vue'], resolve)
+                },
+                {
+                    path:'/toPublic',
+                    name: 'toPublic',
+                    component: resolve => require(['../views/admin/exam/toPublic.vue'], resolve) 
                 }
             ]
         },

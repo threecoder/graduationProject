@@ -82,7 +82,7 @@
                 </el-row>
 
                 <el-row :gutter="20">
-                    <el-form-item label="活动开放时间" prop="dateRange">
+                    <el-form-item label="活动开放时间" prop="dateRange" label-width="200">
                         <el-col :span="10">
                             <el-form-item prop="openTime">
                                 <el-date-picker

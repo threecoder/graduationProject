@@ -23,7 +23,7 @@
 </template>
 <script>
 import { getDoneExam } from "@/api/modules/exam.js";
-import singleExam from "./components/singleExam.vue";
+import singleExam from "@/components/singleExam.vue";
 import page from "@/components/page.vue";
 export default {
     components: {

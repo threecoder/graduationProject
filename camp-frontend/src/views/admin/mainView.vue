@@ -71,7 +71,7 @@ export default {
                     title: "考试管理",
                     children: [
                         { index: "/question", title: "试题管理" },
-                        { index: "", title: "发布考试" },
+                        { index: "/toPublic", title: "发布考试" },
                         { index: "", title: "已发布的考试" },
                         { index: "", title: "成绩审核" }
                     ]
