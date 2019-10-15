@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -404,6 +405,57 @@ public class ActivityServiceImpl implements ActivityService {
         return result;
     }
 
+    @Override
+    public JSONObject memberGetSignedActivities(String id) {
+        JSONObject result=new JSONObject();
+
+        ActivityOrderExample activityOrderExample=new ActivityOrderExample();
+        ActivityOrderExample.Criteria criteria=activityOrderExample.createCriteria();
+        criteria.andOrderTypeEqualTo(false).andMemberIdEqualTo(id).andPaymentStateEqualTo(false).andCloseEqualTo(false);
+        activityOrderExample.setOrderByClause("order_begin_time DESC");
+        List<ActivityOrder> activityOrders=activityOrderMapper.selectByExample(activityOrderExample);
+
+        List<Integer> activityIds=ActivityStudentSQLConn.getActivityIdByMemberId(id);
+
+        if(activityIds.size()==0 && activityOrders.size()==0){
+            result.put("code", "fail");
+            result.put("msg", "暂无已报名活动");
+            result.put("data", null);
+        }
+        List<Activity> activities=new ArrayList<>();
+        for(int i=0;i<activityOrders.size();i++){
+            activities.add(activityMapper.selectByPrimaryKey(activityOrders.get(i).getActivityId()));
+        }
+        for(int i=activityIds.size()-1;i>=0;i--){
+            activities.add(activityMapper.selectByPrimaryKey(activityIds.get(i)));
+        }
+        JSONArray data=new JSONArray();
+        int num=0;
+        for(Activity activity:activities){
+            JSONObject object=new JSONObject();
+            object.put("id", activity.getActivityId());
+            object.put("name", activity.getActivityName());
+            object.put("date", activity.getActivityDate());
+            object.put("address", activity.getActivityAddress());
+            object.put("fee", activity.getActivityFee());
+            JSONArray introduce=new JSONArray();
+            introduce.add(activity.getActivityIntroduction());
+            object.put("introduce",introduce);
+            if(num<activityOrders.size()){
+                object.put("status", "有订单未支付");
+            }else {
+                object.put("status", "已支付");
+            }
+            object.put("contacts", activity.getContacts());
+            data.add(object);
+            num+=1;
+        }
+        result.put("code", "success");
+        result.put("msg", "成功获取已报名的活动");
+        result.put("data", data);
+        return result;
+    }
+
     /**
      * 协会管理员的活动管理
      * **/
@@ -486,4 +538,6 @@ public class ActivityServiceImpl implements ActivityService {
         result.put("msg", "获取已发布培训成功");
         return result;
     }
+
+
 }

@@ -26,8 +26,8 @@ public class TrainingStudentSQLConn {
         try{
             conn= DriverManager.getConnection(URL,Name,Pwd);
             statement=conn.createStatement();
-            String sql="select t.training_id from member_re_student m,training_re_student t " +
-                    "where m.member_id='"+memberId+"' and m.student_id=t.student_id and t.is_apply_success=1";
+            String sql="select distinct t.training_id from member_re_student m,training_re_student t " +
+                    "where m.member_id='"+memberId+"' and m.student_id=t.student_id";
 
             ResultSet rs=statement.executeQuery(sql);
             while (rs.next()){

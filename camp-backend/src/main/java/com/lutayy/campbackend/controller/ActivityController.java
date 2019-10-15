@@ -63,4 +63,10 @@ public class ActivityController {
     public Object adminGetActivityList(){
         return activityService.adminGetActivityList();
     }
+
+    @RequestMapping("/member/getSignedActivities")
+    @ResponseBody
+    public Object memberGetSignedActivities(@RequestParam("id") String id){
+        return activityService.memberGetSignedActivities(id);
+    }
 }
