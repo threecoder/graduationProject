@@ -75,4 +75,10 @@ public class MemberController {
     public Object getStudentList(@RequestParam("id") String memberId){
         return memberService.getStudentList(memberId);
     }
+
+    @RequestMapping("/getStudentListByCondition")
+    @ResponseBody
+    public JSONObject getStudentListByCondition(@RequestBody JSONObject jsonObject){
+        return memberService.getStudentListByCondition(jsonObject);
+    }
 }

@@ -1,5 +1,6 @@
 package com.lutayy.campbackend.service;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,4 +27,6 @@ public interface MemberService {
     JSONObject importStudentByFile(HttpServletRequest request);
 
     JSONObject getStudentList(String memberId);
+
+    JSONObject getStudentListByCondition(JSONObject jsonObject);
 }

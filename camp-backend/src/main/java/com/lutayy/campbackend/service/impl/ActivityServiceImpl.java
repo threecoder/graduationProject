@@ -1,5 +1,6 @@
 package com.lutayy.campbackend.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.lutayy.campbackend.common.util.OrderIdGenerator;
@@ -15,6 +16,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -170,7 +172,7 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public JSONObject getSeatNum(String idcard,int activityId) {
+    public JSONObject studentGetSeatNum(String idcard,int activityId) {
         JSONObject result=new JSONObject();
 
         ActivityStudentExample activityStudentExample=new ActivityStudentExample();
@@ -310,12 +312,12 @@ public class ActivityServiceImpl implements ActivityService {
         }
         /**
          * 由会员报名，对应的订单，还需插入“订单—学生”表
-         * **/
+         **/
         ActivityOrder activityOrder=new ActivityOrder();
         activityOrder.setActivityOrderId(orderId);
         activityOrder.setActivityId(activityId);
         activityOrder.setMemberId(memberId);
-        activityOrder.setOrderType(false);//"0"即学生提交的订单
+        activityOrder.setOrderType(false);//"0"即会员提交的订单
         //activityOrder.setOrderPrice(activity.getActivityFee());
         activityOrder.setOrderBeginTime(new Date());
         activityOrder.setPaymentState(false);
@@ -334,7 +336,7 @@ public class ActivityServiceImpl implements ActivityService {
                 continue;
             }
             String checkOrderId=ActivityStudentSQLConn.getActivityOrderByStudentId(student.getStudentId(),activityId);
-            System.out.println(checkOrderId);
+//            System.out.println(checkOrderId);
             if(checkOrderId!=null){
                 existOrderTotalCount+=1;
                 existOrderTagTip+=student.getStudentName()+"(订单"+checkOrderId+") ";
@@ -347,7 +349,7 @@ public class ActivityServiceImpl implements ActivityService {
             activityOrderStudentMapper.insertSelective(activityOrderStudent);
         }
         BigDecimal successNums = new BigDecimal(idNums.size() - existTotalCount - existOrderTotalCount);
-        DecimalFormat decimalFormat=new DecimalFormat("0.00");
+//        DecimalFormat decimalFormat=new DecimalFormat("0.00");
         activityOrder.setOrderPrice(activity.getActivityFee().multiply(successNums));
         activityOrderMapper.updateByPrimaryKeySelective(activityOrder);
         String msg="尝试为"+idNums.size()+"名学员报名； 成功"+(idNums.size()-existTotalCount-existOrderTotalCount)+"名； ";
@@ -373,4 +375,115 @@ public class ActivityServiceImpl implements ActivityService {
         return result;
     }
 
+    @Override
+    public JSONObject memberGetSeatNum(String memberId, int activityId) {
+        JSONObject result=new JSONObject();
+        JSONObject data=new JSONObject();
+
+        List<Map<String,String>> studentActivityInfos = ActivityStudentSQLConn.getStudentActivityInfoFromMember(memberId, activityId);
+        if(studentActivityInfos.size()==0){
+            result.put("code", "fail");
+            result.put("msg", "名下学员无报名此活动");
+            result.put("data", null);
+            return result;
+        }
+        JSONArray list=new JSONArray();
+        for(int i=0;i<studentActivityInfos.size();i++){
+            JSONObject object=new JSONObject();
+            object.put("name", studentActivityInfos.get(i).get("name"));
+            object.put("phone", studentActivityInfos.get(i).get("phone"));
+            object.put("seatNumber", studentActivityInfos.get(i).get("seatNumber"));
+            object.put("applyNumber", studentActivityInfos.get(i).get("applyNumber"));
+            object.put("applyTime", studentActivityInfos.get(i).get("applyTime"));
+            list.add(object);
+        }
+        data.put("list", list);
+        result.put("data", data);
+        result.put("code", "success");
+        result.put("msg", "获取学生报名信息成功");
+        return result;
+    }
+
+    /**
+     * 协会管理员的活动管理
+     * **/
+    @Override
+    public JSONObject addNewActivity(JSONObject jsonObject) {
+        JSONObject result=new JSONObject();
+
+        String name=jsonObject.getString("name");
+        BigDecimal fee=jsonObject.getBigDecimal("fee");
+        String address=jsonObject.getString("address");
+        Date startDate=jsonObject.getDate("date");//活动举行时间
+        float lenHour=jsonObject.getFloat("len");
+        String contacts=jsonObject.getString("contacts");
+        Date openTime=jsonObject.getDate("openTime");//开放报名时间
+        Date closeTime=jsonObject.getDate("closeTime");//关闭报名时间
+        JSONArray description=jsonObject.getJSONArray("desc");
+        String introduction="";
+        for(int i=0;i<description.size();i++){
+            introduction+=description.getString(i)+"\n";
+        }
+        System.out.println(introduction);
+
+        Activity activity=new Activity();
+        activity.setActivityAddress(address);
+        activity.setActivityName(name);
+        activity.setActivityDate(startDate);
+        activity.setActivityFee(fee);
+        activity.setActivityLengthMin((int)(lenHour*60));
+        activity.setOpenTime(openTime);
+        activity.setCloseTime(closeTime);
+        activity.setContacts(contacts);
+        activity.setActivityIntroduction(introduction);
+        activity.setPostTime(new Date());
+        if(activityMapper.insertSelective(activity)>0){
+            result.put("code", "success");
+            result.put("msg", "成功发布活动");
+        } else {
+            result.put("code", "fail");
+            result.put("msg", "系统繁忙，发布失败，请重试");
+        }
+        return result;
+    }
+
+    @Override
+    public JSONObject adminGetActivityList() {
+        JSONObject result=new JSONObject();
+        JSONArray data=new JSONArray();
+
+        ActivityExample activityExample=new ActivityExample();
+        activityExample.setOrderByClause("post_time DESC");
+        List<Activity> activities=activityMapper.selectByExample(activityExample);
+        if(activities.size()==0){
+            result.put("code", "fail");
+            result.put("msg", "系统中暂无已发布活动");
+            result.put("data", null);
+            return result;
+        }
+        for(Activity activity:activities){
+            JSONObject object=new JSONObject();
+            object.put("id", activity.getActivityId());
+            object.put("name", activity.getActivityName());
+            object.put("date", activity.getActivityDate());
+            object.put("openDate", activity.getOpenTime());
+            object.put("address", activity.getActivityAddress());
+            object.put("fee", activity.getActivityFee());
+            JSONArray introduce=new JSONArray();
+            introduce.add(activity.getActivityIntroduction());
+            object.put("introduce",introduce);
+            object.put("contacts", activity.getContacts());
+            /* 获取参与活动的人数 */
+            ActivityStudentExample activityStudentExample=new ActivityStudentExample();
+            ActivityStudentExample.Criteria criteria=activityStudentExample.createCriteria();
+            criteria.andActivityIdEqualTo(activity.getActivityId());
+            List<ActivityStudent> activityStudents=activityStudentMapper.selectByExample(activityStudentExample);
+            object.put("joinNum", activityStudents.size());
+            data.add(object);
+        }
+        result.put("data", data);
+        result.put("code", "success");
+        result.put("msg", "获取已发布培训成功");
+        return result;
+    }
 }

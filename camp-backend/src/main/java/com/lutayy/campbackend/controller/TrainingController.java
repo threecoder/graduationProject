@@ -33,4 +33,10 @@ public class TrainingController {
     public Object getMemberSignedTraining(@RequestParam("id") String id){
         return trainingService.getMemberSignedTraining(id);
     }
+
+    @RequestMapping("/member/joinTraining")
+    @ResponseBody
+    public JSONObject memberJoinActivity(@RequestBody JSONObject jsonObject){
+        return trainingService.memberJoinTraining(jsonObject);
+    }
 }

@@ -16,7 +16,7 @@ public class ActivityController {
     @Autowired
     ActivityService activityService;
 
-    @RequestMapping("/student/getJoinableActivities")
+    @RequestMapping(value={"/student/getJoinableActivities","/member/getJoinableActivities"})
     @ResponseBody
     public Object getJoinableActivities(){
         return activityService.getJoinableActivities();
@@ -30,8 +30,8 @@ public class ActivityController {
 
     @RequestMapping("/student/getSeatNum")
     @ResponseBody
-    public Object getSeatNum(@RequestParam("id") String idcard,@RequestParam("activityId") int activityId){
-        return activityService.getSeatNum(idcard,activityId);
+    public Object studentGetSeatNum(@RequestParam("id") String idcard,@RequestParam("activityId") int activityId){
+        return activityService.studentGetSeatNum(idcard,activityId);
     }
 
     @RequestMapping("/student/joinActivity")
@@ -44,5 +44,23 @@ public class ActivityController {
     @ResponseBody
     public JSONObject memberJoinActivity(@RequestBody JSONObject jsonObject){
         return activityService.memberJoinActivity(jsonObject);
+    }
+
+    @RequestMapping("/member/getSeatNum")
+    @ResponseBody
+    public Object memberGetSeatNum(@RequestParam("id") String memberId,@RequestParam("activityId") int activityId){
+        return activityService.memberGetSeatNum(memberId,activityId);
+    }
+
+    @RequestMapping("/admin/addNewActivity")
+    @ResponseBody
+    public JSONObject addNewActivity(@RequestBody JSONObject jsonObject){
+        return activityService.addNewActivity(jsonObject);
+    }
+
+    @RequestMapping("/admin/getActivityList")
+    @ResponseBody
+    public Object adminGetActivityList(){
+        return activityService.adminGetActivityList();
     }
 }

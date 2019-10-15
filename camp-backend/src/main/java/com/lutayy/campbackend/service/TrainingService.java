@@ -12,4 +12,6 @@ public interface TrainingService {
     JSONObject getJoinableTraining(String id);
 
     JSONObject getMemberSignedTraining(String id);
+
+    JSONObject memberJoinTraining(JSONObject jsonObject);
 }

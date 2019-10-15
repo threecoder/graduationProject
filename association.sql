@@ -31,15 +31,16 @@ CREATE TABLE `activity` (
   `activity_address` varchar(200) DEFAULT NULL COMMENT '活动地址',
   `open_time` datetime DEFAULT NULL COMMENT '开放报名时间',
   `close_time` datetime DEFAULT NULL COMMENT '关闭报名时间',
+  `post_time` datetime DEFAULT NULL COMMENT '活动发布时间',
   `max_num` int(11) DEFAULT NULL COMMENT '活动可容纳最大人数',
   `area_width` int(11) DEFAULT NULL COMMENT '场地矩形行座位数',
   `area_length` int(11) DEFAULT NULL COMMENT '场地矩形列座位数',
   PRIMARY KEY (`activity_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 /*Data for the table `activity` */
 
-insert  into `activity`(`activity_id`,`activity_fee`,`activity_name`,`activity_introduction`,`activity_date`,`activity_length_min`,`contacts`,`activity_address`,`open_time`,`close_time`,`max_num`,`area_width`,`area_length`) values (1,'188.88','垃圾分类讲解','  今年夏天，垃圾分类无疑是最火的话题。作为全国46个垃圾分类试点城市之一，长沙市围绕垃圾分类开展了形式多样、内容丰富的宣传活动，趣味游戏、知识宣讲、在线答题、儿童手抄报……一场全民参与、声势浩大的“全民生活垃圾分类之旅”让环保理念深植人心。','2019-10-01 20:00:00',60,'王先生 13332122312','广东省广州市华南理工大学大学城校区','2019-09-25 20:00:00','2019-10-09 02:32:42',50,NULL,NULL),(2,'299.99','英语角','  我们的英语俱乐部旨在为大家创造一个英语的交流环境，让所有想学英语，想说好英语的人们，在这样一个极具特色的氛围中学好英语，在外语老师的引导下，大家会积极交流，大胆开口说，培养纯正的外语语感，让你更加自信说英语，并结交更多的外国友人，避免找个好工作， 而因为英语困惑自己~~~~','2019-09-30 15:00:00',120,'李先生 13332122312','广东省广州市华南理工大学大学城校区','2019-09-25 13:00:00','2019-10-19 00:32:46',59,NULL,NULL),(3,'199.99','“拥抱春天，播种绿色”植树节活动','  植树节是按照法律规定宣传保护树木，并组织动员群众积极参加以植树造林为活动内容的节日。按时间长短可分为植树日、植树周和植树月，共称为国际植树节。提倡通过这种活动，激发人们爱林造林的热情、意识到环保的重要性。',NULL,NULL,'李先生 13332122312','广东省广州市华南理工大学大学城校区','2019-09-24 02:28:46','2019-09-30 02:32:52',46,NULL,NULL),(4,'213.22','主题餐厅','  主题餐厅旨在为大家提供一起品尝美食的机会','2019-11-09 14:28:55',NULL,NULL,NULL,'2019-10-09 14:29:09','2019-11-16 14:29:12',40,NULL,NULL);
+insert  into `activity`(`activity_id`,`activity_fee`,`activity_name`,`activity_introduction`,`activity_date`,`activity_length_min`,`contacts`,`activity_address`,`open_time`,`close_time`,`post_time`,`max_num`,`area_width`,`area_length`) values (1,'188.88','垃圾分类讲解','  今年夏天，垃圾分类无疑是最火的话题。作为全国46个垃圾分类试点城市之一，长沙市围绕垃圾分类开展了形式多样、内容丰富的宣传活动，趣味游戏、知识宣讲、在线答题、儿童手抄报……一场全民参与、声势浩大的“全民生活垃圾分类之旅”让环保理念深植人心。','2019-10-01 20:00:00',60,'王先生 13332122312','广东省广州市华南理工大学大学城校区','2019-09-25 20:00:00','2019-10-09 02:32:42','2019-10-05 02:41:10',50,NULL,NULL),(2,'299.99','英语角','  我们的英语俱乐部旨在为大家创造一个英语的交流环境，让所有想学英语，想说好英语的人们，在这样一个极具特色的氛围中学好英语，在外语老师的引导下，大家会积极交流，大胆开口说，培养纯正的外语语感，让你更加自信说英语，并结交更多的外国友人，避免找个好工作， 而因为英语困惑自己~~~~','2019-09-30 15:00:00',120,'李先生 13332122312','广东省广州市华南理工大学大学城校区','2019-09-25 13:00:00','2019-10-19 00:32:46','2019-10-04 02:41:14',59,NULL,NULL),(3,'199.99','“拥抱春天，播种绿色”植树节活动','  植树节是按照法律规定宣传保护树木，并组织动员群众积极参加以植树造林为活动内容的节日。按时间长短可分为植树日、植树周和植树月，共称为国际植树节。提倡通过这种活动，激发人们爱林造林的热情、意识到环保的重要性。',NULL,NULL,'李先生 13332122312','广东省广州市华南理工大学大学城校区','2019-09-24 02:28:46','2019-09-30 02:32:52','2019-10-18 02:41:16',46,NULL,NULL),(4,'213.22','主题餐厅','  主题餐厅旨在为大家提供一起品尝美食的机会','2019-11-09 14:28:55',NULL,NULL,NULL,'2019-10-09 14:29:09','2019-11-16 14:29:12','2019-09-05 02:41:20',40,NULL,NULL);
 
 /*Table structure for table `activity_order` */
 
@@ -66,7 +67,7 @@ CREATE TABLE `activity_order` (
 
 /*Data for the table `activity_order` */
 
-insert  into `activity_order`(`activity_order_id`,`activity_id`,`order_type`,`member_id`,`student_id`,`order_price`,`order_begin_time`,`payment_state`,`close`) values ('20191001145853382363',1,1,NULL,1,'188.88','2019-10-01 14:58:54',1,0),('20191009144301721429',4,1,NULL,1,'213.22','2019-10-09 14:43:01',0,0),('20191009163126575245',4,0,'mb_ca33eae307ae4',NULL,'426.44','2019-10-09 16:31:27',1,0),('20191009163703148065',4,0,'mb_ca33eae307ae4',NULL,'213.22','2019-10-09 16:37:04',0,0);
+insert  into `activity_order`(`activity_order_id`,`activity_id`,`order_type`,`member_id`,`student_id`,`order_price`,`order_begin_time`,`payment_state`,`close`) values ('20191001145853382363',1,1,NULL,1,'188.88','2019-10-01 14:58:54',1,0),('20191009144301721429',4,1,NULL,1,'213.22','2019-10-09 14:43:01',0,0),('20191009163126575245',4,0,'mb_ca33eae307ae4',NULL,'426.44','2019-10-09 16:31:27',1,0),('20191009163703148065',4,0,'mb_ca33eae307ae4',NULL,'213.22','2019-10-09 16:37:04',0,0),('20191010164121915078',4,0,'mb_ca33eae307ae4',NULL,'426.44','2019-10-10 16:41:22',0,0);
 
 /*Table structure for table `activity_order_student` */
 
@@ -84,7 +85,7 @@ CREATE TABLE `activity_order_student` (
 
 /*Data for the table `activity_order_student` */
 
-insert  into `activity_order_student`(`activity_order_id`,`student_id`,`is_paid`) values ('20191009163126575245',1,1),('20191009163126575245',8,1),('20191009163703148065',2,0);
+insert  into `activity_order_student`(`activity_order_id`,`student_id`,`is_paid`) values ('20191009163126575245',1,1),('20191009163126575245',8,1),('20191009163703148065',2,0),('20191010164121915078',38,0),('20191010164121915078',39,0);
 
 /*Table structure for table `activity_seat` */
 
@@ -127,7 +128,7 @@ CREATE TABLE `activity_student` (
 
 /*Data for the table `activity_student` */
 
-insert  into `activity_student`(`apply_number`,`activity_id`,`student_id`,`apply_time`,`seat_id`,`seat_number`) values ('34cvsf',4,1,'2019-10-09 16:33:40',NULL,NULL),('asdasd',1,1,'2019-10-09 14:38:36',NULL,NULL),('ssdas1',4,8,'2019-10-09 16:34:09',NULL,NULL);
+insert  into `activity_student`(`apply_number`,`activity_id`,`student_id`,`apply_time`,`seat_id`,`seat_number`) values ('34cvsf',4,1,'2019-10-09 16:33:40',NULL,'1-5'),('asdasd',1,1,'2019-10-09 14:38:36',NULL,'4-6'),('ssdas1',4,8,'2019-10-09 16:34:09',NULL,'1-12');
 
 /*Table structure for table `admin` */
 
@@ -496,7 +497,7 @@ CREATE TABLE `member_re_student` (
 
 /*Data for the table `member_re_student` */
 
-insert  into `member_re_student`(`member_id`,`student_id`) values ('mb_ca33eae307ae4',1),('mb_ca33eae307ae4',8),('mb_ca33eae307ae4',38),('mb_ca33eae307ae4',39);
+insert  into `member_re_student`(`member_id`,`student_id`) values ('mb_ca33eae307ae4',1),('mb_ca33eae307ae4',8),('mb_ca33eae307ae4',38),('mb_ca33eae307ae4',39),('mb_ca33eae307ae4',40);
 
 /*Table structure for table `member_subscription_order` */
 
@@ -591,7 +592,7 @@ CREATE TABLE `student` (
   `student_phone` varchar(20) DEFAULT NULL,
   `student_name` varchar(12) DEFAULT NULL,
   `student_email` varchar(50) DEFAULT NULL,
-  `student_positon` varchar(20) DEFAULT NULL COMMENT '职位',
+  `student_position` varchar(20) DEFAULT NULL COMMENT '职位',
   `student_country` varchar(20) DEFAULT NULL COMMENT '地址',
   `student_province` varchar(20) DEFAULT NULL,
   `student_city` varchar(20) DEFAULT NULL,
@@ -602,11 +603,11 @@ CREATE TABLE `student` (
   PRIMARY KEY (`student_id`),
   UNIQUE KEY `UNIQUE1` (`student_phone`),
   UNIQUE KEY `UNIQUE2` (`student_idcard`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8;
 
 /*Data for the table `student` */
 
-insert  into `student`(`student_id`,`student_password`,`student_idcard`,`student_phone`,`student_name`,`student_email`,`student_positon`,`student_country`,`student_province`,`student_city`,`student_area`,`student_address`,`company`,`enter_time`) values (1,'123456','445281199308310056','15521054785','张三','11@qq.com','经理','中国','广东省','广州市','番禺区','大学城华南理工大学',NULL,NULL),(2,'123456','445281199308310037','15521064789','李四','22@qq.com',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(8,'123456','445281199707774569','13112114587','王建国',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL),(38,'123456','4342323432','15521065436','张英语',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL),(39,'123456','134455','15521065326','李数学',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL);
+insert  into `student`(`student_id`,`student_password`,`student_idcard`,`student_phone`,`student_name`,`student_email`,`student_position`,`student_country`,`student_province`,`student_city`,`student_area`,`student_address`,`company`,`enter_time`) values (1,'123456','445281199308310056','15521054785','张三','11@qq.com','经理','中国','广东省','广州市','番禺区','大学城华南理工大学',NULL,NULL),(2,'123456','445281199308310037','15521064789','李四','22@qq.com',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(8,'123456','445281199707774569','13112114587','王建国',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL),(38,'123456','4342323432','15521065436','张英语',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL),(39,'123456','134455','15521065326','李数学',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL),(40,'123456','445281199302210226','15521065416','王建国',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL);
 
 /*Table structure for table `system_parameter` */
 
@@ -622,7 +623,7 @@ CREATE TABLE `system_parameter` (
   `modify_time` datetime DEFAULT NULL COMMENT '最后一次修改时间',
   PRIMARY KEY (`para_id`),
   UNIQUE KEY `key` (`key`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 /*Data for the table `system_parameter` */
 
@@ -677,6 +678,8 @@ CREATE TABLE `training_order` (
 
 /*Data for the table `training_order` */
 
+insert  into `training_order`(`training_order_id`,`training_id`,`order_type`,`member_id`,`student_id`,`order_price`,`order_begin_time`,`payment_state`,`close`) values ('20191011164356741646',2,0,'mb_ca33eae307ae4',NULL,'1398.02','2019-10-11 16:43:57',1,0),('20191011164411967235',2,0,'mb_ca33eae307ae4',NULL,'699.01','2019-10-11 16:44:12',0,0),('20191011164630774051',2,0,'mb_ca33eae307ae4',NULL,'699.01','2019-10-11 16:46:31',0,0);
+
 /*Table structure for table `training_order_student` */
 
 DROP TABLE IF EXISTS `training_order_student`;
@@ -684,6 +687,7 @@ DROP TABLE IF EXISTS `training_order_student`;
 CREATE TABLE `training_order_student` (
   `training_order_id` varchar(20) DEFAULT NULL,
   `student_id` int(20) DEFAULT NULL,
+  `is_paid` tinyint(1) DEFAULT '0' COMMENT '1:已支付',
   KEY `training_order_id` (`training_order_id`),
   KEY `student_id` (`student_id`),
   CONSTRAINT `training_order_student_ibfk_1` FOREIGN KEY (`training_order_id`) REFERENCES `training_order` (`training_order_id`),
@@ -691,6 +695,8 @@ CREATE TABLE `training_order_student` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `training_order_student` */
+
+insert  into `training_order_student`(`training_order_id`,`student_id`,`is_paid`) values ('20191011164356741646',1,1),('20191011164356741646',8,1),('20191011164411967235',38,0),('20191011164630774051',39,0);
 
 /*Table structure for table `training_re_student` */
 
@@ -712,7 +718,7 @@ CREATE TABLE `training_re_student` (
 
 /*Data for the table `training_re_student` */
 
-insert  into `training_re_student`(`apply_id`,`training_id`,`student_id`,`begin_time`,`is_done`,`is_invalid`) values ('2312',2,2,NULL,0,0),('342315',5,38,NULL,0,0),('45453',3,38,NULL,0,0),('5635',1,8,NULL,0,0);
+insert  into `training_re_student`(`apply_id`,`training_id`,`student_id`,`begin_time`,`is_done`,`is_invalid`) values ('23123123',2,1,'2019-10-11 16:45:27',0,0),('324wsds',2,8,'2019-10-11 16:45:42',0,0);
 
 /*Table structure for table `vote` */
 

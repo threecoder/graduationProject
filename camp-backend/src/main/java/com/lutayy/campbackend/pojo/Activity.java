@@ -25,6 +25,8 @@ public class Activity implements Serializable {
 
     private Date closeTime;
 
+    private Date postTime;
+
     private Integer maxNum;
 
     private Integer areaWidth;
@@ -111,6 +113,14 @@ public class Activity implements Serializable {
 
     public void setCloseTime(Date closeTime) {
         this.closeTime = closeTime;
+    }
+
+    public Date getPostTime() {
+        return postTime;
+    }
+
+    public void setPostTime(Date postTime) {
+        this.postTime = postTime;
     }
 
     public Integer getMaxNum() {

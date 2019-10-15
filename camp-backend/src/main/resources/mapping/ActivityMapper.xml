@@ -12,6 +12,7 @@
     <result column="activity_address" jdbcType="VARCHAR" property="activityAddress" />
     <result column="open_time" jdbcType="TIMESTAMP" property="openTime" />
     <result column="close_time" jdbcType="TIMESTAMP" property="closeTime" />
+    <result column="post_time" jdbcType="TIMESTAMP" property="postTime" />
     <result column="max_num" jdbcType="INTEGER" property="maxNum" />
     <result column="area_width" jdbcType="INTEGER" property="areaWidth" />
     <result column="area_length" jdbcType="INTEGER" property="areaLength" />
@@ -76,7 +77,8 @@
   </sql>
   <sql id="Base_Column_List">
     activity_id, activity_fee, activity_name, activity_introduction, activity_date, activity_length_min, 
-    contacts, activity_address, open_time, close_time, max_num, area_width, area_length
+    contacts, activity_address, open_time, close_time, post_time, max_num, area_width, 
+    area_length
   </sql>
   <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.ActivityExample" resultMap="BaseResultMap">
     select
@@ -115,13 +117,13 @@
     insert into activity (activity_fee, activity_name, activity_introduction, 
       activity_date, activity_length_min, contacts, 
       activity_address, open_time, close_time, 
-      max_num, area_width, area_length
-      )
+      post_time, max_num, area_width, 
+      area_length)
     values (#{activityFee,jdbcType=DECIMAL}, #{activityName,jdbcType=VARCHAR}, #{activityIntroduction,jdbcType=VARCHAR}, 
       #{activityDate,jdbcType=TIMESTAMP}, #{activityLengthMin,jdbcType=INTEGER}, #{contacts,jdbcType=VARCHAR}, 
       #{activityAddress,jdbcType=VARCHAR}, #{openTime,jdbcType=TIMESTAMP}, #{closeTime,jdbcType=TIMESTAMP}, 
-      #{maxNum,jdbcType=INTEGER}, #{areaWidth,jdbcType=INTEGER}, #{areaLength,jdbcType=INTEGER}
-      )
+      #{postTime,jdbcType=TIMESTAMP}, #{maxNum,jdbcType=INTEGER}, #{areaWidth,jdbcType=INTEGER}, 
+      #{areaLength,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.Activity">
     <selectKey keyProperty="activityId" order="AFTER" resultType="java.lang.Integer">
@@ -155,6 +157,9 @@
       </if>
       <if test="closeTime != null">
         close_time,
+      </if>
+      <if test="postTime != null">
+        post_time,
       </if>
       <if test="maxNum != null">
         max_num,
@@ -193,6 +198,9 @@
       </if>
       <if test="closeTime != null">
         #{closeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="postTime != null">
+        #{postTime,jdbcType=TIMESTAMP},
       </if>
       <if test="maxNum != null">
         #{maxNum,jdbcType=INTEGER},
@@ -244,6 +252,9 @@
       <if test="record.closeTime != null">
         close_time = #{record.closeTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.postTime != null">
+        post_time = #{record.postTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="record.maxNum != null">
         max_num = #{record.maxNum,jdbcType=INTEGER},
       </if>
@@ -270,6 +281,7 @@
       activity_address = #{record.activityAddress,jdbcType=VARCHAR},
       open_time = #{record.openTime,jdbcType=TIMESTAMP},
       close_time = #{record.closeTime,jdbcType=TIMESTAMP},
+      post_time = #{record.postTime,jdbcType=TIMESTAMP},
       max_num = #{record.maxNum,jdbcType=INTEGER},
       area_width = #{record.areaWidth,jdbcType=INTEGER},
       area_length = #{record.areaLength,jdbcType=INTEGER}
@@ -307,6 +319,9 @@
       <if test="closeTime != null">
         close_time = #{closeTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="postTime != null">
+        post_time = #{postTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="maxNum != null">
         max_num = #{maxNum,jdbcType=INTEGER},
       </if>
@@ -330,6 +345,7 @@
       activity_address = #{activityAddress,jdbcType=VARCHAR},
       open_time = #{openTime,jdbcType=TIMESTAMP},
       close_time = #{closeTime,jdbcType=TIMESTAMP},
+      post_time = #{postTime,jdbcType=TIMESTAMP},
       max_num = #{maxNum,jdbcType=INTEGER},
       area_width = #{areaWidth,jdbcType=INTEGER},
       area_length = #{areaLength,jdbcType=INTEGER}

@@ -37,7 +37,7 @@ public class TokenFilter implements Filter {
         String url =request.getRequestURI();
         String contentType=request.getContentType();
 
-        if (url.contains("/register")||url.contains("/login")||url.contains("/index")||url.contains(".")||url.equals("/")||contentType.contains("multipart/form-data")){
+        if (url.contains("/admin")||url.contains("/register")||url.contains("/login")||url.contains("/index")||url.contains(".")||url.equals("/")||contentType.contains("multipart/form-data")){
             chain.doFilter(request, response);
             return;
         }

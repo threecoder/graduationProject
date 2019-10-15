@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lutayy.campbackend.dao.TrainingOrderMapper">
+  <resultMap id="BaseResultMap" type="com.lutayy.campbackend.pojo.TrainingOrder">
+    <id column="training_order_id" jdbcType="VARCHAR" property="trainingOrderId" />
+    <result column="training_id" jdbcType="INTEGER" property="trainingId" />
+    <result column="order_type" jdbcType="BIT" property="orderType" />
+    <result column="member_id" jdbcType="VARCHAR" property="memberId" />
+    <result column="student_id" jdbcType="INTEGER" property="studentId" />
+    <result column="order_price" jdbcType="DECIMAL" property="orderPrice" />
+    <result column="order_begin_time" jdbcType="TIMESTAMP" property="orderBeginTime" />
+    <result column="payment_state" jdbcType="BIT" property="paymentState" />
+    <result column="close" jdbcType="BIT" property="close" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    training_order_id, training_id, order_type, member_id, student_id, order_price, order_begin_time, 
+    payment_state, close
+  </sql>
+  <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.TrainingOrderExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from training_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from training_order
+    where training_order_id = #{trainingOrderId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from training_order
+    where training_order_id = #{trainingOrderId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.lutayy.campbackend.pojo.TrainingOrderExample">
+    delete from training_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lutayy.campbackend.pojo.TrainingOrder">
+    insert into training_order (training_order_id, training_id, order_type, 
+      member_id, student_id, order_price, 
+      order_begin_time, payment_state, close
+      )
+    values (#{trainingOrderId,jdbcType=VARCHAR}, #{trainingId,jdbcType=INTEGER}, #{orderType,jdbcType=BIT}, 
+      #{memberId,jdbcType=VARCHAR}, #{studentId,jdbcType=INTEGER}, #{orderPrice,jdbcType=DECIMAL}, 
+      #{orderBeginTime,jdbcType=TIMESTAMP}, #{paymentState,jdbcType=BIT}, #{close,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.TrainingOrder">
+    insert into training_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="trainingOrderId != null">
+        training_order_id,
+      </if>
+      <if test="trainingId != null">
+        training_id,
+      </if>
+      <if test="orderType != null">
+        order_type,
+      </if>
+      <if test="memberId != null">
+        member_id,
+      </if>
+      <if test="studentId != null">
+        student_id,
+      </if>
+      <if test="orderPrice != null">
+        order_price,
+      </if>
+      <if test="orderBeginTime != null">
+        order_begin_time,
+      </if>
+      <if test="paymentState != null">
+        payment_state,
+      </if>
+      <if test="close != null">
+        close,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="trainingOrderId != null">
+        #{trainingOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="trainingId != null">
+        #{trainingId,jdbcType=INTEGER},
+      </if>
+      <if test="orderType != null">
+        #{orderType,jdbcType=BIT},
+      </if>
+      <if test="memberId != null">
+        #{memberId,jdbcType=VARCHAR},
+      </if>
+      <if test="studentId != null">
+        #{studentId,jdbcType=INTEGER},
+      </if>
+      <if test="orderPrice != null">
+        #{orderPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderBeginTime != null">
+        #{orderBeginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paymentState != null">
+        #{paymentState,jdbcType=BIT},
+      </if>
+      <if test="close != null">
+        #{close,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lutayy.campbackend.pojo.TrainingOrderExample" resultType="java.lang.Long">
+    select count(*) from training_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update training_order
+    <set>
+      <if test="record.trainingOrderId != null">
+        training_order_id = #{record.trainingOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.trainingId != null">
+        training_id = #{record.trainingId,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderType != null">
+        order_type = #{record.orderType,jdbcType=BIT},
+      </if>
+      <if test="record.memberId != null">
+        member_id = #{record.memberId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.studentId != null">
+        student_id = #{record.studentId,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderPrice != null">
+        order_price = #{record.orderPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.orderBeginTime != null">
+        order_begin_time = #{record.orderBeginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.paymentState != null">
+        payment_state = #{record.paymentState,jdbcType=BIT},
+      </if>
+      <if test="record.close != null">
+        close = #{record.close,jdbcType=BIT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update training_order
+    set training_order_id = #{record.trainingOrderId,jdbcType=VARCHAR},
+      training_id = #{record.trainingId,jdbcType=INTEGER},
+      order_type = #{record.orderType,jdbcType=BIT},
+      member_id = #{record.memberId,jdbcType=VARCHAR},
+      student_id = #{record.studentId,jdbcType=INTEGER},
+      order_price = #{record.orderPrice,jdbcType=DECIMAL},
+      order_begin_time = #{record.orderBeginTime,jdbcType=TIMESTAMP},
+      payment_state = #{record.paymentState,jdbcType=BIT},
+      close = #{record.close,jdbcType=BIT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lutayy.campbackend.pojo.TrainingOrder">
+    update training_order
+    <set>
+      <if test="trainingId != null">
+        training_id = #{trainingId,jdbcType=INTEGER},
+      </if>
+      <if test="orderType != null">
+        order_type = #{orderType,jdbcType=BIT},
+      </if>
+      <if test="memberId != null">
+        member_id = #{memberId,jdbcType=VARCHAR},
+      </if>
+      <if test="studentId != null">
+        student_id = #{studentId,jdbcType=INTEGER},
+      </if>
+      <if test="orderPrice != null">
+        order_price = #{orderPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderBeginTime != null">
+        order_begin_time = #{orderBeginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paymentState != null">
+        payment_state = #{paymentState,jdbcType=BIT},
+      </if>
+      <if test="close != null">
+        close = #{close,jdbcType=BIT},
+      </if>
+    </set>
+    where training_order_id = #{trainingOrderId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lutayy.campbackend.pojo.TrainingOrder">
+    update training_order
+    set training_id = #{trainingId,jdbcType=INTEGER},
+      order_type = #{orderType,jdbcType=BIT},
+      member_id = #{memberId,jdbcType=VARCHAR},
+      student_id = #{studentId,jdbcType=INTEGER},
+      order_price = #{orderPrice,jdbcType=DECIMAL},
+      order_begin_time = #{orderBeginTime,jdbcType=TIMESTAMP},
+      payment_state = #{paymentState,jdbcType=BIT},
+      close = #{close,jdbcType=BIT}
+    where training_order_id = #{trainingOrderId,jdbcType=VARCHAR}
+  </update>
+</mapper>
