@@ -101,7 +101,7 @@ export default {
     },
     data() {
         return {
-            idType: null,
+            idType: getLocalStorage("user").type,
             type: this.$route.params.id,
             dialogVisible: false,
             trainingTable: {
@@ -333,7 +333,6 @@ export default {
     },
     methods: {
         async init() {
-            this.idType = getLocalStorage("user").idType;
             try {
                 let res = null;
                 if (this.type == 1) {
