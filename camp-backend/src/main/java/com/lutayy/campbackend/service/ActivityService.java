@@ -1,5 +1,6 @@
 package com.lutayy.campbackend.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 public interface ActivityService {
@@ -19,4 +20,6 @@ public interface ActivityService {
     JSONObject addNewActivity(JSONObject jsonObject);
 
     JSONObject adminGetActivityList();
+
+    JSONObject memberGetSignedActivities(String id);
 }

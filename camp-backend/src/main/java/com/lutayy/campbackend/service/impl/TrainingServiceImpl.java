@@ -186,14 +186,26 @@ public class TrainingServiceImpl implements TrainingService {
     @Override
     public JSONObject getMemberSignedTraining(String id) {
         JSONObject result=new JSONObject();
+
+        TrainingOrderExample trainingOrderExample=new TrainingOrderExample();
+        TrainingOrderExample.Criteria criteria=trainingOrderExample.createCriteria();
+        criteria.andOrderTypeEqualTo(false).andMemberIdEqualTo(id).andCloseEqualTo(false).andPaymentStateEqualTo(false);
+        trainingOrderExample.setOrderByClause("order_begin_time DESC");
+        List<TrainingOrder> trainingOrders=trainingOrderMapper.selectByExample(trainingOrderExample);
+
         List<Integer> trainingIds=TrainingStudentSQLConn.getTrainingIdByMemberId(id);
-        if(trainingIds.size()==0){
+
+        if(trainingIds.size()==0 && trainingOrders.size()==0){
             result.put("code", "fail");
-            result.put("msg", "暂无学员报名培训");
+            result.put("msg", "暂无已报名培训");
             result.put("data", null);
         }
         List<Training> trainings=new ArrayList<Training>();
-        for(int i=0;i<trainingIds.size();i++){
+        //此处可以使排列倒过来，使排在前面的是最新报名的培训
+        for(int i=0;i<trainingOrders.size();i++){
+            trainings.add(trainingMapper.selectByPrimaryKey(trainingOrders.get(i).getTrainingId()));
+        }
+        for(int i=trainingIds.size()-1;i>=0;i--){
             trainings.add(trainingMapper.selectByPrimaryKey(trainingIds.get(i)));
         }
         Collections.sort(trainings);
@@ -205,6 +217,7 @@ public class TrainingServiceImpl implements TrainingService {
             }
         }
         JSONArray data=new JSONArray();
+        int num=0;
         for(Training training:trainings){
             JSONObject object=new JSONObject();
             object.put("id", training.getTrainingId());
@@ -219,11 +232,17 @@ public class TrainingServiceImpl implements TrainingService {
             }else {
                 object.put("fee", training.getTrainingFeeVip());
             }
+            if(num<trainingOrders.size()){
+                object.put("status", "有订单未支付");
+            } else {
+                object.put("status", "已支付");
+            }
             object.put("contacts", training.getContacts());
             data.add(object);
+            num+=1;
         }
         result.put("code", "success");
-        result.put("msg", "获取可报名培训成功");
+        result.put("msg", "成功获取已报名的培训");
         result.put("data", data);
         return result;
     }
