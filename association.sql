@@ -349,17 +349,17 @@ CREATE TABLE `exam` (
   `exam_num` smallint(4) DEFAULT NULL COMMENT '题目数量',
   `exam_pass` smallint(4) DEFAULT NULL COMMENT '考试及格分数',
   `exam_length_min` tinyint(4) DEFAULT NULL COMMENT '考试时长(分钟)',
-  `exam_start_time` time DEFAULT NULL,
-  `exam_end_time` time DEFAULT NULL,
-  `exam_date` date DEFAULT NULL,
+  `exam_start_time` datetime DEFAULT NULL,
+  `exam_end_time` datetime DEFAULT NULL,
+  `is_posted` tinyint(1) DEFAULT NULL COMMENT '0:未发布 1:已发布',
   PRIMARY KEY (`exam_id`),
   KEY `training_id` (`training_id`),
   CONSTRAINT `exam_ibfk_1` FOREIGN KEY (`training_id`) REFERENCES `training` (`training_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 /*Data for the table `exam` */
 
-insert  into `exam`(`exam_id`,`exam_name`,`training_id`,`exam_num`,`exam_pass`,`exam_length_min`,`exam_start_time`,`exam_end_time`,`exam_date`) values (1,'质量测试',1,20,55,60,'12:00:00','14:00:00','2019-09-26'),(2,'食品测试',2,20,55,80,'13:00:00','15:00:00','2019-10-01'),(3,'监督测试',3,20,65,70,'14:00:00','16:00:00','2019-09-22'),(4,'网络建设',4,30,60,60,'18:00:00','20:00:00','2019-11-22');
+insert  into `exam`(`exam_id`,`exam_name`,`training_id`,`exam_num`,`exam_pass`,`exam_length_min`,`exam_start_time`,`exam_end_time`,`is_posted`) values (1,'质量测试',1,20,55,60,'2019-10-17 12:00:00','2019-10-17 14:00:00',NULL),(2,'食品测试',2,20,55,80,'2019-10-17 13:00:00','2019-10-17 15:00:00',NULL),(3,'监督测试',3,20,65,70,'2019-10-17 14:00:00','2019-10-17 16:00:00',NULL),(4,'网络建设',4,30,60,60,'2019-10-17 18:00:00','2019-10-17 20:00:00',NULL),(6,'产品教育',5,20,50,120,'2019-10-01 00:00:00','2019-12-01 00:00:00',NULL);
 
 /*Table structure for table `exam_question_student_answer` */
 
