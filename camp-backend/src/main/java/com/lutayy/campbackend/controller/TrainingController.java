@@ -22,7 +22,19 @@ public class TrainingController {
         return trainingService.getCourses(jsonObject);
     }
 
-    @RequestMapping("/member/getJoinableTraining")
+    @RequestMapping("/student/joinTraining")
+    @ResponseBody
+    public JSONObject studentJoinTraining(@RequestBody JSONObject jsonObject){
+        return trainingService.studentJoinTraining(jsonObject);
+    }
+
+    @RequestMapping("/student/getSignedTraining")
+    @ResponseBody
+    public Object getStudentSignedTraining(@RequestParam("id") String id){
+        return trainingService.getStudentSignedTraining(id);
+    }
+
+    @RequestMapping(value = {"/member/getJoinableTraining","/student/getJoinableTraining"})
     @ResponseBody
     public Object getJoinableTraining(@RequestParam("id") String id){
         return trainingService.getJoinableTraining(id);

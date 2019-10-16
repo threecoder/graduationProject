@@ -75,9 +75,7 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
 
-    /**
-     * 学员中心的活动管理
-     * **/
+
     @Override
     public JSONObject getJoinableActivities() {
         JSONObject result=new JSONObject();
@@ -112,6 +110,9 @@ public class ActivityServiceImpl implements ActivityService {
         return result;
     }
 
+    /**
+     * 学员中心的活动管理
+     * **/
     @Override
     public JSONObject getSignedActivities(String idcard) {
         JSONObject result =new JSONObject();
@@ -244,7 +245,7 @@ public class ActivityServiceImpl implements ActivityService {
             return result;
         }
 
-        /** 报名成功操作，搬到订单支付成功后 **/
+        /** 报名成功操作，下面注释内容搬到订单支付成功后 **/
 //        ActivityStudent activityStudent=new ActivityStudent();
 //        String applyNumber= UUIDUtil.getActivityApplyNumber(activityId);//生成报名编号
 //        //排重
@@ -303,6 +304,16 @@ public class ActivityServiceImpl implements ActivityService {
         if(activity==null){
             result.put("code", "fail");
             result.put("msg", "系统中没有该活动");
+            return result;
+        }
+
+        ActivityStudentExample activityStudentExample0=new ActivityStudentExample();
+        ActivityStudentExample.Criteria criteria0=activityStudentExample0.createCriteria();
+        criteria0.andActivityIdEqualTo(activityId);
+        List<ActivityStudent> activityStudents0=activityStudentMapper.selectByExample(activityStudentExample0);
+        if(activityStudents0.size() + idNums.size() > activity.getMaxNum()){
+            result.put("code", "fail");
+            result.put("msg", "报名人数超过活动可容纳人数");
             return result;
         }
 
