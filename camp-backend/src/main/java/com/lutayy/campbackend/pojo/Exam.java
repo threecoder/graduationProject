@@ -20,7 +20,7 @@ public class Exam implements Serializable {
 
     private Date examEndTime;
 
-    private Date examDate;
+    private Boolean isPosted;
 
     private static final long serialVersionUID = 1L;
 
@@ -88,11 +88,11 @@ public class Exam implements Serializable {
         this.examEndTime = examEndTime;
     }
 
-    public Date getExamDate() {
-        return examDate;
+    public Boolean getIsPosted() {
+        return isPosted;
     }
 
-    public void setExamDate(Date examDate) {
-        this.examDate = examDate;
+    public void setIsPosted(Boolean isPosted) {
+        this.isPosted = isPosted;
     }
 }

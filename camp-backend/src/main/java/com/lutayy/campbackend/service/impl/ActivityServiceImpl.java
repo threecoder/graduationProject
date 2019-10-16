@@ -484,10 +484,11 @@ public class ActivityServiceImpl implements ActivityService {
         Date closeTime=jsonObject.getDate("closeTime");//关闭报名时间
         JSONArray description=jsonObject.getJSONArray("desc");
         String introduction="";
-        for(int i=0;i<description.size();i++){
-            introduction+=description.getString(i)+"\n";
+        if(description!=null){
+            for(int i=0;i<description.size();i++){
+                introduction+=description.getString(i)+"\n";
+            }
         }
-        System.out.println(introduction);
 
         Activity activity=new Activity();
         activity.setActivityAddress(address);
