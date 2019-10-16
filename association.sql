@@ -615,19 +615,19 @@ DROP TABLE IF EXISTS `system_parameter`;
 
 CREATE TABLE `system_parameter` (
   `para_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '方案编号',
-  `key` varchar(50) DEFAULT NULL COMMENT '参数名称',
-  `value` varchar(200) DEFAULT NULL COMMENT '参数内容',
+  `para_key` varchar(50) DEFAULT NULL COMMENT '参数名称',
+  `para_value` varchar(200) DEFAULT NULL COMMENT '参数内容',
   `value_type` varchar(20) DEFAULT NULL COMMENT '参数数据类型:String,Integer,BigDecimal,Date...',
   `flag` tinyint(1) DEFAULT '1' COMMENT '1:启用/0:停用',
   `description` varchar(200) DEFAULT NULL COMMENT '参数描述',
   `modify_time` datetime DEFAULT NULL COMMENT '最后一次修改时间',
   PRIMARY KEY (`para_id`),
-  UNIQUE KEY `key` (`key`)
+  UNIQUE KEY `key` (`para_key`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 /*Data for the table `system_parameter` */
 
-insert  into `system_parameter`(`para_id`,`key`,`value`,`value_type`,`flag`,`description`,`modify_time`) values (1,'stu_tran_permission','1','Interge',1,'学员培训权限 0:关闭 1:开放',NULL),(2,'activity_order_length','60','Interge',1,'活动报名订单有效时长 单位:min',NULL),(3,NULL,NULL,NULL,1,NULL,NULL);
+insert  into `system_parameter`(`para_id`,`para_key`,`para_value`,`value_type`,`flag`,`description`,`modify_time`) values (1,'stu_tran_permission','1','Interge',1,'学员培训权限 0:关闭 1:开放',NULL),(2,'activity_order_length','60','Interge',1,'活动报名订单有效时长 单位:min',NULL),(3,NULL,NULL,NULL,1,NULL,NULL);
 
 /*Table structure for table `training` */
 
@@ -678,7 +678,7 @@ CREATE TABLE `training_order` (
 
 /*Data for the table `training_order` */
 
-insert  into `training_order`(`training_order_id`,`training_id`,`order_type`,`member_id`,`student_id`,`order_price`,`order_begin_time`,`payment_state`,`close`) values ('20191011164356741646',2,0,'mb_ca33eae307ae4',NULL,'1398.02','2019-10-11 16:43:57',1,0),('20191011164411967235',2,0,'mb_ca33eae307ae4',NULL,'699.01','2019-10-11 16:44:12',0,0),('20191011164630774051',2,0,'mb_ca33eae307ae4',NULL,'699.01','2019-10-11 16:46:31',0,0);
+insert  into `training_order`(`training_order_id`,`training_id`,`order_type`,`member_id`,`student_id`,`order_price`,`order_begin_time`,`payment_state`,`close`) values ('20191011164356741646',2,0,'mb_ca33eae307ae4',NULL,'1398.02','2019-10-11 16:43:57',1,0),('20191011164411967235',2,0,'mb_ca33eae307ae4',NULL,'699.01','2019-10-11 16:44:12',0,0),('20191011164630774051',2,0,'mb_ca33eae307ae4',NULL,'699.01','2019-10-11 16:46:31',0,0),('20191016222310229181',1,1,NULL,1,'199.99','2019-10-16 22:23:10',0,0);
 
 /*Table structure for table `training_order_student` */
 
