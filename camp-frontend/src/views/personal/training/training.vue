@@ -88,8 +88,8 @@
     </div>
 </template>
 <script>
-import mTable from "../../../components/mTable.vue";
-import list from "../activities/studentList";
+import mTable from "@/components/mTable.vue";
+import list from "@/components/studentList";
 import { getLocalStorage } from "@/assets/js/util.js";
 import { getList } from "@/api/modules/activity.js";
 import {

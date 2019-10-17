@@ -13,13 +13,13 @@
                         <el-option value="1" label="多选题"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="所属培训" label-position="top">
+                <!-- <el-form-item label="所属培训" label-position="top">
                     <el-select v-model="form.trainingId">
                         <template v-for="(item,i) in trainingList">
                             <el-option :label="item.label" :value="item.value" :key="i"></el-option>
                         </template>
                     </el-select>
-                </el-form-item>
+                </el-form-item> -->
                 <el-button type="primary" round @click="search">搜索</el-button>
             </el-form>
         </div>

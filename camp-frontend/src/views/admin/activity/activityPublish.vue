@@ -266,11 +266,8 @@ export default {
         submitForm(formName) {
             this.$refs[formName].validate(valid => {
                 if (valid) {
-                    console.log(this.ruleForm);
                     let par = { ...this.ruleForm };
-                    par.date = `${formatDate(par.date)} ${formatTime(
-                        par.date
-                    )}`;
+                    par.date = `${formatDate(par.date)} ${formatTime(par.time)}`;
                     par.openTime = formatDateAndTime(par.dateRange[0]);
                     par.closeTime = formatDateAndTime(par.dateRange[1]);
                     par.contacts = par.contacts + " " + par.phone;
@@ -278,7 +275,7 @@ export default {
                     console.log(par);
                     this.par = par;
                     this.flag = true;
-                    this.addNewActivity();
+                    this.addNewActivity(par);
                 } else {
                     this.$message.error("请填完所有信息再创建活动");
                     this.flag = false;
@@ -286,7 +283,7 @@ export default {
                 }
             });
         },
-        async addNewActivity() {
+        async addNewActivity(par) {
             if (this.flag) {
                 try {
                     let res = await newActivity(par);

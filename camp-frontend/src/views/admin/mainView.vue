@@ -46,7 +46,7 @@ export default {
                     index: "1",
                     title: "会员管理",
                     children: [
-                        { index: "", title: "我的会员" },
+                        { index: "/managerMember", title: "我的会员" },
                         { index: "", title: "会员统计" },
                     ]
                 },
@@ -196,6 +196,9 @@ export default {
                 color: #fff;
                 &:hover {
                     background: none;
+                }
+                i {
+                    color: #fff;
                 }
             }
             ::v-deep .el-menu {

@@ -8,7 +8,7 @@ export const studentJoinTraining = activityId => {
     return request('/campback/student/joinActivity', { activityId }, 'post', 'json');
 }
 export const getsignedTraining = idType => {
-    let str = idType == 0 ? "/campback/student/getsignedTraining" : "/campback/member/getsignedTraining";
+    let str = idType == 0 ? "/campback/student/getSignedTraining" : "/campback/member/getSignedTraining";
     return request(str, {}, 'get', 'json');
 }
 export const getSeatNum = activityId => {

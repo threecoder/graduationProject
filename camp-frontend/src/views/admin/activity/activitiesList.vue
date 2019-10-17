@@ -50,6 +50,7 @@
                 </el-upload>
                 <el-button style="margin-left:5px" @click="exportEntryForm" type="primary">导出报名表</el-button>
                 <el-button style="margin:0 5px" type="primary">导出座位表模板</el-button>
+                <el-button style="margin:0 5px" type="primary">导出座位表</el-button>
                 <el-upload
                     class="upload-demo"
                     action="https://jsonplaceholder.typicode.com/posts/"
@@ -196,10 +197,14 @@ export default {
             tableFlag: true
         };
     },
+    mounted(){
+        this.init();
+    },
     methods: {
         async init() {
             try {
                 let listRes = await getActivityList();
+                console.log(listRes)
                 this.activityTable.tableData = listRes.data;
             } catch (error) {
                 

@@ -7,25 +7,23 @@
             :tableEvent="tableEvent"
         >
             <el-table-column fixed slot-scope="{params}" v-bind="params" align="center" slot="select" type="selection" width="55"></el-table-column>
+            <el-table-column fixed="right" slot-scope="{params}" v-bind="params" align="center" slot="oper">
+                <div slot-scope="{ row }">
+                    <el-button size="small" type="primary" @click="deleteOneStudent(row)">解除挂靠</el-button>
+                </div>
+            </el-table-column>
         </m-table>
     </div>
 </template>
 <script>
-import mTable from "../../../components/mTable.vue";
+import mTable from "@/components/mTable.vue";
 export default {
     components: {
         mTable
     },
-    props:["tableData"],
+    props:["tableData","tableConfig"],
     data() {
         return {
-            tableConfig: [
-                { slot: "select"},
-                { prop: "name", label: "姓名" },
-                { prop: "idNum", label: "身份证号码" },
-                { prop: "phone", label: "手机号码" },
-                { prop: "position", label: "职务" }
-            ],
             tableEvent: {
                 "selection-change":this.handleSelectionChange
             },
@@ -38,6 +36,9 @@ export default {
     methods: {
         handleSelectionChange(val){
             this.$emit("selectChange",val);
+        },
+        deleteOneStudent(row) {
+            this.$emit("dele", row.idNum);
         }
     }
 };

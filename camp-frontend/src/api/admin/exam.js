@@ -1,5 +1,5 @@
 import { request } from '../request';
-let commentUrl = "/campback/damin";
+let commentUrl = "/campback/admin";
 //获取试题
 export const getQuestionList = par => request(commentUrl+"/getQuestionList", par, 'post', 'json');
 
@@ -8,3 +8,9 @@ export const getTrainingList = () => request(commentUrl+"/getTraingingList", par
 
 //修改试题信息
 export const modefyQuestionInfo = par => request(commentUrl+"/modifyQuestion", par, 'post', 'json');
+
+//添加考试
+export const newExam = par => request(commentUrl+"/addNewExam", par, 'post', 'json');
+
+//发布考试
+export const publishExam = examId => request(commentUrl+`/publishExam?examId=${examId}`, {}, 'get', 'json');

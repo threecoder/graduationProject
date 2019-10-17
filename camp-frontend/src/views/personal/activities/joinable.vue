@@ -75,7 +75,7 @@
             :visible.sync="studentList.listFlag"
             width="40%"
         >
-            <list :tableData="studentList.list" @selectChange="selectChange" />
+            <list :tableData="studentList.list" :tableConfig="studentTableConfig" @selectChange="selectChange" />
             <div slot="footer" class="dialog-footer">
                 <el-button @click="studentList.listFlag = false">取 消</el-button>
                 <el-button type="primary" @click="memberJoin">确 定</el-button>
@@ -84,8 +84,8 @@
     </div>
 </template>
 <script>
-import mTable from "../../../components/mTable.vue";
-import list from "./studentList.vue";
+import mTable from "@/components/mTable.vue";
+import list from "@/components/studentList.vue";
 import { getLocalStorage } from "@/assets/js/util.js";
 import {
     getJoinableActivities,
@@ -174,6 +174,13 @@ export default {
                 },
                 loading: false
             },
+            studentTableConfig: [
+                { slot: "select"},
+                { prop: "name", label: "姓名" },
+                { prop: "idNum", label: "身份证号码" },
+                { prop: "phone", label: "手机号码" },
+                { prop: "position", label: "职务" }
+            ],
             drwaerInfo: {
                 id: null,
                 name: null,

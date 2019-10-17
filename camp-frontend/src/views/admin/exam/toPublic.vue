@@ -19,6 +19,7 @@
                         :grade="item.grade"
                         :examId="item.examId"
                         :idtype="1"
+                        @pick="pickFlag=true"
                     />
                 </div>
             </div>
@@ -33,7 +34,6 @@
     </div>
 </template>
 <script>
-import { getTodoExam, getHalfExam } from "@/api/modules/exam.js";
 import singleExam from "@/components/singleExam.vue";
 import page from "@/components/page.vue";
 import examPublish from './components/examPublish';
@@ -59,37 +59,17 @@ export default {
                     grade:null
                 }
             ],
-            newFlag: true,
-            pickFlag: true,
+            newFlag: false,
+            pickFlag: false,
             loading: false
         };
     },
-    watch: {
-        flag() {
-            // this.examList = [];
-        }
-    },
+    
     mounted() {
-        // this.getExamList();
+        
     },
     methods: {
-        async getExamList() {
-            this.loading = true;
-            try {
-                let res = null;
-                if (this.flag) {
-                    res = await getTodoExam();
-                } else {
-                    res = await getHalfExam();
-                }
-                if (res) {
-                    this.examList = res.data;
-                }
-                this.loading = false;
-            } catch (error) {
-                this.loading = false;
-            }
-        }
+        
     }
 };
 </script>

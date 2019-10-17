@@ -5,7 +5,7 @@ import Login from '../views/login/login.vue'
 Vue.use(Router)
 
 export default new Router({
-        
+
     routes: [
         {
             path: '/',
@@ -13,9 +13,9 @@ export default new Router({
             component: resolve => require(["../views/home/home.vue"], resolve),
             children: [
                 {
-                  path:'/index',
-                  name:'index',
-                  component: resolve => require(['../views/index/index.vue'],resolve)
+                    path: '/index',
+                    name: 'index',
+                    component: resolve => require(['../views/index/index.vue'], resolve)
                 },
                 {
                     path: '/courses/:type',
@@ -28,32 +28,32 @@ export default new Router({
                     component: resolve => require(['../views/contact.vue'], resolve)
                 },
                 {
-                    path:'/introduction',
-                    name:'introduction',
-                    component: resolve => require(["../views/introduction/introduction.vue"],resolve),
-                    children:[
-                      {
-                        path:'/brief',
-                        name:'brief',
-                        component: resolve =>require(["../views/introduction/components/brief.vue"],resolve)
-                      },
-                      {
-                        path:'/constitution',
-                        name:'constitution',
-                        component: resolve =>require(["../views/introduction/components/constitution.vue"],resolve)
-                      },
-                      {
-                        path:'/framework',
-                        name:'framework',
-                        component: resolve =>require(["../views/introduction/components/framework.vue"],resolve)
-                      }
+                    path: '/introduction',
+                    name: 'introduction',
+                    component: resolve => require(["../views/introduction/introduction.vue"], resolve),
+                    children: [
+                        {
+                            path: '/brief',
+                            name: 'brief',
+                            component: resolve => require(["../views/introduction/components/brief.vue"], resolve)
+                        },
+                        {
+                            path: '/constitution',
+                            name: 'constitution',
+                            component: resolve => require(["../views/introduction/components/constitution.vue"], resolve)
+                        },
+                        {
+                            path: '/framework',
+                            name: 'framework',
+                            component: resolve => require(["../views/introduction/components/framework.vue"], resolve)
+                        }
                     ]
                 }
             ]
         },
         {
-            path:'/adminLogin',
-            name:'adminLogin',
+            path: '/adminLogin',
+            name: 'adminLogin',
             component: resolve => require(["../views/admin/login.vue"], resolve),
         },
         {
@@ -97,8 +97,8 @@ export default new Router({
                     component: resolve => require(['../views/personal/training/training.vue'], resolve)
                 },
                 {
-                    path:'/vote/:id',
-                    name:'vote',
+                    path: '/vote/:id',
+                    name: 'vote',
                     component: resolve => require(['../views/personal/vote/vote.vue'], resolve)
                 }
             ]
@@ -109,9 +109,9 @@ export default new Router({
             component: resolve => require(['../views/admin/mainView.vue'], resolve),
             children: [
                 {
-                    path:'/publicActivity',
+                    path: '/publicActivity',
                     name: 'publicActivity',
-                    component: resolve => require(['../views/admin/activity/activityPublish.vue'], resolve) 
+                    component: resolve => require(['../views/admin/activity/activityPublish.vue'], resolve)
                 },
                 {
                     path: '/activitiesList',
@@ -124,9 +124,14 @@ export default new Router({
                     component: resolve => require(['../views/admin/exam/question.vue'], resolve)
                 },
                 {
-                    path:'/toPublic',
+                    path: '/toPublic',
                     name: 'toPublic',
-                    component: resolve => require(['../views/admin/exam/toPublic.vue'], resolve) 
+                    component: resolve => require(['../views/admin/exam/toPublic.vue'], resolve)
+                },
+                {
+                    path: '/managerMember',
+                    name: 'managerMember',
+                    component: resolve => require(['../views/admin/member/myMember.vue'], resolve)
                 }
             ]
         },

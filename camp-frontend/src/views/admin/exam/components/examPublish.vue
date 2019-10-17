@@ -22,11 +22,6 @@
                 </el-row>
 
                 <el-row :gutter="40">
-                    <el-col :span="10">
-                        <el-form-item label="及格分数(百分制)" prop="pass" label-width="130px">
-                            <el-input v-model="ruleForm.pass" placeholder="输入及格分数"></el-input>
-                        </el-form-item>
-                    </el-col>
                     <el-col :span="8">
                         <el-form-item label="考试时长(分钟)" prop="len" label-width="120px">
                             <el-input v-model="ruleForm.len" placeholder="以分钟为单位"></el-input>
@@ -35,6 +30,11 @@
                 </el-row>
 
                 <el-row :gutter="20">
+                    <el-col :span="10">
+                        <el-form-item label="及格分数(百分制)" prop="pass" label-width="130px">
+                            <el-input v-model="ruleForm.pass" placeholder="输入及格分数"></el-input>
+                        </el-form-item>
+                    </el-col>
                     <el-col :span="8">
                         <el-form-item label="所属培训" prop="training">
                             <el-select v-model="ruleForm.training">
@@ -94,7 +94,7 @@
 </template>
 <script>
 import { formatDate, formatTime, formatDateAndTime } from "@/assets/js/util.js";
-import { newActivity } from "@/api/admin/activity.js";
+import { newExam } from "@/api/admin/exam.js";
 export default {
     data() {
         let valid = (rule, value, callback) => {
@@ -124,9 +124,10 @@ export default {
                 pass: null,
                 len: null,
                 dateRange: null,
-                training: null
+                training: null,
+                openTime:null,
+                closeTime:null
             },
-            par: null,
             flag: false,
             visible: false,
             trainingList: [],
@@ -148,7 +149,6 @@ export default {
                 ],
                 dateRange: [
                     {
-                        type: "date",
                         required: true,
                         message: "请选择开放考试时间",
                         trigger: "change"
@@ -184,32 +184,25 @@ export default {
         submitForm(formName) {
             this.$refs[formName].validate(valid => {
                 if (valid) {
-                    // console.log(this.ruleForm);
-                    // let par = { ...this.ruleForm };
-                    // par.date = `${formatDate(par.date)} ${formatTime(
-                    //     par.date
-                    // )}`;
-                    // par.openTime = formatDateAndTime(par.dateRange[0]);
-                    // par.closeTime = formatDateAndTime(par.dateRange[1]);
-                    // par.contacts = par.contacts + " " + par.phone;
-                    // par.desc = par.desc.split("\n");
-                    // console.log(par);
-                    // this.par = par;
-                    // this.flag = true;
-                    // this.addNewActivity();
+                    let par = { ...this.ruleForm };
+                    par.openTime = formatDateAndTime(par.dateRange[0]);
+                    par.closeTime = formatDateAndTime(par.dateRange[1]);
+                    console.log(par);
+                    this.flag = true;
+                    this.addNewExam(par);
                 } else {
-                    this.$emit("close");
                     this.$message.error("请填完所有信息再创建活动");
                     this.flag = false;
                     return false;
                 }
             });
         },
-        async addNewActivity() {
+        async addNewExam(par) {
             if (this.flag) {
                 try {
-                    let res = await newActivity(par);
-                    this.$message.success("新建活动成功");
+                    let res = await newExam(par);
+                    this.$message.success("新建考试成功");
+                    this.$emit("close");
                 } catch (error) {}
             }
         },
