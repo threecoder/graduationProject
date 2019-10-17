@@ -2,6 +2,7 @@ package com.lutayy.campbackend.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.lutayy.campbackend.common.util.ExcelUtil;
 import com.lutayy.campbackend.dao.*;
 import com.lutayy.campbackend.pojo.*;
 import com.lutayy.campbackend.service.ExamService;
@@ -9,6 +10,7 @@ import com.lutayy.campbackend.service.SQLConn.ExamStudentSQLConn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -262,7 +264,7 @@ public class ExamServiceImpl implements ExamService {
         JSONObject data=new JSONObject();
         JSONObject examInfo=new JSONObject();
         examInfo.put("examName", exam.getExamName());
-        examInfo.put("date", exam.getExamDate());
+        examInfo.put("date", exam.getExamStartTime());
         examInfo.put("startTime", exam.getExamStartTime());
         examInfo.put("endTime", exam.getExamEndTime());
         examInfo.put("min", exam.getExamLengthMin());
@@ -325,6 +327,46 @@ public class ExamServiceImpl implements ExamService {
         result.put("code", "success");
         result.put("msg", "查询成功!");
 
+        return result;
+    }
+
+    /**
+     * 管理员操作
+     * **/
+    @Override
+    public JSONObject addNewExam(JSONObject jsonObject) {
+        JSONObject result=new JSONObject();
+
+        String name=jsonObject.getString("name");
+        Short num=jsonObject.getShort("num");
+        Short pass=jsonObject.getShort("pass");
+        Byte lenMinute=jsonObject.getByte("len");
+        int trainingId=jsonObject.getInteger("training");
+        Date openTime=jsonObject.getDate("openTime");
+        Date closeTime=jsonObject.getDate("closeTime");
+
+        if(trainingMapper.selectByPrimaryKey(trainingId)==null){
+            result.put("code", "fail");
+            result.put("msg", "所选培训不存在");
+            return result;
+        }
+
+        Exam exam=new Exam();
+        exam.setExamName(name);
+        exam.setExamPass(pass);
+        exam.setExamNum(num);
+        exam.setExamLengthMin(lenMinute);
+        exam.setTrainingId(trainingId);
+        exam.setExamStartTime(openTime);
+        exam.setExamEndTime(closeTime);
+        exam.setIsPosted(false);
+        if(examMapper.insert(exam)>0){
+            result.put("code", "success");
+            result.put("msg", "添加考试成功");
+        }else {
+            result.put("code", "fail");
+            result.put("msg", "添加考试失败,请重试");
+        }
         return result;
     }
 }

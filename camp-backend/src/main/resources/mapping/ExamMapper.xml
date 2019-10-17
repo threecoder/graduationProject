@@ -8,9 +8,9 @@
     <result column="exam_num" jdbcType="SMALLINT" property="examNum" />
     <result column="exam_pass" jdbcType="SMALLINT" property="examPass" />
     <result column="exam_length_min" jdbcType="TINYINT" property="examLengthMin" />
-    <result column="exam_start_time" jdbcType="TIME" property="examStartTime" />
-    <result column="exam_end_time" jdbcType="TIME" property="examEndTime" />
-    <result column="exam_date" jdbcType="DATE" property="examDate" />
+    <result column="exam_start_time" jdbcType="TIMESTAMP" property="examStartTime" />
+    <result column="exam_end_time" jdbcType="TIMESTAMP" property="examEndTime" />
+    <result column="is_posted" jdbcType="BIT" property="isPosted" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -72,7 +72,7 @@
   </sql>
   <sql id="Base_Column_List">
     exam_id, exam_name, training_id, exam_num, exam_pass, exam_length_min, exam_start_time, 
-    exam_end_time, exam_date
+    exam_end_time, is_posted
   </sql>
   <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.ExamExample" resultMap="BaseResultMap">
     select
@@ -110,10 +110,10 @@
     </selectKey>
     insert into exam (exam_name, training_id, exam_num, 
       exam_pass, exam_length_min, exam_start_time, 
-      exam_end_time, exam_date)
+      exam_end_time, is_posted)
     values (#{examName,jdbcType=VARCHAR}, #{trainingId,jdbcType=INTEGER}, #{examNum,jdbcType=SMALLINT}, 
-      #{examPass,jdbcType=SMALLINT}, #{examLengthMin,jdbcType=TINYINT}, #{examStartTime,jdbcType=TIME}, 
-      #{examEndTime,jdbcType=TIME}, #{examDate,jdbcType=DATE})
+      #{examPass,jdbcType=SMALLINT}, #{examLengthMin,jdbcType=TINYINT}, #{examStartTime,jdbcType=TIMESTAMP}, 
+      #{examEndTime,jdbcType=TIMESTAMP}, #{isPosted,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.Exam">
     <selectKey keyProperty="examId" order="AFTER" resultType="java.lang.Integer">
@@ -142,8 +142,8 @@
       <if test="examEndTime != null">
         exam_end_time,
       </if>
-      <if test="examDate != null">
-        exam_date,
+      <if test="isPosted != null">
+        is_posted,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -163,13 +163,13 @@
         #{examLengthMin,jdbcType=TINYINT},
       </if>
       <if test="examStartTime != null">
-        #{examStartTime,jdbcType=TIME},
+        #{examStartTime,jdbcType=TIMESTAMP},
       </if>
       <if test="examEndTime != null">
-        #{examEndTime,jdbcType=TIME},
+        #{examEndTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="examDate != null">
-        #{examDate,jdbcType=DATE},
+      <if test="isPosted != null">
+        #{isPosted,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -201,13 +201,13 @@
         exam_length_min = #{record.examLengthMin,jdbcType=TINYINT},
       </if>
       <if test="record.examStartTime != null">
-        exam_start_time = #{record.examStartTime,jdbcType=TIME},
+        exam_start_time = #{record.examStartTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.examEndTime != null">
-        exam_end_time = #{record.examEndTime,jdbcType=TIME},
+        exam_end_time = #{record.examEndTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.examDate != null">
-        exam_date = #{record.examDate,jdbcType=DATE},
+      <if test="record.isPosted != null">
+        is_posted = #{record.isPosted,jdbcType=BIT},
       </if>
     </set>
     <if test="_parameter != null">
@@ -222,9 +222,9 @@
       exam_num = #{record.examNum,jdbcType=SMALLINT},
       exam_pass = #{record.examPass,jdbcType=SMALLINT},
       exam_length_min = #{record.examLengthMin,jdbcType=TINYINT},
-      exam_start_time = #{record.examStartTime,jdbcType=TIME},
-      exam_end_time = #{record.examEndTime,jdbcType=TIME},
-      exam_date = #{record.examDate,jdbcType=DATE}
+      exam_start_time = #{record.examStartTime,jdbcType=TIMESTAMP},
+      exam_end_time = #{record.examEndTime,jdbcType=TIMESTAMP},
+      is_posted = #{record.isPosted,jdbcType=BIT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -248,13 +248,13 @@
         exam_length_min = #{examLengthMin,jdbcType=TINYINT},
       </if>
       <if test="examStartTime != null">
-        exam_start_time = #{examStartTime,jdbcType=TIME},
+        exam_start_time = #{examStartTime,jdbcType=TIMESTAMP},
       </if>
       <if test="examEndTime != null">
-        exam_end_time = #{examEndTime,jdbcType=TIME},
+        exam_end_time = #{examEndTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="examDate != null">
-        exam_date = #{examDate,jdbcType=DATE},
+      <if test="isPosted != null">
+        is_posted = #{isPosted,jdbcType=BIT},
       </if>
     </set>
     where exam_id = #{examId,jdbcType=INTEGER}
@@ -266,9 +266,9 @@
       exam_num = #{examNum,jdbcType=SMALLINT},
       exam_pass = #{examPass,jdbcType=SMALLINT},
       exam_length_min = #{examLengthMin,jdbcType=TINYINT},
-      exam_start_time = #{examStartTime,jdbcType=TIME},
-      exam_end_time = #{examEndTime,jdbcType=TIME},
-      exam_date = #{examDate,jdbcType=DATE}
+      exam_start_time = #{examStartTime,jdbcType=TIMESTAMP},
+      exam_end_time = #{examEndTime,jdbcType=TIMESTAMP},
+      is_posted = #{isPosted,jdbcType=BIT}
     where exam_id = #{examId,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -17,4 +17,6 @@ public interface ExamService {
     JSONObject getExamQuestions(JSONObject jsonObject);
 
     JSONObject getExamDetail(JSONObject jsonObject);
+
+    JSONObject addNewExam(JSONObject jsonObject);
 }

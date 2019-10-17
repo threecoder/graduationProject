@@ -11,46 +11,51 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping("/student")
 public class ExamController {
 
     @Autowired
     ExamService examService;
 
-    @RequestMapping("/getHalfExamList")
+    @RequestMapping("/student/getHalfExamList")
     @ResponseBody
     public Object getHalfExamList(@RequestParam("id") String idcard){
         return examService.getHalfExamList(idcard);
     }
 
-    @RequestMapping("/getTodoExamList")
+    @RequestMapping("/student/getTodoExamList")
     @ResponseBody
     public Object getTodoExamList(@RequestParam("id") String idcard){
         return examService.getTodoExamList(idcard);
     }
 
-    @RequestMapping("/getDoneExamList")
+    @RequestMapping("/student/getDoneExamList")
     @ResponseBody
     public Object getDoneExamList(@RequestParam("id") String idcard){
         return examService.getDoneExamList(idcard);
     }
 
-    @RequestMapping("/getExamInfo")
+    @RequestMapping("/student/getExamInfo")
     @ResponseBody
     public JSONObject getExamInfo(@RequestBody JSONObject jsonObject){
         return examService.getExamInfo(jsonObject);
     }
 
-    @RequestMapping("/getExamQuestions")
+    @RequestMapping("/student/getExamQuestions")
     @ResponseBody
     public JSONObject getExamQuestions(@RequestBody JSONObject jsonObject){
         return examService.getExamQuestions(jsonObject);
     }
 
-    @RequestMapping("/getExamDetail")
+    @RequestMapping("/student/getExamDetail")
     @ResponseBody
     public JSONObject getExamDetail(@RequestBody JSONObject jsonObject){
         return examService.getExamDetail(jsonObject);
+    }
+
+    @RequestMapping("/admin/addNewExam")
+    @ResponseBody
+    public JSONObject addNewExam(@RequestBody JSONObject jsonObject){
+        return examService.addNewExam(jsonObject);
     }
 
 

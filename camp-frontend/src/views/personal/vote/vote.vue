@@ -28,14 +28,17 @@
                             </div>
                             <div>
                                 <div class="vote-choose">
-                                    <div v-for="(item,index) in dialogInfo.votelist" :key="index">
-                                        <el-radio
-                                            v-if="dialogInfo.vtype==0"
-                                            v-model="radio" 
-                                            :label="item.id"
+                                    <el-radio-group
+                                        v-if="dialogInfo.vtype==0"
+                                        v-model="radio" 
+                                        class="radio-group">
+                                        <el-radio 
+                                            v-for="(item,index) in dialogInfo.votelist" :key="index" 
+                                            :label="item.id" 
                                             border
                                             class="radio">
-                                                <div v-if="item.url" class="">
+                                            <div class="radio-text">{{item.id}}号   {{item.name}}   {{item.brief}}</div>
+                                                <!-- <div v-if="item.url" class="">
                                                     <img :src="item.url" alt />
                                                 </div>
                                                 <div>
@@ -46,14 +49,18 @@
                                                     <div>
                                                         <p>{{item.brief}}</p>
                                                     </div>
-                                                </div>
+                                                </div>--> 
                                         </el-radio>
-                                    </div>
+                                    </el-radio-group>
                                     <el-checkbox-group 
                                         v-if="dialogInfo.vtype==1"
                                         v-model="voteArray">
-                                        <el-checkbox v-for="(item,index) in dialogInfo.votelist" :key="index" :label="item.id">
-                                            <div v-if="item.url" class="">
+                                        <el-checkbox 
+                                        v-for="(item,index) in dialogInfo.votelist" :key="index" 
+                                        :label="item.id"
+                                        border
+                                        class="checkbox">
+                                            <!-- <div v-if="item.url" class="">
                                                 <img :src="item.url" alt />
                                             </div>
                                             <div>
@@ -64,7 +71,8 @@
                                                 <div>
                                                     <p>{{item.brief}}</p>
                                                 </div>
-                                            </div>
+                                            </div> -->
+                                            {{item.id}}号   {{item.name}}   {{item.brief}}
                                         </el-checkbox>
                                     </el-checkbox-group>
                                 </div>
@@ -78,17 +86,18 @@
                             title="投票详情"
                             :visible.sync="dialogResult"
                             :modal-append-to-body="false">
-                                <div v-for="(item,index) in votelist" :key="index">
-                                    <span>{{item.id+"号"}}</span>
+                                <div v-for="(item,index) in row.votelist" :key="index">
+                                    <span>{{item.id}}号</span>
+                                    &nbsp;&nbsp;&nbsp;
+                                    <span>{{item.vote}}票</span>
                                     <el-progress 
                                         :text-inside="true" 
                                         :stroke-width="20" 
-                                        :percentage="item.progress"
-                                        :format="item.vote">
+                                        :percentage="item.progress">
                                     </el-progress>
                                 </div>
                             <span slot="footer" class="dialog-footer">
-                                <el-button type="primary" @click="dialogResult = false">提交</el-button>
+                                <el-button type="primary" @click="dialogResult = false">确定</el-button>
                                 <el-button @click="dialogResult = false">取消</el-button>
                             </span>
                         </el-dialog>
@@ -309,11 +318,26 @@ export default {
     font-size: 18px;
     color: black;
 }
-.vote-choose{
-    width: 300px;
-    .radio{
-        width: 200px;
+.el-radio{
+    width: 720px;
+    margin-top: 20px;        
+    margin-left: auto;
+    margin-right: auto;
+    .el-radio__label{
+        display: inline-block;
+        width: 700px;
     }
 }
+.checkbox{
+    width: 720px;
+    margin-top: 20px;        
+    margin-left: 0;
+    margin-right: 0;
+    .el-checkbox__label{
+        display: inline-block;
+        width: 700px;
+    }
+}
+
 
 </style>

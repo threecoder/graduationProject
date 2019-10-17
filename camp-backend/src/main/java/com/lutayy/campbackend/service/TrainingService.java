@@ -11,6 +11,10 @@ public interface TrainingService {
 
     JSONObject getJoinableTraining(String id);
 
+    JSONObject getStudentSignedTraining(String id);
+
+    JSONObject studentJoinTraining(JSONObject jsonObject);
+
     JSONObject getMemberSignedTraining(String id);
 
     JSONObject memberJoinTraining(JSONObject jsonObject);

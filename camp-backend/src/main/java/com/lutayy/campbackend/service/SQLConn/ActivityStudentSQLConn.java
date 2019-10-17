@@ -84,4 +84,31 @@ public class ActivityStudentSQLConn {
             return infos;
         }
     }
+    /**
+     * 获取某会员名下学员已报名的活动 id 数组
+     **/
+    public static List<Integer> getActivityIdByMemberId(String memberId){
+
+        List<Integer> activityIds=new ArrayList<Integer>();
+
+        Connection conn=null;
+        Statement statement=null;
+        try{
+            conn= DriverManager.getConnection(URL,Name,Pwd);
+            statement=conn.createStatement();
+            String sql="select distinct a.activity_id from member_re_student m,activity_student a " +
+                    "where m.member_id='"+memberId+"' and m.student_id=a.student_id";
+
+            ResultSet rs=statement.executeQuery(sql);
+            while (rs.next()){
+                int activityId=rs.getInt("activity_id");
+                activityIds.add(activityId);
+            }
+            return activityIds;
+
+        } catch (SQLException e){
+            e.printStackTrace();
+            return activityIds;
+        }
+    }
 }

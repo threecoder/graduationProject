@@ -349,17 +349,17 @@ CREATE TABLE `exam` (
   `exam_num` smallint(4) DEFAULT NULL COMMENT '题目数量',
   `exam_pass` smallint(4) DEFAULT NULL COMMENT '考试及格分数',
   `exam_length_min` tinyint(4) DEFAULT NULL COMMENT '考试时长(分钟)',
-  `exam_start_time` time DEFAULT NULL,
-  `exam_end_time` time DEFAULT NULL,
-  `exam_date` date DEFAULT NULL,
+  `exam_start_time` datetime DEFAULT NULL,
+  `exam_end_time` datetime DEFAULT NULL,
+  `is_posted` tinyint(1) DEFAULT NULL COMMENT '0:未发布 1:已发布',
   PRIMARY KEY (`exam_id`),
   KEY `training_id` (`training_id`),
   CONSTRAINT `exam_ibfk_1` FOREIGN KEY (`training_id`) REFERENCES `training` (`training_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 /*Data for the table `exam` */
 
-insert  into `exam`(`exam_id`,`exam_name`,`training_id`,`exam_num`,`exam_pass`,`exam_length_min`,`exam_start_time`,`exam_end_time`,`exam_date`) values (1,'质量测试',1,20,55,60,'12:00:00','14:00:00','2019-09-26'),(2,'食品测试',2,20,55,80,'13:00:00','15:00:00','2019-10-01'),(3,'监督测试',3,20,65,70,'14:00:00','16:00:00','2019-09-22'),(4,'网络建设',4,30,60,60,'18:00:00','20:00:00','2019-11-22');
+insert  into `exam`(`exam_id`,`exam_name`,`training_id`,`exam_num`,`exam_pass`,`exam_length_min`,`exam_start_time`,`exam_end_time`,`is_posted`) values (1,'质量测试',1,20,55,60,'2019-10-17 12:00:00','2019-10-17 14:00:00',NULL),(2,'食品测试',2,20,55,80,'2019-10-17 13:00:00','2019-10-17 15:00:00',NULL),(3,'监督测试',3,20,65,70,'2019-10-17 14:00:00','2019-10-17 16:00:00',NULL),(4,'网络建设',4,30,60,60,'2019-10-17 18:00:00','2019-10-17 20:00:00',NULL),(6,'产品教育',5,20,50,120,'2019-10-01 00:00:00','2019-12-01 00:00:00',NULL);
 
 /*Table structure for table `exam_question_student_answer` */
 
@@ -615,19 +615,19 @@ DROP TABLE IF EXISTS `system_parameter`;
 
 CREATE TABLE `system_parameter` (
   `para_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '方案编号',
-  `key` varchar(50) DEFAULT NULL COMMENT '参数名称',
-  `value` varchar(200) DEFAULT NULL COMMENT '参数内容',
+  `para_key` varchar(50) DEFAULT NULL COMMENT '参数名称',
+  `para_value` varchar(200) DEFAULT NULL COMMENT '参数内容',
   `value_type` varchar(20) DEFAULT NULL COMMENT '参数数据类型:String,Integer,BigDecimal,Date...',
   `flag` tinyint(1) DEFAULT '1' COMMENT '1:启用/0:停用',
   `description` varchar(200) DEFAULT NULL COMMENT '参数描述',
   `modify_time` datetime DEFAULT NULL COMMENT '最后一次修改时间',
   PRIMARY KEY (`para_id`),
-  UNIQUE KEY `key` (`key`)
+  UNIQUE KEY `key` (`para_key`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 /*Data for the table `system_parameter` */
 
-insert  into `system_parameter`(`para_id`,`key`,`value`,`value_type`,`flag`,`description`,`modify_time`) values (1,'stu_tran_permission','1','Interge',1,'学员培训权限 0:关闭 1:开放',NULL),(2,'activity_order_length','60','Interge',1,'活动报名订单有效时长 单位:min',NULL),(3,NULL,NULL,NULL,1,NULL,NULL);
+insert  into `system_parameter`(`para_id`,`para_key`,`para_value`,`value_type`,`flag`,`description`,`modify_time`) values (1,'stu_tran_permission','1','Interge',1,'学员培训权限 0:关闭 1:开放',NULL),(2,'activity_order_length','60','Interge',1,'活动报名订单有效时长 单位:min',NULL),(3,NULL,NULL,NULL,1,NULL,NULL);
 
 /*Table structure for table `training` */
 
@@ -678,7 +678,7 @@ CREATE TABLE `training_order` (
 
 /*Data for the table `training_order` */
 
-insert  into `training_order`(`training_order_id`,`training_id`,`order_type`,`member_id`,`student_id`,`order_price`,`order_begin_time`,`payment_state`,`close`) values ('20191011164356741646',2,0,'mb_ca33eae307ae4',NULL,'1398.02','2019-10-11 16:43:57',1,0),('20191011164411967235',2,0,'mb_ca33eae307ae4',NULL,'699.01','2019-10-11 16:44:12',0,0),('20191011164630774051',2,0,'mb_ca33eae307ae4',NULL,'699.01','2019-10-11 16:46:31',0,0);
+insert  into `training_order`(`training_order_id`,`training_id`,`order_type`,`member_id`,`student_id`,`order_price`,`order_begin_time`,`payment_state`,`close`) values ('20191011164356741646',2,0,'mb_ca33eae307ae4',NULL,'1398.02','2019-10-11 16:43:57',1,0),('20191011164411967235',2,0,'mb_ca33eae307ae4',NULL,'699.01','2019-10-11 16:44:12',0,0),('20191011164630774051',2,0,'mb_ca33eae307ae4',NULL,'699.01','2019-10-11 16:46:31',0,0),('20191016222310229181',1,1,NULL,1,'199.99','2019-10-16 22:23:10',0,0);
 
 /*Table structure for table `training_order_student` */
 
