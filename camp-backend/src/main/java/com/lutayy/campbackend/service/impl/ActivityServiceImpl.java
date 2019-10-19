@@ -9,6 +9,7 @@ import com.lutayy.campbackend.dao.*;
 import com.lutayy.campbackend.pojo.*;
 import com.lutayy.campbackend.service.ActivityService;
 import com.lutayy.campbackend.service.SQLConn.ActivityStudentSQLConn;
+import com.lutayy.campbackend.service.SQLConn.SystemParamManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,8 @@ public class ActivityServiceImpl implements ActivityService {
     StudentMapper studentMapper;
     @Autowired
     ActivityOrderStudentMapper activityOrderStudentMapper;
+    @Autowired
+    MemberReStudentMapper memberReStudentMapper;
 
     /** 由身份证获得学员Id **/
     private int getStudentId(String idcard){
@@ -203,9 +206,22 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public JSONObject studentJoinActivity(JSONObject jsonObject) {
         JSONObject result=new JSONObject();
-
+        if(SystemParamManager.getValueByKey("stu_tran_permission").equals("0")){
+            result.put("code", "fail");
+            result.put("msg", "当前用户没有报名培训的权限");
+            return result;
+        }
         String idcard=jsonObject.getString("id");
         int studentId=getStudentId(idcard);
+        MemberReStudentExample memberReStudentExample=new MemberReStudentExample();
+        MemberReStudentExample.Criteria criteria2=memberReStudentExample.createCriteria();
+        criteria2.andStudentIdEqualTo(studentId);
+        if(memberReStudentMapper.selectByExample(memberReStudentExample)!=null){
+            result.put("code", "fail");
+            result.put("msg", "请由所属单位报名");
+            return result;
+        }
+
         int activityId=jsonObject.getInteger("activityId");
 
         Activity activity=activityMapper.selectByPrimaryKey(activityId);
@@ -239,10 +255,12 @@ public class ActivityServiceImpl implements ActivityService {
         ActivityStudentExample.Criteria criteria0=activityStudentExample0.createCriteria();
         criteria0.andActivityIdEqualTo(activityId);
         List<ActivityStudent> activityStudents0=activityStudentMapper.selectByExample(activityStudentExample0);
-        if(activityStudents0.size()>=activity.getMaxNum()){
-            result.put("code", "fail");
-            result.put("msg", "活动人数已满");
-            return result;
+        if(activity.getMaxNum()!=null){
+            if(activityStudents0.size()>=activity.getMaxNum()){
+                result.put("code", "fail");
+                result.put("msg", "活动人数已满");
+                return result;
+            }
         }
 
         /** 报名成功操作，下面注释内容搬到订单支付成功后 **/
@@ -311,10 +329,12 @@ public class ActivityServiceImpl implements ActivityService {
         ActivityStudentExample.Criteria criteria0=activityStudentExample0.createCriteria();
         criteria0.andActivityIdEqualTo(activityId);
         List<ActivityStudent> activityStudents0=activityStudentMapper.selectByExample(activityStudentExample0);
-        if(activityStudents0.size() + idNums.size() > activity.getMaxNum()){
-            result.put("code", "fail");
-            result.put("msg", "报名人数超过活动可容纳人数");
-            return result;
+        if(activity.getMaxNum()!=null){
+            if(activityStudents0.size() + idNums.size() > activity.getMaxNum()){
+                result.put("code", "fail");
+                result.put("msg", "报名人数超过活动可容纳人数");
+                return result;
+            }
         }
 
         String orderId=OrderIdGenerator.getUniqueId();

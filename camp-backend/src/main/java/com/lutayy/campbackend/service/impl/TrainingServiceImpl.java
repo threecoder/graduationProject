@@ -35,6 +35,8 @@ public class TrainingServiceImpl implements TrainingService {
     TrainingOrderMapper trainingOrderMapper;
     @Autowired
     TrainingOrderStudentMapper trainingOrderStudentMapper;
+    @Autowired
+    MemberReStudentMapper memberReStudentMapper;
 
 
     private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
@@ -254,9 +256,17 @@ public class TrainingServiceImpl implements TrainingService {
             result.put("msg", "当前用户没有报名培训的权限");
             return result;
         }
-
         String idcard=jsonObject.getString("id");
         Student student=getStudentByIdcard(idcard);
+        MemberReStudentExample memberReStudentExample=new MemberReStudentExample();
+        MemberReStudentExample.Criteria criteria=memberReStudentExample.createCriteria();
+        criteria.andStudentIdEqualTo(student.getStudentId());
+        if(memberReStudentMapper.selectByExample(memberReStudentExample)!=null){
+            result.put("code", "fail");
+            result.put("msg", "请由所属单位报名");
+            return result;
+        }
+
         int trainingId=jsonObject.getInteger("trainingId");
 
         Training training=trainingMapper.selectByPrimaryKey(trainingId);
