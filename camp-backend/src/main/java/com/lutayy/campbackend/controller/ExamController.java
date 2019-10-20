@@ -58,5 +58,10 @@ public class ExamController {
         return examService.addNewExam(jsonObject);
     }
 
+    @RequestMapping("/admin/getQuestionList")
+    @ResponseBody
+    public JSONObject getQuestionList(@RequestBody JSONObject jsonObject){
+        return examService.getQuestionList(jsonObject);
+    }
 
 }

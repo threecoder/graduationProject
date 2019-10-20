@@ -352,6 +352,7 @@ CREATE TABLE `exam` (
   `exam_start_time` datetime DEFAULT NULL,
   `exam_end_time` datetime DEFAULT NULL,
   `is_posted` tinyint(1) DEFAULT NULL COMMENT '0:未发布 1:已发布',
+  `have_questions` tinyint(1) DEFAULT NULL COMMENT '0:无题目 1:已加题目',
   PRIMARY KEY (`exam_id`),
   KEY `training_id` (`training_id`),
   CONSTRAINT `exam_ibfk_1` FOREIGN KEY (`training_id`) REFERENCES `training` (`training_id`)
@@ -359,7 +360,7 @@ CREATE TABLE `exam` (
 
 /*Data for the table `exam` */
 
-insert  into `exam`(`exam_id`,`exam_name`,`training_id`,`exam_num`,`exam_pass`,`exam_length_min`,`exam_start_time`,`exam_end_time`,`is_posted`) values (1,'质量测试',1,20,55,60,'2019-10-17 12:00:00','2019-10-17 14:00:00',NULL),(2,'食品测试',2,20,55,80,'2019-10-17 13:00:00','2019-10-17 15:00:00',NULL),(3,'监督测试',3,20,65,70,'2019-10-17 14:00:00','2019-10-17 16:00:00',NULL),(4,'网络建设',4,30,60,60,'2019-10-17 18:00:00','2019-10-17 20:00:00',NULL),(6,'产品教育',5,20,50,120,'2019-10-01 00:00:00','2019-12-01 00:00:00',NULL);
+insert  into `exam`(`exam_id`,`exam_name`,`training_id`,`exam_num`,`exam_pass`,`exam_length_min`,`exam_start_time`,`exam_end_time`,`is_posted`,`have_questions`) values (1,'质量测试',1,20,55,60,'2019-10-17 12:00:00','2019-10-17 14:00:00',NULL,NULL),(2,'食品测试',2,20,55,80,'2019-10-17 13:00:00','2019-10-17 15:00:00',NULL,NULL),(3,'监督测试',3,20,65,70,'2019-10-17 14:00:00','2019-10-17 16:00:00',NULL,NULL),(4,'网络建设',4,30,60,60,'2019-10-17 18:00:00','2019-10-17 20:00:00',NULL,NULL),(6,'产品教育',5,20,50,120,'2019-10-01 00:00:00','2019-12-01 00:00:00',NULL,NULL);
 
 /*Table structure for table `exam_question_student_answer` */
 
@@ -480,7 +481,7 @@ CREATE TABLE `member` (
 
 /*Data for the table `member` */
 
-insert  into `member`(`member_id`,`member_phone`,`member_email`,`member_password`,`member_tel`,`member_name`,`is_vip`,`enter_date`,`vip_end_date`,`vip_begin_date`,`member_country`,`member_province`,`member_city`,`member_area`,`member_address`) values ('mb_ca33eae307ae4','15521065463','12345@163.com','123456','222102312','BB股份有限公司',1,'2019-09-19',NULL,NULL,'中国','江苏省','南京市','鼓楼区','南京大学');
+insert  into `member`(`member_id`,`member_phone`,`member_email`,`member_password`,`member_tel`,`member_name`,`is_vip`,`enter_date`,`vip_end_date`,`vip_begin_date`,`member_country`,`member_province`,`member_city`,`member_area`,`member_address`) values ('mb_ca33eae307ae4','15521065463','12345@163.com','123456','222102312','BB股份有限公司',1,'2019-09-19','2019-12-21',NULL,'中国','江苏省','南京市','鼓楼区','南京大学');
 
 /*Table structure for table `member_re_student` */
 
@@ -563,7 +564,7 @@ CREATE TABLE `question` (
   `question_id` int(11) NOT NULL AUTO_INCREMENT,
   `training_id` int(11) DEFAULT NULL COMMENT '题目所属的培训',
   `question_state` varchar(255) DEFAULT NULL COMMENT '题干',
-  `type` tinyint(1) DEFAULT NULL COMMENT '0为单选，1为多选',
+  `type` int(2) DEFAULT NULL COMMENT '0:单选 1:多选 2:判断',
   `choice_a` varchar(30) DEFAULT NULL COMMENT '选项A',
   `choice_b` varchar(30) DEFAULT NULL COMMENT '选项B',
   `choice_c` varchar(30) DEFAULT NULL COMMENT '...',
@@ -607,7 +608,7 @@ CREATE TABLE `student` (
 
 /*Data for the table `student` */
 
-insert  into `student`(`student_id`,`student_password`,`student_idcard`,`student_phone`,`student_name`,`student_email`,`student_position`,`student_country`,`student_province`,`student_city`,`student_area`,`student_address`,`company`,`enter_time`) values (1,'123456','445281199308310056','15521054785','张三','11@qq.com','经理','中国','广东省','广州市','番禺区','大学城华南理工大学',NULL,NULL),(2,'123456','445281199308310037','15521064789','李四','22@qq.com',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(8,'123456','445281199707774569','13112114587','王建国',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL),(38,'123456','4342323432','15521065436','张英语',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL),(39,'123456','134455','15521065326','李数学',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL),(40,'123456','445281199302210226','15521065416','王建国',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL);
+insert  into `student`(`student_id`,`student_password`,`student_idcard`,`student_phone`,`student_name`,`student_email`,`student_position`,`student_country`,`student_province`,`student_city`,`student_area`,`student_address`,`company`,`enter_time`) values (1,'123456','445281199308310056','15521054785','张三','11@qq.com','经理','中国','广东省','广州市','番禺区','大学城华南理工大学',NULL,NULL),(2,'123456','445281199308310037','15521064789','李四','22@qq.com',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(8,'123456','445281199707774569','13112114587','王建国',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'',NULL),(38,'123456','4342323432','15521065436','张英语',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL),(39,'123456','134455','15521065326','李数学',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL),(40,'123456','445281199302210226','15521065416','王建国',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL);
 
 /*Table structure for table `system_parameter` */
 
@@ -651,7 +652,7 @@ CREATE TABLE `training` (
 
 /*Data for the table `training` */
 
-insert  into `training`(`training_id`,`training_name`,`training_introduce`,`training_fee_normal`,`training_fee_vip`,`training_end_time`,`training_start_time`,`post_time`,`level`,`training_pic`,`training_address`,`contacts`) values (1,'质量检测','示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n示例范文示例范文示例范文示例范文','199.99','199.00','2019-09-28 16:13:03','2019-09-13 16:12:30','2019-09-21 00:41:14',1,NULL,NULL,NULL),(2,'食品安全','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','888.01','699.01','2019-10-03 12:00:00','2019-10-01 12:00:00','2019-07-15 00:41:19',2,NULL,NULL,NULL),(3,'食品监督','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','2000.00','1899.11','2019-09-11 16:14:32','2019-09-05 16:14:25','2020-02-06 00:41:22',1,NULL,NULL,NULL),(4,'网络工程','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','800.90','700.00','2019-10-26 16:14:40','2019-09-11 16:14:36','2019-11-01 00:41:27',3,NULL,NULL,NULL),(5,'产品规范','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','99.99','98.99','2019-11-08 16:14:56','2019-09-29 16:14:44','2019-10-17 00:41:35',1,NULL,NULL,NULL);
+insert  into `training`(`training_id`,`training_name`,`training_introduce`,`training_fee_normal`,`training_fee_vip`,`training_end_time`,`training_start_time`,`post_time`,`level`,`training_pic`,`training_address`,`contacts`) values (1,'质量检测','示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n示例范文示例范文示例范文示例范文','199.99','199.00','2019-09-28 16:13:03','2019-09-13 16:12:30','2019-09-21 00:41:14',1,NULL,NULL,NULL),(2,'食品安全','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','888.01','699.01','2019-10-27 12:00:00','2019-10-01 12:00:00','2019-07-15 00:41:19',2,NULL,NULL,NULL),(3,'食品监督','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','2000.00','1899.11','2019-09-11 16:14:32','2019-09-05 16:14:25','2020-02-06 00:41:22',1,NULL,NULL,NULL),(4,'网络工程','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','800.90','700.00','2019-10-26 16:14:40','2019-09-11 16:14:36','2019-11-01 00:41:27',3,NULL,NULL,NULL),(5,'产品规范','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','99.99','98.99','2019-11-08 16:14:56','2019-09-29 16:14:44','2019-10-17 00:41:35',1,NULL,NULL,NULL);
 
 /*Table structure for table `training_order` */
 

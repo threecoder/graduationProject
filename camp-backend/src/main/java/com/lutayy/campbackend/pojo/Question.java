@@ -9,7 +9,7 @@ public class Question implements Serializable {
 
     private String questionState;
 
-    private Boolean type;
+    private Integer type;
 
     private String choiceA;
 
@@ -53,11 +53,11 @@ public class Question implements Serializable {
         this.questionState = questionState;
     }
 
-    public Boolean getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(Boolean type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 

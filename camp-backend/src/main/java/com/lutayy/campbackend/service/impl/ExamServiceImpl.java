@@ -7,9 +7,11 @@ import com.lutayy.campbackend.dao.*;
 import com.lutayy.campbackend.pojo.*;
 import com.lutayy.campbackend.service.ExamService;
 import com.lutayy.campbackend.service.SQLConn.ExamStudentSQLConn;
+import org.omg.PortableInterceptor.INACTIVE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -221,11 +223,7 @@ public class ExamServiceImpl implements ExamService {
             arr.add(question.getChoiceC());
             arr.add(question.getChoiceD());
             object.put("arr", arr);
-            if(!question.getType()){
-                object.put("type", 1);
-            }else {
-                object.put("type", 2);
-            }
+            object.put("type", question.getType());
             list.add(object);
         }
         data.put("list", list);
@@ -295,12 +293,7 @@ public class ExamServiceImpl implements ExamService {
             arr.add(question.getChoiceC());
             arr.add(question.getChoiceD());
             object.put("arr", arr);
-            boolean type=question.getType();
-            if(!type){
-                object.put("type", 1);
-            }else {
-                object.put("type", 2);
-            }
+            object.put("type", question.getType());
             JSONArray rightAnswer=new JSONArray();
             rightAnswer.add(question.getRightChoiceOne());
             if(question.getRightChoiceTwo()!=null){rightAnswer.add(question.getRightChoiceTwo());}
@@ -313,7 +306,7 @@ public class ExamServiceImpl implements ExamService {
                 object.put("studentAnswer", null);
             }else{
                 studentAnswer.add(examQuestionStudentAnswer.getAnswerOne());
-                if(type){
+                if(question.getType()==1){
                     if(examQuestionStudentAnswer.getAnswerTwo()!=null){studentAnswer.add(examQuestionStudentAnswer.getAnswerTwo());}
                     if(examQuestionStudentAnswer.getAnswerThree()!=null){studentAnswer.add(examQuestionStudentAnswer.getAnswerThree());}
                     if(examQuestionStudentAnswer.getAnswerFour()!=null){studentAnswer.add(examQuestionStudentAnswer.getAnswerFour());}
@@ -367,6 +360,81 @@ public class ExamServiceImpl implements ExamService {
             result.put("code", "fail");
             result.put("msg", "添加考试失败,请重试");
         }
+        return result;
+    }
+
+    @Override
+    public JSONObject getQuestionList(JSONObject jsonObject) {
+        JSONObject result=new JSONObject();
+        JSONObject data=new JSONObject();
+
+        Integer currentPage=jsonObject.getInteger("currentPage");
+        Integer pageSize=jsonObject.getInteger("pageSize");
+        if(pageSize==null){
+            pageSize=10;
+        }
+        if(currentPage==null){
+            currentPage=1;
+        }
+        String keyword=jsonObject.getString("keyword");
+        int type=-1;
+        if(jsonObject.getInteger("type")!=null){
+            type=jsonObject.getInteger("type");
+        }
+
+        QuestionExample questionExample=new QuestionExample();
+        QuestionExample.Criteria criteria=questionExample.createCriteria();
+        if(keyword!=null){
+            criteria.andQuestionStateLike("%"+keyword+"%");
+        }
+        if(type!=-1){
+            criteria.andTypeEqualTo(type);
+        }
+        questionExample.setOrderByClause("question_id DESC");
+        List<Question> questions=questionMapper.selectByExample(questionExample);
+        int total=questions.size();
+        JSONArray list=new JSONArray();
+
+        int i=1;//计数
+        int sum=0;//每页数目;
+        for(Question question:questions){
+            if(i<=pageSize*(currentPage-1)){
+                i++;
+                continue;
+            }
+            JSONObject object=new JSONObject();
+            object.put("questionId", question.getQuestionId());
+            object.put("state", question.getQuestionState());
+            object.put("type", question.getType());
+            List<Byte> answerList=new ArrayList<>();
+            answerList.add(question.getRightChoiceOne());
+            answerList.add(question.getRightChoiceTwo());
+            answerList.add(question.getRightChoiceThree());
+            answerList.add(question.getRightChoiceFour());
+            String answer="";
+            for(int o=0;o<4;o++){
+                if(answerList.get(o)!=null){
+                    answer+=answerList.get(o);
+                }
+            }
+            answer=answer.replace("1", "A").replace("2", "B").replace("3", "C").replace("4", "D");
+            object.put("answer", answer);
+            object.put("choiceA", question.getChoiceA());
+            object.put("choiceB", question.getChoiceB());
+            object.put("choiceC", question.getChoiceC());
+            object.put("choiceD", question.getChoiceD());
+            list.add(object);
+            sum++;
+            if(sum==pageSize){
+                break;
+            }
+        }
+        data.put("list", list);
+        data.put("total", total);
+        data.put("currentPage", currentPage);
+        result.put("data", data);
+        result.put("code", "success");
+        result.put("msg", "获取试题成功");
         return result;
     }
 }

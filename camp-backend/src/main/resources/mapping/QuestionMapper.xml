@@ -5,7 +5,7 @@
     <id column="question_id" jdbcType="INTEGER" property="questionId" />
     <result column="training_id" jdbcType="INTEGER" property="trainingId" />
     <result column="question_state" jdbcType="VARCHAR" property="questionState" />
-    <result column="type" jdbcType="BIT" property="type" />
+    <result column="type" jdbcType="INTEGER" property="type" />
     <result column="choice_a" jdbcType="VARCHAR" property="choiceA" />
     <result column="choice_b" jdbcType="VARCHAR" property="choiceB" />
     <result column="choice_c" jdbcType="VARCHAR" property="choiceC" />
@@ -115,7 +115,7 @@
       choice_a, choice_b, choice_c, 
       choice_d, right_choice_one, right_choice_two, 
       right_choice_three, right_choice_four)
-    values (#{trainingId,jdbcType=INTEGER}, #{questionState,jdbcType=VARCHAR}, #{type,jdbcType=BIT}, 
+    values (#{trainingId,jdbcType=INTEGER}, #{questionState,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
       #{choiceA,jdbcType=VARCHAR}, #{choiceB,jdbcType=VARCHAR}, #{choiceC,jdbcType=VARCHAR}, 
       #{choiceD,jdbcType=VARCHAR}, #{rightChoiceOne,jdbcType=TINYINT}, #{rightChoiceTwo,jdbcType=TINYINT}, 
       #{rightChoiceThree,jdbcType=TINYINT}, #{rightChoiceFour,jdbcType=TINYINT})
@@ -168,7 +168,7 @@
         #{questionState,jdbcType=VARCHAR},
       </if>
       <if test="type != null">
-        #{type,jdbcType=BIT},
+        #{type,jdbcType=INTEGER},
       </if>
       <if test="choiceA != null">
         #{choiceA,jdbcType=VARCHAR},
@@ -215,7 +215,7 @@
         question_state = #{record.questionState,jdbcType=VARCHAR},
       </if>
       <if test="record.type != null">
-        type = #{record.type,jdbcType=BIT},
+        type = #{record.type,jdbcType=INTEGER},
       </if>
       <if test="record.choiceA != null">
         choice_a = #{record.choiceA,jdbcType=VARCHAR},
@@ -251,7 +251,7 @@
     set question_id = #{record.questionId,jdbcType=INTEGER},
       training_id = #{record.trainingId,jdbcType=INTEGER},
       question_state = #{record.questionState,jdbcType=VARCHAR},
-      type = #{record.type,jdbcType=BIT},
+      type = #{record.type,jdbcType=INTEGER},
       choice_a = #{record.choiceA,jdbcType=VARCHAR},
       choice_b = #{record.choiceB,jdbcType=VARCHAR},
       choice_c = #{record.choiceC,jdbcType=VARCHAR},
@@ -274,7 +274,7 @@
         question_state = #{questionState,jdbcType=VARCHAR},
       </if>
       <if test="type != null">
-        type = #{type,jdbcType=BIT},
+        type = #{type,jdbcType=INTEGER},
       </if>
       <if test="choiceA != null">
         choice_a = #{choiceA,jdbcType=VARCHAR},
@@ -307,7 +307,7 @@
     update question
     set training_id = #{trainingId,jdbcType=INTEGER},
       question_state = #{questionState,jdbcType=VARCHAR},
-      type = #{type,jdbcType=BIT},
+      type = #{type,jdbcType=INTEGER},
       choice_a = #{choiceA,jdbcType=VARCHAR},
       choice_b = #{choiceB,jdbcType=VARCHAR},
       choice_c = #{choiceC,jdbcType=VARCHAR},
