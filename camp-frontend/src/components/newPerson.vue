@@ -46,7 +46,7 @@
         </el-form>
         <div class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="addSingleStudent">确 定</el-button>
+            <el-button type="primary" @click="addSingleONe">确 定</el-button>
         </div>
         <div class="divider"></div>
         <h6 style="font-size: 16px">

@@ -18,26 +18,35 @@
                         :min="item.min"
                         :grade="item.grade"
                         :examId="item.examId"
+                        :status="item.status"
                         :idtype="1"
                         @pick="pickFlag=true"
+                        @refresh="fresh"
                     />
                 </div>
+                <page
+                    @curChange="curChange"
+                    :currentPage="currentPage"
+                    :total="total"
+                    :pageSize="6"
+                />
             </div>
         </div>
 
         <el-dialog :visible.sync="newFlag">
-            <exam-publish  @close="newFlag=false"/>
+            <exam-publish @close="newFlag=false" />
         </el-dialog>
         <el-dialog :visible.sync="pickFlag">
-            <pick-question  @close="pickFlag=false"/>
+            <pick-question @close="pickFlag=false" />
         </el-dialog>
     </div>
 </template>
 <script>
 import singleExam from "@/components/singleExam.vue";
 import page from "@/components/page.vue";
-import examPublish from './components/examPublish';
-import pickQuestion from './components/pickQuestion';
+import examPublish from "./components/examPublish";
+import pickQuestion from "./components/pickQuestion";
+import { getNotPostExam } from "@/api/admin/exam.js";
 export default {
     components: {
         singleExam,
@@ -49,27 +58,90 @@ export default {
         return {
             examList: [
                 {
-                    examId:"1",
-                    examName:"考试名称",
-                    date:"2016-10-10",
+                    examId: "1",
+                    examName: "考试名称",
+                    date: "2016-10-10",
                     startTime: "14:00:00",
                     endTime: "16:00:00",
                     min: "120分钟",
                     belong: "HTML入门",
-                    grade:null
+                    status: 0,
+                    grade: null
+                },
+                {
+                    examId: "1",
+                    examName: "考试名称",
+                    date: "2016-10-10",
+                    startTime: "14:00:00",
+                    endTime: "16:00:00",
+                    min: "120分钟",
+                    belong: "HTML入门",
+                    status: 0,
+                    grade: null
+                },
+                {
+                    examId: "1",
+                    examName: "考试名称",
+                    date: "2016-10-10",
+                    startTime: "14:00:00",
+                    endTime: "16:00:00",
+                    min: "120分钟",
+                    belong: "HTML入门",
+                    status: 1,
+                    grade: null
+                },
+                {
+                    examId: "1",
+                    examName: "考试名称",
+                    date: "2016-10-10",
+                    startTime: "14:00:00",
+                    endTime: "16:00:00",
+                    min: "120分钟",
+                    belong: "HTML入门",
+                    status: 0,
+                    grade: null
+                },
+                {
+                    examId: "1",
+                    examName: "考试名称",
+                    date: "2016-10-10",
+                    startTime: "14:00:00",
+                    endTime: "16:00:00",
+                    min: "120分钟",
+                    belong: "HTML入门",
+                    status: 0,
+                    grade: null
                 }
             ],
+            currentPage: 1,
+            total:10,
             newFlag: false,
             pickFlag: false,
             loading: false
         };
     },
-    
+
     mounted() {
-        
+        this.fresh();
     },
     methods: {
-        
+        fresh() {
+            this.getNotPostExamList();
+        },
+        async getNotPostExamList() {
+            try {
+                this.loading = true;
+                let res = await getNotPostExam(this.currentPage);
+                this.examList = res.data.list;
+                this.loading = false;
+            } catch (error) {
+                this.loading = true;
+            }
+        },
+        curChange(val){
+            this.currentPage = val;
+            this.getNotPostExamList();
+        }
     }
 };
 </script>
