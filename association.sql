@@ -352,6 +352,7 @@ CREATE TABLE `exam` (
   `exam_start_time` datetime DEFAULT NULL,
   `exam_end_time` datetime DEFAULT NULL,
   `is_posted` tinyint(1) DEFAULT NULL COMMENT '0:未发布 1:已发布',
+  `have_questions` tinyint(1) DEFAULT NULL COMMENT '0:无题目 1:已加题目',
   PRIMARY KEY (`exam_id`),
   KEY `training_id` (`training_id`),
   CONSTRAINT `exam_ibfk_1` FOREIGN KEY (`training_id`) REFERENCES `training` (`training_id`)
@@ -359,7 +360,7 @@ CREATE TABLE `exam` (
 
 /*Data for the table `exam` */
 
-insert  into `exam`(`exam_id`,`exam_name`,`training_id`,`exam_num`,`exam_pass`,`exam_length_min`,`exam_start_time`,`exam_end_time`,`is_posted`) values (1,'质量测试',1,20,55,60,'2019-10-17 12:00:00','2019-10-17 14:00:00',NULL),(2,'食品测试',2,20,55,80,'2019-10-17 13:00:00','2019-10-17 15:00:00',NULL),(3,'监督测试',3,20,65,70,'2019-10-17 14:00:00','2019-10-17 16:00:00',NULL),(4,'网络建设',4,30,60,60,'2019-10-17 18:00:00','2019-10-17 20:00:00',NULL),(6,'产品教育',5,20,50,120,'2019-10-01 00:00:00','2019-12-01 00:00:00',NULL);
+insert  into `exam`(`exam_id`,`exam_name`,`training_id`,`exam_num`,`exam_pass`,`exam_length_min`,`exam_start_time`,`exam_end_time`,`is_posted`,`have_questions`) values (1,'质量测试',1,20,55,60,'2019-10-17 12:00:00','2019-10-17 14:00:00',NULL,NULL),(2,'食品测试',2,20,55,80,'2019-10-17 13:00:00','2019-10-17 15:00:00',NULL,NULL),(3,'监督测试',3,20,65,70,'2019-10-17 14:00:00','2019-10-17 16:00:00',NULL,NULL),(4,'网络建设',4,30,60,60,'2019-10-17 18:00:00','2019-10-17 20:00:00',NULL,NULL),(6,'产品教育',5,20,50,120,'2019-10-01 00:00:00','2019-12-01 00:00:00',NULL,NULL);
 
 /*Table structure for table `exam_question_student_answer` */
 
@@ -480,7 +481,7 @@ CREATE TABLE `member` (
 
 /*Data for the table `member` */
 
-insert  into `member`(`member_id`,`member_phone`,`member_email`,`member_password`,`member_tel`,`member_name`,`is_vip`,`enter_date`,`vip_end_date`,`vip_begin_date`,`member_country`,`member_province`,`member_city`,`member_area`,`member_address`) values ('mb_ca33eae307ae4','15521065463','12345@163.com','123456','222102312','BB股份有限公司',1,'2019-09-19',NULL,NULL,'中国','江苏省','南京市','鼓楼区','南京大学');
+insert  into `member`(`member_id`,`member_phone`,`member_email`,`member_password`,`member_tel`,`member_name`,`is_vip`,`enter_date`,`vip_end_date`,`vip_begin_date`,`member_country`,`member_province`,`member_city`,`member_area`,`member_address`) values ('mb_ca33eae307ae4','15521065463','12345@163.com','123456','222102312','BB股份有限公司',1,'2019-09-19','2019-12-21',NULL,'中国','江苏省','南京市','鼓楼区','南京大学');
 
 /*Table structure for table `member_re_student` */
 
