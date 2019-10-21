@@ -474,6 +474,38 @@ public class TrainingServiceImpl implements TrainingService {
         return result;
     }
 
+    @Override
+    public JSONObject adminGetTrainingList() {
+        JSONObject result = new JSONObject();
+        JSONArray data=new JSONArray();
 
+        TrainingExample trainingExample=new TrainingExample();
+        trainingExample.setOrderByClause("post_time DESC");
+        List<Training> trainings=trainingMapper.selectByExample(trainingExample);
+        if(trainings.size()==0){
+            result.put("code", "fail");
+            result.put("msg", "系统中暂无已发布的培训");
+            result.put("data", null);
+            return result;
+        }
+        for(Training training:trainings){
+            JSONObject object=new JSONObject();
+            object.put("label", training.getTrainingName());
+            object.put("id", training.getTrainingId());
+            object.put("postTime", training.getPostTime());
+            object.put("level", training.getLevel());
+            object.put("normalFee", training.getTrainingFeeNormal());
+            object.put("vipFee", training.getTrainingFeeVip());
+            object.put("introduction", training.getTrainingIntroduce());
+            object.put("startDate", training.getTrainingStartTime());
+            object.put("endDate", training.getTrainingEndTime());
+            data.add(object);
+        }
+        result.put("data", data);
+        result.put("code", "success");
+        result.put("msg", "获取已发布培训成功");
+        return result;
+
+    }
 }
 

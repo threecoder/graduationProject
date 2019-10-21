@@ -8,6 +8,7 @@ import com.lutayy.campbackend.dao.StudentMapper;
 import com.lutayy.campbackend.pojo.*;
 import com.lutayy.campbackend.service.AdminService;
 import com.lutayy.campbackend.service.SQLConn.SystemParamManager;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.STUnderline;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -169,6 +170,25 @@ public class AdminServiceImpl implements AdminService {
             }
             JSONObject object=new JSONObject();
             object.put("name", member.getMemberName());
+            object.put("id", member.getMemberId());
+            object.put("phone", member.getMemberPhone());
+            object.put("enterDate", member.getEnterDate());
+            object.put("email", member.getMemberEmail());
+            object.put("vip", 0);
+            if (member.getIsVip()){
+                object.put("vip", 1);
+            }
+            object.put("vipBegin", member.getVipBeginDate());
+            object.put("vipEnd", member.getVipEndDate());
+            if (member.getVipEndDate().compareTo(new Date())>=0 && member.getVipEndDate().compareTo(c.getTime())<=0){
+                object.put("deadline",1 );
+            }else{
+                object.put("deadline", 0);
+            }
+            object.put("province", member.getMemberProvince());
+            object.put("city", member.getMemberCity());
+            object.put("area", member.getMemberArea());
+            object.put("zone",member.getMemberAddress());
 
             list.add(object);
             sum++;
@@ -180,5 +200,39 @@ public class AdminServiceImpl implements AdminService {
         result.put("data", data);
         return result;
 
+    }
+
+    @Override
+    public JSONObject getOneMemberStudentList(String memberId) {
+        JSONObject result=new JSONObject();
+        JSONArray data=new JSONArray();
+        MemberReStudentExample memberReStudentExample=new MemberReStudentExample();
+        MemberReStudentExample.Criteria criteria=memberReStudentExample.createCriteria();
+        criteria.andMemberIdEqualTo(memberId);
+        List<MemberReStudent> memberReStudents=memberReStudentMapper.selectByExample(memberReStudentExample);
+        if(memberReStudents.size()==0){
+            result.put("code", "fail");
+            result.put("msg", "该会员名下暂无学员");
+            result.put("data", null);
+            return result;
+        }
+        for(MemberReStudent memberReStudent:memberReStudents){
+            JSONObject object=new JSONObject();
+            Student student=studentMapper.selectByPrimaryKey(memberReStudent.getStudentId());
+            object.put("name", student.getStudentName());
+            object.put("idNum", student.getStudentIdcard());
+            object.put("phone", student.getStudentPhone());
+            object.put("position", student.getStudentPosition());
+            object.put("email", student.getStudentEmail());
+            object.put("province", student.getStudentProvince());
+            object.put("city", student.getStudentCity());
+            object.put("area", student.getStudentArea());
+            object.put("zone", student.getStudentAddress());
+            data.add(object);
+        }
+        result.put("data", data);
+        result.put("code", "success");
+        result.put("msg", "获取会员名下学员列表成功");
+        return result;
     }
 }

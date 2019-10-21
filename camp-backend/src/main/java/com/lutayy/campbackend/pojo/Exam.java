@@ -22,6 +22,10 @@ public class Exam implements Serializable {
 
     private Boolean isPosted;
 
+    private Boolean haveQuestions;
+
+    private Date createTime;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getExamId() {
@@ -94,5 +98,21 @@ public class Exam implements Serializable {
 
     public void setIsPosted(Boolean isPosted) {
         this.isPosted = isPosted;
+    }
+
+    public Boolean getHaveQuestions() {
+        return haveQuestions;
+    }
+
+    public void setHaveQuestions(Boolean haveQuestions) {
+        this.haveQuestions = haveQuestions;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

@@ -567,7 +567,7 @@ public class ActivityServiceImpl implements ActivityService {
         }
         result.put("data", data);
         result.put("code", "success");
-        result.put("msg", "获取已发布培训成功");
+        result.put("msg", "获取已发布活动成功");
         return result;
     }
 
