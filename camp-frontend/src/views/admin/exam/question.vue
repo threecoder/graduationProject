@@ -11,6 +11,7 @@
                     <el-select v-model="form.type">
                         <el-option value="0" label="单选题"></el-option>
                         <el-option value="1" label="多选题"></el-option>
+                        <el-option value="2" label="判断题"></el-option>
                     </el-select>
                 </el-form-item>
                 <!-- <el-form-item label="所属培训" label-position="top">
@@ -169,6 +170,9 @@ export default {
         currentPage() {
             this.search();
         }
+    },
+    mounted(){
+        this.search();
     },
     methods: {
         async search() {
