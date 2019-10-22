@@ -82,7 +82,6 @@ export default {
                 {
                     examId: "1",
                     examName: "考试名称",
-                    date: "2016-10-10",
                     startTime: "14:00:00",
                     endTime: "16:00:00",
                     min: "120分钟",
@@ -133,6 +132,7 @@ export default {
                 this.loading = true;
                 let res = await getNotPostExam(this.currentPage);
                 this.examList = res.data.list;
+                this.total = res.data.total;
                 this.loading = false;
             } catch (error) {
                 this.loading = true;

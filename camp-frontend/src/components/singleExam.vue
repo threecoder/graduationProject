@@ -5,7 +5,7 @@
                 <span class="title">{{examName}}</span>
             </div>
             <div class="info-container">
-                <p>
+                <p v-if="date">
                     日期：
                     <span>{{date}}</span>
                 </p>

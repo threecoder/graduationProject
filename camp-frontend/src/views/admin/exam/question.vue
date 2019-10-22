@@ -193,7 +193,6 @@ export default {
             }
         },
         curChange(val) {
-            console.log(val);
             this.form.currentPage = val;
         },
         checkDetail(row) {
