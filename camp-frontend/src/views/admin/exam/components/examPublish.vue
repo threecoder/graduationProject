@@ -22,7 +22,7 @@
                 </el-row>
 
                 <el-row :gutter="40">
-                    <el-col :span="8">
+                    <el-col :span="10">
                         <el-form-item label="考试时长(分钟)" prop="len" label-width="120px">
                             <el-input v-model="ruleForm.len" placeholder="以分钟为单位"></el-input>
                         </el-form-item>
@@ -38,9 +38,12 @@
                     <el-col :span="8">
                         <el-form-item label="所属培训" prop="training">
                             <el-select v-model="ruleForm.training">
-                                <template v-for="(item,i) in trainingList">
-                                    <el-option :value="item.value" :label="item.label" :key="i"></el-option>
-                                </template>
+                                <el-option
+                                    v-for="(item,i) in trainingList"
+                                    :value="item.id"
+                                    :label="item.label"
+                                    :key="i"
+                                ></el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -94,7 +97,7 @@
 </template>
 <script>
 import { formatDate, formatTime, formatDateAndTime } from "@/assets/js/util.js";
-import { newExam } from "@/api/admin/exam.js";
+import { newExam, getTrainingList } from "@/api/admin/exam.js";
 export default {
     data() {
         let valid = (rule, value, callback) => {
@@ -125,8 +128,8 @@ export default {
                 len: null,
                 dateRange: null,
                 training: null,
-                openTime:null,
-                closeTime:null
+                openTime: null,
+                closeTime: null
             },
             flag: false,
             visible: false,
@@ -166,19 +169,22 @@ export default {
                     {
                         required: true,
                         message: "请输入百分制及格分数",
-                        trigger: 'blur'
+                        trigger: "blur"
                     },
-                    { validator: valid2, trigger: 'blur'}
+                    { validator: valid2, trigger: "blur" }
                 ],
                 training: [
                     {
                         required: true,
                         message: "请选择考试所属培训",
-                        trigger: 'blur'
+                        trigger: "blur"
                     }
                 ]
             }
         };
+    },
+    mounted() {
+        this.getTraining();
     },
     methods: {
         submitForm(formName) {
@@ -187,7 +193,6 @@ export default {
                     let par = { ...this.ruleForm };
                     par.openTime = formatDateAndTime(par.dateRange[0]);
                     par.closeTime = formatDateAndTime(par.dateRange[1]);
-                    console.log(par);
                     this.flag = true;
                     this.addNewExam(par);
                 } else {
@@ -196,6 +201,11 @@ export default {
                     return false;
                 }
             });
+        },
+        resetForm(formName) {
+            this.$refs[formName].resetFields();
+            this.visible = false;
+            this.$message.success("重置成功！");
         },
         async addNewExam(par) {
             if (this.flag) {
@@ -206,10 +216,12 @@ export default {
                 } catch (error) {}
             }
         },
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
-            this.visible = false;
-            this.$message.success("重置成功！");
+        async getTraining() {
+            try {
+                let res = await getTrainingList();
+                this.trainingList = res.data;
+                console.log(res);
+            } catch (error) {}
         }
     }
 };

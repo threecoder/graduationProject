@@ -4,7 +4,7 @@ let commentUrl = "/campback/admin";
 export const getQuestionList = par => request(commentUrl+"/getQuestionList", par, 'post', 'json');
 
 //获取训练列表用于确定考试归属
-export const getTrainingList = () => request(commentUrl+"/getTraingingList", par, 'get', 'json');
+export const getTrainingList = () => request(commentUrl+"/getTrainingList", {}, 'get', 'json');
 
 //修改试题信息
 export const modefyQuestionInfo = par => request(commentUrl+"/modifyQuestion", par, 'post', 'json');

@@ -33,8 +33,8 @@
             </div>
         </div>
 
-        <el-dialog :visible.sync="newFlag">
-            <exam-publish @close="newFlag=false" />
+        <el-dialog v-if="newFlag" :visible.sync="newFlag">
+            <exam-publish @close="newFlag=false;fresh()" />
         </el-dialog>
         <el-dialog :visible.sync="pickFlag">
             <pick-question @close="pickFlag=false" />
@@ -131,6 +131,7 @@ export default {
             try {
                 this.loading = true;
                 let res = await getNotPostExam(this.currentPage);
+                console.log(res);
                 this.examList = res.data.list;
                 this.total = res.data.total;
                 this.loading = false;
