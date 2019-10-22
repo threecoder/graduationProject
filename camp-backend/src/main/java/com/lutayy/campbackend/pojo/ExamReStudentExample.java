@@ -104,6 +104,66 @@ public class ExamReStudentExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
+        public Criteria andReportIdIsNull() {
+            addCriterion("report_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportIdIsNotNull() {
+            addCriterion("report_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportIdEqualTo(Integer value) {
+            addCriterion("report_id =", value, "reportId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportIdNotEqualTo(Integer value) {
+            addCriterion("report_id <>", value, "reportId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportIdGreaterThan(Integer value) {
+            addCriterion("report_id >", value, "reportId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("report_id >=", value, "reportId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportIdLessThan(Integer value) {
+            addCriterion("report_id <", value, "reportId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportIdLessThanOrEqualTo(Integer value) {
+            addCriterion("report_id <=", value, "reportId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportIdIn(List<Integer> values) {
+            addCriterion("report_id in", values, "reportId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportIdNotIn(List<Integer> values) {
+            addCriterion("report_id not in", values, "reportId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportIdBetween(Integer value1, Integer value2) {
+            addCriterion("report_id between", value1, value2, "reportId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReportIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("report_id not between", value1, value2, "reportId");
+            return (Criteria) this;
+        }
+
         public Criteria andExamIdIsNull() {
             addCriterion("exam_id is null");
             return (Criteria) this;
@@ -401,6 +461,256 @@ public class ExamReStudentExample {
 
         public Criteria andIsInvalidNotBetween(Boolean value1, Boolean value2) {
             addCriterion("is_invalid not between", value1, value2, "isInvalid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsVerifyIsNull() {
+            addCriterion("is_verify is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsVerifyIsNotNull() {
+            addCriterion("is_verify is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsVerifyEqualTo(Boolean value) {
+            addCriterion("is_verify =", value, "isVerify");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsVerifyNotEqualTo(Boolean value) {
+            addCriterion("is_verify <>", value, "isVerify");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsVerifyGreaterThan(Boolean value) {
+            addCriterion("is_verify >", value, "isVerify");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsVerifyGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_verify >=", value, "isVerify");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsVerifyLessThan(Boolean value) {
+            addCriterion("is_verify <", value, "isVerify");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsVerifyLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_verify <=", value, "isVerify");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsVerifyIn(List<Boolean> values) {
+            addCriterion("is_verify in", values, "isVerify");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsVerifyNotIn(List<Boolean> values) {
+            addCriterion("is_verify not in", values, "isVerify");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsVerifyBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_verify between", value1, value2, "isVerify");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsVerifyNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_verify not between", value1, value2, "isVerify");
+            return (Criteria) this;
+        }
+
+        public Criteria andInLineIsNull() {
+            addCriterion("in_line is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInLineIsNotNull() {
+            addCriterion("in_line is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInLineEqualTo(Boolean value) {
+            addCriterion("in_line =", value, "inLine");
+            return (Criteria) this;
+        }
+
+        public Criteria andInLineNotEqualTo(Boolean value) {
+            addCriterion("in_line <>", value, "inLine");
+            return (Criteria) this;
+        }
+
+        public Criteria andInLineGreaterThan(Boolean value) {
+            addCriterion("in_line >", value, "inLine");
+            return (Criteria) this;
+        }
+
+        public Criteria andInLineGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("in_line >=", value, "inLine");
+            return (Criteria) this;
+        }
+
+        public Criteria andInLineLessThan(Boolean value) {
+            addCriterion("in_line <", value, "inLine");
+            return (Criteria) this;
+        }
+
+        public Criteria andInLineLessThanOrEqualTo(Boolean value) {
+            addCriterion("in_line <=", value, "inLine");
+            return (Criteria) this;
+        }
+
+        public Criteria andInLineIn(List<Boolean> values) {
+            addCriterion("in_line in", values, "inLine");
+            return (Criteria) this;
+        }
+
+        public Criteria andInLineNotIn(List<Boolean> values) {
+            addCriterion("in_line not in", values, "inLine");
+            return (Criteria) this;
+        }
+
+        public Criteria andInLineBetween(Boolean value1, Boolean value2) {
+            addCriterion("in_line between", value1, value2, "inLine");
+            return (Criteria) this;
+        }
+
+        public Criteria andInLineNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("in_line not between", value1, value2, "inLine");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotPassReasonIsNull() {
+            addCriterion("not_pass_reason is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotPassReasonIsNotNull() {
+            addCriterion("not_pass_reason is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotPassReasonEqualTo(String value) {
+            addCriterion("not_pass_reason =", value, "notPassReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotPassReasonNotEqualTo(String value) {
+            addCriterion("not_pass_reason <>", value, "notPassReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotPassReasonGreaterThan(String value) {
+            addCriterion("not_pass_reason >", value, "notPassReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotPassReasonGreaterThanOrEqualTo(String value) {
+            addCriterion("not_pass_reason >=", value, "notPassReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotPassReasonLessThan(String value) {
+            addCriterion("not_pass_reason <", value, "notPassReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotPassReasonLessThanOrEqualTo(String value) {
+            addCriterion("not_pass_reason <=", value, "notPassReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotPassReasonLike(String value) {
+            addCriterion("not_pass_reason like", value, "notPassReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotPassReasonNotLike(String value) {
+            addCriterion("not_pass_reason not like", value, "notPassReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotPassReasonIn(List<String> values) {
+            addCriterion("not_pass_reason in", values, "notPassReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotPassReasonNotIn(List<String> values) {
+            addCriterion("not_pass_reason not in", values, "notPassReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotPassReasonBetween(String value1, String value2) {
+            addCriterion("not_pass_reason between", value1, value2, "notPassReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotPassReasonNotBetween(String value1, String value2) {
+            addCriterion("not_pass_reason not between", value1, value2, "notPassReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotPassTimesIsNull() {
+            addCriterion("not_pass_times is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotPassTimesIsNotNull() {
+            addCriterion("not_pass_times is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotPassTimesEqualTo(Integer value) {
+            addCriterion("not_pass_times =", value, "notPassTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotPassTimesNotEqualTo(Integer value) {
+            addCriterion("not_pass_times <>", value, "notPassTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotPassTimesGreaterThan(Integer value) {
+            addCriterion("not_pass_times >", value, "notPassTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotPassTimesGreaterThanOrEqualTo(Integer value) {
+            addCriterion("not_pass_times >=", value, "notPassTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotPassTimesLessThan(Integer value) {
+            addCriterion("not_pass_times <", value, "notPassTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotPassTimesLessThanOrEqualTo(Integer value) {
+            addCriterion("not_pass_times <=", value, "notPassTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotPassTimesIn(List<Integer> values) {
+            addCriterion("not_pass_times in", values, "notPassTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotPassTimesNotIn(List<Integer> values) {
+            addCriterion("not_pass_times not in", values, "notPassTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotPassTimesBetween(Integer value1, Integer value2) {
+            addCriterion("not_pass_times between", value1, value2, "notPassTimes");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotPassTimesNotBetween(Integer value1, Integer value2) {
+            addCriterion("not_pass_times not between", value1, value2, "notPassTimes");
             return (Criteria) this;
         }
     }

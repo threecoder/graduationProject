@@ -26,6 +26,8 @@ public class ExamServiceImpl implements ExamService {
     @Autowired
     TrainingMapper trainingMapper;
     @Autowired
+    TrainingReStudentMapper trainingReStudentMapper;
+    @Autowired
     ExamReStudentMapper examReStudentMapper;
     @Autowired
     QuestionMapper questionMapper;
@@ -47,6 +49,16 @@ public class ExamServiceImpl implements ExamService {
         return student.getStudentId();
     }
 
+    private Student getStudentByIdcard(String idcard){
+        StudentExample studentExample=new StudentExample();
+        StudentExample.Criteria criteria=studentExample.createCriteria();
+        criteria.andStudentIdcardEqualTo(idcard);
+        List<Student> students=studentMapper.selectByExample(studentExample);
+        if(students.size()==0){
+            return null;
+        }
+        return students.get(0);
+    }
 
     @Override
     public JSONObject getHalfExamList(String idcard) {
@@ -82,20 +94,42 @@ public class ExamServiceImpl implements ExamService {
     public JSONObject getTodoExamList(String idcard) {
         JSONObject result=new JSONObject();
 
-        StudentExample studentExample=new StudentExample();
-        StudentExample.Criteria criteria=studentExample.createCriteria();
-        criteria.andStudentIdcardEqualTo(idcard);
-        List<Student> students=studentMapper.selectByExample(studentExample);
-        if(students.size()==0){
+        int studentId=getStudentId(idcard);
+        if(studentId==-1){
             result.put("code", "fail");
             result.put("data",null);
             result.put("msg","用户不存在！");
             return result;
         }
-        Student student=students.get(0);
-        int userKey=student.getStudentId();
+        /**
+         * 检查是否有已报名的培训新发布了考试，有的话进行更新
+         **/
+        TrainingReStudentExample trainingReStudentExample=new TrainingReStudentExample();
+        TrainingReStudentExample.Criteria criteria=trainingReStudentExample.createCriteria();
+        criteria.andStudentIdEqualTo(studentId);
+        List<TrainingReStudent> trainingReStudents=trainingReStudentMapper.selectByExample(trainingReStudentExample);
+        if(trainingReStudents.size()!=0){
+            for (TrainingReStudent trainingReStudent:trainingReStudents){
+                ExamExample examExample=new ExamExample();
+                ExamExample.Criteria criteria1=examExample.createCriteria();
+                criteria1.andTrainingIdEqualTo(trainingReStudent.getTrainingId()).andIsPostedEqualTo(true);
+                List<Exam> exams=examMapper.selectByExample(examExample);
+                if(exams.size()!=0){
+                    ExamReStudentExample examReStudentExample=new ExamReStudentExample();
+                    ExamReStudentExample.Criteria criteria2=examReStudentExample.createCriteria();
+                    criteria2.andStudentIdEqualTo(studentId).andExamIdEqualTo(exams.get(0).getExamId());
+                    if(examReStudentMapper.selectByExample(examReStudentExample).size()==0){
+                        ExamReStudent examReStudent=new ExamReStudent();
+                        examReStudent.setExamId(exams.get(0).getExamId());
+                        examReStudent.setStudentId(studentId);
+                        examReStudentMapper.insertSelective(examReStudent);
+                    }
+                }
+            }
+        }
 
-        JSONArray exams = ExamStudentSQLConn.getExamByCondition(userKey,"r.remaining_times=3");
+        /** 获取报名的培训中已发布的考试 **/
+        JSONArray exams = ExamStudentSQLConn.getExamByCondition(studentId,"r.remaining_times=3");
         if(exams.size()==0){
             result.put("code", "fail");
             result.put("data",null);
@@ -354,7 +388,8 @@ public class ExamServiceImpl implements ExamService {
         exam.setExamStartTime(openTime);
         exam.setExamEndTime(closeTime);
         exam.setIsPosted(false);
-        if(examMapper.insert(exam)>0){
+        exam.setHaveQuestions(false);
+        if(examMapper.insertSelective(exam)>0){
             result.put("code", "success");
             result.put("msg", "添加考试成功");
         }else {
@@ -406,8 +441,10 @@ public class ExamServiceImpl implements ExamService {
             Training training=trainingMapper.selectByPrimaryKey(exam.getTrainingId());
             object.put("belong", training.getTrainingName());
             object.put("status", 0);
-            if (exam.getHaveQuestions()){
-                object.put("status", 1);
+            if(exam.getHaveQuestions()!=null){
+                if (exam.getHaveQuestions()){
+                    object.put("status", 1);
+                }
             }
             list.add(object);
             sum++;
@@ -521,7 +558,10 @@ public class ExamServiceImpl implements ExamService {
         }
         QuestionExample questionExample=new QuestionExample();
         QuestionExample.Criteria criteria=questionExample.createCriteria();
+        QuestionExample.Criteria criteria1=questionExample.createCriteria();
         criteria.andTrainingIdEqualTo(trainingId);
+        criteria1.andTrainingIdIsNull();
+        questionExample.or(criteria1);
         List<Question> questions=questionMapper.selectByExample(questionExample);
         if(questions.size()==0){
             result.put("code", "fail");

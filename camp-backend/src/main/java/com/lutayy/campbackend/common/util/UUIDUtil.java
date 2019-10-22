@@ -17,6 +17,12 @@ public class UUIDUtil {
         /* 报名编号格式:a活动编号_随机6位 */
         return "a"+activityId+"_"+id.substring(0, 6);
     }
+    public  static String getTrainingApplyNumber(int trainingId){
+        UUID uuid=UUID.randomUUID();
+        String id=uuid.toString().replace("-", "");
+        /* 报名编号格式:a活动编号_随机6位 */
+        return "t"+trainingId+"_"+id.substring(0, 6);
+    }
 
     public static void main(String[] args){
         System.out.println(getMemberUUID());

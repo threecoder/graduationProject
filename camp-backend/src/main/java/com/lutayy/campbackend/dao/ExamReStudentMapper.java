@@ -10,13 +10,21 @@ public interface ExamReStudentMapper {
 
     int deleteByExample(ExamReStudentExample example);
 
+    int deleteByPrimaryKey(Integer reportId);
+
     int insert(ExamReStudent record);
 
     int insertSelective(ExamReStudent record);
 
     List<ExamReStudent> selectByExample(ExamReStudentExample example);
 
+    ExamReStudent selectByPrimaryKey(Integer reportId);
+
     int updateByExampleSelective(@Param("record") ExamReStudent record, @Param("example") ExamReStudentExample example);
 
     int updateByExample(@Param("record") ExamReStudent record, @Param("example") ExamReStudentExample example);
+
+    int updateByPrimaryKeySelective(ExamReStudent record);
+
+    int updateByPrimaryKey(ExamReStudent record);
 }

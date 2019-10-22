@@ -5,11 +5,13 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.lutayy.campbackend.common.util.OrderIdGenerator;
+import com.lutayy.campbackend.common.util.UUIDUtil;
 import com.lutayy.campbackend.dao.*;
 import com.lutayy.campbackend.pojo.*;
 import com.lutayy.campbackend.service.SQLConn.SystemParamManager;
 import com.lutayy.campbackend.service.SQLConn.TrainingStudentSQLConn;
 import com.lutayy.campbackend.service.TrainingService;
+import org.omg.PortableInterceptor.INACTIVE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +39,10 @@ public class TrainingServiceImpl implements TrainingService {
     TrainingOrderStudentMapper trainingOrderStudentMapper;
     @Autowired
     MemberReStudentMapper memberReStudentMapper;
+    @Autowired
+    ExamMapper examMapper;
+    @Autowired
+    ExamReStudentMapper examReStudentMapper;
 
 
     private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
@@ -316,6 +322,7 @@ public class TrainingServiceImpl implements TrainingService {
             result.put("code", "fail");
             result.put("msg", "订单生成失败!");
         }
+        confirmOrder(orderId);
         return result;
     }
 
@@ -384,11 +391,11 @@ public class TrainingServiceImpl implements TrainingService {
         return result;
     }
 
+
     @Override
     public JSONObject memberJoinTraining(JSONObject jsonObject) {
         JSONObject result=new JSONObject();
         String memberId=jsonObject.getString("id");
-        System.out.println(memberId);
         int trainingId=jsonObject.getInteger("trainingId");
         JSONArray idNums=jsonObject.getJSONArray("idNums");
         Training training=trainingMapper.selectByPrimaryKey(trainingId);
@@ -418,7 +425,7 @@ public class TrainingServiceImpl implements TrainingService {
         int isVip=0;
         Member member=memberMapper.selectByPrimaryKey(memberId);
         if(member!=null){
-            if(member.getIsVip()==true){
+            if(member.getIsVip()){
                 isVip=1;
             }
         }
@@ -470,9 +477,82 @@ public class TrainingServiceImpl implements TrainingService {
             result.put("data", orderId);
             msg+="订单生成成功！订单号："+orderId;
         }
+
+        /** 模拟订单支付确认 **/
+        if(confirmOrder(orderId)==1){
+            msg+="  模拟订单支付确认完成";
+        }
         result.put("msg", msg);
         return result;
     }
+
+    /** 会员订单成功支付 **/
+    private int confirmOrder(String orderId){
+        System.out.println("---- 模拟订单支付确认 开启 ----");
+        TrainingOrder trainingOrder=trainingOrderMapper.selectByPrimaryKey(orderId);
+        if(trainingOrder==null){
+            System.out.println("---- 该订单不存在 ----");
+            return -1;
+        }
+        int trainingId=trainingOrder.getTrainingId();
+        trainingOrder.setPaymentState(true);
+        trainingOrderMapper.updateByPrimaryKeySelective(trainingOrder);
+        List<Integer> studentIds=new ArrayList<>();
+        if(trainingOrder.getOrderType()!=null && !trainingOrder.getOrderType()){
+            TrainingOrderStudentExample trainingOrderStudentExample=new TrainingOrderStudentExample();
+            TrainingOrderStudentExample.Criteria criteria=trainingOrderStudentExample.createCriteria();
+            criteria.andTrainingOrderIdEqualTo(orderId);
+            List<TrainingOrderStudent> trainingOrderStudents=trainingOrderStudentMapper.selectByExample(trainingOrderStudentExample);
+            if(trainingOrderStudents.size()==0){
+                System.out.println("---- 该订单下无学员 结束 ----");
+                return -1;
+            }
+            for(TrainingOrderStudent trainingOrderStudent:trainingOrderStudents){
+                studentIds.add(trainingOrderStudent.getStudentId());
+            }
+        }
+        if(trainingOrder.getOrderType()!=null && trainingOrder.getOrderType()){
+            studentIds.add(trainingOrder.getStudentId());
+        }
+        /** 检查该培训是否已发布试卷,有的话就添加到学生的试卷可考列表中 **/
+        ExamExample examExample=new ExamExample();
+        ExamExample.Criteria criteria1=examExample.createCriteria();
+        criteria1.andTrainingIdEqualTo(trainingId).andIsPostedEqualTo(true);
+        List<Exam> exams=examMapper.selectByExample(examExample);
+        boolean isExamPosted=false;
+        if(exams.size()!=0){
+            isExamPosted=true;
+        }
+        for(Integer studentId:studentIds){
+            TrainingReStudentExample trainingReStudentExample=new TrainingReStudentExample();
+            TrainingReStudentExample.Criteria criteria=trainingReStudentExample.createCriteria();
+            criteria.andStudentIdEqualTo(studentId).andTrainingIdEqualTo(trainingId).andIsInvalidEqualTo(false);
+            if (trainingReStudentMapper.selectByExample(trainingReStudentExample).size()==0){
+                TrainingReStudent trainingReStudent=new TrainingReStudent();
+                trainingReStudent.setStudentId(studentId);
+                trainingReStudent.setTrainingId(trainingId);
+                trainingReStudent.setApplyId(UUIDUtil.getTrainingApplyNumber(trainingId));
+                trainingReStudent.setBeginTime(new Date());
+                trainingReStudentMapper.insertSelective(trainingReStudent);
+                System.out.println("---- 学员"+studentId+"报名培训成功 ----");
+            }
+            if(isExamPosted){
+                ExamReStudentExample examReStudentExample=new ExamReStudentExample();
+                ExamReStudentExample.Criteria criteria2=examReStudentExample.createCriteria();
+                criteria2.andStudentIdEqualTo(studentId).andExamIdEqualTo(exams.get(0).getExamId());
+                if(examReStudentMapper.selectByExample(examReStudentExample).size()==0){
+                    ExamReStudent examReStudent=new ExamReStudent();
+                    examReStudent.setStudentId(studentId);
+                    examReStudent.setExamId(exams.get(0).getExamId());
+                    examReStudentMapper.insertSelective(examReStudent);
+                    System.out.println("---- 学员"+studentId+"报名考试成功(考试已添加进列表) ----");
+                }
+            }
+        }
+        System.out.println("---- 模拟订单支付确认 结束 ----");
+        return 1;
+    }
+
 
     @Override
     public JSONObject adminGetTrainingList() {

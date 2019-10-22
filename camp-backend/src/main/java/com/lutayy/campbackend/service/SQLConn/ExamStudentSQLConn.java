@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,6 +29,9 @@ public class ExamStudentSQLConn {
 
     private static ExamStudentSQLConn examStudentSQLConn;
 
+    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
+            "yyyy-MM-dd HH:mm:ss");
+
     @PostConstruct
     public void init(){
         examStudentSQLConn=this;
@@ -41,7 +45,7 @@ public class ExamStudentSQLConn {
         try{
             conn= DriverManager.getConnection(URL,Name,Pwd);
             statement=conn.createStatement();
-            String sql="select e.exam_id,e.exam_name,e.training_id,e.exam_date,e.exam_start_time,e.exam_end_time,e.exam_length_min,r.score from exam e, student s,exam_re_student r " +
+            String sql="select e.exam_id,e.exam_name,e.training_id,e.exam_start_time,e.exam_end_time,e.exam_length_min,r.score from exam e, student s,exam_re_student r " +
                     "where e.exam_id = r.exam_id and s.student_id = r.student_id and r.is_invalid=0 and s.student_id ="+userKey;
             if(!condition.equals("")){
                 sql+=" and "+condition;
@@ -51,15 +55,13 @@ public class ExamStudentSQLConn {
                 int examId=rs.getInt("exam_id");
                 int trainingId=rs.getInt("training_id");
                 String examName=rs.getString("exam_name");
-                Date examDate=rs.getDate("exam_date");
-                Time examStartTime=rs.getTime("exam_start_time");
-                Time examEndTime=rs.getTime("exam_end_time");
+                String examStartTime=rs.getString("exam_start_time");
+                String examEndTime=rs.getString("exam_end_time");
                 byte examLengthMin=rs.getByte("exam_length_min");
                 int score=rs.getInt("score");
                 JSONObject exam=new JSONObject();
                 exam.put("examName",examName);
-                exam.put("date", examDate);
-                exam.put("startTime",examStartTime );
+                exam.put("startTime",examStartTime);
                 exam.put("endTime", examEndTime);
                 exam.put("min", examLengthMin);
                 exam.put("grade", score);
