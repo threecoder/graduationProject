@@ -21,4 +21,10 @@ public interface ExamService {
     JSONObject addNewExam(JSONObject jsonObject);
 
     JSONObject getQuestionList(JSONObject jsonObject);
+
+    JSONObject getNotPostExam(Integer pageSize,Integer currentPage);
+
+    JSONObject randomFillExam(Integer examId);
+
+    JSONObject publishExam(Integer examId);
 }

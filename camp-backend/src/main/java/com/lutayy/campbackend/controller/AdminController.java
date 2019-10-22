@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,4 +37,11 @@ public class AdminController {
     public JSONObject getMemberList(@RequestBody JSONObject jsonObject){
         return adminService.getMemberList(jsonObject);
     }
+
+    @RequestMapping("/getOneMemberStudentList")
+    @ResponseBody
+    public Object getOneMemberStudentList(@RequestParam("memberId") String memberId){
+        return adminService.getOneMemberStudentList(memberId);
+    }
+
 }

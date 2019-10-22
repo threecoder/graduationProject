@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -364,6 +365,64 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
+    public JSONObject getNotPostExam(Integer pageSize, Integer currentPage) {
+        JSONObject result=new JSONObject();
+        JSONObject data=new JSONObject();
+
+        if(pageSize==null){
+            pageSize=10;
+        }
+        if(currentPage==null){
+            currentPage=1;
+        }
+
+        ExamExample examExample=new ExamExample();
+        ExamExample.Criteria criteria=examExample.createCriteria();
+        criteria.andIsPostedEqualTo(false);
+        examExample.setOrderByClause("create_time DESC");
+        List<Exam> exams=examMapper.selectByExample(examExample);
+        int total=exams.size();
+        data.put("total", total);
+        if(total==0){
+            data.put("list", null);
+            result.put("msg", "暂无未发布的试卷");
+            result.put("code", "fail");
+            result.put("data", data);
+        }
+        JSONArray list=new JSONArray();
+        int i=1;//计数
+        int sum=0;//每页数目;
+        for(Exam exam:exams){
+            if(i<=pageSize*(currentPage-1)){
+                i++;
+                continue;
+            }
+            JSONObject object=new JSONObject();
+            object.put("examId", exam.getExamId());
+            object.put("examName", exam.getExamName());
+            object.put("startTime", exam.getExamStartTime());
+            object.put("endTime", exam.getExamEndTime());
+            object.put("min", exam.getExamLengthMin());
+            Training training=trainingMapper.selectByPrimaryKey(exam.getTrainingId());
+            object.put("belong", training.getTrainingName());
+            object.put("status", 0);
+            if (exam.getHaveQuestions()){
+                object.put("status", 1);
+            }
+            list.add(object);
+            sum++;
+            if(sum==pageSize){
+                break;
+            }
+        }
+        data.put("list", list);
+        result.put("data", data);
+        result.put("code", "success");
+        result.put("msg", "查找未发布的考试成功");
+        return result;
+    }
+
+    @Override
     public JSONObject getQuestionList(JSONObject jsonObject) {
         JSONObject result=new JSONObject();
         JSONObject data=new JSONObject();
@@ -435,6 +494,89 @@ public class ExamServiceImpl implements ExamService {
         result.put("data", data);
         result.put("code", "success");
         result.put("msg", "获取试题成功");
+        return result;
+    }
+
+    @Override
+    public JSONObject randomFillExam(Integer examId) {
+        JSONObject result=new JSONObject();
+        /**
+         * 暂时是从考试对应的培训下的题库随机出题，每道题目的分数=总分(100)/题目数目
+         * **/
+        Exam exam=examMapper.selectByPrimaryKey(examId);
+        if(exam==null){
+            result.put("code", "fail");
+            result.put("msg", "系统中找不到当前的考试");
+            return result;
+        }
+        int trainingId=exam.getTrainingId();
+        int questionNum=exam.getExamNum();
+        ExamReQuestionExample examReQuestionExample=new ExamReQuestionExample();
+        ExamReQuestionExample.Criteria criteria0=examReQuestionExample.createCriteria();
+        criteria0.andExamIdEqualTo(examId);
+        if(examReQuestionMapper.selectByExample(examReQuestionExample).size()!=0){
+            result.put("code", "fail");
+            result.put("msg", "该考试已有试卷，请清空后再尝试");
+            return result;
+        }
+        QuestionExample questionExample=new QuestionExample();
+        QuestionExample.Criteria criteria=questionExample.createCriteria();
+        criteria.andTrainingIdEqualTo(trainingId);
+        List<Question> questions=questionMapper.selectByExample(questionExample);
+        if(questions.size()==0){
+            result.put("code", "fail");
+            result.put("msg", "无符合条件的试题可供随机出卷");
+            return result;
+        }
+        String msg="";
+        Collections.shuffle(questions);
+        if(questions.size()>=questionNum){
+            questions=questions.subList(0, questionNum);
+        }else {
+            msg+="题库中符合条件的试题数量小于试卷要求数量，";
+        }
+        questionNum=questions.size();
+        int averageScore=100/questionNum;
+        int questionIndex=1;//题目序号
+        for (Question question:questions){
+            ExamReQuestion examReQuestion=new ExamReQuestion();
+            examReQuestion.setExamId(examId);
+            examReQuestion.setQuestionId(question.getQuestionId());
+            examReQuestion.setScore(averageScore);
+            examReQuestion.setQuestionIndex(questionIndex);
+            if(questionIndex==questionNum){
+                examReQuestion.setScore(averageScore+(100-averageScore*questionNum));
+            }
+            examReQuestionMapper.insert(examReQuestion);
+            questionIndex++;
+        }
+        exam.setHaveQuestions(true);
+        examMapper.updateByPrimaryKeySelective(exam);
+
+        msg+="随机生成试卷成功";
+        result.put("code", "success");
+        result.put("msg", msg);
+        return result;
+    }
+
+    @Override
+    public JSONObject publishExam(Integer examId) {
+        JSONObject result=new JSONObject();
+        Exam exam=examMapper.selectByPrimaryKey(examId);
+        if(exam==null){
+            result.put("code", "fail");
+            result.put("msg", "系统中找不到当前的考试");
+            return result;
+        }
+        if(!exam.getHaveQuestions()){
+            result.put("code", "fail");
+            result.put("msg", "试卷还未出题，不可发布");
+            return result;
+        }
+        exam.setIsPosted(true);
+        examMapper.updateByPrimaryKeySelective(exam);
+        result.put("code", "success");
+        result.put("msg", "考试发布成功!");
         return result;
     }
 }

@@ -11,6 +11,8 @@
     <result column="exam_start_time" jdbcType="TIMESTAMP" property="examStartTime" />
     <result column="exam_end_time" jdbcType="TIMESTAMP" property="examEndTime" />
     <result column="is_posted" jdbcType="BIT" property="isPosted" />
+    <result column="have_questions" jdbcType="BIT" property="haveQuestions" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -72,7 +74,7 @@
   </sql>
   <sql id="Base_Column_List">
     exam_id, exam_name, training_id, exam_num, exam_pass, exam_length_min, exam_start_time, 
-    exam_end_time, is_posted
+    exam_end_time, is_posted, have_questions, create_time
   </sql>
   <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.ExamExample" resultMap="BaseResultMap">
     select
@@ -110,10 +112,12 @@
     </selectKey>
     insert into exam (exam_name, training_id, exam_num, 
       exam_pass, exam_length_min, exam_start_time, 
-      exam_end_time, is_posted)
+      exam_end_time, is_posted, have_questions, 
+      create_time)
     values (#{examName,jdbcType=VARCHAR}, #{trainingId,jdbcType=INTEGER}, #{examNum,jdbcType=SMALLINT}, 
       #{examPass,jdbcType=SMALLINT}, #{examLengthMin,jdbcType=TINYINT}, #{examStartTime,jdbcType=TIMESTAMP}, 
-      #{examEndTime,jdbcType=TIMESTAMP}, #{isPosted,jdbcType=BIT})
+      #{examEndTime,jdbcType=TIMESTAMP}, #{isPosted,jdbcType=BIT}, #{haveQuestions,jdbcType=BIT}, 
+      #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.Exam">
     <selectKey keyProperty="examId" order="AFTER" resultType="java.lang.Integer">
@@ -145,6 +149,12 @@
       <if test="isPosted != null">
         is_posted,
       </if>
+      <if test="haveQuestions != null">
+        have_questions,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="examName != null">
@@ -170,6 +180,12 @@
       </if>
       <if test="isPosted != null">
         #{isPosted,jdbcType=BIT},
+      </if>
+      <if test="haveQuestions != null">
+        #{haveQuestions,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -209,6 +225,12 @@
       <if test="record.isPosted != null">
         is_posted = #{record.isPosted,jdbcType=BIT},
       </if>
+      <if test="record.haveQuestions != null">
+        have_questions = #{record.haveQuestions,jdbcType=BIT},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -224,7 +246,9 @@
       exam_length_min = #{record.examLengthMin,jdbcType=TINYINT},
       exam_start_time = #{record.examStartTime,jdbcType=TIMESTAMP},
       exam_end_time = #{record.examEndTime,jdbcType=TIMESTAMP},
-      is_posted = #{record.isPosted,jdbcType=BIT}
+      is_posted = #{record.isPosted,jdbcType=BIT},
+      have_questions = #{record.haveQuestions,jdbcType=BIT},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -256,6 +280,12 @@
       <if test="isPosted != null">
         is_posted = #{isPosted,jdbcType=BIT},
       </if>
+      <if test="haveQuestions != null">
+        have_questions = #{haveQuestions,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where exam_id = #{examId,jdbcType=INTEGER}
   </update>
@@ -268,7 +298,9 @@
       exam_length_min = #{examLengthMin,jdbcType=TINYINT},
       exam_start_time = #{examStartTime,jdbcType=TIMESTAMP},
       exam_end_time = #{examEndTime,jdbcType=TIMESTAMP},
-      is_posted = #{isPosted,jdbcType=BIT}
+      is_posted = #{isPosted,jdbcType=BIT},
+      have_questions = #{haveQuestions,jdbcType=BIT},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
     where exam_id = #{examId,jdbcType=INTEGER}
   </update>
 </mapper>

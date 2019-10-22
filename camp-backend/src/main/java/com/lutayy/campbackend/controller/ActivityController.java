@@ -52,6 +52,12 @@ public class ActivityController {
         return activityService.memberGetSeatNum(memberId,activityId);
     }
 
+    @RequestMapping("/member/getSignedActivities")
+    @ResponseBody
+    public Object memberGetSignedActivities(@RequestParam("id") String id){
+        return activityService.memberGetSignedActivities(id);
+    }
+
     @RequestMapping("/admin/addNewActivity")
     @ResponseBody
     public JSONObject addNewActivity(@RequestBody JSONObject jsonObject){
@@ -64,9 +70,5 @@ public class ActivityController {
         return activityService.adminGetActivityList();
     }
 
-    @RequestMapping("/member/getSignedActivities")
-    @ResponseBody
-    public Object memberGetSignedActivities(@RequestParam("id") String id){
-        return activityService.memberGetSignedActivities(id);
-    }
+
 }

@@ -654,6 +654,126 @@ public class ExamExample {
             addCriterion("is_posted not between", value1, value2, "isPosted");
             return (Criteria) this;
         }
+
+        public Criteria andHaveQuestionsIsNull() {
+            addCriterion("have_questions is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHaveQuestionsIsNotNull() {
+            addCriterion("have_questions is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHaveQuestionsEqualTo(Boolean value) {
+            addCriterion("have_questions =", value, "haveQuestions");
+            return (Criteria) this;
+        }
+
+        public Criteria andHaveQuestionsNotEqualTo(Boolean value) {
+            addCriterion("have_questions <>", value, "haveQuestions");
+            return (Criteria) this;
+        }
+
+        public Criteria andHaveQuestionsGreaterThan(Boolean value) {
+            addCriterion("have_questions >", value, "haveQuestions");
+            return (Criteria) this;
+        }
+
+        public Criteria andHaveQuestionsGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("have_questions >=", value, "haveQuestions");
+            return (Criteria) this;
+        }
+
+        public Criteria andHaveQuestionsLessThan(Boolean value) {
+            addCriterion("have_questions <", value, "haveQuestions");
+            return (Criteria) this;
+        }
+
+        public Criteria andHaveQuestionsLessThanOrEqualTo(Boolean value) {
+            addCriterion("have_questions <=", value, "haveQuestions");
+            return (Criteria) this;
+        }
+
+        public Criteria andHaveQuestionsIn(List<Boolean> values) {
+            addCriterion("have_questions in", values, "haveQuestions");
+            return (Criteria) this;
+        }
+
+        public Criteria andHaveQuestionsNotIn(List<Boolean> values) {
+            addCriterion("have_questions not in", values, "haveQuestions");
+            return (Criteria) this;
+        }
+
+        public Criteria andHaveQuestionsBetween(Boolean value1, Boolean value2) {
+            addCriterion("have_questions between", value1, value2, "haveQuestions");
+            return (Criteria) this;
+        }
+
+        public Criteria andHaveQuestionsNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("have_questions not between", value1, value2, "haveQuestions");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeIsNull() {
+            addCriterion("create_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeIsNotNull() {
+            addCriterion("create_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeEqualTo(Date value) {
+            addCriterion("create_time =", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeNotEqualTo(Date value) {
+            addCriterion("create_time <>", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeGreaterThan(Date value) {
+            addCriterion("create_time >", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("create_time >=", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeLessThan(Date value) {
+            addCriterion("create_time <", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeLessThanOrEqualTo(Date value) {
+            addCriterion("create_time <=", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeIn(List<Date> values) {
+            addCriterion("create_time in", values, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeNotIn(List<Date> values) {
+            addCriterion("create_time not in", values, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeBetween(Date value1, Date value2) {
+            addCriterion("create_time between", value1, value2, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeNotBetween(Date value1, Date value2) {
+            addCriterion("create_time not between", value1, value2, "createTime");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

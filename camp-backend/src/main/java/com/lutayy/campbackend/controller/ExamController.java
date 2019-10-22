@@ -64,4 +64,21 @@ public class ExamController {
         return examService.getQuestionList(jsonObject);
     }
 
+    @RequestMapping("/admin/getNotPostExam")
+    @ResponseBody
+    public Object getNotPostExam(@RequestParam("pageSize") Integer pageSize,@RequestParam("currentPage") Integer currentPage){
+        return examService.getNotPostExam(pageSize,currentPage);
+    }
+
+    @RequestMapping("/admin/randomFillExam")
+    @ResponseBody
+    public Object randomFillExam(@RequestParam("examId") Integer examId){
+        return examService.randomFillExam(examId);
+    }
+
+    @RequestMapping("/admin/publishExam")
+    @ResponseBody
+    public Object publishExam(@RequestParam("examId") Integer examId){
+        return examService.publishExam(examId);
+    }
 }

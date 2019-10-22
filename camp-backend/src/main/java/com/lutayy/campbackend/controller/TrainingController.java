@@ -51,4 +51,10 @@ public class TrainingController {
     public JSONObject memberJoinActivity(@RequestBody JSONObject jsonObject){
         return trainingService.memberJoinTraining(jsonObject);
     }
+
+    @RequestMapping("/admin/getTrainingList")
+    @ResponseBody
+    public Object adminGetTrainingList(){
+        return trainingService.adminGetTrainingList();
+    }
 }
