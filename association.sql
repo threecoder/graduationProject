@@ -361,11 +361,9 @@ CREATE TABLE `exam` (
   PRIMARY KEY (`exam_id`),
   KEY `training_id` (`training_id`),
   CONSTRAINT `exam_ibfk_1` FOREIGN KEY (`training_id`) REFERENCES `training` (`training_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 /*Data for the table `exam` */
-
-insert  into `exam`(`exam_id`,`exam_name`,`training_id`,`exam_num`,`exam_pass`,`exam_length_min`,`exam_start_time`,`exam_end_time`,`is_posted`,`have_questions`,`create_time`) values (1,'质量测试',1,20,55,60,'2019-10-17 12:00:00','2019-10-17 14:00:00',1,1,NULL),(2,'食品测试',2,20,55,80,'2019-10-17 13:00:00','2019-10-17 15:00:00',0,0,NULL),(3,'监督测试',3,20,65,70,'2019-10-17 14:00:00','2019-10-17 16:00:00',0,0,NULL),(4,'网络建设',4,30,60,60,'2019-10-17 18:00:00','2019-10-17 20:00:00',0,0,NULL),(6,'产品教育',5,20,50,120,'2019-10-01 00:00:00','2019-12-01 00:00:00',0,0,NULL);
 
 /*Table structure for table `exam_question_student_answer` */
 
@@ -416,19 +414,17 @@ CREATE TABLE `exam_re_student` (
   `remaining_times` tinyint(4) DEFAULT '3' COMMENT '可重考剩余次数',
   `is_invalid` tinyint(1) DEFAULT '0' COMMENT '1为无效(考试不通过)',
   `is_verify` tinyint(1) DEFAULT '0' COMMENT '0:未审核 1:已审核',
-  `in_line` tinyblob COMMENT '0:不在审核队列里 1:在审核队列里',
+  `in_line` tinyint(1) DEFAULT '0' COMMENT '0:不在审核队列里 1:在审核队列里',
   `not_pass_reason` varchar(100) DEFAULT NULL COMMENT '审核不通过理由',
   `not_pass_times` int(11) DEFAULT NULL COMMENT '审核不通过次数，被驳回一次+1',
   PRIMARY KEY (`report_id`),
-  KEY `exam_id` (`exam_id`),
   KEY `student_id` (`student_id`),
+  KEY `exam_id` (`exam_id`),
   CONSTRAINT `exam_re_student_ibfk_1` FOREIGN KEY (`exam_id`) REFERENCES `exam` (`exam_id`),
   CONSTRAINT `exam_re_student_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 
 /*Data for the table `exam_re_student` */
-
-insert  into `exam_re_student`(`report_id`,`exam_id`,`student_id`,`score`,`remaining_times`,`is_invalid`,`is_verify`,`in_line`,`not_pass_reason`,`not_pass_times`) values (1,1,1,55,2,0,0,NULL,NULL,NULL),(2,1,2,34,1,0,0,NULL,NULL,NULL),(3,2,1,41,0,0,0,NULL,NULL,NULL),(4,4,1,56,1,0,0,NULL,NULL,NULL);
 
 /*Table structure for table `exam_report_op_log` */
 
@@ -582,11 +578,11 @@ CREATE TABLE `question` (
   PRIMARY KEY (`question_id`),
   KEY `training_id` (`training_id`),
   CONSTRAINT `question_ibfk_1` FOREIGN KEY (`training_id`) REFERENCES `training` (`training_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 /*Data for the table `question` */
 
-insert  into `question`(`question_id`,`training_id`,`question_state`,`type`,`choice_a`,`choice_b`,`choice_c`,`choice_d`,`right_choice_one`,`right_choice_two`,`right_choice_three`,`right_choice_four`) values (1,1,'以下属于物理层的设备是',0,'中继器','以太网交换机','桥','网关',1,NULL,NULL,NULL),(2,1,' 在以太网中，是根据___地址来区分不同的设备的.',0,'LLC地址','MAC地址','IP地址','IPX地址',2,NULL,NULL,NULL),(3,1,'下面哪种LAN 是应用CSMA/CD协议的',1,'令牌环','FDDI','ETHERNET','NOVELL',3,4,NULL,NULL),(4,1,'在路由器上可以出现的端口是',1,'Console端口','AUX端口','PCI端口','RJ45端口',1,2,4,NULL);
+insert  into `question`(`question_id`,`training_id`,`question_state`,`type`,`choice_a`,`choice_b`,`choice_c`,`choice_d`,`right_choice_one`,`right_choice_two`,`right_choice_three`,`right_choice_four`) values (1,NULL,'以下属于物理层的设备是',0,'中继器','以太网交换机','桥','网关',1,NULL,NULL,NULL),(2,NULL,' 在以太网中，是根据___地址来区分不同的设备的.',0,'LLC地址','MAC地址','IP地址','IPX地址',2,NULL,NULL,NULL),(3,NULL,'下面哪种LAN 是应用CSMA/CD协议的',1,'令牌环','FDDI','ETHERNET','NOVELL',3,4,NULL,NULL),(4,NULL,'在路由器上可以出现的端口是',1,'Console端口','AUX端口','PCI端口','RJ45端口',1,2,4,NULL);
 
 /*Table structure for table `student` */
 
@@ -685,8 +681,6 @@ CREATE TABLE `training_order` (
 
 /*Data for the table `training_order` */
 
-insert  into `training_order`(`training_order_id`,`training_id`,`order_type`,`member_id`,`student_id`,`order_price`,`order_begin_time`,`payment_state`,`close`) values ('20191011164356741646',2,0,'mb_ca33eae307ae4',NULL,'1398.02','2019-10-11 16:43:57',1,0),('20191011164411967235',2,0,'mb_ca33eae307ae4',NULL,'699.01','2019-10-11 16:44:12',0,0),('20191011164630774051',2,0,'mb_ca33eae307ae4',NULL,'699.01','2019-10-11 16:46:31',0,0),('20191016222310229181',1,1,NULL,1,'199.99','2019-10-16 22:23:10',0,0);
-
 /*Table structure for table `training_order_student` */
 
 DROP TABLE IF EXISTS `training_order_student`;
@@ -702,8 +696,6 @@ CREATE TABLE `training_order_student` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `training_order_student` */
-
-insert  into `training_order_student`(`training_order_id`,`student_id`,`is_paid`) values ('20191011164356741646',1,1),('20191011164356741646',8,1),('20191011164411967235',38,0),('20191011164630774051',39,0);
 
 /*Table structure for table `training_re_student` */
 
@@ -725,7 +717,7 @@ CREATE TABLE `training_re_student` (
 
 /*Data for the table `training_re_student` */
 
-insert  into `training_re_student`(`apply_id`,`training_id`,`student_id`,`begin_time`,`is_done`,`is_invalid`) values ('23123123',2,1,'2019-10-11 16:45:27',0,0),('324wsds',2,8,'2019-10-11 16:45:42',0,0);
+insert  into `training_re_student`(`apply_id`,`training_id`,`student_id`,`begin_time`,`is_done`,`is_invalid`) values ('123123',1,1,'2019-10-22 20:47:51',0,0);
 
 /*Table structure for table `vote` */
 
