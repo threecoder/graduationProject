@@ -67,7 +67,7 @@ CREATE TABLE `activity_order` (
 
 /*Data for the table `activity_order` */
 
-insert  into `activity_order`(`activity_order_id`,`activity_id`,`order_type`,`member_id`,`student_id`,`order_price`,`order_begin_time`,`payment_state`,`close`) values ('20191001145853382363',1,1,NULL,1,'188.88','2019-10-01 14:58:54',1,0),('20191009144301721429',4,1,NULL,1,'213.22','2019-10-09 14:43:01',0,0),('20191009163126575245',4,0,'mb_ca33eae307ae4',NULL,'426.44','2019-10-09 16:31:27',1,0),('20191009163703148065',4,0,'mb_ca33eae307ae4',NULL,'213.22','2019-10-09 16:37:04',0,0),('20191010164121915078',4,0,'mb_ca33eae307ae4',NULL,'426.44','2019-10-10 16:41:22',0,0);
+insert  into `activity_order`(`activity_order_id`,`activity_id`,`order_type`,`member_id`,`student_id`,`order_price`,`order_begin_time`,`payment_state`,`close`) values ('20191001145853382363',1,1,NULL,1,'188.88','2019-10-01 14:58:54',1,0),('20191009163126575245',4,0,'mb_ca33eae307ae4',NULL,'426.44','2019-10-09 16:31:27',1,0),('20191009163703148065',4,0,'mb_ca33eae307ae4',NULL,'213.22','2019-10-09 16:37:04',0,0),('20191010164121915078',4,0,'mb_ca33eae307ae4',NULL,'426.44','2019-10-10 16:41:22',0,0);
 
 /*Table structure for table `activity_order_student` */
 
@@ -361,9 +361,11 @@ CREATE TABLE `exam` (
   PRIMARY KEY (`exam_id`),
   KEY `training_id` (`training_id`),
   CONSTRAINT `exam_ibfk_1` FOREIGN KEY (`training_id`) REFERENCES `training` (`training_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 /*Data for the table `exam` */
+
+insert  into `exam`(`exam_id`,`exam_name`,`training_id`,`exam_num`,`exam_pass`,`exam_length_min`,`exam_start_time`,`exam_end_time`,`is_posted`,`have_questions`,`create_time`) values (8,'网络工程考试',4,20,60,60,'2019-10-01 00:00:00','2019-10-31 00:00:00',1,1,NULL),(9,'网络工程考试2',4,10,40,40,'2019-10-01 00:00:00','2019-11-05 00:00:00',1,1,NULL);
 
 /*Table structure for table `exam_question_student_answer` */
 
@@ -385,6 +387,8 @@ CREATE TABLE `exam_question_student_answer` (
 
 /*Data for the table `exam_question_student_answer` */
 
+insert  into `exam_question_student_answer`(`exam_id`,`question_id`,`student_id`,`answer_one`,`answer_two`,`answer_three`,`answer_four`) values (9,3,1,4,3,NULL,NULL),(9,8,1,1,NULL,NULL,NULL),(9,9,1,1,NULL,NULL,NULL),(9,10,1,1,NULL,NULL,NULL),(9,15,1,4,NULL,NULL,NULL),(9,20,1,1,NULL,NULL,NULL),(9,29,1,1,NULL,NULL,NULL),(9,33,1,1,NULL,NULL,NULL),(9,35,1,1,NULL,NULL,NULL),(9,40,1,1,NULL,NULL,NULL);
+
 /*Table structure for table `exam_re_question` */
 
 DROP TABLE IF EXISTS `exam_re_question`;
@@ -401,6 +405,8 @@ CREATE TABLE `exam_re_question` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `exam_re_question` */
+
+insert  into `exam_re_question`(`exam_id`,`question_id`,`score`,`question_index`) values (8,1,5,16),(8,4,5,12),(8,7,5,17),(8,10,5,1),(8,11,5,19),(8,12,5,9),(8,14,5,11),(8,15,5,3),(8,16,5,10),(8,17,5,5),(8,18,5,2),(8,25,5,4),(8,26,5,14),(8,27,5,20),(8,29,5,7),(8,30,5,8),(8,32,5,6),(8,33,5,13),(8,35,5,15),(8,40,5,18),(9,3,10,6),(9,8,10,1),(9,9,10,7),(9,10,10,8),(9,15,10,3),(9,20,10,9),(9,29,10,5),(9,33,10,4),(9,35,10,2),(9,40,10,10);
 
 /*Table structure for table `exam_re_student` */
 
@@ -422,9 +428,11 @@ CREATE TABLE `exam_re_student` (
   KEY `exam_id` (`exam_id`),
   CONSTRAINT `exam_re_student_ibfk_1` FOREIGN KEY (`exam_id`) REFERENCES `exam` (`exam_id`),
   CONSTRAINT `exam_re_student_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 
 /*Data for the table `exam_re_student` */
+
+insert  into `exam_re_student`(`report_id`,`exam_id`,`student_id`,`score`,`remaining_times`,`is_invalid`,`is_verify`,`in_line`,`not_pass_reason`,`not_pass_times`) values (22,8,1,NULL,3,0,0,0,NULL,NULL),(23,9,1,30,1,0,0,0,NULL,NULL);
 
 /*Table structure for table `exam_report_op_log` */
 
@@ -654,7 +662,7 @@ CREATE TABLE `training` (
 
 /*Data for the table `training` */
 
-insert  into `training`(`training_id`,`training_name`,`training_introduce`,`training_fee_normal`,`training_fee_vip`,`training_end_time`,`training_start_time`,`post_time`,`level`,`training_pic`,`training_address`,`contacts`) values (1,'质量检测','示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n示例范文示例范文示例范文示例范文','199.99','199.00','2019-09-28 16:13:03','2019-09-13 16:12:30','2019-09-21 00:41:14',1,NULL,NULL,NULL),(2,'食品安全','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','888.01','699.01','2019-10-27 12:00:00','2019-10-01 12:00:00','2019-07-15 00:41:19',2,NULL,NULL,NULL),(3,'食品监督','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','2000.00','1899.11','2019-09-11 16:14:32','2019-09-05 16:14:25','2020-02-06 00:41:22',1,NULL,NULL,NULL),(4,'网络工程','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','800.90','700.00','2019-10-26 16:14:40','2019-09-11 16:14:36','2019-11-01 00:41:27',3,NULL,NULL,NULL),(5,'产品规范','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','99.99','98.99','2019-11-08 16:14:56','2019-09-29 16:14:44','2019-10-17 00:41:35',1,NULL,NULL,NULL);
+insert  into `training`(`training_id`,`training_name`,`training_introduce`,`training_fee_normal`,`training_fee_vip`,`training_end_time`,`training_start_time`,`post_time`,`level`,`training_pic`,`training_address`,`contacts`) values (1,'质量检测','示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n示例范文示例范文示例范文示例范文','199.99','199.00','2019-11-02 16:13:03','2019-09-13 16:12:30','2019-10-31 00:41:14',1,NULL,NULL,NULL),(2,'食品安全','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','888.01','699.01','2019-11-01 12:00:00','2019-10-01 12:00:00','2019-07-15 00:41:19',2,NULL,NULL,NULL),(3,'食品监督','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','2000.00','1899.11','2019-12-15 16:14:32','2019-09-05 16:14:25','2020-02-06 00:41:22',1,NULL,NULL,NULL),(4,'网络工程','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','800.90','700.00','2019-11-22 16:14:40','2019-09-11 16:14:36','2019-11-01 00:41:27',3,NULL,NULL,NULL),(5,'产品规范','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','99.99','98.99','2019-11-08 16:14:56','2019-09-29 16:14:44','2019-10-17 00:41:35',1,NULL,NULL,NULL);
 
 /*Table structure for table `training_order` */
 
@@ -681,6 +689,8 @@ CREATE TABLE `training_order` (
 
 /*Data for the table `training_order` */
 
+insert  into `training_order`(`training_order_id`,`training_id`,`order_type`,`member_id`,`student_id`,`order_price`,`order_begin_time`,`payment_state`,`close`) values ('20191023111733112724',2,0,'mb_ca33eae307ae4',NULL,'2097.03','2019-10-23 11:17:34',1,0),('20191023112509346401',4,0,'mb_ca33eae307ae4',NULL,'2100.00','2019-10-23 11:25:10',1,0);
+
 /*Table structure for table `training_order_student` */
 
 DROP TABLE IF EXISTS `training_order_student`;
@@ -696,6 +706,8 @@ CREATE TABLE `training_order_student` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `training_order_student` */
+
+insert  into `training_order_student`(`training_order_id`,`student_id`,`is_paid`) values ('20191023111733112724',1,0),('20191023111733112724',8,0),('20191023111733112724',38,0),('20191023112509346401',1,0),('20191023112509346401',8,0),('20191023112509346401',38,0);
 
 /*Table structure for table `training_re_student` */
 
@@ -717,7 +729,7 @@ CREATE TABLE `training_re_student` (
 
 /*Data for the table `training_re_student` */
 
-insert  into `training_re_student`(`apply_id`,`training_id`,`student_id`,`begin_time`,`is_done`,`is_invalid`) values ('123123',1,1,'2019-10-22 20:47:51',0,0);
+insert  into `training_re_student`(`apply_id`,`training_id`,`student_id`,`begin_time`,`is_done`,`is_invalid`) values ('123123',1,1,'2019-10-22 20:47:51',0,0),('t2_26cd94',2,38,'2019-10-23 11:17:34',0,0),('t2_9c96de',2,1,'2019-10-23 11:17:34',0,0),('t2_e2c534',2,8,'2019-10-23 11:17:34',0,0),('t4_9ffa06',4,38,'2019-10-23 11:25:11',0,0),('t4_cfd30e',4,8,'2019-10-23 11:25:11',0,0),('t4_fb4b75',4,1,'2019-10-23 11:25:11',0,0);
 
 /*Table structure for table `vote` */
 
