@@ -1,5 +1,6 @@
 package com.lutayy.campbackend.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.lutayy.campbackend.common.util.ExcelUtil;
@@ -11,10 +12,8 @@ import org.omg.PortableInterceptor.INACTIVE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.lang.reflect.Array;
+import java.util.*;
 
 @Service
 public class ExamServiceImpl implements ExamService {
@@ -359,6 +358,133 @@ public class ExamServiceImpl implements ExamService {
         result.put("msg", "查询成功!");
 
         return result;
+    }
+
+    @Override
+    public JSONObject submitExam(JSONObject jsonObject) {
+        JSONObject result=new JSONObject();
+        String idcard=jsonObject.getString("id");
+        Student student=getStudentByIdcard(idcard);
+        if (student==null){
+            result.put("code", "error");
+            result.put("msg", "当前登录用户信息错误");
+            return result;
+        }
+        Integer examId=jsonObject.getInteger("examId");
+        Exam exam=examMapper.selectByPrimaryKey(examId);
+        if(exam==null){
+            result.put("code", "fail");
+            result.put("msg", "查询不到该试卷!");
+            return result;
+        }
+        JSONArray answer=jsonObject.getJSONArray("answer");
+
+        ExamReQuestionExample examReQuestionExample=new ExamReQuestionExample();
+        ExamReQuestionExample.Criteria criteria=examReQuestionExample.createCriteria();
+        criteria.andExamIdEqualTo(examId);
+        examReQuestionExample.setOrderByClause("question_index ASC");
+        List<ExamReQuestion> examReQuestions=examReQuestionMapper.selectByExample(examReQuestionExample);
+        if(answer.size()!=examReQuestions.size()){
+            result.put("code", "fail");
+            result.put("msg", "提交的试题数目与试卷试题数目不一致，提交失败!");
+            return result;
+        }
+        int rightAnswerNum=0;
+        int score=0;
+        for (int i=0;i<examReQuestions.size();i++){
+            System.out.println("第"+(i+1)+"题选了"+answer.get(i));
+            Question question=questionMapper.selectByPrimaryKey(examReQuestions.get(i).getQuestionId());
+            //查询改题目的正确答案数
+            rightAnswerNum=0;
+            List<Byte> rightAnswer=new ArrayList<>();
+            if(question.getRightChoiceOne()!=null){
+                rightAnswerNum+=1;
+                rightAnswer.add(question.getRightChoiceOne());
+            }
+            if(question.getRightChoiceTwo()!=null){
+                rightAnswerNum+=1;
+                rightAnswer.add(question.getRightChoiceTwo());
+            }
+            if(question.getRightChoiceThree()!=null){
+                rightAnswerNum+=1;
+                rightAnswer.add(question.getRightChoiceThree());
+            }
+            if(question.getRightChoiceFour()!=null){
+                rightAnswerNum+=1;
+                rightAnswer.add(question.getRightChoiceFour());
+            }
+            //保存做题记录
+            ExamQuestionStudentAnswer examQuestionStudentAnswer=new ExamQuestionStudentAnswer();
+            examQuestionStudentAnswer.setExamId(examId);
+            examQuestionStudentAnswer.setQuestionId(question.getQuestionId());
+            examQuestionStudentAnswer.setStudentId(student.getStudentId());
+            if(answer.get(i) instanceof JSONArray){
+                List<Byte> answerList=new ArrayList<>();
+                for(int o=0;o<((JSONArray)answer.get(i)).size();o++){
+                    answerList.add(((JSONArray) answer.get(i)).getByte(o));
+                }
+                if(compareTwoArray(rightAnswer, answerList)){
+                    score+=examReQuestions.get(i).getScore();
+                    System.out.println("第"+(i+1)+"题正确");
+                }else {
+                    System.out.println("第"+(i+1)+"题选了"+answer.get(i)+"错误,正确答案是"+rightAnswer);
+                }
+                //保存做题记录
+                examQuestionStudentAnswer.setAnswerOne(((JSONArray) answer.get(i)).getByte(0));
+                examQuestionStudentAnswer.setAnswerTwo(((JSONArray) answer.get(i)).getByte(1));
+                if(((JSONArray) answer.get(i)).size()>2){
+                    examQuestionStudentAnswer.setAnswerThree(((JSONArray) answer.get(i)).getByte(2));
+                    if(((JSONArray) answer.get(i)).size()>3){
+                        examQuestionStudentAnswer.setAnswerFour(((JSONArray) answer.get(i)).getByte(3));
+                    }
+                }
+            }else {
+                if(answer.getByte(i)==rightAnswer.get(0)){
+                    score+=examReQuestions.get(i).getScore();
+                    System.out.println("第"+(i+1)+"题正确");
+                }else {
+                    System.out.println("第"+(i+1)+"题选了"+answer.get(i)+"错误,正确答案是"+rightAnswer.get(0));
+                }
+                examQuestionStudentAnswer.setAnswerOne(answer.getByte(i));
+            }
+            //保存做题记录
+            if(examQuestionStudentAnswerMapper.selectByPrimaryKey(examId, question.getQuestionId(), student.getStudentId())!=null){
+                examQuestionStudentAnswerMapper.updateByPrimaryKeySelective(examQuestionStudentAnswer);
+            }else {
+                examQuestionStudentAnswerMapper.insertSelective(examQuestionStudentAnswer);
+            }
+        }
+        //查找是否已有考试记录
+        ExamReStudentExample examReStudentExample=new ExamReStudentExample();
+        ExamReStudentExample.Criteria criteria1=examReStudentExample.createCriteria();
+        criteria1.andExamIdEqualTo(examId).andStudentIdEqualTo(student.getStudentId()).andIsInvalidEqualTo(false);
+        List<ExamReStudent> examReStudents=examReStudentMapper.selectByExample(examReStudentExample);
+        if(examReStudents.size()!=0){
+            ExamReStudent examReStudent=examReStudents.get(0);
+            Byte remainingTimes=examReStudent.getRemainingTimes();
+            examReStudent.setRemainingTimes((byte)(remainingTimes-1));
+            examReStudent.setScore(score);
+            examReStudentMapper.updateByPrimaryKeySelective(examReStudent);
+        }else {
+            ExamReStudent examReStudent=new ExamReStudent();
+            examReStudent.setScore(score);;
+            examReStudent.setRemainingTimes((byte)3);
+            examReStudent.setExamId(examId);
+            examReStudent.setStudentId(student.getStudentId());
+            examReStudentMapper.insertSelective(examReStudent);
+        }
+        result.put("code", "success");
+        result.put("msg", "提交试卷成功!");
+        return result;
+    }
+    //比较两个数组是否具有相同的元素，是返回true，否返回false，用于多选题的评分
+    private boolean compareTwoArray(List<Byte> A,List<Byte> B){
+        if(A.size()!=B.size()){
+            return false;
+        }
+        Collections.sort(A);
+        Collections.sort(B);
+        return A.equals(B);
     }
 
     /**
