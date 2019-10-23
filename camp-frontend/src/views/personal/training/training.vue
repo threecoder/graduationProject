@@ -79,7 +79,7 @@
             :visible.sync="studentList.listFlag"
             width="40%"
         >
-            <list :tableData="studentList.list" @selectChange="selectChange" />
+            <list :tableConfig="studentList.config" :tableData="studentList.list" @selectChange="selectChange" />
             <div slot="footer" class="dialog-footer">
                 <el-button @click="studentList.listFlag = false">取 消</el-button>
                 <el-button type="primary" @click="memberJoin">确 定</el-button>
@@ -193,6 +193,13 @@ export default {
                 id: null,
                 listFlag: false,
                 data: [],
+                config: [
+                    { slot: "select" },
+                    { prop: "name", label: "姓名" },
+                    { prop: "idNum", label: "身份证号码" },
+                    { prop: "phone", label: "手机号码" },
+                    { prop: "position", label: "职务" }
+                ],
                 list: [
                     {
                         name: "1",
@@ -369,7 +376,9 @@ export default {
         },
         async getStudentList() {
             try {
+                console.log("执行");
                 let res = await getList();
+                console.log(res);
                 this.studentList.list = res.data;
             } catch (error) {}
         },
