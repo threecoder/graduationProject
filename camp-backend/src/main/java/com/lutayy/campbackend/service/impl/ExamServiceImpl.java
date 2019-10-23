@@ -115,14 +115,16 @@ public class ExamServiceImpl implements ExamService {
                 criteria1.andTrainingIdEqualTo(trainingReStudent.getTrainingId()).andIsPostedEqualTo(true);
                 List<Exam> exams=examMapper.selectByExample(examExample);
                 if(exams.size()!=0){
-                    ExamReStudentExample examReStudentExample=new ExamReStudentExample();
-                    ExamReStudentExample.Criteria criteria2=examReStudentExample.createCriteria();
-                    criteria2.andStudentIdEqualTo(studentId).andExamIdEqualTo(exams.get(0).getExamId());
-                    if(examReStudentMapper.selectByExample(examReStudentExample).size()==0){
-                        ExamReStudent examReStudent=new ExamReStudent();
-                        examReStudent.setExamId(exams.get(0).getExamId());
-                        examReStudent.setStudentId(studentId);
-                        examReStudentMapper.insertSelective(examReStudent);
+                    for(Exam exam:exams){
+                        ExamReStudentExample examReStudentExample=new ExamReStudentExample();
+                        ExamReStudentExample.Criteria criteria2=examReStudentExample.createCriteria();
+                        criteria2.andStudentIdEqualTo(studentId).andExamIdEqualTo(exam.getExamId());
+                        if(examReStudentMapper.selectByExample(examReStudentExample).size()==0){
+                            ExamReStudent examReStudent=new ExamReStudent();
+                            examReStudent.setExamId(exam.getExamId());
+                            examReStudent.setStudentId(studentId);
+                            examReStudentMapper.insertSelective(examReStudent);
+                        }
                     }
                 }
             }
@@ -222,6 +224,7 @@ public class ExamServiceImpl implements ExamService {
         ExamReQuestionExample examReQuestionExample=new ExamReQuestionExample();
         ExamReQuestionExample.Criteria criteria=examReQuestionExample.createCriteria();
         criteria.andExamIdEqualTo(examId);
+        examReQuestionExample.setOrderByClause("question_index ASC");
         List<ExamReQuestion> examReQuestions=examReQuestionMapper.selectByExample(examReQuestionExample);
 
         JSONArray list=new JSONArray();
