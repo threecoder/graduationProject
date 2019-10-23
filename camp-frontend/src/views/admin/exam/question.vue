@@ -5,13 +5,13 @@
         <div class="form-container">
             <el-form :model="form" inline>
                 <el-form-item label="题目" label-position="left">
-                    <el-input placeholder="输入题目关键字" v-model="form.keyword"></el-input>
+                    <el-input clearable placeholder="输入题目关键字" v-model="form.keyword"></el-input>
                 </el-form-item>
                 <el-form-item label="题目类型" label-position="top">
-                    <el-select v-model="form.type">
+                    <el-select clearable v-model="form.type">
                         <el-option value="0" label="单选题"></el-option>
                         <el-option value="1" label="多选题"></el-option>
-                        <el-option value="2" label="判断题"></el-option>
+                        <!-- <el-option value="2" label="判断题"></el-option> -->
                     </el-select>
                 </el-form-item>
                 <!-- <el-form-item label="所属培训" label-position="top">
@@ -20,7 +20,7 @@
                             <el-option :label="item.label" :value="item.value" :key="i"></el-option>
                         </template>
                     </el-select>
-                </el-form-item> -->
+                </el-form-item>-->
                 <el-button type="primary" round @click="search">搜索</el-button>
             </el-form>
         </div>
@@ -99,7 +99,11 @@
 <script>
 import mTable from "@/components/mTable.vue";
 import page from "@/components/page.vue";
-import { getQuestionList, modefyQuestionInfo,getTrainingList} from '@/api/admin/exam.js';
+import {
+    getQuestionList,
+    modefyQuestionInfo,
+    getTrainingList
+} from "@/api/admin/exam.js";
 export default {
     components: {
         mTable,
@@ -171,7 +175,7 @@ export default {
             this.search();
         }
     },
-    mounted(){
+    mounted() {
         this.search();
     },
     methods: {
@@ -179,41 +183,44 @@ export default {
             try {
                 let res = await getQuestionList(this.form);
                 this.table.tableData = res.data.list;
+                let arr = this.table.tableData;
+                arr.forEach( (val,i) => {
+                    if(val.type==0){
+                        arr[i].type="单选题";
+                    }else if(val.type==1){
+                        arr[i].type="多选题";
+                    }else if(val.type==2){
+                        arr[i].type="判断题";
+                    }
+                })
                 this.form.total = res.data.total;
-            } catch (error) {
-                
-            }
+            } catch (error) {}
         },
         async getTraining() {
             try {
                 let res = await getTrainingList();
-                this.trainingList = res.data; 
-            } catch (error) {
-                
-            }
+                this.trainingList = res.data;
+            } catch (error) {}
         },
         curChange(val) {
             this.form.currentPage = val;
         },
         checkDetail(row) {
             this.flag = true;
-            this.dialog = row;
+            this.dialog = {...row};
         },
-        async modefyQuestion(){
-
-        }
+        async modefyQuestion() {}
     }
 };
 </script>
 
 <style lang="scss" scoped>
 .all-container {
-    
     .dialog-container {
         .question-type {
             position: absolute;
             right: 10%;
-            top: 75px;
+            top: 25px;
         }
         .option {
             margin-top: 20px;

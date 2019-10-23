@@ -7,7 +7,7 @@
                 :arr="item.arr"
                 :score="item.score"
                 :index="item.index"
-                :choice="answer"
+                :choice.sync="answer"
             />
             <div class="button-container">
                 <el-button :disabled="preFlag" type="primary" @click="pre">上 一 题</el-button>
@@ -42,7 +42,7 @@
 </template>
 <script>
 import singleChoice from "./components/singChoice.vue";
-import { getExamQuestion } from "@/api/modules/exam.js";
+import { getExamQuestion, submitExam } from "@/api/modules/exam.js";
 export default {
     data() {
         return {
@@ -51,34 +51,34 @@ export default {
             nextFlag: false,
             preFlag: true,
             item: {
-                index: 1,
-                title: "食醋是什么味道1",
-                score: 8,
-                arr: ["发发发", "备选项", "备选", "备选1"],
-                type: 1
+                index: 0,
+                title: null,
+                score: -1,
+                arr: ["", "", "", ""],
+                type: 0
             },
             list: [
-                {
-                    index: 1,
-                    title: "食醋是什么味道1",
-                    score: 8,
-                    arr: ["发发发", "备选项", "备选", "备选1"],
-                    type: 1 //1是单选和判断，2是多选
-                },
-                {
-                    index: 2,
-                    title: "食醋是什么味道2",
-                    score: 8,
-                    arr: ["发发发", "备选项", "备选", "备选1"],
-                    type: 1
-                },
-                {
-                    index: 3,
-                    title: "食醋是什么味道3",
-                    score: 8,
-                    arr: ["发发发", "备选项", "备选", "备选1"],
-                    type: 2
-                }
+                // {
+                //     index: 1,
+                //     title: "食醋是什么味道1",
+                //     score: 8,
+                //     arr: ["发发发", "备选项", "备选", "备选1"],
+                //     type: 1 //1是单选和判断，2是多选
+                // },
+                // {
+                //     index: 2,
+                //     title: "食醋是什么味道2",
+                //     score: 8,
+                //     arr: ["发发发", "备选项", "备选", "备选1"],
+                //     type: 1
+                // },
+                // {
+                //     index: 3,
+                //     title: "食醋是什么味道3",
+                //     score: 8,
+                //     arr: ["发发发", "备选项", "备选", "备选1"],
+                //     type: 2
+                // }
             ],
             answer: [],
             examInfo: {
@@ -92,9 +92,8 @@ export default {
         singleChoice
     },
     mounted() {
-        this.answer = [null, null, []];
         this.getExamById();
-        console.log("考试页面",this.examId);
+        console.log("考试页面", this.examId);
     },
     watch: {
         index() {
@@ -113,17 +112,17 @@ export default {
     },
     methods: {
         async getExamById() {
-            let res = await getExamQuestion(this.examId);
-            console.log(res);
-            if (res) {
+            try {
+                let res = await getExamQuestion(this.examId);
+                console.log(res);
                 this.list = res.data.list;
+                this.item = this.list[0];
                 this.examInfo = res.data.examInfo;
-                let s = this.examInfo.timeLength;
+                let s = this.examInfo.timeLength * 60;
+                this.initAnswer();
                 this.remainTime = `${parseInt(s / 60)
-                        .toString()
-                        .padStart(2, "0")}:${(s % 60)
-                        .toString()
-                        .padStart(2, "0")}`;
+                    .toString()
+                    .padStart(2, "0")}:${(s % 60).toString().padStart(2, "0")}`;
                 let id = setInterval(() => {
                     let arr = this.remainTime.split(":");
                     let s = +arr[0] * 60 + +arr[1] - 1;
@@ -139,7 +138,16 @@ export default {
                         .toString()
                         .padStart(2, "0")}`;
                 }, 1000);
-            }
+            } catch (error) {}
+        },
+        initAnswer() {
+            this.list.forEach((val, i) => {
+                if (val.type == 1) {
+                    this.answer[i] = [];
+                } else {
+                    this.answer[i] = null;
+                }
+            });
         },
         hadDone(i) {
             if (Array.isArray(this.answer[i - 1])) {
@@ -171,9 +179,21 @@ export default {
                 this.$message.error("还有问题没有作答，不能提交");
             }
         },
-        runOutOfTime() {},
-        submit() {
+        runOutOfTime() {
+            this.submit();
+        },
+        async submit() {
             //提交试卷代码
+            try {
+                let par = {
+                    examId: this.examId,
+                    answer: this.answer
+                }
+                console.log(par)
+                let res = await submitExam(par);
+                this.$message.success("提交试卷成功！");
+                this.$router.push({ path: "/examTodo" });
+            } catch (error) {}
         },
         switchQuestion(i) {
             this.index = i - 1;

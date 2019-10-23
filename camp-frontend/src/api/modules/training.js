@@ -1,7 +1,6 @@
 import { request } from '../request.js';
 export const getJoinableTraining = idType => {
     let str = idType == 0 ? "/campback/student/getJoinableTraining" : "/campback/member/getJoinableTraining";
-    console.log(idType)
     return request(str, {}, 'get', 'json');
 }
 export const studentJoinTraining = activityId => {
@@ -17,4 +16,4 @@ export const getSeatNum = activityId => {
 
 
 //会员批量报名
-export const memberJoinTraining = () => request("/campback/member/joinTraining", par, 'post', 'json');
+export const memberJoinTraining = par => request("/campback/member/joinTraining", par, 'post', 'json');

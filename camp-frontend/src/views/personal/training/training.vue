@@ -392,7 +392,7 @@ export default {
                     idNums: this.studentList.data,
                     trainingId: this.studentList.id
                 };
-                let res = await memberJoinTraining();
+                let res = await memberJoinTraining(par);
                 this.$message.success("报名成功");
             } catch (error) {}
         },

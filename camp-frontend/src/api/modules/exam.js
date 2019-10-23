@@ -34,3 +34,6 @@ export const getExamDetail = examId => {
 export const rejoinExam = examId => {
     return request("/campback/student/rejoinExam", {examId}, 'post', 'json');
 }
+
+//提交考试
+export const submitExam = par => request('/campback/student/submitExam', par, 'post', 'json');

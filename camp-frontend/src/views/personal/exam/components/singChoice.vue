@@ -2,21 +2,21 @@
     <div class="single-choice">
         <p>
             <span class="blue">{{index}}.</span>
-            <span v-if="type==1" class="blue">[单选题]</span>
-            <span v-else class="blue">[多选题]</span>
+            <span v-if="type==0" class="blue">[单选题]</span>
+            <span v-if="type==1" class="blue">[多选题]</span>
             {{title}}
             <span class="grey">({{score}}分)</span>
         </p>
-        <ul v-if="type==1">
+        <ul v-if="type!=1">
             <li v-for="(item,i) in arr" :key="i">
                 <el-radio v-model="choice[index-1]" :label="i+1">{{getWord(i)}}{{item}}</el-radio>
             </li>
         </ul>
-        <template v-else>
+        <template v-if="type==1">
             <el-checkbox-group @change="mulChange" v-model="mulChoice">
                 <ul>
                     <li v-for="(item,i) in arr" :key="i" >
-                        <el-checkbox :label="item"></el-checkbox>
+                        <el-checkbox :label="item" ></el-checkbox>
                     </li>
                 </ul>
             </el-checkbox-group>
@@ -27,13 +27,13 @@
 export default {
     props: ["index", "title", "score", "arr", "choice", "type"],
     data() {
+        console.log(this.choice);
         return {
             mulChoice: []
         };
     },
     methods: {
         mulChange(){
-            console.log(this.mulChoice);
             while(this.choice[this.index-1].length!=0){
                 this.choice[this.index-1].pop();
             }
