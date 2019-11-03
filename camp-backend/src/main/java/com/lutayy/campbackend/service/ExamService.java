@@ -27,4 +27,6 @@ public interface ExamService {
     JSONObject randomFillExam(Integer examId);
 
     JSONObject publishExam(Integer examId);
+
+    JSONObject submitExam(JSONObject jsonObject);
 }

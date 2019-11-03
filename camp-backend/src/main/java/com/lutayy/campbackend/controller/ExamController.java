@@ -52,6 +52,12 @@ public class ExamController {
         return examService.getExamDetail(jsonObject);
     }
 
+    @RequestMapping("/student/submitExam")
+    @ResponseBody
+    public JSONObject submitExam(@RequestBody JSONObject jsonObject){
+        return examService.submitExam(jsonObject);
+    }
+
     @RequestMapping("/admin/addNewExam")
     @ResponseBody
     public JSONObject addNewExam(@RequestBody JSONObject jsonObject){
