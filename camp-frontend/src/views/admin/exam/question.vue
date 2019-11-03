@@ -123,14 +123,14 @@ export default {
             table: {
                 tableConfig: [
                     { prop: "questionId", label: "题目ID" },
-                    { prop: "state", label: "试题题干" },
+                    { prop: "state", label: "试题题干", width:'250px' },
                     { prop: "type", label: "题目类型" },
                     { prop: "answer", label: "正确答案" },
                     { prop: "choiceA", label: "选项A" },
                     { prop: "choiceB", label: "选项B" },
                     { prop: "choiceC", label: "选项C" },
                     { prop: "choiceD", label: "选项D" },
-                    { slot: "oper", label: "操作" }
+                    { slot: "oper", label: "操作",fixed:"right",width:"100px" }
                 ],
                 tableData: [
                     {
