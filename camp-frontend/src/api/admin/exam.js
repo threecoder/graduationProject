@@ -20,3 +20,24 @@ export const randomFillExam = examId => request(commentUrl+`/randomFillExam?exam
 
 //获取未发布考试列表
 export const getNotPostExam = currentPage => request(commentUrl+`/getNotPostExam?pageSize=6&currentPage=${currentPage}`, {}, 'get', 'json');
+
+//获取已经添加的考试信息(根据id)
+export const getExamInfo = id => request(commentUrl+`/getExamInfo?id=${id}`, {}, 'get', 'json');
+
+//修改已经添加的考试信息
+export const modifyExam = par => request(commentUrl+"/modifyExamInfo", par, 'post', 'json');
+
+//根据试卷id获取试卷题目id列表
+export const getExamQuestionList = id => request(commentUrl+`/getExamQuestionList?id=${id}`, {}, 'get', 'json');
+
+//根据题目id获取题目信息
+export const getSingleQuestion = id => request(commentUrl+`/getQuestionInfo?id=${id}`, {}, 'get', 'json');
+
+//保存给某个试卷挑选的题目
+export const saveQuestionForExam = par => request(commentUrl+"/saveQuestionForExam", par, 'post', 'json');
+
+//获取题目模板
+export const getQuestionTemplate = () => request(commentUrl+"/getQuestionTemplate", {}, "get", 'blob');
+
+//管理员批量导入试题 /campback/admin/importQuestionByFile
+

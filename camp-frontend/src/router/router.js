@@ -129,10 +129,20 @@ export default new Router({
                     component: resolve => require(['../views/admin/exam/toPublic.vue'], resolve)
                 },
                 {
+                    path: '/pickQuestion/:id',
+                    name: 'pickQuestion',
+                    component: resolve => require(['../views/admin/exam/pickQuestion.vue'], resolve)
+                },
+                {
                     path: '/managerMember',
                     name: 'managerMember',
                     component: resolve => require(['../views/admin/member/myMember.vue'], resolve)
-                }
+                },
+                {
+                    path: '/publicTraining',
+                    name: 'publicTraining',
+                    component: resolve => require(['../views/admin/training/trainingPublish.vue'], resolve)
+                },
             ]
         },
         {

@@ -36,7 +36,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="所属培训" prop="training">
+                        <el-form-item label="所属培训" prop="training" label-width="100px">
                             <el-select v-model="ruleForm.training">
                                 <el-option
                                     v-for="(item,i) in trainingList"
@@ -70,7 +70,12 @@
                 <el-row>
                     <el-col>
                         <el-form-item>
-                            <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+                            <el-button
+                                v-if="type==true"
+                                type="primary"
+                                @click="submitForm('ruleForm')"
+                            >立即创建</el-button>
+                            <el-button v-else type="primary" @click="submitForm('ruleForm')">确认修改</el-button>
                             <el-popover
                                 placement="top"
                                 width="160"
@@ -97,8 +102,15 @@
 </template>
 <script>
 import { formatDate, formatTime, formatDateAndTime } from "@/assets/js/util.js";
-import { newExam, getTrainingList } from "@/api/admin/exam.js";
+import {
+    newExam,
+    getTrainingList,
+    modifyExam,
+    getExam
+} from "@/api/admin/exam.js";
 export default {
+    //"type，true表示新建考试，false表示修改考试信息"
+    props: ["type", "id"],
     data() {
         let valid = (rule, value, callback) => {
             let num = Number(value);
@@ -184,6 +196,9 @@ export default {
         };
     },
     mounted() {
+        if (this.type == false) {
+            this.getExam();
+        }
         this.getTraining();
     },
     methods: {
@@ -194,7 +209,11 @@ export default {
                     par.openTime = formatDateAndTime(par.dateRange[0]);
                     par.closeTime = formatDateAndTime(par.dateRange[1]);
                     this.flag = true;
-                    this.addNewExam(par);
+                    if (this.type == true) {
+                        this.addNewExam(par);
+                    } else {
+                        this.saveModify(par);
+                    }
                 } else {
                     this.$message.error("请填完所有信息再创建活动");
                     this.flag = false;
@@ -216,11 +235,31 @@ export default {
                 } catch (error) {}
             }
         },
+        async saveModify() {
+            if (this.flag) {
+                try {
+                    let res = await modifyExam(par);
+                    this.$message.success("修改考试成功");
+                    this.$emit("close");
+                } catch (error) {}
+            }
+        },
         async getTraining() {
             try {
                 let res = await getTrainingList();
                 this.trainingList = res.data;
                 console.log(res);
+            } catch (error) {}
+        },
+        async getExam() {
+            if (this.type == true) return false;
+            try {
+                let res = await getExamInfo(this.id);
+                this.ruleForm = res.data;
+                let arr = [];
+                arr[0] = new Date(res.data.startTime);
+                arr[1] = new Date(res.data.endTIme);
+                this.ruleForm.dateRange = arr;
             } catch (error) {}
         }
     }

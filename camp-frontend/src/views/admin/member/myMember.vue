@@ -31,8 +31,13 @@
             >
                 <el-table-column slot="oper" align="center" slot-scope="{ params }" v-bind="params">
                     <div slot-scope=" {row}">
-                        <el-button @click="checkStudent(row)">查看成员</el-button>
-                        <el-button>提醒续费</el-button>
+                        <el-button type="primary" size="small" @click="checkStudent(row)">查看成员</el-button>
+                        <el-button
+                            v-if="row.vip==1"
+                            type="primary"
+                            size="small"
+                            @click="remind(row)"
+                        >提醒续费</el-button>
                     </div>
                 </el-table-column>
             </m-table>
@@ -43,35 +48,29 @@
                 :pageSize="form.pageSize"
             />
         </div>
-        <div>
-            <new-person :type="1" />
-        </div>
+
+        <!-- 添加会员弹窗 -->
+        <el-dialog title="添加会员" v-if="newFlag" :visible.sync="newFlag">
+            <new-person
+                :type="1"
+                :uploadUrl="`/campback/admin/importMemberByFile`"
+                @close="closeMember"
+            />
+        </el-dialog>
+
+        <!-- 查看学员弹窗 -->
         <el-dialog v-if="studentTable.flag" :visible.sync="studentTable.flag">
             <h3>{{dialogInfo.company}}</h3>
             <div class="button-container">
-                <el-button type="primary" size="small">导出模板</el-button>
+                <el-button type="primary" size="small" @click="getStuTemp">导出模板</el-button>
                 <div style="margin-left:8px;">
-                    <el-upload
-                        class="upload-demo"
-                        ref="upload"
-                        action="/campback/admin/importStudentByFile"
-                        :before-upload="beforeUpload"
-                        :on-remove="handleRemove"
-                        :on-exceed="handleExceed"
-                        :on-success="handleSuccess"
-                        :on-error="handleError"
-                        :file-list="fileList"
-                        :auto-upload="false"
+                    <upload
+                        :uploadUrl="'/campback/admin/importStudentByFile'"
                         :limit="1"
-                    >
-                        <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                        <el-button
-                            style="margin-left: 10px;"
-                            size="small"
-                            type="success"
-                            @click="submitUpload"
-                        >上传名单</el-button>
-                    </el-upload>
+                        :autoUpload="false"
+                        :formData="formData"
+                        @uploadSuccess="handleSuccess"
+                    />
                 </div>
             </div>
             <div class="divider"></div>
@@ -83,7 +82,7 @@
         </el-dialog>
 
         <div class="new-container">
-            <el-button type="primary">添加会员</el-button>
+            <el-button @click="newFlag=true" type="primary">添加会员</el-button>
         </div>
     </div>
 </template>
@@ -92,10 +91,13 @@ import mTable from "@/components/mTable.vue";
 import page from "@/components/page.vue";
 import list from "@/components/studentList.vue";
 import newPerson from "@/components/newPerson.vue";
+import upload from "@/components/upload.vue";
 import {
     getMemberList,
     getStudentList,
-    deleteStudentFromMember
+    deleteStudentFromMember,
+    getStudentTemplate,
+    remindRenew
 } from "@/api/admin/member.js";
 import { download } from "@/api/request.js";
 export default {
@@ -103,7 +105,8 @@ export default {
         mTable,
         page,
         list,
-        newPerson
+        newPerson,
+        upload
     },
     data() {
         return {
@@ -118,30 +121,30 @@ export default {
             memberTable: {
                 tableData: [
                     {
-                        id: 1,
+                        area: "鼓楼区",
+                        city: "南京市",
+                        deadline: 1,
+                        email: "12345@163.com",
+                        enterDate: "2019-09-19 00:00:00",
+                        id: "mb_ca33eae307ae4",
                         name: "BB股份有限公司",
-                        phone: "020-88888888",
-                        email: "101@qq.com",
-                        enterData: "2019-10-10",
-                        vip: "是",
-                        vipBegin: "2019-12-12",
-                        vipEnd: "2019-12-30",
-                        deadline: "是",
-                        province: "广东省",
-                        city: "广州市",
-                        area: "番禺区",
-                        zone: "华南理工大学C12-415"
+                        phone: "15521065463",
+                        province: "江苏省",
+                        vip: 1,
+                        vipBegin: "2019-09-20 00:00:00",
+                        vipEnd: "2019-12-22 00:00:00",
+                        zone: "南京大学"
                     }
                 ],
                 tableConfig: [
-                    { prop: "id", label: "会员ID" },
-                    { prop: "name", label: "公司名称" },
-                    { prop: "phone", label: "联系电话" },
-                    { prop: "email", label: "邮箱" },
+                    { prop: "id", label: "会员ID", width: "150px" },
+                    { prop: "name", label: "公司名称", width: "150px" },
+                    { prop: "phone", label: "联系电话", width: "150px" },
+                    { prop: "email", label: "邮箱", width: "150px" },
                     { prop: "enterData", label: "加入时间" },
                     { prop: "vip", label: "是否会员" },
-                    { prop: "vipBegin", label: "会员开始时间" },
-                    { prop: "vipEnd", label: "会员结束时间" },
+                    { prop: "vipBegin", label: "会员开始时间", width: "150px" },
+                    { prop: "vipEnd", label: "会员结束时间", width: "150px" },
                     { prop: "deadline", label: "会员是否快到期" },
                     { prop: "province", label: "省份" },
                     { prop: "city", label: "城市" },
@@ -151,7 +154,7 @@ export default {
                         slot: "oper",
                         label: "操作",
                         fixed: "right",
-                        width: "300"
+                        width: "300px"
                     }
                 ],
                 loading: false
@@ -188,7 +191,9 @@ export default {
                 id: null,
                 company: null
             },
-            fileList: []
+            fileList: [],
+            newFlag: false,
+            formData: {}
         };
     },
     mounted() {
@@ -198,6 +203,7 @@ export default {
         async search() {
             try {
                 let res = await getMemberList(this.form);
+                console.log(res);
                 this.memberTable.tableData = res.data.list;
                 let t = memberTable.tableData;
                 t.forEach((val, i) => {
@@ -205,16 +211,30 @@ export default {
                     t[i].deadline = t[i].deadline == 0 ? "否" : "是";
                 });
                 this.form.total = res.data.total;
-            } catch (error) {}
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        curChange(val) {
+            this.form.currentPage = val;
+            this.search();
         },
         async checkStudent(row) {
             this.dialogInfo.company = row.name;
             this.dialogInfo.id = row.id;
+            this.formData = {memberId:this.dialogInfo.id};
+            console.log(this.formData);
             try {
                 let res = await getStudentList(this.dialogInfo.id);
                 this.studentTable.tableData = res.data;
             } catch (error) {}
             this.studentTable.flag = true;
+        },
+        async remind(row) {
+            try {
+                let res = await remindRenew(row.id);
+                this.$message.success(`提醒会员${row.name}续费成功`);
+            } catch (error) {}
         },
         async deleteOneStudent(val) {
             let par = {
@@ -228,19 +248,16 @@ export default {
                 this.studentTable.tableData = res.data;
             } catch (error) {}
         },
-        curChange(val) {
-            this.form.currentPage = val;
-            this.search();
-        },
-
-        async getListTemplate() {
+        async getStuTemp() {
             try {
-                let res = await getTemplate();
+                let res = await getStudentTemplate();
                 download(res);
             } catch (error) {}
         },
-        handleRemove(file) {
-            this.$message.warning(`移除文件：${file.name}`);
+
+        //会员弹窗相关
+        closeMember() {
+            this.newFlag = false;
         },
         handleSuccess(response) {
             this.$alert(response.msg, "上传文件成功", {
@@ -252,21 +269,7 @@ export default {
                 //     });
                 // }
             });
-        },
-        handleExceed() {
-            this.$message.error("一次只能添加一个文件");
-        },
-        handleError() {
-            this.$message.error("上传文件失败，请重试");
-        },
-        submitUpload() {
-            this.$refs.upload.action = `/campback/admin/importStudentByFile?memberId=${this.dialogInfo.id}`;
-            console.log(this.$refs.upload.action);
-            setTimeout(() => {
-                this.$refs.upload.submit();
-            }, 400);
-        },
-        beforeUpload() {}
+        }
     }
 };
 </script>

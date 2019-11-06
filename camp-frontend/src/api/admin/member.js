@@ -11,4 +11,13 @@ export const getStudentList = memberId => request(`${commomUrl}/getOneMemberStud
 export const deleteStudentFromMember = par => request(`${commomUrl}/deleteOneStudentFromMember`, par, 'post', 'json');
 
 //下载会员名单模板
-export const getMemberTemplate = () => request(`${commomUrl}/getMemberTemplate`, {}, 'get', 'json');
+export const getMemberTemplate = () => request(`${commomUrl}/getMemberTemplate`, {}, 'get', 'blob');
+
+//下载学员名单模板
+export const getStudentTemplate = () => request(`${commomUrl}/getStudentTemplate`, {}, 'get', 'blob');
+
+//提醒会员续费
+export const remindRenew = memberId => request(`${commomUrl}/remindRenew?memberId=${memberId}`, {}, 'get', 'json');
+
+//添加单个会员
+export const addSingleMember = par => request(`${commomUrl}/addSingleMember`, par, 'post', 'json');

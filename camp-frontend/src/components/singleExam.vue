@@ -5,10 +5,6 @@
                 <span class="title">{{examName}}</span>
             </div>
             <div class="info-container">
-                <p v-if="date">
-                    日期：
-                    <span>{{date}}</span>
-                </p>
                 <p>
                     开始时间：
                     <span>{{startTime}}</span>
@@ -19,7 +15,7 @@
                 </p>
                 <p>
                     考试时长：
-                    <span>{{min}}分</span>
+                    <span>{{min}}分钟</span>
                 </p>
                 <p>
                     所属课程：
@@ -50,10 +46,13 @@
                         :loading="loading"
                     >重新报名</el-button>
                 </div>
-                <div v-if="idtype==1">
-                    <el-button v-if="status==0" type="primary" round @click="pick">挑选试题</el-button>
-                    <el-button v-if="status==0" type="primary" round @click="fillExam">随机出题</el-button>
-                    <el-button v-if="status==1" type="primary" round @click="publish">发布考试</el-button>
+                <div class="exam-button-container" v-if="idtype==1">
+                    <el-button class="items" v-if="status==0" type="primary" round @click="pick">挑选试题</el-button>
+                    <el-button class="items" v-if="status==0" type="primary" round @click="fillExam">随机出题</el-button>
+                    <el-button class="items" v-if="status==1" type="primary" round >查看试题</el-button>
+                    <el-button class="items" v-if="status==1" type="primary" round @click="publish">发布考试</el-button>
+                    <el-button class="items" v-if="status==0||status==1" type="primary" round @click="modify">修改信息</el-button>
+                    <el-button class="items" v-if="status==2" type="primary" round>停止发布</el-button>
                 </div>
             </div>
         </el-card>
@@ -64,17 +63,16 @@ import { rejoinExam } from "@/api/modules/exam.js";
 import { publishExam, randomFillExam } from "@/api/admin/exam.js";
 export default {
     props: [
-        "type",
-        "examName",
-        "date",
-        "startTime",
-        "endTime",
-        "min",
-        "belong",
-        "grade",
-        "examId",
-        "idtype",
-        "status"
+        "type",     //学生是否已经考过试，done表示考过
+        "examName", //考试名称
+        "startTime",//考试开始时间
+        "endTime",  //考试结束时间
+        "min",      //考试时长（单位：分钟）
+        "belong",   //所属课程/培训
+        "grade",    //考试分数（学生使用）
+        "examId",   //考试id
+        "idtype",   //使用这个组件的身份状态，0学生，1管理员
+        "status"    //管理员使用，考试的状态，0未出题，1已经出题，2已经发布
     ],
     data() {
         return {
@@ -94,6 +92,9 @@ export default {
         },
         pick() {
             this.$emit("pick");
+        },
+        modify(){
+            this.$emit("modify")
         },
         async fillExam() {
             try {
@@ -153,6 +154,16 @@ export default {
         .mybutton {
             margin: 20px 10px 10px;
         }
+    }
+}
+.exam-button-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    .items {
+        flex-shrink: 1;
     }
 }
 </style>

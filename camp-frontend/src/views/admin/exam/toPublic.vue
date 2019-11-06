@@ -3,7 +3,7 @@
         <h3>发布考试</h3>
         <div class="divider"></div>
         <div class="switcher">
-            <el-button type="primary" @click="newFlag=true">新建考试</el-button>
+            <el-button type="primary" @click="examForm.newFlag=true;examForm.formType=true">新建考试</el-button>
         </div>
         <div>
             <span class="panel-title">已有考试</span>
@@ -20,7 +20,8 @@
                         :examId="item.examId"
                         :status="item.status"
                         :idtype="1"
-                        @pick="pickFlag=true"
+                        @pick="pickQuestion(item.examId)"
+                        @modify="modify(item.examId)"
                         @refresh="fresh"
                     />
                 </div>
@@ -33,11 +34,8 @@
             </div>
         </div>
 
-        <el-dialog v-if="newFlag" :visible.sync="newFlag">
-            <exam-publish @close="newFlag=false;fresh()" />
-        </el-dialog>
-        <el-dialog :visible.sync="pickFlag">
-            <pick-question @close="pickFlag=false" />
+        <el-dialog v-if="examForm.newFlag" :visible.sync="examForm.newFlag">
+            <exam-publish :id="examForm.id" :type.sync="examForm.formType" @close="examForm.newFlag=false;fresh()" />
         </el-dialog>
     </div>
 </template>
@@ -45,14 +43,12 @@
 import singleExam from "@/components/singleExam.vue";
 import page from "@/components/page.vue";
 import examPublish from "./components/examPublish";
-import pickQuestion from "./components/pickQuestion";
 import { getNotPostExam } from "@/api/admin/exam.js";
 export default {
     components: {
         singleExam,
         page,
-        examPublish,
-        pickQuestion
+        examPublish
     },
     data() {
         return {
@@ -82,8 +78,8 @@ export default {
                 {
                     examId: "1",
                     examName: "考试名称",
-                    startTime: "14:00:00",
-                    endTime: "16:00:00",
+                    startTime: "2016-10-10 14:00:00",
+                    endTime: "2016-10-10 16:00:00",
                     min: "120分钟",
                     belong: "HTML入门",
                     status: 1,
@@ -114,14 +110,18 @@ export default {
             ],
             currentPage: 1,
             total:10,
-            newFlag: false,
+            examForm: {
+                id: null,
+                newFlag: false,
+                formType: true
+            },
             pickFlag: false,
             loading: false
         };
     },
 
     mounted() {
-        this.fresh();
+        // this.fresh();
     },
     methods: {
         fresh() {
@@ -142,6 +142,15 @@ export default {
         curChange(val){
             this.currentPage = val;
             this.getNotPostExamList();
+        },
+        pickQuestion(id){
+            console.log(id);
+            this.$router.push({path:`/pickQuestion/${id}`})
+        },
+        modify(id){
+            this.examForm.id = id;
+            this.examForm.newFlag = true;
+            this.examForm.formType = false;
         }
     }
 };

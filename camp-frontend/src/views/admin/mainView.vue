@@ -62,7 +62,7 @@ export default {
                     index: "3",
                     title: "培训管理",
                     children: [
-                        { index: "", title: "发布培训" },
+                        { index: "/publicTraining", title: "发布培训" },
                         { index: "", title: "已发布的培训" }
                     ]
                 },
@@ -143,6 +143,7 @@ export default {
     top: 0px;
     bottom: 0px;
     width: 100%;
+    min-width: 1700px;
     overflow-x: auto;
 
     & > .el-col:nth-child(1) {

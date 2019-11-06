@@ -25,10 +25,21 @@
             </el-form>
         </div>
 
+        <div class="button-container">
+            <el-button size="medium" style="margin-right:10px;" type="primary" @click="getQueTem">下载模板</el-button>
+            <upload
+                :autoUpload="uploadAttr.autoUpload"
+                :uploadUrl="uploadAttr.uploadUrl"
+                :formData="uploadAttr.data"
+                :size="'medium'"
+            />
+        </div>
+
         <div class="table-container">
             <m-table
                 :data="table.tableData"
                 :tableConfig="table.tableConfig"
+                :tableAttr="table.tableAttr"
                 :loading="table.loading"
             >
                 <el-table-column
@@ -42,10 +53,9 @@
                         <el-button
                             size="small"
                             type="primary"
-                            round
                             @click="checkDetail(row)"
                             :loading="buttonLoading"
-                        >详情</el-button>
+                        >详 情</el-button>
                     </div>
                 </el-table-column>
             </m-table>
@@ -57,6 +67,7 @@
             />
         </div>
 
+        <!-- 题目详情弹框 -->
         <div class="dialog-container">
             <el-dialog title="修改试题" :visible.sync="flag">
                 <h3>题目内容：{{dialog.state}}</h3>
@@ -99,15 +110,19 @@
 <script>
 import mTable from "@/components/mTable.vue";
 import page from "@/components/page.vue";
+import upload from "@/components/upload.vue";
 import {
     getQuestionList,
     modefyQuestionInfo,
-    getTrainingList
+    getTrainingList,
+    getQuestionTemplate
 } from "@/api/admin/exam.js";
+import { download } from '@/api/request'
 export default {
     components: {
         mTable,
-        page
+        page,
+        upload
     },
     data() {
         return {
@@ -122,19 +137,25 @@ export default {
             trainingList: [],
             table: {
                 tableConfig: [
-                    { prop: "questionId", label: "题目ID" },
-                    { prop: "state", label: "试题题干", width:'250px' },
+                    { prop: "questionId", label: "题目ID", fixed: "left" },
+                    { prop: "stateMin", label: "试题题干", width: "250px" },
                     { prop: "type", label: "题目类型" },
                     { prop: "answer", label: "正确答案" },
-                    { prop: "choiceA", label: "选项A" },
-                    { prop: "choiceB", label: "选项B" },
-                    { prop: "choiceC", label: "选项C" },
-                    { prop: "choiceD", label: "选项D" },
-                    { slot: "oper", label: "操作",fixed:"right",width:"100px" }
+                    { prop: "choiceAMin", label: "选项A" },
+                    { prop: "choiceBMin", label: "选项B" },
+                    { prop: "choiceCMin", label: "选项C" },
+                    { prop: "choiceDMin", label: "选项D" },
+                    {
+                        slot: "oper",
+                        label: "操作",
+                        fixed: "right",
+                        width: "150px"
+                    }
                 ],
                 tableData: [
                     {
                         questionId: 1,
+                        stateMin: "简略",
                         state: "以下属于物理层的设备是",
                         type: "单选题",
                         answer: "A",
@@ -154,6 +175,9 @@ export default {
                         choiceD: "IPX地址"
                     }
                 ],
+                tableAttr: {
+                    stripe: true
+                },
                 tableLoading: false
             },
             buttonLoading: false,
@@ -167,13 +191,13 @@ export default {
                 choiceB: "以太网交换机",
                 choiceC: "桥",
                 choiceD: "网关"
+            },
+            uploadAttr: {
+                uploadUrl: "/campback/admin/importQuestionByFile",
+                autoUpload: false,
+                data: {}
             }
         };
-    },
-    watch: {
-        currentPage() {
-            this.search();
-        }
     },
     mounted() {
         this.search();
@@ -184,15 +208,28 @@ export default {
                 let res = await getQuestionList(this.form);
                 this.table.tableData = res.data.list;
                 let arr = this.table.tableData;
-                arr.forEach( (val,i) => {
-                    if(val.type==0){
-                        arr[i].type="单选题";
-                    }else if(val.type==1){
-                        arr[i].type="多选题";
-                    }else if(val.type==2){
-                        arr[i].type="判断题";
+                let t = ["choiceA", "choiceB", "choiceC", "choiceD"],
+                    max = 4;
+                arr.forEach((val, i) => {
+                    if (val.type == 0) {
+                        arr[i].type = "单选题";
+                    } else if (val.type == 1) {
+                        arr[i].type = "多选题";
+                    } else if (val.type == 2) {
+                        arr[i].type = "判断题";
+                        max = 2;
                     }
-                })
+                    arr[i].stateMin =
+                        val.state.length <= 30
+                            ? val.state
+                            : val.state.substring(0, 24) + ".....";
+                    for (let j = 0; j < max; j++) {
+                        arr[i][t[j] + "Min"] =
+                            val[t[j]].length <= 20
+                                ? val[t[j]]
+                                : val[t[j]].substring(0, 10) + ".....";
+                    }
+                });
                 this.form.total = res.data.total;
             } catch (error) {}
         },
@@ -204,18 +241,41 @@ export default {
         },
         curChange(val) {
             this.form.currentPage = val;
+            this.search();
         },
         checkDetail(row) {
             this.flag = true;
-            this.dialog = {...row};
+            this.dialog = { ...row };
         },
-        async modefyQuestion() {}
+        async modefyQuestion() {
+            try {
+                let res = await modefyQuestionInfo(this.dialog);
+                this.$message.success("修改试题成功");
+                this.getQuestionList();
+                this.flag = false;
+            } catch (error) {}
+        },
+        async getQueTem() {
+            try {
+                let res = await getQuestionTemplate();
+                download(res);
+            } catch (error) {}
+        }
     }
 };
 </script>
 
 <style lang="scss" scoped>
 .all-container {
+    .button-container {
+        width: 400px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-start;
+        position: absolute;
+        right: 50px;
+        top: 70px;
+    }
     .dialog-container {
         .question-type {
             position: absolute;
