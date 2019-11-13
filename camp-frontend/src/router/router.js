@@ -139,6 +139,11 @@ export default new Router({
                     component: resolve => require(['../views/admin/member/myMember.vue'], resolve)
                 },
                 {
+                    path: '/studentInfo',
+                    name: 'studentInfo',
+                    component: resolve => require(['../views/admin/student/infoManagement.vue'], resolve)
+                },
+                {
                     path: '/publicTraining',
                     name: 'publicTraining',
                     component: resolve => require(['../views/admin/training/trainingPublish.vue'], resolve)

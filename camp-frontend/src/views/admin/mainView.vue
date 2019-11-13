@@ -54,8 +54,8 @@ export default {
                     index: "2",
                     title: "学员管理",
                     children: [
-                        { index: "", title: "挂靠管理" },
-                        { index: "", title: "学员信息" }
+                        { index: "/studentInfo", title: "学员信息及挂靠管理" },
+                        { index: "/studentRecord", title: "学员培训及相关证书" }
                     ]
                 },
                 {

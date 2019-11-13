@@ -191,7 +191,6 @@ export default {
                 id: null,
                 company: null
             },
-            fileList: [],
             newFlag: false,
             formData: {}
         };
