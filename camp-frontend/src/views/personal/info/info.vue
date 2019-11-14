@@ -116,6 +116,7 @@
                                 :readonly="readOnly"
                             >
                                 <v-distpicker
+                                    style="width:50%"
                                     v-on:province="changeProvince"
                                     v-on:city="changeCity"
                                     v-on:area="changeArea"
@@ -283,7 +284,8 @@ export default {
         right: 5%;
     }
     ::v-deep #zone-input {
-        min-width: 300px !important;
+        // min-width: 300px !important;
+        width: 100%;
     }
 }
 </style>

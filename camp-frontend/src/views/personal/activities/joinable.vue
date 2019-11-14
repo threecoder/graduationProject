@@ -17,30 +17,41 @@
                     class="myoper"
                 >
                     <div slot-scope="{ row }">
-                        <el-button @click="checkDetail(row)">详情</el-button>
-                        <el-button v-if="type==1 && row.status=='未支付'" @click="pay">支付</el-button>
-                        <el-button v-if="type==0 && idType==0" @click="dialogVisible = true">报名</el-button>
-                        <el-dialog
-                            title="提示"
-                            :visible.sync="dialogVisible"
-                            :modal-append-to-body="false"
-                            width="30%">
-                            <span>您确定报名这个活动吗？</span>
-                            <span slot="footer" class="dialog-footer">
-                                <el-button type="primary" @click="studentJoin(row) , dialogVisible = false">确定</el-button>
-                                <el-button @click="dialogVisible = false">取消</el-button>
-                            </span>
-                        </el-dialog>
+                        <el-button type="primary" @click="checkDetail(row)">详情</el-button>
                         <el-button
+                            type="primary"
+                            v-if="type==1 && row.status=='未支付'"
+                            @click="pay"
+                        >支付</el-button>
+                        <el-button
+                            type="primary"
+                            v-if="type==0 && idType==0"
+                            @click="dialogVisible = true"
+                        >报名</el-button>
+
+                        <el-button
+                            type="primary"
                             v-if="type==0 && idType==1"
                             @click="studentList.listFlag = true;studentList.id=row.id"
                         >报名</el-button>
-                        <el-button v-if="type==1 && row.status=='已支付'" @click="checkSEAT(row)">座位号</el-button>
+                        <el-button type="primary" v-if="type==1 && row.status=='已支付'" @click="checkSEAT(row)">座位号</el-button>
                     </div>
                 </el-table-column>
             </m-table>
         </div>
 
+        <el-dialog
+            title="提示"
+            :visible.sync="dialogVisible"
+            :modal-append-to-body="false"
+            width="30%"
+        >
+            <span>您确定报名这个活动吗？</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="studentJoin(row) , dialogVisible = false">确定</el-button>
+                <el-button @click="dialogVisible = false">取消</el-button>
+            </span>
+        </el-dialog>
         <el-drawer class="drawer-container" title="活动详情" :visible.sync="drawer" size="30%">
             <div class="tac">
                 <h3>{{drwaerInfo.name}}</h3>
@@ -75,7 +86,11 @@
             :visible.sync="studentList.listFlag"
             width="40%"
         >
-            <list :tableData="studentList.list" :tableConfig="studentTableConfig" @selectChange="selectChange" />
+            <list
+                :tableData="studentList.list"
+                :tableConfig="studentTableConfig"
+                @selectChange="selectChange"
+            />
             <div slot="footer" class="dialog-footer">
                 <el-button @click="studentList.listFlag = false">取 消</el-button>
                 <el-button type="primary" @click="memberJoin">确 定</el-button>
@@ -175,7 +190,7 @@ export default {
                 loading: false
             },
             studentTableConfig: [
-                { slot: "select"},
+                { slot: "select" },
                 { prop: "name", label: "姓名" },
                 { prop: "idNum", label: "身份证号码" },
                 { prop: "phone", label: "手机号码" },

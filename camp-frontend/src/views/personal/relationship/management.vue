@@ -13,6 +13,7 @@
                     <el-input placeholder="输入姓名" v-model="form.name"></el-input>
                 </el-form-item>
                 <el-button type="primary" round @click="search">搜索</el-button>
+                <el-button type="primary" round @click="dialogFormVisible=true">添加学员</el-button>
             </el-form>
         </div>
         <div class="table-container">
@@ -51,7 +52,7 @@
         </div>
 
         <div class="modifyButton">
-            <el-button type="primary" round @click="dialogFormVisible=true">添加学员</el-button>
+            
         </div>
 
         <el-dialog title="添加学员" :visible.sync="dialogFormVisible" width="40%">

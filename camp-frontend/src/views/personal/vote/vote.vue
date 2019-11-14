@@ -17,8 +17,8 @@
                     class="myoper"
                 >
                     <div slot-scope="{ row }">
-                        <el-button v-if="row.result==0" @click="voteInfo(row)">参与投票</el-button>
-                        <el-button v-else @click="dialogResult=true">查看结果</el-button>
+                        <el-button type="primary" v-if="row.result==0" @click="voteInfo(row)">参与投票</el-button>
+                        <el-button type="primary" v-else @click="dialogResult=true">查看结果</el-button>
                         <el-dialog
                             title="投票详情"
                             :visible.sync="dialogVisible"

@@ -4,8 +4,8 @@
         <div class="divider"></div>
         <div class="form-container">
             <el-form :model="form" inline>
-                <el-form-item label="会员名称" label-position="left">
-                    <el-input placeholder="输入名称" v-model="form.name" clearable></el-input>
+                <el-form-item label="名称" label-position="left">
+                    <el-input placeholder="输入会员名称" v-model="form.name" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="是否会员" label-position="top">
                     <el-select v-model="form.type" clearable>
@@ -19,7 +19,8 @@
                         <el-option value="1" label="是"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-button type="primary" round @click="search">搜索</el-button>
+                <el-button type="primary" @click="search">搜索</el-button>
+                <el-button @click="newFlag=true" type="primary">添加会员</el-button>
             </el-form>
         </div>
 
@@ -80,10 +81,6 @@
                 @dele="deleteOneStudent"
             />
         </el-dialog>
-
-        <div class="new-container">
-            <el-button @click="newFlag=true" type="primary">添加会员</el-button>
-        </div>
     </div>
 </template>
 <script>

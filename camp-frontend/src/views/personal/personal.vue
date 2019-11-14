@@ -155,7 +155,7 @@ export default {
     top: 0px;
     bottom: 0px;
     width: 100%;
-    min-width: 1700px;
+    // min-width: 1700px;
     // overflow-x: auto;
     // min-width: 1280px;
 

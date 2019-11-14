@@ -17,14 +17,14 @@
                     class="myoper"
                 >
                     <div slot-scope="{ row }">
-                        <el-button size="mini" @click="checkDetail(row)">更多</el-button>
-                        <el-button size="mini" @click="handleSEAT(row)">安排座位</el-button>
+                        <el-button type="primary" size="mini" @click="checkDetail(row)">更多</el-button>
+                        <el-button type="primary" size="mini" @click="handleSEAT(row)">安排座位</el-button>
                     </div>
                 </el-table-column>
             </m-table>
         </div>
 
-        <el-drawer class="drawer-container" title="活动详情" :visible.sync="drawer" size="35%">
+        <el-drawer class="drawer-container" title="活动详情" :visible.sync="drawer" size="40%">
             <div class="tac">
                 <h3>{{drwaerInfo.name}}</h3>
                 <p>活动时间：{{drwaerInfo.date}}</p>
@@ -48,9 +48,9 @@
                 >
                     <el-button type="primary">导入报名表</el-button>
                 </el-upload>
-                <el-button style="margin-left:5px" @click="exportEntryForm" type="primary">导出报名表</el-button>
-                <el-button style="margin:0 5px" type="primary">导出座位表模板</el-button>
-                <el-button style="margin:0 5px" type="primary">导出座位表</el-button>
+                <el-button @click="exportEntryForm" type="primary">导出报名表</el-button>
+                <el-button type="primary">导出座位表模板</el-button>
+                <el-button type="primary">导出座位表</el-button>
                 <el-upload
                     class="upload-demo"
                     action="https://jsonplaceholder.typicode.com/posts/"
@@ -352,11 +352,10 @@ export default {
         }
     }
     .drawer-footer {
-        text-align: center;
         border-top: 1px solid rgb(58, 158, 240);
         width: 100%;
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
         position: absolute;
         bottom: 0;
         padding: 30px;
