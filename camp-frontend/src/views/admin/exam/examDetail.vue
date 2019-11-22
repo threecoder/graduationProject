@@ -2,10 +2,11 @@
     <div v-loading="loading">
         <div class="examInfo fixed">
             <span class="title">{{examInfo.examName}}</span>
-            <span>姓名:{{examInfo.name}}</span>
+            <span>姓名:{{sName}}</span>
             <span>考试时间：{{examInfo.date}} {{examInfo.startTime}}-{{examInfo.endTime}}</span>
             <span>考试时长：{{examInfo.min}}分钟</span>
             <span>总得分：{{examInfo.grade}}</span>
+            <span class="cursor" style="color:black" @click="goBack">返回</span>
         </div>
         <div class="container">
             <template v-for="(item,i) in list">
@@ -15,12 +16,14 @@
     </div>
 </template>
 <script>
-import singleOne from "./components/singleChoiceDetail.vue";
-import { getExamDetail } from "@/api/modules/exam.js";
+import singleOne from "@/views/personal/exam/components/singleChoiceDetail.vue";
+import { getExamDetail } from "@/api/admin/exam.js";
 export default {
     data() {
         return {
             examId: this.$route.params.id,
+            sName: this.$route.params.name,
+            idNum: this.$route.params.idNum,
             examInfo: {
                 examName: "考试名",
                 date: "2016-10-10",
@@ -71,14 +74,17 @@ export default {
     methods: {
         async init() {
             this.loading = true;
-            let res = await getExamDetail(this.examId);
-            console.log("res", res);
-            if (res) {
+            try {
+                let res = await getExamDetail({examId:this.examId,});
                 this.list = res.data.questionList;
                 this.examInfo = res.data.examInfo;
-                this.loading = false;
+            } catch (error) {
+                
             }
             this.loading = false;
+        },
+        goBack(){
+            this.$router.go(-1);
         }
     }
 };

@@ -129,6 +129,11 @@ export default new Router({
                     component: resolve => require(['../views/admin/exam/toPublic.vue'], resolve)
                 },
                 {
+                    path: '/published',
+                    name: 'published',
+                    component: resolve => require(['../views/admin/exam/published.vue'], resolve)
+                },
+                {
                     path: '/pickQuestion/:id',
                     name: 'pickQuestion',
                     component: resolve => require(['../views/admin/exam/pickQuestion.vue'], resolve)
@@ -161,6 +166,11 @@ export default new Router({
         {
             path: '/examDetail/:id',
             component: resolve => require(['@/views/personal/exam/examDetail.vue'], resolve)
+        },
+        {
+            path: '/studentExamDetail/:name/:examId/:idNum',
+            name: 'studentExamDetail',
+            component: resolve => require(['../views/admin/exam/examDetail.vue'], resolve)
         },
         {
             path: '/404',

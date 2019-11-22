@@ -16,18 +16,18 @@ Vue.prototype.confirm = element.MessageBox.confirm;
 Vue.use(element);
 Vue.component('v-distpicker',Distpicker)
 //配置路由拦截
-router.beforeEach((to, from, next) => {
-    let token = document.cookie.indexOf("token");
-    let canGoPath = getCanGoPath();
-    if (token==-1 && canGoPath.indexOf(to.path) == -1) {
-        let url = escape(to.fullPath);
-        next({
-            path: `/login?redirect=${url}`
-        })
-    } else {
-        next();
-    }
-})
+// router.beforeEach((to, from, next) => {
+//     let token = document.cookie.indexOf("token");
+//     let canGoPath = getCanGoPath();
+//     if (token==-1 && canGoPath.indexOf(to.path) == -1) {
+//         let url = escape(to.fullPath);
+//         next({
+//             path: `/login?redirect=${url}`
+//         })
+//     } else {
+//         next();
+//     }
+// })
 
 //http response 拦截器
 Axios.interceptors.response.use(
