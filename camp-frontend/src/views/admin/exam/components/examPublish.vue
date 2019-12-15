@@ -102,12 +102,7 @@
 </template>
 <script>
 import { formatDate, formatTime, formatDateAndTime } from "@/assets/js/util.js";
-import {
-    newExam,
-    getTrainingList,
-    modifyExam,
-    getExam
-} from "@/api/admin/exam.js";
+import adminExamApi from "@/api/admin/exam.js";
 export default {
     //"type，true表示新建考试，false表示修改考试信息"
     props: ["type", "id"],
@@ -229,7 +224,7 @@ export default {
         async addNewExam(par) {
             if (this.flag) {
                 try {
-                    let res = await newExam(par);
+                    let res = await adminExamApi.newExam(par);
                     this.$message.success("新建考试成功");
                     this.$emit("close");
                 } catch (error) {}
@@ -238,7 +233,7 @@ export default {
         async saveModify() {
             if (this.flag) {
                 try {
-                    let res = await modifyExam(par);
+                    let res = await adminExamApi.modifyExam(par);
                     this.$message.success("修改考试成功");
                     this.$emit("close");
                 } catch (error) {}
@@ -254,7 +249,7 @@ export default {
         async getExam() {
             if (this.type == true) return false;
             try {
-                let res = await getExamInfo(this.id);
+                let res = await adminExamApi.getExamInfo(this.id);
                 this.ruleForm = res.data;
                 let arr = [];
                 arr[0] = new Date(res.data.startTime);

@@ -13,7 +13,7 @@
 import searchForm from "./components/searchForm.vue";
 import list from "./components/list.vue";
 import page from "@/components/page.vue";
-import { getCourses } from "@/api/modules/courses.js";
+import coursesApi from "@/api/modules/courses.js";
 export default {
     data() {
         return {
@@ -126,7 +126,7 @@ export default {
                 ...this.pagination,
                 type: this.type
             };
-            let res = await getCourses(params);
+            let res = await coursesApi.getCourses(params);
             console.log(res);
             this.list = res.data.list;
             this.pagination.total = res.data.allNum;

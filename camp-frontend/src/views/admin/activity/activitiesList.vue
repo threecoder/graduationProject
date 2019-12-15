@@ -88,13 +88,7 @@
 <script>
 import mTable from "@/components/mTable.vue";
 import sTable from "./components/seatingTable.vue";
-import {
-    getActivityList,
-    getSEATInfo,
-    getEntryForm,
-    getSEATForm,
-    setSEATInfo
-} from "@/api/admin/activity.js";
+import adminActivityApi from "@/api/admin/activity.js";
 export default {
     components: {
         mTable,
@@ -132,7 +126,7 @@ export default {
                     那么用户转化率就会大大提高，企业客户资源的源源不断带给我们企业的将会是订单，
                     所以企业网站建设不能只是摆设性的搭建一个域名、空间和程序，需要融合企业文化和企业精华到网站中。`
                         ],
-                        joinNum:11,
+                        joinNum: 11,
                         seatInfo: true,
                         contacts: "唐先生 13535789321"
                     },
@@ -187,8 +181,8 @@ export default {
             fileList: [],
             seatInfo: {
                 id: null,
-                xLen:0,
-                yLen:0,
+                xLen: 0,
+                yLen: 0,
                 x: 0,
                 y: 0,
                 arr: null
@@ -197,18 +191,16 @@ export default {
             tableFlag: true
         };
     },
-    mounted(){
+    mounted() {
         this.init();
     },
     methods: {
         async init() {
             try {
-                let listRes = await getActivityList();
-                console.log(listRes)
+                let listRes = await adminActivityApi.getActivityList();
+                console.log(listRes);
                 this.activityTable.tableData = listRes.data;
-            } catch (error) {
-                
-            }
+            } catch (error) {}
         },
         handleLock(i, j, flag) {
             this.seatInfo.arr[i][j].lock = flag;
@@ -232,11 +224,11 @@ export default {
             this.seatInfo.id = row.id;
             if (row.seatInfo == true) {
                 try {
-                    let res = await getSEATInfo(row.id);
+                    let res = await adminActivityApi.getSEATInfo(row.id);
                     this.seatInfo = res.data;
                     this.flag = true;
                 } catch (error) {
-                    this.$message.error("获取座位信息失败")
+                    this.$message.error("获取座位信息失败");
                 }
             } else {
                 this.$prompt("请输入座位行列数，如8*8", "提示", {
@@ -308,16 +300,13 @@ export default {
                 activityId: this.seatInfo.id,
                 data: this.seatInfo.arr
             };
-            let res = await setSEATInfo(par);
+            let res = await adminActivityApi.setSEATInfo(par);
             console.log(par);
         },
-        async exportEntryForm(){
+        async exportEntryForm() {
             try {
-                let res = await getEntryForm(drwaerInfo.id);
-                
-            } catch (error) {
-                
-            }
+                let res = await adminActivityApi.getEntryForm(drwaerInfo.id);
+            } catch (error) {}
         }
     }
 };

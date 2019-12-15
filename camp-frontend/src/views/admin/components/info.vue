@@ -169,7 +169,7 @@
     </div>
 </template>
 <script>
-import { modifyInfo } from "@/api/admin/student.js";
+import adminStudentApi from "@/api/admin/student.js";
 import { getLocalStorage } from "@/assets/js/util.js";
 export default {
     props: {
@@ -217,7 +217,7 @@ export default {
                 this.confirmLoading = true;
                 let res = null;
                 if (idType == 0) {
-                    res = await modifyInfo(this.info);
+                    res = await adminStudentApi.modifyInfo(this.info);
                     this.$message.success("修改学员资料成功");
                 } else {
                     res = await setInfo(this.info, this.idType);

@@ -42,7 +42,7 @@
 </template>
 <script>
 import singleChoice from "./components/singChoice.vue";
-import { getExamQuestion, submitExam } from "@/api/modules/exam.js";
+import examApi from "@/api/modules/exam.js";
 export default {
     data() {
         return {
@@ -57,29 +57,7 @@ export default {
                 arr: ["", "", "", ""],
                 type: 0
             },
-            list: [
-                // {
-                //     index: 1,
-                //     title: "食醋是什么味道1",
-                //     score: 8,
-                //     arr: ["发发发", "备选项", "备选", "备选1"],
-                //     type: 1 //1是单选和判断，2是多选
-                // },
-                // {
-                //     index: 2,
-                //     title: "食醋是什么味道2",
-                //     score: 8,
-                //     arr: ["发发发", "备选项", "备选", "备选1"],
-                //     type: 1
-                // },
-                // {
-                //     index: 3,
-                //     title: "食醋是什么味道3",
-                //     score: 8,
-                //     arr: ["发发发", "备选项", "备选", "备选1"],
-                //     type: 2
-                // }
-            ],
+            list: [],
             answer: [],
             examInfo: {
                 name: "考试名",
@@ -113,7 +91,7 @@ export default {
     methods: {
         async getExamById() {
             try {
-                let res = await getExamQuestion(this.examId);
+                let res = await examApi.getExamQuestion(this.examId);
                 console.log(res);
                 this.list = res.data.list;
                 this.item = this.list[0];
@@ -190,7 +168,7 @@ export default {
                     answer: this.answer
                 }
                 console.log(par)
-                let res = await submitExam(par);
+                let res = await examApi.submitExam(par);
                 this.$message.success("提交试卷成功！");
                 this.$router.push({ path: "/examTodo" });
             } catch (error) {}

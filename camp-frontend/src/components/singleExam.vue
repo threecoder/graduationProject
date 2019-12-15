@@ -59,8 +59,8 @@
     </div>
 </template>
 <script>
-import { rejoinExam } from "@/api/modules/exam.js";
-import { publishExam, randomFillExam } from "@/api/admin/exam.js";
+import examApi from "@/api/modules/exam.js";
+import adminExamApi from "@/api/admin/exam.js";
 export default {
     props: [
         "type",     //学生是否已经考过试，done表示考过
@@ -98,7 +98,7 @@ export default {
         },
         async fillExam() {
             try {
-                let res = await randomFillExam(this.examId);
+                let res = await adminExamApi.randomFillExam(this.examId);
                 this.$message.success("随机出题成功");
                 this.$emit("refresh");
             } catch (error) {}
@@ -106,7 +106,7 @@ export default {
         async rejoin() {
             this.loading = true;
             try {
-                let res = await rejoinExam(this.examId);
+                let res = await examApi.rejoinExam(this.examId);
                 if (res) {
                     this.$message.success(res.msg);
                 }
@@ -116,7 +116,7 @@ export default {
         },
         async publish() {
             try {
-                let res = await publishExam(this.examId);
+                let res = await adminExamApi.publishExam(this.examId);
                 this.$message.success(
                     "发布考试成功，考生可以在规定时间内参与考试"
                 );

@@ -26,7 +26,7 @@
     </div>
 </template>
 <script>
-import { getTodoExam, getHalfExam } from "@/api/modules/exam.js";
+import examApi from "@/api/modules/exam.js";
 import singleExam from "@/components/singleExam.vue";
 import page from "@/components/page.vue";
 export default {
@@ -67,9 +67,9 @@ export default {
             try {
                 let res = null;
                 if (this.flag) {
-                    res = await getTodoExam();
+                    res = await examApi.getTodoExam();
                 } else {
-                    res = await getHalfExam();
+                    res = await examApi.getHalfExam();
                 }
                 if (res) {
                     this.examList = res.data;

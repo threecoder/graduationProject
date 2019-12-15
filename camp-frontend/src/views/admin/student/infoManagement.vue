@@ -49,12 +49,7 @@
 import stuList from "./components/studentList.vue";
 import newPerson from "@/components/newPerson.vue";
 import info from "../components/info.vue";
-import {
-    modifyRely,
-    resetPassword,
-    modifyInfo,
-    getMemSelectList
-} from "@/api/admin/student.js";
+import adminStudentApi from "@/api/admin/student.js";
 export default {
     components: {
         stuList,
@@ -84,7 +79,7 @@ export default {
         },
         async getCompanyList() {
             try {
-                let res = await getMemSelectList();
+                let res = await adminStudentApi.getMemSelectList();
                 this.companyList = res.data;
             } catch (error) {}
         },
@@ -98,7 +93,7 @@ export default {
                 return false;
             }
             try {
-                let res = await modifyRely(this.comPar);
+                let res = await adminStudentApi.modifyRely(this.comPar);
                 this.$message.success("修改挂靠成功");
             } catch (error) {}
         },
@@ -117,7 +112,7 @@ export default {
                         idNum: row.idNum
                     };
                     try {
-                        let res = await resetPassword(par);
+                        let res = await adminStudentApi.resetPassword(par);
                         this.$message.success("重置密码成功");
                     } catch (error) {}
                 })

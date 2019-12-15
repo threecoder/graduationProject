@@ -16,7 +16,7 @@
 </template>
 <script>
 import singleOne from "./components/singleChoiceDetail.vue";
-import { getExamDetail } from "@/api/modules/exam.js";
+import examApi from "@/api/modules/exam.js";
 export default {
     data() {
         return {
@@ -71,7 +71,7 @@ export default {
     methods: {
         async init() {
             this.loading = true;
-            let res = await getExamDetail(this.examId);
+            let res = await examApi.getExamDetail(this.examId);
             console.log("res", res);
             if (res) {
                 this.list = res.data.questionList;

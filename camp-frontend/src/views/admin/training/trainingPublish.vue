@@ -116,7 +116,7 @@
 </template>
 <script>
 import { formatDate, formatTime, formatDateAndTime } from "@/assets/js/util.js";
-import { addNewTraining } from "@/api/admin/training.js";
+import adminTrainingApi from "@/api/admin/training.js";
 export default {
     data() {
         let valid = (rule, value, callback) => {
@@ -249,7 +249,7 @@ export default {
         async newTraining(par) {
             if (this.flag) {
                 try {
-                    let res = await addNewTraining(par);
+                    let res = await adminTrainingApi.addNewTraining(par);
                     this.$message.success("新建培训成功");
                 } catch (error) {}
             }
