@@ -2,17 +2,16 @@
 
 //获取localStorage某个值
 export function getLocalStorage(key) {
-    return JSON.parse(localStorage.getItem(key));
+    return JSON.parse(window.localStorage.getItem(key));
 }
-
 //保存localStorage
 export function setLocalStorage(key, val) {
-    return localStorage.setItem(key, JSON.stringify(val));
+    return window.localStorage.setItem(key, JSON.stringify(val));
 }
 
 //删除localStorage
 export function removeLocalStorage(key) {
-    return localStorage.removeItem(key);
+    return window.localStorage.removeItem(key);
 }
 
 //返回月份，从1开始

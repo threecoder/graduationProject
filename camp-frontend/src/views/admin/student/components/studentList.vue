@@ -51,7 +51,7 @@
 <script>
 import mTable from "@/components/mTable.vue";
 import page from "@/components/page.vue";
-import { getStudentList } from "@/api/admin/student.js";
+import adminStudentApi from "@/api/admin/student.js";
 
 export default {
     props: {
@@ -122,7 +122,7 @@ export default {
         async search() {
             try {
                 let que = "";
-                let res = await getStudentList(que);
+                let res = await adminStudentApi.getStudentList(que);
                 console.log(res);
                 this.table.tableData = res.data.list;
                 this.form.total = res.data.total;

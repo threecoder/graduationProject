@@ -102,14 +102,7 @@
 import mTable from "@/components/mTable.vue";
 import list from "@/components/studentList.vue";
 import { getLocalStorage } from "@/assets/js/util.js";
-import {
-    getJoinableActivities,
-    studentJoinActivties,
-    getsignedActivities,
-    getSeatNum,
-    getList,
-    memberJoinActivity
-} from "@/api/modules/activity.js";
+import activityApi from "@/api/modules/activity.js";
 export default {
     components: {
         mTable,
@@ -366,9 +359,9 @@ export default {
                         { prop: "status", label: "状态" },
                         t
                     );
-                    res = await getsignedActivities(this.idType);
+                    res = await activityApi.getsignedActivities(this.idType);
                 } else {
-                    res = await getJoinableActivities(this.idType);
+                    res = await activityApi.getJoinableActivities(this.idType);
                 }
                 this.activityTable.tableData = res.data;
             } catch (error) {
@@ -379,7 +372,7 @@ export default {
             try {
                 this.joinLoading = true;
                 let id = params ? params.id : this.drwaerInfo.id;
-                let res = await studentJoinActivties(id);
+                let res = await activityApi.studentJoinActivties(id);
                 this.$message.success("报名成功");
                 this.joinLoading = false;
             } catch (error) {
@@ -388,7 +381,7 @@ export default {
         },
         async getStudentList() {
             try {
-                let res = await getList();
+                let res = await activityApi.getList();
                 this.studentList.list = res.data;
             } catch (error) {}
         },
@@ -402,7 +395,7 @@ export default {
                     idNums: this.studentList.data,
                     activityId: this.studentList.id
                 };
-                let res = await memberJoinActivity(par);
+                let res = await activityApi.memberJoinActivity(par);
                 this.$message.success("报名成功");
             } catch (error) {}
         },
@@ -413,7 +406,7 @@ export default {
         pay() {},
         async checkSEAT(row) {
             try {
-                let res = await getSeatNum(row.id);
+                let res = await activityApi.getSeatNum(row.id);
             } catch (error) {}
         },
         selectChange(val) {

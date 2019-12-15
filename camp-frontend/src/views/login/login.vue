@@ -31,7 +31,7 @@
                 <span class="fr cursor" @click="forgetFlag=true">忘记密码</span>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="login">{{buttonText}}</el-button>
+                <el-button type="primary" v-loading="loading" @click="login">{{buttonText}}</el-button>
             </el-form-item>
         </el-form>
 
@@ -83,11 +83,12 @@ export default {
                     }
                 ]
             },
-            forgetFlag: false
+            forgetFlag: false,
+            loading: false
         };
     },
     methods: {
-        login() {
+        async login() {
             if (
                 this.userForm.username == null ||
                 this.userForm.password == null
@@ -95,18 +96,23 @@ export default {
                 this.$message.error("账号或者密码不能为空");
                 return false;
             }
+            this.loading = true;
             let params = {
                 username: this.userForm.username,
                 password: Encrypt(this.userForm.password)
             };
-
-            request("/campback/login", params, "post").then(res => {
+            try {
+                let res = await request("/campback/login", params, "post");
                 this.$message.success(res.msg)
                 this.$router.push({
                     path: this.redirect ? this.redirect : "/personal"
                 });
                 setLocalStorage("user",res.data);
-            }).catch(error=>{});
+            } catch (error) {
+                console.log(error);
+            }
+
+            this.loading = false;
         }
     },
     computed: {

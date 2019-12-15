@@ -106,12 +106,7 @@
 <script>
 import mTable from "@/components/mTable.vue";
 import page from "@/components/page.vue";
-import {
-    getStudentList,
-    deleteOneStudent,
-    addOneStudent,
-    getTemplate
-} from "@/api/modules/relationship.js";
+import relaApi from "@/api/modules/relationship.js";
 import { download } from "@/api/request.js";
 export default {
     components: {
@@ -207,7 +202,7 @@ export default {
                 t.name = t.name == ""? null:t.name;
                 t.phone = t.phone == ""? null:t.phone;
                 t.idNum = t.idNum == ""? null:t.idNum;
-                let res = await getStudentList(this.form);
+                let res = await relaApi.getStudentList(this.form);
                 this.tableData = res.data.list;
                 this.form.total = res.total;
                 this.loading = false;
@@ -222,7 +217,7 @@ export default {
                     idNum: row.idNum,
                     phone: row.phone
                 };
-                let res = await deleteOneStudent(par);
+                let res = await relaApi.deleteOneStudent(par);
                 this.$message.success("解除挂靠关系成功");
                 this.buttonLoading = false;
                 this.search();
@@ -237,7 +232,7 @@ export default {
                 return false;
             }
             try {
-                let res = await addOneStudent(this.newStudent);
+                let res = await relaApi.addOneStudent(this.newStudent);
                 this.$message.success(res.msg);
                 this.dialogFormVisible = false;
                 this.search();
@@ -246,7 +241,7 @@ export default {
         //获取模板
         async getListTemplate() {
             try {
-                let res = await getTemplate();
+                let res = await relaApi.getTemplate();
                 download(res);
             } catch (error) {}
         },

@@ -22,7 +22,7 @@
     </div>
 </template>
 <script>
-import { getExamIndexInfo } from '@/api/modules/exam.js'
+import examApi from '@/api/modules/exam.js'
 export default {
     data(){
         return {
@@ -41,7 +41,7 @@ export default {
     },
     methods: {
         async getIndexInfoByExamId(){
-            let res = await getExamIndexInfo(this.examId);
+            let res = await examApi.getExamIndexInfo(this.examId);
             if(res){
                 this.examInfo = res.data;
             }

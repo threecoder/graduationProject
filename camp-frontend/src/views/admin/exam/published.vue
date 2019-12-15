@@ -76,12 +76,7 @@ import mTable from "@/components/mTable.vue";
 import page from "@/components/page.vue";
 import examPublish from "./components/examPublish.vue";
 import upload from "@/components/upload.vue";
-import {
-    getPublishedList,
-    closeExam,
-    getFinishedStudentList,
-    getGradeTemplate
-} from "@/api/admin/exam.js";
+import adminExamApi from "@/api/admin/exam.js";
 import { download } from "@/api/request.js";
 export default {
     components: {
@@ -176,7 +171,7 @@ export default {
         async getPubedList() {
             this.table.loading = true;
             try {
-                let res = await getPublishedList(this.form);
+                let res = await adminExamApi.getPublishedList(this.form);
                 this.form.total = res.data.total;
                 let t = (this.table.data = res.data.list);
                 //考试的状态，2-发布了还没开始考试，3-正在考试，4-已经考完试（未成绩审核），5-成绩审核完成
@@ -218,7 +213,7 @@ export default {
             this.diaFini.loading = true;
             this.diaFini.type = row.status == 3 ? "考试中" : "已完成";
             try {
-                let res = await getFinishedStudentList(row.examId);
+                let res = await adminExamApi.getFinishedStudentList(row.examId);
                 this.diaFini.data = res.data;
             } catch (error) {}
             this.diaFini.loading = false;
@@ -230,7 +225,7 @@ export default {
         },
         async getGradeTemp() {
             try {
-                let res = await getGradeTemplate();
+                let res = await adminExamApi.getGradeTemplate();
                 download(res);
             } catch (error) {}
         },

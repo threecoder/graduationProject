@@ -89,13 +89,7 @@ import page from "@/components/page.vue";
 import list from "@/components/studentList.vue";
 import newPerson from "@/components/newPerson.vue";
 import upload from "@/components/upload.vue";
-import {
-    getMemberList,
-    getStudentList,
-    deleteStudentFromMember,
-    getStudentTemplate,
-    remindRenew
-} from "@/api/admin/member.js";
+import adminMemberApi from "@/api/admin/member.js";
 import { download } from "@/api/request.js";
 export default {
     components: {
@@ -221,14 +215,14 @@ export default {
             this.formData = {memberId:this.dialogInfo.id};
             console.log(this.formData);
             try {
-                let res = await getStudentList(this.dialogInfo.id);
+                let res = await adminMemberApi.getStudentList(this.dialogInfo.id);
                 this.studentTable.tableData = res.data;
             } catch (error) {}
             this.studentTable.flag = true;
         },
         async remind(row) {
             try {
-                let res = await remindRenew(row.id);
+                let res = await adminMemberApi.remindRenew(row.id);
                 this.$message.success(`提醒会员${row.name}续费成功`);
             } catch (error) {}
         },
@@ -238,15 +232,15 @@ export default {
                 memberId: this.dialogInfo.id
             };
             try {
-                let res = await deleteStudentFromMember(par);
+                let res = await adminMemberApi.deleteStudentFromMember(par);
                 this.$message.success("解除挂靠成功！");
-                res = await getStudentList(this.dialogInfo.id);
+                res = await adminMemberApi.getStudentList(this.dialogInfo.id);
                 this.studentTable.tableData = res.data;
             } catch (error) {}
         },
         async getStuTemp() {
             try {
-                let res = await getStudentTemplate();
+                let res = await adminMemberApi.getStudentTemplate();
                 download(res);
             } catch (error) {}
         },

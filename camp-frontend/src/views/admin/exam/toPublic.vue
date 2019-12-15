@@ -43,7 +43,7 @@
 import singleExam from "@/components/singleExam.vue";
 import page from "@/components/page.vue";
 import examPublish from "./components/examPublish";
-import { getNotPostExam } from "@/api/admin/exam.js";
+import adminExamApi from "@/api/admin/exam.js";
 export default {
     components: {
         singleExam,
@@ -130,7 +130,7 @@ export default {
         async getNotPostExamList() {
             try {
                 this.loading = true;
-                let res = await getNotPostExam(this.currentPage);
+                let res = await adminExamApi.getNotPostExam(this.currentPage);
                 console.log(res);
                 this.examList = res.data.list;
                 this.total = res.data.total;

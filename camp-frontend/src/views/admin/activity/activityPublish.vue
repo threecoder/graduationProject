@@ -135,7 +135,7 @@
 </template>
 <script>
 import { formatDate, formatTime, formatDateAndTime } from "@/assets/js/util.js";
-import { newActivity } from "@/api/admin/activity.js";
+import adminActivityApi from "@/api/admin/activity.js";
 export default {
     data() {
         let valid = (rule, value, callback) => {
@@ -286,7 +286,7 @@ export default {
         async addNewActivity(par) {
             if (this.flag) {
                 try {
-                    let res = await newActivity(par);
+                    let res = await adminActivityApi.newActivity(par);
                     this.$message.success("新建活动成功");
                 } catch (error) {}
             }

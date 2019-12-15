@@ -111,12 +111,7 @@
 import mTable from "@/components/mTable.vue";
 import page from "@/components/page.vue";
 import upload from "@/components/upload.vue";
-import {
-    getQuestionList,
-    modefyQuestionInfo,
-    getTrainingList,
-    getQuestionTemplate
-} from "@/api/admin/exam.js";
+import adminExamApi from "@/api/admin/exam.js";
 import { download } from '@/api/request'
 export default {
     components: {
@@ -205,7 +200,7 @@ export default {
     methods: {
         async search() {
             try {
-                let res = await getQuestionList(this.form);
+                let res = await adminExamApi.getQuestionList(this.form);
                 this.table.tableData = res.data.list;
                 let arr = this.table.tableData;
                 let t = ["choiceA", "choiceB", "choiceC", "choiceD"],
@@ -235,7 +230,7 @@ export default {
         },
         async getTraining() {
             try {
-                let res = await getTrainingList();
+                let res = await adminExamApi.getTrainingList();
                 this.trainingList = res.data;
             } catch (error) {}
         },
@@ -249,7 +244,7 @@ export default {
         },
         async modefyQuestion() {
             try {
-                let res = await modefyQuestionInfo(this.dialog);
+                let res = await adminExamApi.modefyQuestionInfo(this.dialog);
                 this.$message.success("修改试题成功");
                 this.getQuestionList();
                 this.flag = false;
@@ -257,7 +252,7 @@ export default {
         },
         async getQueTem() {
             try {
-                let res = await getQuestionTemplate();
+                let res = await adminExamApi.getQuestionTemplate();
                 download(res);
             } catch (error) {}
         }

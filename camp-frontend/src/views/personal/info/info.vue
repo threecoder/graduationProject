@@ -167,7 +167,7 @@
     </div>
 </template>
 <script>
-import { getInfo, setInfo, setPassword } from "@/api/modules/info.js";
+import infoApi from "@/api/modules/info.js";
 import { getLocalStorage } from "@/assets/js/util.js"
 export default {
     data() {
@@ -219,12 +219,18 @@ export default {
     },
     methods: {
         initType(){
+            console.log(getLocalStorage("user").type)
             this.idType = getLocalStorage("user").type;
         },
         async getUserInfo() {
             try {
+                console.log(this.idType,"idt")
                 this.loading = true;
-                let res = await getInfo(this.idType);
+                let getInfo = infoApi.getStudentInfo;
+                if(this.idType == 1){
+                    getInfo = infoApi.getMemberInfo;
+                }
+                let res = await getInfo();
                 this.info = res.data;
                 this.loading = false;
             } catch (error) {
@@ -234,7 +240,11 @@ export default {
         async setUserInfo() {
             try {
                 this.confirmLoading = true;
-                let res = await setInfo(this.info,this.idType);
+                let setInfo = infoApi.setStudentInfo;
+                if(this.idType == 1){
+                    setInfo = infoApi.setMemberInfo;
+                }
+                let res = await setInfo(this.info);
                 this.$message.success(res.msg);
                 this.readOnly = true;
                 this.confirmLoading = false;
@@ -245,7 +255,11 @@ export default {
         async setNewPassword() {
             try {
                 this.confirmLoading = true;
-                let res = await setPassword(this.password,this.idType);
+                let setPassword = infoApi.setStudentPassword;
+                if(this.idType == 1){
+                    setPassword = infoApi.setMemberPassword;
+                }
+                let res = await setPassword(this.password);
                 this.$message.success(res.msg);
                 this.dialogFormVisible = false;
                 this.confirmLoading = false;

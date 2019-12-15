@@ -134,13 +134,7 @@
 <script>
 import mTable from "@/components/mTable.vue";
 import page from "@/components/page.vue";
-import {
-    getQuestionList,
-    getSingleQuestion,
-    saveQuestionForExam,
-    getExamInfo,
-    getExamQuestionList
-} from "@/api/admin/exam.js";
+import adminExamApi from "@/api/admin/exam.js";
 export default {
     components: {
         mTable,
@@ -213,7 +207,7 @@ export default {
         },
         async getInfo() {
             try {
-                let res = await getExamInfo(this.examId);
+                let res = await adminExamApi.getExamInfo(this.examId);
                 this.examInfo = res.data;
                 if (this.examInfo.hasQue == true) {
                     this.getQueList();
@@ -222,14 +216,14 @@ export default {
         },
         async getQueList() {
             try {
-                let res = await getExamQuestionList(this.examId);
+                let res = await adminExamApi.getExamQuestionList(this.examId);
                 this.questionIdList = res.data.list;
                 this.len = res.data.list.length;
             } catch (error) {}
         },
         async search() {
             try {
-                let res = await getQuestionList(this.form);
+                let res = await adminExamApi.getQuestionList(this.form);
                 this.table.data = res.data.list;
                 let arr = this.table.data;
                 arr.forEach((val, i) => {
@@ -258,7 +252,7 @@ export default {
                 }
                 try {
                     let id = this.questionIdList[row - 1];
-                    let res = await getSingleQuestion(id);
+                    let res = await adminExamApi.getSingleQuestion(id);
                     this.dialog = { ...res.data };
                 } catch (error) {}
             } else {
@@ -297,7 +291,7 @@ export default {
             par.id = this.examId;
             par.queList = this.questionIdList;
             try {
-                let res = await saveQuestionForExam(par);
+                let res = await adminExamApi.saveQuestionForExam(par);
                 this.$message.success("保存题目成功");
                 this.$router.push({ path: "/toPublic" });
             } catch (error) {}

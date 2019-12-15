@@ -65,8 +65,8 @@
     </div>
 </template>
 <script>
-import { getMemberTemplate, addSingleMember } from "@/api/admin/member.js";
-import { getStudentTemplate, addSingleStudent } from "@/api/admin/student.js";
+import adminMemberApi from "@/api/admin/member.js";
+import adminStudentApi from "@/api/admin/student.js";
 import { download } from "@/api/request.js";
 import upload from "@/components/upload.vue";
 export default {
@@ -96,9 +96,9 @@ export default {
     },
     methods: {
         async getListTemplate() {
-            let getTemplate = getStudentTemplate;
+            let getTemplate = adminStudentApi.getStudentTemplate;
             if (this.type == 1) {
-                getTemplate = getMemberTemplate;
+                getTemplate = adminMemberApi.getMemberTemplate;
             }
             try {
                 let res = await getTemplate();
@@ -106,9 +106,9 @@ export default {
             } catch (error) {}
         },
         async addSingleONe() {
-            let addSingle = addSingleStudent;
+            let addSingle = adminStudentApi.addSingleStudent;
             if (this.type == 1) {
-                addSingle = addSingleMember;
+                addSingle = adminMemberApi.addSingleMember;
             }
             try {
                 let res = await addsingle(this.newOne);
