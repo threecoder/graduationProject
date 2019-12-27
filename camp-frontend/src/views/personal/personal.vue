@@ -20,7 +20,7 @@
                     text-color="#fff"
                 >
                     <navmenu v-if="type==1" :data="adminList"></navmenu>
-                    <navmenu v-else :data="menuList"></navmenu>
+                    <navmenu v-if="type==0" :data="menuList"></navmenu>
                 </el-menu>
             </aside>
             <section class="content-container">
@@ -127,12 +127,21 @@ export default {
                     ]
                 }
             ],
-            name: getLocalStorage("user").name,
-            type: getLocalStorage("user").type
+            name: null,
+            type: null
         };
     },
     components: {
         navmenu
+    },
+    mounted(){
+        let user = getLocalStorage("user");
+        this.name = user && user.name;
+        this.type = user && user.type;
+        if(this.type!==0 && this.type!=1){
+            this.$message.error("请先登录系统");
+            this.$router.push({path: '/login'});
+        }
     },
     methods: {
         toHomePage() {

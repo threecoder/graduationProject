@@ -63,6 +63,15 @@ const getGradeTemplate = () => request(commentUrl + "/getGradeTemplate", {}, "ge
 //获取学生作答详情
 const getExamDetail = par => request(`${commentUrl}/getExamDetail?examId=${par.examId}&idNum=${par.idNum}`, {}, 'get', 'json');
 
+//获取成绩审核员名单
+const getCheckerList = () => request(`${commentUrl}/getCheckerList`, {}, 'get', 'json');
+
+//获取待审核学生成绩列表
+const getGradeList = examId => request(`${commentUrl}/getGradeList?examId=${examId}`, {}, 'get', 'json');
+
+//提交成绩审核
+const submitGradeList = par => request(`${commentUrl}/submitGradeList`, par, 'post', 'json');
+
 export default {
     getQuestionList,
     getTrainingList,
@@ -81,5 +90,8 @@ export default {
     closeExam,
     getFinishedStudentList,
     getGradeTemplate,
-    getExamDetail
+    getExamDetail,
+    getCheckerList,
+    getGradeList,
+    submitGradeList
 }

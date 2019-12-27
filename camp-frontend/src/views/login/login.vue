@@ -31,7 +31,7 @@
                 <span class="fr cursor" @click="forgetFlag=true">忘记密码</span>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" v-loading="loading" @click="login">{{buttonText}}</el-button>
+                <el-button type="primary" :loading="loading" @click="login">{{buttonText}}</el-button>
             </el-form-item>
         </el-form>
 

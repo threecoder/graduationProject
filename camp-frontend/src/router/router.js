@@ -108,16 +108,25 @@ export default new Router({
             name: 'admin',
             component: resolve => require(['../views/admin/mainView.vue'], resolve),
             children: [
+                //会员管理
                 {
-                    path: '/publicActivity',
-                    name: 'publicActivity',
-                    component: resolve => require(['../views/admin/activity/activityPublish.vue'], resolve)
+                    path: '/managerMember',
+                    name: 'managerMember',
+                    component: resolve => require(['../views/admin/member/myMember.vue'], resolve)
                 },
+                //学员管理
                 {
-                    path: '/activitiesList',
-                    name: 'activitiesList',
-                    component: resolve => require(['../views/admin/activity/activitiesList.vue'], resolve)
+                    path: '/studentInfo',
+                    name: 'studentInfo',
+                    component: resolve => require(['../views/admin/student/infoManagement.vue'], resolve)
                 },
+                //培训
+                {
+                    path: '/publicTraining',
+                    name: 'publicTraining',
+                    component: resolve => require(['../views/admin/training/trainingPublish.vue'], resolve)
+                },
+                //考试管理
                 {
                     path: '/question',
                     name: 'question',
@@ -134,25 +143,26 @@ export default new Router({
                     component: resolve => require(['../views/admin/exam/published.vue'], resolve)
                 },
                 {
+                    path: '/checkGrade',
+                    name: 'checkGrade',
+                    component: resolve => require(['../views/admin/exam/checkGrade.vue'], resolve)
+                },
+                {
                     path: '/pickQuestion/:id',
                     name: 'pickQuestion',
                     component: resolve => require(['../views/admin/exam/pickQuestion.vue'], resolve)
                 },
+                //活动管理
                 {
-                    path: '/managerMember',
-                    name: 'managerMember',
-                    component: resolve => require(['../views/admin/member/myMember.vue'], resolve)
+                    path: '/publicActivity',
+                    name: 'publicActivity',
+                    component: resolve => require(['../views/admin/activity/activityPublish.vue'], resolve)
                 },
                 {
-                    path: '/studentInfo',
-                    name: 'studentInfo',
-                    component: resolve => require(['../views/admin/student/infoManagement.vue'], resolve)
-                },
-                {
-                    path: '/publicTraining',
-                    name: 'publicTraining',
-                    component: resolve => require(['../views/admin/training/trainingPublish.vue'], resolve)
-                },
+                    path: '/activitiesList',
+                    name: 'activitiesList',
+                    component: resolve => require(['../views/admin/activity/activitiesList.vue'], resolve)
+                }
             ]
         },
         {

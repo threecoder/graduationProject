@@ -10,6 +10,9 @@ const getStudentList = memberId => request(`${commomUrl}/getOneMemberStudentList
 //解除某个学员的挂靠
 const deleteStudentFromMember = par => request(`${commomUrl}/deleteOneStudentFromMember`, par, 'post', 'json');
 
+//修改会员资料
+const modifyInfo = par => request(`${commomUrl}/modifyMemberInfo`, par, 'post', 'json');
+
 //下载会员名单模板
 const getMemberTemplate = () => request(`${commomUrl}/getMemberTemplate`, {}, 'get', 'blob');
 
@@ -26,6 +29,7 @@ export default {
     getMemberList,
     getStudentList,
     deleteStudentFromMember,
+    modifyInfo,
     getMemberTemplate,
     getStudentTemplate,
     remindRenew,

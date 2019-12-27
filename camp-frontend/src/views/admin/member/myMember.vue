@@ -32,6 +32,7 @@
             >
                 <el-table-column slot="oper" align="center" slot-scope="{ params }" v-bind="params">
                     <div slot-scope=" {row}">
+                        <el-button type="primary" size="small" @click="checkInfo(row)">修改信息</el-button>
                         <el-button type="primary" size="small" @click="checkStudent(row)">查看成员</el-button>
                         <el-button
                             v-if="row.vip==1"
@@ -49,6 +50,11 @@
                 :pageSize="form.pageSize"
             />
         </div>
+
+        <!-- 查看会员信息弹窗 -->
+        <el-dialog title="会员信息" v-if="memberTable.flag" :visible.sync="memberTable.flag" width="70%">
+            <info :idType="1" :infor="temRow" />
+        </el-dialog>
 
         <!-- 添加会员弹窗 -->
         <el-dialog title="添加会员" v-if="newFlag" :visible.sync="newFlag">
@@ -86,6 +92,7 @@
 <script>
 import mTable from "@/components/mTable.vue";
 import page from "@/components/page.vue";
+import info from '../components/info.vue'
 import list from "@/components/studentList.vue";
 import newPerson from "@/components/newPerson.vue";
 import upload from "@/components/upload.vue";
@@ -97,7 +104,8 @@ export default {
         page,
         list,
         newPerson,
-        upload
+        upload,
+        info
     },
     data() {
         return {
@@ -148,7 +156,8 @@ export default {
                         width: "300px"
                     }
                 ],
-                loading: false
+                loading: false,
+                flag: false
             },
             studentTable: {
                 tableConfig: [
@@ -161,7 +170,7 @@ export default {
                     { prop: "city", label: "城市" },
                     { prop: "area", label: "区/县" },
                     { prop: "zone", label: "详细地址" },
-                    { slot: "oper", label: "操作", width: "200" }
+                    { slot: "oper", label: "操作", width: "100px" }
                 ],
                 tableData: [
                     {
@@ -183,7 +192,8 @@ export default {
                 company: null
             },
             newFlag: false,
-            formData: {}
+            formData: {},
+            temRow: {}
         };
     },
     mounted() {
@@ -192,7 +202,7 @@ export default {
     methods: {
         async search() {
             try {
-                let res = await getMemberList(this.form);
+                let res = await adminMemberApi.getMemberList(this.form);
                 console.log(res);
                 this.memberTable.tableData = res.data.list;
                 let t = memberTable.tableData;
@@ -208,6 +218,10 @@ export default {
         curChange(val) {
             this.form.currentPage = val;
             this.search();
+        },
+        checkInfo(row){
+            this.temRow = row;
+            this.memberTable.flag = true;
         },
         async checkStudent(row) {
             this.dialogInfo.company = row.name;

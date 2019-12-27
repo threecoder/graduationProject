@@ -69,36 +69,39 @@
                 <el-row :gutter="40">
                     <el-col :span="8">
                         <el-form-item label-position="top" label="公司名字">
-                            <el-input v-model="info.name" :readonly="readOnly"></el-input>
+                            <el-input v-model="info.name" :disabled="readOnly"></el-input>
                         </el-form-item>
                     </el-col>
 
                     <el-col :span="8">
                         <el-form-item label-position="top" label="号码">
-                            <el-input v-model="info.phone" :readonly="readOnly"></el-input>
+                            <el-input v-model="info.phone" :disabled="readOnly"></el-input>
                         </el-form-item>
                     </el-col>
 
                     <el-col :span="8">
                         <el-form-item label-position="top" label="邮箱">
-                            <el-input v-model="info.email" :readonly="readOnly"></el-input>
+                            <el-input v-model="info.email" :disabled="readOnly"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row :gutter="40">
                     <el-col :span="4">
                         <el-form-item label-position="top" label="是否是会员">
-                            <el-input v-model="info.memberFlag" :readonly="true"></el-input>
+                            <el-select v-model="info.vip" :disabled="readOnly">
+                                <el-option :value="1" label="是"></el-option>
+                                <el-option :value="0" label="否"></el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label-position="top" label="会员开始时间">
-                            <el-input v-model="info.memberBeginDate" :readonly="true"></el-input>
+                            <el-date-picker type="datetime" v-model="info.vipBegin" :disabled="readOnly"></el-date-picker>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label-position="top" label="会员到期时间">
-                            <el-input v-model="info.memberEndDate" :readonly="true"></el-input>
+                            <el-date-picker type="datetime" v-model="info.vipEnd" :disabled="readOnly"></el-date-picker>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -110,7 +113,7 @@
                                 v-model="info.zone"
                                 class="input-with-select"
                                 placeholder="请输入具体地址"
-                                :readonly="readOnly"
+                                :disabled="readOnly"
                             >
                                 <v-distpicker
                                     v-on:province="changeProvince"
@@ -133,7 +136,7 @@
                     v-if="!readOnly"
                     type="primary"
                     round
-                    @click="setUserInfo"
+                    @click="modifyInfo"
                     :loading="confirmLoading"
                 >确定</el-button>
                 <el-button v-if="!readOnly" type="primary" round @click="readOnly=true">取消</el-button>
@@ -170,7 +173,8 @@
 </template>
 <script>
 import adminStudentApi from "@/api/admin/student.js";
-import { getLocalStorage } from "@/assets/js/util.js";
+import adminMemberApi from "@/api/admin/member.js";
+import { getLocalStorage,formatDateAndTime } from "@/assets/js/util.js";
 export default {
     props: {
         idType: {
@@ -212,15 +216,19 @@ export default {
         this.info = this.infor;
     },
     methods: {
-        async setUserInfo() {
+        async modifyInfo() {
             try {
                 this.confirmLoading = true;
                 let res = null;
-                if (idType == 0) {
+                if (this.idType == 0) {
                     res = await adminStudentApi.modifyInfo(this.info);
                     this.$message.success("修改学员资料成功");
                 } else {
-                    res = await setInfo(this.info, this.idType);
+                    //处理参数
+                    let par = {...this.info};
+                    par.vipBegin = formatDateAndTime(par.vipBegin);
+                    par.vipEnd = formatDateAndTime(par.vipEnd);
+                    res = await adminMemberApi.modifyInfo(par);
                     this.$message.success("修改会员资料成功");
                 }
                 this.readOnly = true;
