@@ -391,7 +391,6 @@ public class TrainingServiceImpl implements TrainingService {
         return result;
     }
 
-
     @Override
     public JSONObject memberJoinTraining(JSONObject jsonObject) {
         JSONObject result=new JSONObject();

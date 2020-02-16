@@ -431,11 +431,13 @@ public class ExamServiceImpl implements ExamService {
                 }
                 //保存做题记录
                 examQuestionStudentAnswer.setAnswerOne(((JSONArray) answer.get(i)).getByte(0));
-                examQuestionStudentAnswer.setAnswerTwo(((JSONArray) answer.get(i)).getByte(1));
-                if(((JSONArray) answer.get(i)).size()>2){
-                    examQuestionStudentAnswer.setAnswerThree(((JSONArray) answer.get(i)).getByte(2));
-                    if(((JSONArray) answer.get(i)).size()>3){
-                        examQuestionStudentAnswer.setAnswerFour(((JSONArray) answer.get(i)).getByte(3));
+                if(((JSONArray) answer.get(i)).size()>1){
+                    examQuestionStudentAnswer.setAnswerTwo(((JSONArray) answer.get(i)).getByte(1));
+                    if(((JSONArray) answer.get(i)).size()>2){
+                        examQuestionStudentAnswer.setAnswerThree(((JSONArray) answer.get(i)).getByte(2));
+                        if(((JSONArray) answer.get(i)).size()>3){
+                            examQuestionStudentAnswer.setAnswerFour(((JSONArray) answer.get(i)).getByte(3));
+                        }
                     }
                 }
             }else {
