@@ -26,10 +26,9 @@ public class TestController {
 
     @RequestMapping("/test")
     @ResponseBody
-    public void getall(){
-        String result="";
-        StudentExample studentExample=new StudentExample();
-        System.out.println((Student)redisUtil.get("studentI_1"));
+    public String getall(){
+        Student student=(Student)redisUtil.get("studentId_38");
+        return JSONObject.toJSON(student).toString();
     }
 
     public static void main(String[] args){

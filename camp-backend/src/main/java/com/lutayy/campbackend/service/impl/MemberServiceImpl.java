@@ -487,7 +487,7 @@ public class MemberServiceImpl implements MemberService {
         criteria.andMemberIdEqualTo(memberId);
         List<MemberReStudent> memberReStudents=memberReStudentMapper.selectByExample(memberReStudentExample);
         if(memberReStudents.size()==0){
-            result.put("code", "fail");
+            result.put("code", "success");
             result.put("msg","名下无学员");
             result.put("data", null);
             return result;
@@ -537,7 +537,7 @@ public class MemberServiceImpl implements MemberService {
             data.put("currentPage", "1");
             data.put("total", totalNum);
             result.put("data", data);
-            result.put("code", "fail");
+            result.put("code", "success");
             result.put("msg", "名下没有符合条件的学员");
             return result;
         }

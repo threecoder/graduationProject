@@ -22,6 +22,12 @@ public class TrainingController {
         return trainingService.getCourses(jsonObject);
     }
 
+    @RequestMapping("/admin/addNewTraining")
+    @ResponseBody
+    public JSONObject addNewTraining(@RequestBody JSONObject jsonObject){
+        return trainingService.addNewTraining(jsonObject);
+    }
+
     @RequestMapping("/student/joinTraining")
     @ResponseBody
     public JSONObject studentJoinTraining(@RequestBody JSONObject jsonObject){

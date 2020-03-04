@@ -197,6 +197,8 @@ public class AdminServiceImpl implements AdminService {
             }
         }
         data.put("list", list);
+        result.put("code", "success");
+        result.put("msg", "查询成功");
         result.put("data", data);
         return result;
 
@@ -211,7 +213,7 @@ public class AdminServiceImpl implements AdminService {
         criteria.andMemberIdEqualTo(memberId);
         List<MemberReStudent> memberReStudents=memberReStudentMapper.selectByExample(memberReStudentExample);
         if(memberReStudents.size()==0){
-            result.put("code", "fail");
+            result.put("code", "success");
             result.put("msg", "该会员名下暂无学员");
             result.put("data", null);
             return result;

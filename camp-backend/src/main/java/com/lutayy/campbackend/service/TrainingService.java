@@ -9,6 +9,8 @@ public interface TrainingService {
 
     JSONObject getCourses(JSONObject jsonObject);
 
+    JSONObject addNewTraining(JSONObject jsonObject);
+
     JSONObject getJoinableTraining(String id);
 
     JSONObject getStudentSignedTraining(String id);
