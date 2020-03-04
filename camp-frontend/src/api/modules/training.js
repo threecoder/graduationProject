@@ -9,9 +9,7 @@ const getsignedTraining = idType => {
     let str = idType == 0 ? "/campback/student/getSignedTraining" : "/campback/member/getSignedTraining";
     return request(str, {}, 'get', 'json');
 }
-const getSeatNum = activityId => {
-    return request("/campback/student/getSeatNum", { activityId }, 'post', 'json');
-}
+const getSeatNum = activityId =>  request("/campback/student/getSeatNum", { activityId }, 'post', 'json');
 
 //会员批量报名
 const memberJoinTraining = par => request("/campback/member/joinTraining", par, 'post', 'json');

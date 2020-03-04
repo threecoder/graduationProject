@@ -19,8 +19,8 @@
                     :unique-opened="true"
                     text-color="#fff"
                 >
-                    <navmenu v-if="type==1" :data="adminList"></navmenu>
-                    <navmenu v-if="type==0" :data="menuList"></navmenu>
+                    <navmenu v-if="type==1" :data="memberList"></navmenu>
+                    <navmenu v-if="type==0" :data="studentList"></navmenu>
                 </el-menu>
             </aside>
             <section class="content-container">
@@ -45,7 +45,7 @@ export default {
     },
     data() {
         return {
-            menuList: [
+            studentList: [
                 {
                     index: "1",
                     title: "我的信息",
@@ -64,8 +64,8 @@ export default {
                     index: "2",
                     title: "我的培训",
                     children: [
-                        { index: "/training/0", title: "可报名的培训" },
-                        { index: "/training/1", title: "已报名的培训" }
+                        { index: "/enrolableTraining", title: "可报名的培训" },
+                        { index: "/enrolledTraining", title: "已报名的培训" }
                     ]
                 },
                 {
@@ -80,8 +80,8 @@ export default {
                     index: "4",
                     title: "我的活动",
                     children: [
-                        { index: "/activities/0",title: "可报名的活动"},
-                        { index: "/activities/1",title: "已报名的活动"}
+                        { index: "/enrolableActivities", title: "可报名活动" },
+                        { index: "/enrolledActivities", title: "已报名活动" }
                     ]
                 },
                 {
@@ -94,7 +94,7 @@ export default {
                 }
             ],
             //会员菜单
-            adminList: [
+            memberList: [
                 {
                     index: "1",
                     title: "我的信息",
@@ -109,8 +109,8 @@ export default {
                     index: "3",
                     title: "培训管理",
                     children: [
-                        { index: "/training/0", title: "可报名培训" },
-                        { index: "/training/1", title: "已报名培训" }
+                        { index: "/enrolableTraining", title: "可报名的培训" },
+                        { index: "/enrolledTraining", title: "已报名的培训" }
                     ]
                 },
                 {
@@ -122,8 +122,8 @@ export default {
                     index: "5",
                     title: "活动报名",
                     children: [
-                        { index: "/activities/0", title: "可报名活动" },
-                        { index: "/activities/1", title: "已报名活动" }
+                        { index: "/enrolableActivities", title: "可报名活动" },
+                        { index: "/enrolledActivities", title: "已报名活动" }
                     ]
                 }
             ],

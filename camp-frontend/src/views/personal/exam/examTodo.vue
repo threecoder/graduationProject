@@ -2,11 +2,11 @@
     <div>
         <h2>需完成的考试</h2>
         <div class="switcher">
-            <el-button :class="{'active':flag}" @click="flag=true">未作答</el-button>
-            <el-button :class="{'active':!flag}" @click="flag=false">已作答</el-button>
+            <el-button :class="{'active':notFinishedFlag}" @click="notFinishedFlag=true">未作答</el-button>
+            <el-button :class="{'active':!notFinishedFlag}" @click="notFinishedFlag=false">已作答</el-button>
         </div>
         <div>
-            <span v-if="flag" class="panel-title">还未作答的试卷</span>
+            <span v-if="notFinishedFlag" class="panel-title">还未作答的试卷</span>
             <span v-else class="panel-title">已经作答过的试卷</span>
             <div class="all-exam-container" :loading="loading">
                 <div class="single-exam-container" v-for="(item,i) in examList" :key="i">
@@ -26,34 +26,32 @@
     </div>
 </template>
 <script>
-import examApi from "@/api/modules/exam.js";
-import singleExam from "@/components/singleExam.vue";
-import page from "@/components/page.vue";
+import examApi from "../../../api/modules/exam";
+import singleExam from "./components/singleExam.vue";
 export default {
     components: {
-        singleExam,
-        page
+        singleExam
     },
     data() {
         return {
             examList: [
-                // {
-                //     examId:"1",
-                //     examName:"考试名称",
-                //     date:"2016-10-10",
-                //     startTime: "14:00:00",
-                //     endTime: "16:00:00",
-                //     min: "120分钟",
-                //     belong: "HTML入门",
-                //     grade:null
-                // }
+                {
+                    examId: "1",
+                    examName: "考试名称",
+                    date: "2016-10-10",
+                    startTime: "14:00:00",
+                    endTime: "16:00:00",
+                    min: "120分钟",
+                    belong: "HTML入门",
+                    grade: null
+                }
             ],
-            flag: true,
+            notFinishedFlag: true,
             loading: false
         };
     },
     watch: {
-        flag() {
+        notFinishedFlag() {
             this.examList = [];
             this.getExamList();
         }
@@ -66,7 +64,7 @@ export default {
             this.loading = true;
             try {
                 let res = null;
-                if (this.flag) {
+                if (this.notFinishedFlag) {
                     res = await examApi.getTodoExam();
                 } else {
                     res = await examApi.getHalfExam();
@@ -74,10 +72,10 @@ export default {
                 if (res) {
                     this.examList = res.data;
                 }
-                this.loading = false;
             } catch (error) {
-                this.loading = false;
+                this.$message.error(error.message);
             }
+            this.loading = false;
         }
     }
 };

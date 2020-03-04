@@ -26,7 +26,12 @@
         </div>
 
         <div class="button-container">
-            <el-button size="medium" style="margin-right:10px;" type="primary" @click="getQueTem">下载模板</el-button>
+            <el-button
+                size="medium"
+                style="margin-right:10px;"
+                type="primary"
+                @click="getQueTem"
+            >下载模板</el-button>
             <upload
                 :autoUpload="uploadAttr.autoUpload"
                 :uploadUrl="uploadAttr.uploadUrl"
@@ -108,11 +113,11 @@
 </template>
 
 <script>
-import mTable from "@/components/mTable.vue";
-import page from "@/components/page.vue";
-import upload from "@/components/upload.vue";
-import adminExamApi from "@/api/admin/exam.js";
-import { download } from '@/api/request'
+import mTable from "../../../components/mTable.vue";
+import page from "../../../components/page.vue";
+import upload from "../../../components/upload.vue";
+import adminExamApi from "../../../api/admin/exam";
+import { download } from "../../../api/request";
 export default {
     components: {
         mTable,
@@ -226,13 +231,17 @@ export default {
                     }
                 });
                 this.form.total = res.data.total;
-            } catch (error) {}
+            } catch (error) {
+                this.$message.error(error.message);
+            }
         },
         async getTraining() {
             try {
                 let res = await adminExamApi.getTrainingList();
                 this.trainingList = res.data;
-            } catch (error) {}
+            } catch (error) {
+                this.$message.error(error.message);
+            }
         },
         curChange(val) {
             this.form.currentPage = val;
@@ -248,13 +257,17 @@ export default {
                 this.$message.success("修改试题成功");
                 this.getQuestionList();
                 this.flag = false;
-            } catch (error) {}
+            } catch (error) {
+                this.$message.error(error.message);
+            }
         },
         async getQueTem() {
             try {
                 let res = await adminExamApi.getQuestionTemplate();
                 download(res);
-            } catch (error) {}
+            } catch (error) {
+                this.$message.error(error.message);
+            }
         }
     }
 };

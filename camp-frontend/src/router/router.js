@@ -82,9 +82,14 @@ export default new Router({
                     component: resolve => require(['../views/personal/exam/examDone.vue'], resolve)
                 },
                 {
-                    path: '/activities/:id',
-                    name: 'activities',
-                    component: resolve => require(['../views/personal/activities/joinable.vue'], resolve)
+                    path: '/enrolableActivities',
+                    name: 'enrolableActivities',
+                    component: resolve => require(['../views/personal/activities/enrolableActivities.vue'], resolve)
+                },
+                {
+                    path: '/enrolledActivities',
+                    name: 'enrolledActivities',
+                    component: resolve => require([ '../views/personal/activities/enrolledActivities.vue' ], resolve)
                 },
                 {
                     path: '/management',
@@ -92,9 +97,14 @@ export default new Router({
                     component: resolve => require(['../views/personal/relationship/management.vue'], resolve)
                 },
                 {
-                    path: '/training/:id',
-                    name: 'training',
-                    component: resolve => require(['../views/personal/training/training.vue'], resolve)
+                    path: '/enrolableTraining',
+                    name: 'enrolableTraining',
+                    component: resolve => require(['../views/personal/training/enrolableTraining.vue'], resolve)
+                },
+                {
+                    path: '/enrolledTraining',
+                    name: 'enrolledTraining',
+                    component: resolve => require([ '../views/personal/training/enrolledTraining.vue' ], resolve)
                 },
                 {
                     path: '/vote/:id',

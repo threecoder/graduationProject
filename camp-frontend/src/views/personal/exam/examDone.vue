@@ -6,7 +6,7 @@
             <div class="all-exam-container">
                 <div class="single-exam-container" v-for="(item,i) in examList" :key="i">
                     <single-exam
-                        type="done"
+                        isDone="done"
                         :examName="item.examName"
                         :date="item.date"
                         :startTime="item.startTime"
@@ -22,13 +22,11 @@
     </div>
 </template>
 <script>
-import examApi from "@/api/modules/exam.js";
-import singleExam from "@/components/singleExam.vue";
-import page from "@/components/page.vue";
+import examApi from '../../../api/modules/exam';
+import singleExam from "./components/singleExam.vue";
 export default {
     components: {
-        singleExam,
-        page
+        singleExam
     },
     data() {
         return {
@@ -58,7 +56,7 @@ export default {
                     this.examList = res.data;
                 }
             } catch (error) {
-                this.$message.error("获取已完成试卷失败，请刷新重试");
+                this.$message.error(error.message);
             }
         }
     }

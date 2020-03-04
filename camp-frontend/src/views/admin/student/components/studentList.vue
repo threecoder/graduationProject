@@ -49,9 +49,9 @@
     </div>
 </template>
 <script>
-import mTable from "@/components/mTable.vue";
-import page from "@/components/page.vue";
-import adminStudentApi from "@/api/admin/student.js";
+import mTable from "../../../../components/mTable.vue";
+import page from "../../../../components/page.vue";
+import adminStudentApi from "../../../../api/admin/student";
 
 export default {
     props: {
@@ -127,6 +127,7 @@ export default {
                 this.table.tableData = res.data.list;
                 this.form.total = res.data.total;
             } catch (error) {
+                this.$message.error(error.message);
                 console.log(error);
             }
         },

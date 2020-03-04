@@ -1,7 +1,6 @@
 <template>
     <div>
-        <h2 v-if="type==0">可参与的活动</h2>
-        <h2 v-else>已经报名的活动</h2>
+        <h2>可参与的活动</h2>
         <div class="table-container">
             <m-table
                 :data="activityTable.tableData"
@@ -18,71 +17,23 @@
                 >
                     <div slot-scope="{ row }">
                         <el-button type="primary" @click="checkDetail(row)">详情</el-button>
+                        <el-button type="primary" v-if="idType==0" @click="dialogVisible = true">报名</el-button>
                         <el-button
                             type="primary"
-                            v-if="type==1 && row.status=='未支付'"
-                            @click="pay"
-                        >支付</el-button>
-                        <el-button
-                            type="primary"
-                            v-if="type==0 && idType==0"
-                            @click="dialogVisible = true"
-                        >报名</el-button>
-
-                        <el-button
-                            type="primary"
-                            v-if="type==0 && idType==1"
+                            v-if="idType==1"
                             @click="studentList.listFlag = true;studentList.id=row.id"
                         >报名</el-button>
-                        <el-button
-                            type="primary"
-                            v-if="type==1 && row.status=='已支付'"
-                            @click="checkSEAT(row)"
-                        >座位号</el-button>
                     </div>
                 </el-table-column>
             </m-table>
         </div>
 
-        <el-dialog
-            title="提示"
-            :visible.sync="dialogVisible"
-            :modal-append-to-body="false"
-            width="30%"
-        >
-            <span>您确定报名这个活动吗？</span>
-            <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="studentJoin(row) , dialogVisible = false">确定</el-button>
-                <el-button @click="dialogVisible = false">取消</el-button>
-            </span>
-        </el-dialog>
-        <el-drawer class="drawer-container" title="活动详情" :visible.sync="drawer" size="30%">
-            <div class="tac">
-                <h3>{{drwaerInfo.name}}</h3>
-                <p>活动时间：{{drwaerInfo.date}}</p>
-                <p>活动地点：{{drwaerInfo.address}}</p>
-            </div>
-            <div class="divider"></div>
-            <div class="activity-detail">
-                <p v-for="(item,i) in drwaerInfo.introduce" :key="i">{{item}}</p>
-                <p>如有疑问，请联系：{{drwaerInfo.contacts}}。</p>
-            </div>
-            <div class="drawer-footer">
-                <el-button @click="drawer = false">取 消</el-button>
-                <el-button
-                    v-if="type==0 && idType==0"
-                    type="primary"
-                    @click="studentJoin(null)"
-                    :loading="joinLoading"
-                >{{ joinLoading ? '提交中 ...' : '立即报名' }}</el-button>
-                <el-button
-                    v-if="type==0 && idType==1"
-                    type="primary"
-                    @click="studentList.listFlag=true;drawer=false;studentList.id=drwaerInfo.id"
-                    :loading="joinLoading"
-                >{{ joinLoading ? '提交中 ...' : '立即报名' }}</el-button>
-            </div>
-        </el-drawer>
+        <activity-detail
+            :drawerInfo="drawerInfo"
+            :flag.sync="drawerInfoFlag"
+            @notDisplay="drawerInfoFlag = false"
+            @enroll="enroll"
+        />
 
         <el-dialog
             title="选择人员"
@@ -104,13 +55,15 @@
 </template>
 <script>
 import mTable from "@/components/mTable.vue";
+import activityDetail from "./components/activityDetail.vue";
 import list from "@/components/studentList.vue";
 import { getLocalStorage } from "@/assets/js/util.js";
 import activityApi from "@/api/modules/activity.js";
 export default {
     components: {
         mTable,
-        list
+        list,
+        activityDetail
     },
     data() {
         return {
@@ -193,7 +146,7 @@ export default {
                 { prop: "phone", label: "手机号码" },
                 { prop: "position", label: "职务" }
             ],
-            drwaerInfo: {
+            drawerInfo: {
                 id: null,
                 name: null,
                 date: null,
@@ -202,7 +155,7 @@ export default {
                 introduciotn: [],
                 contacts: "唐先生 13535789321"
             },
-            drawer: false,
+            drawerInfoFlag: false,
             joinLoading: false,
             dialogVisible: false,
             studentList: {
@@ -356,32 +309,37 @@ export default {
     methods: {
         async init() {
             try {
-                let res = null;
-                if (this.type == 1) {
-                    let t = this.activityTable.tableConfig.pop();
-                    this.activityTable.tableConfig.push(
-                        { prop: "status", label: "状态" },
-                        t
-                    );
-                    res = await activityApi.getsignedActivities(this.idType);
-                } else {
-                    res = await activityApi.getJoinableActivities(this.idType);
-                }
+                let res = await activityApi.getJoinableActivities(this.idType);
                 this.activityTable.tableData = res.data;
             } catch (error) {
+                this.$message.error(error.message);
                 console.log(error);
             }
         },
-        async studentJoin(params) {
-            try {
-                this.joinLoading = true;
-                let id = params ? params.id : this.drwaerInfo.id;
-                let res = await activityApi.studentJoinActivties(id);
-                this.$message.success("报名成功");
-                this.joinLoading = false;
-            } catch (error) {
-                this.joinLoading = false;
+        enroll() {
+            if (this.idType == 0) {
+                this.studentJoin(null);
+            } else {
+                this.studentList.listFlag = true;
+                this.studentList.id = this.drawerInfo.id;
             }
+        },
+        async studentJoin(params) {
+            this.$confirm("确定报名这个活动吗？", "提示", {
+                cancelButtonText: "取消",
+                confirmButtonText: "确定",
+                type: "warning"
+            }).then(async () => {
+                try {
+                    this.joinLoading = true;
+                    let id = params ? params.id : this.drawerInfo.id;
+                    let res = await activityApi.studentJoinActivties(id);
+                    this.$message.success("报名成功");
+                } catch (error) {
+                    this.$message.error(error);
+                }
+                this.joinLoading = false;
+            });
         },
         async getStudentList() {
             try {
@@ -394,18 +352,26 @@ export default {
                 this.$message.error("报名人数不能为0");
                 return false;
             }
-            try {
-                let par = {
-                    idNums: this.studentList.data,
-                    activityId: this.studentList.id
-                };
-                let res = await activityApi.memberJoinActivity(par);
-                this.$message.success("报名成功");
-            } catch (error) {}
+            this.$confirm("确定报名这个活动吗？", "提示", {
+                cancelButtonText: "取消",
+                confirmButtonText: "确定",
+                type: "warning"
+            }).then(async () => {
+                try {
+                    let par = {
+                        idNums: this.studentList.data,
+                        activityId: this.studentList.id
+                    };
+                    let res = await activityApi.memberJoinActivity(par);
+                    this.$message.success("报名成功");
+                } catch (error) {
+                    this.$message.error(error.message);
+                }
+            });
         },
         checkDetail(row) {
-            this.drawer = true;
-            this.drwaerInfo = row;
+            this.drawerInfo = row;
+            this.drawerInfoFlag = true;
         },
         pay() {},
         async checkSEAT(row) {
@@ -415,7 +381,6 @@ export default {
         },
         selectChange(val) {
             this.studentList.data = val.map(val => val.idNum);
-            console.log("父节点", this.studentList.data);
         }
     }
 };

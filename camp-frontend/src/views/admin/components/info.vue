@@ -172,9 +172,9 @@
     </div>
 </template>
 <script>
-import adminStudentApi from "@/api/admin/student.js";
-import adminMemberApi from "@/api/admin/member.js";
-import { getLocalStorage,formatDateAndTime } from "@/assets/js/util.js";
+import adminStudentApi from "../../../api/admin/student";
+import adminMemberApi from "../../../api/admin/member.js";
+import { getLocalStorage,formatDateAndTime } from "../../../assets/js/util.js";
 export default {
     props: {
         idType: {

@@ -251,7 +251,9 @@ export default {
                 try {
                     let res = await adminTrainingApi.addNewTraining(par);
                     this.$message.success("新建培训成功");
-                } catch (error) {}
+                } catch (error) {
+                    this.$message.error(error.message);
+                }
             }
         },
         resetForm(formName) {

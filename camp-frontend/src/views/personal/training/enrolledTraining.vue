@@ -1,13 +1,12 @@
 <template>
     <div>
-        <h2 v-if="type==0">可参与的活动</h2>
-        <h2 v-else>已经报名的活动</h2>
+        <h2>已报名的培训</h2>
         <div class="table-container">
             <m-table
-                :data="activityTable.tableData"
-                :tableConfig="activityTable.tableConfig"
-                :loading="activityTable.loading"
-                :tableAttr="activityTable.tableAttr"
+                :data="trainingTable.tableData"
+                :tableConfig="trainingTable.tableConfig"
+                :loading="trainingTable.loading"
+                :tableAttr="trainingTable.tableAttr"
             >
                 <el-table-column
                     align="center"
@@ -17,26 +16,11 @@
                     class="myoper"
                 >
                     <div slot-scope="{ row }">
-                        <el-button type="primary" @click="checkDetail(row)">详情</el-button>
+                        <el-button type="primary" @click="checkDetail(row)">培训详情</el-button>
+                        <el-button type="primary" v-if="row.status=='未支付'" @click="pay">支付</el-button>
                         <el-button
                             type="primary"
-                            v-if="type==1 && row.status=='未支付'"
-                            @click="pay"
-                        >支付</el-button>
-                        <el-button
-                            type="primary"
-                            v-if="type==0 && idType==0"
-                            @click="dialogVisible = true"
-                        >报名</el-button>
-
-                        <el-button
-                            type="primary"
-                            v-if="type==0 && idType==1"
-                            @click="studentList.listFlag = true;studentList.id=row.id"
-                        >报名</el-button>
-                        <el-button
-                            type="primary"
-                            v-if="type==1 && row.status=='已支付'"
+                            v-if="row.status=='已支付'"
                             @click="checkSEAT(row)"
                         >座位号</el-button>
                     </div>
@@ -44,97 +28,47 @@
             </m-table>
         </div>
 
-        <el-dialog
-            title="提示"
-            :visible.sync="dialogVisible"
-            :modal-append-to-body="false"
-            width="30%"
-        >
-            <span>您确定报名这个活动吗？</span>
-            <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="studentJoin(row) , dialogVisible = false">确定</el-button>
-                <el-button @click="dialogVisible = false">取消</el-button>
-            </span>
-        </el-dialog>
-        <el-drawer class="drawer-container" title="活动详情" :visible.sync="drawer" size="30%">
-            <div class="tac">
-                <h3>{{drwaerInfo.name}}</h3>
-                <p>活动时间：{{drwaerInfo.date}}</p>
-                <p>活动地点：{{drwaerInfo.address}}</p>
-            </div>
-            <div class="divider"></div>
-            <div class="activity-detail">
-                <p v-for="(item,i) in drwaerInfo.introduce" :key="i">{{item}}</p>
-                <p>如有疑问，请联系：{{drwaerInfo.contacts}}。</p>
-            </div>
-            <div class="drawer-footer">
-                <el-button @click="drawer = false">取 消</el-button>
-                <el-button
-                    v-if="type==0 && idType==0"
-                    type="primary"
-                    @click="studentJoin(null)"
-                    :loading="joinLoading"
-                >{{ joinLoading ? '提交中 ...' : '立即报名' }}</el-button>
-                <el-button
-                    v-if="type==0 && idType==1"
-                    type="primary"
-                    @click="studentList.listFlag=true;drawer=false;studentList.id=drwaerInfo.id"
-                    :loading="joinLoading"
-                >{{ joinLoading ? '提交中 ...' : '立即报名' }}</el-button>
-            </div>
-        </el-drawer>
-
-        <el-dialog
-            title="选择人员"
-            v-if="studentList.listFlag"
-            :visible.sync="studentList.listFlag"
-            width="40%"
-        >
-            <list
-                :tableData="studentList.list"
-                :tableConfig="studentTableConfig"
-                @selectChange="selectChange"
-            />
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="studentList.listFlag = false">取 消</el-button>
-                <el-button type="primary" @click="memberJoin">确 定</el-button>
-            </div>
-        </el-dialog>
+        <training-detail
+            :drawerInfo="drawerInfo"
+            :flag.sync="drawerInfoFlag"
+            @notDisplay="drawerInfoFlag = false"
+        />
     </div>
 </template>
 <script>
 import mTable from "@/components/mTable.vue";
-import list from "@/components/studentList.vue";
-import { getLocalStorage } from "@/assets/js/util.js";
-import activityApi from "@/api/modules/activity.js";
+import trainingDetail from "./components/trainingDetail.vue";
+import { getLocalStorage } from "@/assets/js/util";
+import activityApi from "@/api/modules/activity";
+import trainingApi from "../../../api/modules/training";
 export default {
     components: {
-        mTable,
-        list
+        trainingDetail,
+        mTable
     },
     data() {
         return {
             idType: getLocalStorage("user").type,
-            type: this.$route.params.id,
-            activityTable: {
+            trainingTable: {
                 tableConfig: [
-                    { prop: "id", label: "活动序号", width: "100" },
-                    { prop: "name", label: "活动名称" },
+                    { prop: "id", label: "培训序号", width: "100" },
+                    { prop: "name", label: "培训名称" },
                     { prop: "date", label: "举办时间" },
                     { prop: "address", label: "地点" },
                     { prop: "fee", label: "费用" },
+                    { prop: "status", label: "状态" },
                     {
                         prop: "opera",
                         label: "操作",
                         fixed: "right",
-                        width: 200,
+                        width: 220,
                         slot: "oper"
                     }
                 ],
                 tableData: [
                     {
                         id: 1,
-                        name: "活动测试",
+                        name: "培训测试",
                         date: "2016-10-10 14:00:00-16:00:00",
                         address: "广州市番禺区小谷围街道华南理工大学",
                         fee: 1000,
@@ -150,7 +84,7 @@ export default {
                     },
                     {
                         id: 2,
-                        name: "活动测试",
+                        name: "培训测试",
                         date: "2016-11-11 14:00:00-16:00:00",
                         address: "广州市番禺区小谷围街道华南理工大学",
                         fee: 1000,
@@ -166,7 +100,7 @@ export default {
                     },
                     {
                         id: 3,
-                        name: "活动测试",
+                        name: "培训测试",
                         date: "2016-10-10 14:00:00-16:00:00",
                         address: "广州市番禺区小谷围街道华南理工大学",
                         fee: 1000,
@@ -186,14 +120,7 @@ export default {
                 },
                 loading: false
             },
-            studentTableConfig: [
-                { slot: "select" },
-                { prop: "name", label: "姓名" },
-                { prop: "idNum", label: "身份证号码" },
-                { prop: "phone", label: "手机号码" },
-                { prop: "position", label: "职务" }
-            ],
-            drwaerInfo: {
+            drawerInfo: {
                 id: null,
                 name: null,
                 date: null,
@@ -202,13 +129,19 @@ export default {
                 introduciotn: [],
                 contacts: "唐先生 13535789321"
             },
-            drawer: false,
+            drawerInfoFlag: false,
             joinLoading: false,
-            dialogVisible: false,
             studentList: {
                 id: null,
                 listFlag: false,
                 data: [],
+                config: [
+                    { slot: "select" },
+                    { prop: "name", label: "姓名" },
+                    { prop: "idNum", label: "身份证号码" },
+                    { prop: "phone", label: "手机号码" },
+                    { prop: "position", label: "职务" }
+                ],
                 list: [
                     {
                         name: "1",
@@ -349,69 +282,28 @@ export default {
     },
     mounted() {
         this.init();
-        if (this.idType == 1) {
-            this.getStudentList();
-        }
     },
     methods: {
         async init() {
             try {
-                let res = null;
-                if (this.type == 1) {
-                    let t = this.activityTable.tableConfig.pop();
-                    this.activityTable.tableConfig.push(
-                        { prop: "status", label: "状态" },
-                        t
-                    );
-                    res = await activityApi.getsignedActivities(this.idType);
-                } else {
-                    res = await activityApi.getJoinableActivities(this.idType);
-                }
-                this.activityTable.tableData = res.data;
+                let res = await trainingApi.getsignedTraining(this.idType);
+                this.trainingTable.tableData = res.data;
             } catch (error) {
+                this.$message.error(error.message);
                 console.log(error);
             }
         },
-        async studentJoin(params) {
-            try {
-                this.joinLoading = true;
-                let id = params ? params.id : this.drwaerInfo.id;
-                let res = await activityApi.studentJoinActivties(id);
-                this.$message.success("报名成功");
-                this.joinLoading = false;
-            } catch (error) {
-                this.joinLoading = false;
-            }
-        },
-        async getStudentList() {
-            try {
-                let res = await activityApi.getList();
-                this.studentList.list = res.data;
-            } catch (error) {}
-        },
-        async memberJoin(id) {
-            if (this.studentList.data.length == 0) {
-                this.$message.error("报名人数不能为0");
-                return false;
-            }
-            try {
-                let par = {
-                    idNums: this.studentList.data,
-                    activityId: this.studentList.id
-                };
-                let res = await activityApi.memberJoinActivity(par);
-                this.$message.success("报名成功");
-            } catch (error) {}
-        },
         checkDetail(row) {
-            this.drawer = true;
-            this.drwaerInfo = row;
+            this.drawerInfo = row;
+            this.drawerInfoFlag = true;
         },
         pay() {},
         async checkSEAT(row) {
             try {
-                let res = await activityApi.getSeatNum(row.id);
-            } catch (error) {}
+                // let res = await trainingApi.getSeatNum(row.id);
+            } catch (error) {
+                this.$message.error(error.message);
+            }
         },
         selectChange(val) {
             this.studentList.data = val.map(val => val.idNum);
@@ -433,40 +325,7 @@ export default {
         }
     }
 }
-.drawer-container {
-    .tac {
-        h3 {
-            color: rgb(58, 158, 240);
-        }
-        p {
-            color: rgb(114, 114, 114);
-        }
-    }
 
-    .divider {
-        border-bottom: 1px solid rgb(58, 158, 240);
-    }
-    .activity-detail {
-        padding: 20px 30px;
-        p {
-            line-height: 30px;
-            text-indent: 2rem;
-        }
-    }
-    .drawer-footer {
-        border-top: 1px solid rgb(58, 158, 240);
-        width: 100%;
-        display: flex;
-        justify-content: flex-end;
-        position: absolute;
-        bottom: 0;
-        padding: 30px;
-        right: 0px;
-        .el-button {
-            // flex: 1;
-        }
-    }
-}
 .list-container {
     padding: 20px;
     width: 60%;

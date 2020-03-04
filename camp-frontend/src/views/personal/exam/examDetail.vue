@@ -7,7 +7,7 @@
             <span>考试时长：{{examInfo.min}}分钟</span>
             <span>总得分：{{examInfo.grade}}</span>
         </div>
-        <div class="container">
+        <div class="detail-container">
             <template v-for="(item,i) in list">
                 <singleOne :key="i" :item="item" />
             </template>
@@ -30,33 +30,33 @@ export default {
                 grade: 60
             },
             list: [
-                {
-                    index: 1,
-                    title: "食醋是什么味道1",
-                    score: 8,
-                    arr: ["发发发", "备选项", "备选", "备选1"],
-                    type: 2, //1是单选和判断，2是多选
-                    rightAnswer: [1, 2],
-                    studentAnswer: [2]
-                },
-                {
-                    index: 2,
-                    title: "食醋是什么味道1",
-                    score: 8,
-                    arr: ["发发发", "备选项", "备选", "备选1"],
-                    type: 1, //1是单选和判断，2是多选
-                    rightAnswer: [1],
-                    studentAnswer: [1]
-                },
-                {
-                    index: 2,
-                    title: "食醋是什么味道1",
-                    score: 8,
-                    arr: ["发发发", "备选项", "备选", "备选1"],
-                    type: 1, //1是单选和判断，2是多选
-                    rightAnswer: [1],
-                    studentAnswer: [1]
-                }
+                // {
+                //     index: 1,
+                //     title: "食醋是什么味道1",
+                //     score: 8,
+                //     arr: ["发发发", "备选项", "备选", "备选1"],
+                //     type: 2, //1是单选和判断，2是多选
+                //     rightAnswer: [1, 2],
+                //     studentAnswer: [2]
+                // },
+                // {
+                //     index: 2,
+                //     title: "食醋是什么味道1",
+                //     score: 8,
+                //     arr: ["发发发", "备选项", "备选", "备选1"],
+                //     type: 1, //1是单选和判断，2是多选
+                //     rightAnswer: [1],
+                //     studentAnswer: [1]
+                // },
+                // {
+                //     index: 2,
+                //     title: "食醋是什么味道1",
+                //     score: 8,
+                //     arr: ["发发发", "备选项", "备选", "备选1"],
+                //     type: 1, //1是单选和判断，2是多选
+                //     rightAnswer: [1],
+                //     studentAnswer: [1]
+                // }
             ],
             fixed: false,
             loading: false
@@ -71,12 +71,14 @@ export default {
     methods: {
         async init() {
             this.loading = true;
-            let res = await examApi.getExamDetail(this.examId);
-            console.log("res", res);
-            if (res) {
+            try {
+                let res = await examApi.getExamDetail(this.examId);
+                console.log("res", res);
                 this.list = res.data.questionList;
                 this.examInfo = res.data.examInfo;
                 this.loading = false;
+            } catch (error) {
+                this.$message.error(error.message);
             }
             this.loading = false;
         }
@@ -98,7 +100,7 @@ export default {
         color: #fff;
     }
 }
-.container {
+.detail-container {
     margin-top: 60px;
 }
 .fixed {

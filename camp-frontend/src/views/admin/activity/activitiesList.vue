@@ -86,9 +86,9 @@
     </div>
 </template>
 <script>
-import mTable from "@/components/mTable.vue";
+import mTable from "../../../components/mTable.vue";
 import sTable from "./components/seatingTable.vue";
-import adminActivityApi from "@/api/admin/activity.js";
+import adminActivityApi from "../../../api/admin/activity.js";
 export default {
     components: {
         mTable,
@@ -200,7 +200,9 @@ export default {
                 let listRes = await adminActivityApi.getActivityList();
                 console.log(listRes);
                 this.activityTable.tableData = listRes.data;
-            } catch (error) {}
+            } catch (error) {
+                this.$message.error(error.message);
+            }
         },
         handleLock(i, j, flag) {
             this.seatInfo.arr[i][j].lock = flag;
@@ -300,13 +302,19 @@ export default {
                 activityId: this.seatInfo.id,
                 data: this.seatInfo.arr
             };
-            let res = await adminActivityApi.setSEATInfo(par);
             console.log(par);
+            try {
+                let res = await adminActivityApi.setSEATInfo(par);
+            } catch (error) {
+                this.$message.error(error.message);
+            }
         },
         async exportEntryForm() {
             try {
                 let res = await adminActivityApi.getEntryForm(drwaerInfo.id);
-            } catch (error) {}
+            } catch (error) {
+                this.$message.error(error.message);
+            }
         }
     }
 };

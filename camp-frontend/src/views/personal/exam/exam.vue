@@ -42,7 +42,7 @@
 </template>
 <script>
 import singleChoice from "./components/singChoice.vue";
-import examApi from "@/api/modules/exam.js";
+import examApi from "../../../api/modules/exam";
 export default {
     data() {
         return {
@@ -171,7 +171,9 @@ export default {
                 let res = await examApi.submitExam(par);
                 this.$message.success("提交试卷成功！");
                 this.$router.push({ path: "/examTodo" });
-            } catch (error) {}
+            } catch (error) {
+                this.$message.error(error.message);
+            }
         },
         switchQuestion(i) {
             this.index = i - 1;

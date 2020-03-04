@@ -132,9 +132,9 @@
     </div>
 </template>
 <script>
-import mTable from "@/components/mTable.vue";
-import page from "@/components/page.vue";
-import adminExamApi from "@/api/admin/exam.js";
+import mTable from "../../../components/mTable.vue";
+import page from "../../../components/page.vue";
+import adminExamApi from "../../../api/admin/exam.js";
 export default {
     components: {
         mTable,
@@ -212,14 +212,18 @@ export default {
                 if (this.examInfo.hasQue == true) {
                     this.getQueList();
                 }
-            } catch (error) {}
+            } catch (error) {
+                this.$message.error(error.message);
+            }
         },
         async getQueList() {
             try {
                 let res = await adminExamApi.getExamQuestionList(this.examId);
                 this.questionIdList = res.data.list;
                 this.len = res.data.list.length;
-            } catch (error) {}
+            } catch (error) {
+                this.$message.error(error.message);
+            }
         },
         async search() {
             try {
@@ -241,6 +245,7 @@ export default {
                 });
                 this.form.total = res.data.total;
             } catch (error) {
+                this.$message.error(error.message);
                 console.log(error);
             }
         },
@@ -254,7 +259,9 @@ export default {
                     let id = this.questionIdList[row - 1];
                     let res = await adminExamApi.getSingleQuestion(id);
                     this.dialog = { ...res.data };
-                } catch (error) {}
+                } catch (error) {
+                    this.$message.error(error.message);
+                }
             } else {
                 this.dialog = { ...row };
                 this.dialog.detailType = type;
@@ -294,7 +301,9 @@ export default {
                 let res = await adminExamApi.saveQuestionForExam(par);
                 this.$message.success("保存题目成功");
                 this.$router.push({ path: "/toPublic" });
-            } catch (error) {}
+            } catch (error) {
+                this.$message.error(error.message);
+            }
         }
     }
 };

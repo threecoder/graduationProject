@@ -52,17 +52,18 @@
         </div>
 
         <!-- 查看会员信息弹窗 -->
-        <el-dialog title="会员信息" v-if="memberTable.flag" :visible.sync="memberTable.flag" width="70%">
+        <el-dialog
+            title="会员信息"
+            v-if="memberTable.flag"
+            :visible.sync="memberTable.flag"
+            width="70%"
+        >
             <info :idType="1" :infor="temRow" />
         </el-dialog>
 
         <!-- 添加会员弹窗 -->
         <el-dialog title="添加会员" v-if="newFlag" :visible.sync="newFlag">
-            <new-person
-                :type="1"
-                :uploadUrl="`/campback/admin/importMemberByFile`"
-                @close="closeMember"
-            />
+            <new-member :uploadUrl="`/campback/admin/importMemberByFile`" @close="closeMember" />
         </el-dialog>
 
         <!-- 查看学员弹窗 -->
@@ -90,20 +91,20 @@
     </div>
 </template>
 <script>
-import mTable from "@/components/mTable.vue";
-import page from "@/components/page.vue";
-import info from '../components/info.vue'
-import list from "@/components/studentList.vue";
-import newPerson from "@/components/newPerson.vue";
-import upload from "@/components/upload.vue";
-import adminMemberApi from "@/api/admin/member.js";
-import { download } from "@/api/request.js";
+import mTable from "../../../components/mTable.vue";
+import page from "../../../components/page.vue";
+import info from "../components/info.vue";
+import list from "../../../components/studentList.vue";
+import newMember from "./components/newMember.vue";
+import upload from "../../../components/upload.vue";
+import adminMemberApi from "../../../api/admin/member";
+import { download } from "../../../api/request";
 export default {
     components: {
         mTable,
         page,
         list,
-        newPerson,
+        newMember,
         upload,
         info
     },
@@ -212,33 +213,39 @@ export default {
                 });
                 this.form.total = res.data.total;
             } catch (error) {
-                console.log(error);
+                this.$message.error(error.message);
             }
         },
         curChange(val) {
             this.form.currentPage = val;
             this.search();
         },
-        checkInfo(row){
+        checkInfo(row) {
             this.temRow = row;
             this.memberTable.flag = true;
         },
         async checkStudent(row) {
             this.dialogInfo.company = row.name;
             this.dialogInfo.id = row.id;
-            this.formData = {memberId:this.dialogInfo.id};
+            this.formData = { memberId: this.dialogInfo.id };
             console.log(this.formData);
             try {
-                let res = await adminMemberApi.getStudentList(this.dialogInfo.id);
+                let res = await adminMemberApi.getStudentList(
+                    this.dialogInfo.id
+                );
                 this.studentTable.tableData = res.data;
-            } catch (error) {}
+            } catch (error) {
+                this.$message.error(error.message);
+            }
             this.studentTable.flag = true;
         },
         async remind(row) {
             try {
                 let res = await adminMemberApi.remindRenew(row.id);
                 this.$message.success(`提醒会员${row.name}续费成功`);
-            } catch (error) {}
+            } catch (error) {
+                this.$message.error(error.message);
+            }
         },
         async deleteOneStudent(val) {
             let par = {
@@ -250,13 +257,17 @@ export default {
                 this.$message.success("解除挂靠成功！");
                 res = await adminMemberApi.getStudentList(this.dialogInfo.id);
                 this.studentTable.tableData = res.data;
-            } catch (error) {}
+            } catch (error) {
+                this.$message.error(error.message);
+            }
         },
         async getStuTemp() {
             try {
                 let res = await adminMemberApi.getStudentTemplate();
                 download(res);
-            } catch (error) {}
+            } catch (error) {
+                this.$message.error(error.message);
+            }
         },
 
         //会员弹窗相关

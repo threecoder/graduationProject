@@ -98,13 +98,13 @@
     </div>
 </template>
 <script>
-import mTable from "@/components/mTable.vue";
-import page from "@/components/page.vue";
+import mTable from "../../../components/mTable.vue";
+import page from "../../../components/page.vue";
 import examPublish from "./components/examPublish.vue";
 import gradeList from "./components/gradeList.vue";
-import upload from "@/components/upload.vue";
-import adminExamApi from "@/api/admin/exam.js";
-import { download } from "@/api/request.js";
+import upload from "../../../components/upload.vue";
+import adminExamApi from "../../../api/admin/exam.js";
+import { download } from "../../../api/request.js";
 export default {
     components: {
         mTable,
@@ -219,7 +219,9 @@ export default {
                         t[i].statusText = "成绩已审核";
                     }
                 });
-            } catch (error) {}
+            } catch (error) {
+                this.$message.error(error.message);
+            }
             this.table.loading = false;
         },
         close(row) {
@@ -232,7 +234,9 @@ export default {
                     try {
                         let res = await closeExam(row.examId);
                         this.$message.success("关闭考试成功");
-                    } catch (error) {}
+                    } catch (error) {
+                        this.$message.error(error.message);
+                    }
                 })
                 .catch(e => {});
         },
@@ -248,7 +252,9 @@ export default {
             try {
                 let res = await adminExamApi.getFinishedStudentList(row.examId);
                 this.diaFini.data = res.data;
-            } catch (error) {}
+            } catch (error) {
+                this.$message.error(error.message);
+            }
             this.diaFini.loading = false;
         },
         beforeSubmit(row) {
@@ -264,7 +270,9 @@ export default {
             try {
                 let res = await adminExamApi.getGradeTemplate();
                 download(res);
-            } catch (error) {}
+            } catch (error) {
+                this.$message.error(error.message);
+            }
         },
         checkDetail(row) {
             this.$router.push({

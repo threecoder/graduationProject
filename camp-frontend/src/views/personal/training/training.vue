@@ -1,7 +1,7 @@
 <template>
     <div>
-        <h2 v-if="type==0">可参与的培训</h2>
-        <h2 v-else>已经报名的培训</h2>
+        <h2 v-if="type==0">可报名的培训</h2>
+        <h2 v-else>已报名的培训</h2>
         <div class="table-container">
             <m-table
                 :data="trainingTable.tableData"

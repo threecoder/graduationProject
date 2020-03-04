@@ -35,15 +35,19 @@
         </div>
 
         <el-dialog v-if="examForm.newFlag" :visible.sync="examForm.newFlag">
-            <exam-publish :id="examForm.id" :type.sync="examForm.formType" @close="examForm.newFlag=false;fresh()" />
+            <exam-publish
+                :id="examForm.id"
+                :type.sync="examForm.formType"
+                @close="examForm.newFlag=false;fresh()"
+            />
         </el-dialog>
     </div>
 </template>
 <script>
-import singleExam from "@/components/singleExam.vue";
-import page from "@/components/page.vue";
+import singleExam from "../../../components/singleExam.vue";
+import page from "../../../components/page.vue";
 import examPublish from "./components/examPublish";
-import adminExamApi from "@/api/admin/exam.js";
+import adminExamApi from "../../../api/admin/exam.js";
 export default {
     components: {
         singleExam,
@@ -109,7 +113,7 @@ export default {
                 }
             ],
             currentPage: 1,
-            total:10,
+            total: 10,
             examForm: {
                 id: null,
                 newFlag: false,
@@ -134,20 +138,20 @@ export default {
                 console.log(res);
                 this.examList = res.data.list;
                 this.total = res.data.total;
-                this.loading = false;
             } catch (error) {
-                this.loading = true;
+                this.$message.error(error.message);
             }
+            this.loading = false;
         },
-        curChange(val){
+        curChange(val) {
             this.currentPage = val;
             this.getNotPostExamList();
         },
-        pickQuestion(id){
+        pickQuestion(id) {
             console.log(id);
-            this.$router.push({path:`/pickQuestion/${id}`})
+            this.$router.push({ path: `/pickQuestion/${id}` });
         },
-        modify(id){
+        modify(id) {
             this.examForm.id = id;
             this.examForm.newFlag = true;
             this.examForm.formType = false;

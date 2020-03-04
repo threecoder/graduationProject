@@ -16,8 +16,8 @@
     </div>
 </template>
 <script>
-import singleOne from "@/views/personal/exam/components/singleChoiceDetail.vue";
-import adminExamApi from "@/api/admin/exam.js";
+import singleOne from "./components/singleChoiceDetail.vue";
+import adminExamApi from "../../../api/admin/exam";
 export default {
     data() {
         return {
@@ -79,7 +79,7 @@ export default {
                 this.list = res.data.questionList;
                 this.examInfo = res.data.examInfo;
             } catch (error) {
-                
+                this.$message.error(error.message);
             }
             this.loading = false;
         },

@@ -49,9 +49,9 @@
     </div>
 </template>
 <script>
-import mTable from "@/components/mTable.vue";
-import page from "@/components/page.vue";
-import adminExamApi from "@/api/admin/exam.js";
+import mTable from "../../../../components/mTable.vue";
+import page from "../../../../components/page.vue";
+import adminExamApi from "../../../../api/admin/exam";
 export default {
     props: {
         examId: {
@@ -108,7 +108,7 @@ export default {
             try {
                 let res = adminExamApi.getGradeList(this.examId);
             } catch (error) {
-                console.log(error);
+                this.$message.error(error.message);
             }
             this.loading = false;
         },
@@ -117,7 +117,7 @@ export default {
                 let res = await adminExamApi.getCheckerList();
                 this.checkers = res.data;
             } catch (error) {
-                console.log(error);
+                this.$message.error(error.message);
             }
         },
         cancel() {
@@ -131,7 +131,7 @@ export default {
             try {
                 let res = await adminExamApi.submitGradeList(this.form);
             } catch (error) {
-                console.log(error);
+                this.$message.error(error.message);
             }
         },
         handleSelectionChange(val) {

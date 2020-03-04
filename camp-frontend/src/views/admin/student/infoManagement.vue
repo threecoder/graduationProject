@@ -16,7 +16,7 @@
 
         <!-- 添加学员弹窗 -->
         <el-dialog title="添加学员" v-if="newFlag" :visible.sync="newFlag">
-            <new-person
+            <new-student
                 :type="0"
                 :uploadUrl="`/campback/admin/importStudentByFile`"
                 @close="closeMember"
@@ -47,13 +47,13 @@
 </template>
 <script>
 import stuList from "./components/studentList.vue";
-import newPerson from "@/components/newPerson.vue";
+import newStudent from "./components/newStudent.vue";
 import info from "../components/info.vue";
-import adminStudentApi from "@/api/admin/student.js";
+import adminStudentApi from "../../../api/admin/student";
 export default {
     components: {
         stuList,
-        newPerson,
+        newStudent,
         info
     },
     data() {
@@ -81,7 +81,9 @@ export default {
             try {
                 let res = await adminStudentApi.getMemSelectList();
                 this.companyList = res.data;
-            } catch (error) {}
+            } catch (error) {
+                this.$message.error(error.message);
+            }
         },
         beforeMoRely(row) {
             this.comPar.idNum = row.idNum;
@@ -95,7 +97,9 @@ export default {
             try {
                 let res = await adminStudentApi.modifyRely(this.comPar);
                 this.$message.success("修改挂靠成功");
-            } catch (error) {}
+            } catch (error) {
+                this.$message.error(error.message);
+            }
         },
         modifyInfo(row) {
             this.temRow = row;
@@ -114,7 +118,9 @@ export default {
                     try {
                         let res = await adminStudentApi.resetPassword(par);
                         this.$message.success("重置密码成功");
-                    } catch (error) {}
+                    } catch (error) {
+                        this.$message.error(error.message);
+                    }
                 })
                 .catch(e => {
                     console.log(e);

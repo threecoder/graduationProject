@@ -27,8 +27,8 @@
                 </el-input>
             </el-form-item>
             <el-form-item>
-                <el-switch v-model="userForm.registerFlag" active-text="注册" inactive-text="登陆"></el-switch>
-                <span class="fr cursor" @click="forgetFlag=true">忘记密码</span>
+                <!-- <el-switch v-model="userForm.registerFlag" active-text="注册" inactive-text="登陆"></el-switch> -->
+                <!-- <span class="fr cursor" @click="forgetFlag=true">忘记密码</span> -->
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" :loading="loading" @click="login">{{buttonText}}</el-button>
@@ -109,6 +109,7 @@ export default {
                 });
                 setLocalStorage("user",res.data);
             } catch (error) {
+                this.$message.error(error.message);
                 console.log(error);
             }
 

@@ -101,8 +101,8 @@
     </div>
 </template>
 <script>
-import { formatDate, formatTime, formatDateAndTime } from "@/assets/js/util.js";
-import adminExamApi from "@/api/admin/exam.js";
+import { formatDate, formatTime, formatDateAndTime } from "../../../../assets/js/util";
+import adminExamApi from "../../../../api/admin/exam.js";
 export default {
     //"type，true表示新建考试，false表示修改考试信息"
     props: ["type", "id"],
@@ -227,7 +227,9 @@ export default {
                     let res = await adminExamApi.newExam(par);
                     this.$message.success("新建考试成功");
                     this.$emit("close");
-                } catch (error) {}
+                } catch (error) {
+                    this.$message.error(error.message);
+                }
             }
         },
         async saveModify() {
@@ -236,7 +238,9 @@ export default {
                     let res = await adminExamApi.modifyExam(par);
                     this.$message.success("修改考试成功");
                     this.$emit("close");
-                } catch (error) {}
+                } catch (error) {
+                    this.$message.error(error.message);
+                }
             }
         },
         async getTraining() {
@@ -244,7 +248,9 @@ export default {
                 let res = await getTrainingList();
                 this.trainingList = res.data;
                 console.log(res);
-            } catch (error) {}
+            } catch (error) {
+                this.$message.error(error.message);
+            }
         },
         async getExam() {
             if (this.type == true) return false;
@@ -255,7 +261,9 @@ export default {
                 arr[0] = new Date(res.data.startTime);
                 arr[1] = new Date(res.data.endTIme);
                 this.ruleForm.dateRange = arr;
-            } catch (error) {}
+            } catch (error) {
+                this.$message.error(error.message);
+            }
         }
     }
 };

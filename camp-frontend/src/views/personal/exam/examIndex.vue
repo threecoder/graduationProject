@@ -22,7 +22,7 @@
     </div>
 </template>
 <script>
-import examApi from '@/api/modules/exam.js'
+import examApi from '../../../api/modules/exam'
 export default {
     data(){
         return {

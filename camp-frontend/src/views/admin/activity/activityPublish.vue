@@ -134,8 +134,8 @@
     </div>
 </template>
 <script>
-import { formatDate, formatTime, formatDateAndTime } from "@/assets/js/util.js";
-import adminActivityApi from "@/api/admin/activity.js";
+import { formatDate, formatTime, formatDateAndTime } from "../../../assets/js/util";
+import adminActivityApi from "../../../api/admin/activity.js";
 export default {
     data() {
         let valid = (rule, value, callback) => {
@@ -288,7 +288,9 @@ export default {
                 try {
                     let res = await adminActivityApi.newActivity(par);
                     this.$message.success("新建活动成功");
-                } catch (error) {}
+                } catch (error) {
+                    this.$message.error(error.message);
+                }
             }
         },
         resetForm(formName) {

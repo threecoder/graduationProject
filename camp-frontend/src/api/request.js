@@ -14,21 +14,21 @@ Axios.defaults.baseURL = '/';
  * @type          请求的类型，如get，post等
  * @responseType    返回类型
  */
-export function request(url, data={}, type="post", responseType="json" ) {
-    return new Promise( (resolve, reject) => {
+export function request(url, data = {}, type = "post", responseType = "json") {
+    return new Promise((resolve, reject) => {
         Axios({
             method: type,    //请求类型
             url,    //接收请求的接口
-            data: type=='get'? "":data,    //报文主体中携带的数据
-            params: type=='get'? data:"",   //使用get时，携带在路径的请求参数
+            data: type == 'get' ? "" : data,    //报文主体中携带的数据
+            params: type == 'get' ? data : "",   //使用get时，携带在路径的请求参数
             headers: {
                 ...getHeaders(),
                 'Content-Type': 'application/json;charset=UTF-8'
             },
             responseType    //浏览器返回的数据类型
-        }).then( res => {
+        }).then(res => {
             resolve(res)
-        }).catch( err => {
+        }).catch(err => {
             reject(err);
         });
     });
@@ -49,15 +49,15 @@ export function getHeaders() {
 export function getRandomNum() {
     const myStr = 'abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let randomNum = '';
-    for(let i = 0; i < 16; i++){
+    for (let i = 0; i < 16; i++) {
         let index = Number.parseInt(Math.random() * 61);
-        randomNum += myStr[index];
+        randomNum += myStr[ index ];
     }
     return randomNum;
 }
 
-export function Encrypt(value){
-    if(!value){
+export function Encrypt(value) {
+    if (!value) {
         return null;
     }
     return md5.hex(value).toUpperCase();
@@ -67,9 +67,9 @@ export function Encrypt(value){
 /**
 *res: 文件流
 **/
-export function download(res){
+export function download(res) {
     // 处理返回的文件流
-    let disposition = res.headers['content-disposition'];
-    let filename = decodeURI(disposition.split("filename=")[1]);
+    let disposition = res.headers[ 'content-disposition' ];
+    let filename = decodeURI(disposition.split("filename=")[ 1 ]);
     fileDownload(res.data, filename);
 }
