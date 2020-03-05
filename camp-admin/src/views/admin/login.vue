@@ -91,16 +91,18 @@ export default {
                 password: Encrypt(this.userForm.password)
             };
 
-            request("/campback/login", params, "post")
+            request("/campback/login", "post", params)
                 .then(res => {
                     this.$message.success(res.msg);
                     this.$router.push({
                         path: this.redirect ? this.redirect : "/admin"
                     });
-                    setLocalStorage("user",res.data);
+                    setLocalStorage("user", res.data);
                     // setLocalStorage("user", { name: "张三", idType: 1 });
                 })
-                .catch(error => {});
+                .catch(error => {
+                    this.$message.error(error.message);
+                });
         }
     },
     computed: {
