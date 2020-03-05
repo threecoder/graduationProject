@@ -177,11 +177,8 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public JSONObject getExamInfo(JSONObject jsonObject) {
-        String idcard=jsonObject.getString("id");
-        int examId=jsonObject.getInteger("examId");
+    public JSONObject getExamInfo(String idcard,Integer examId) {
         JSONObject result=new JSONObject();
-
         Exam exam=examMapper.selectByPrimaryKey(examId);
         if(exam==null){
             result.put("code", "fail");
@@ -216,8 +213,7 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public JSONObject getExamQuestions(JSONObject jsonObject) {
-        int examId=jsonObject.getInteger("examId");
+    public JSONObject getExamQuestions(Integer examId) {
         JSONObject result=new JSONObject();
 
         ExamReQuestionExample examReQuestionExample=new ExamReQuestionExample();
@@ -271,9 +267,7 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public JSONObject getExamDetail(JSONObject jsonObject) {
-        String idcard=jsonObject.getString("id");
-        int examId=jsonObject.getInteger("examId");
+    public JSONObject getExamDetail(String idcard,Integer examId) {
         JSONObject result=new JSONObject();
 
         Exam exam=examMapper.selectByPrimaryKey(examId);

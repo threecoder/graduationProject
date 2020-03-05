@@ -513,19 +513,14 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public JSONObject getStudentListByCondition(JSONObject jsonObject) {
+    public JSONObject getStudentListByCondition(String memberId,String phone,
+                                                String idNum,String name,
+                                                Integer currentPage,Integer pageSize) {
         JSONObject result=new JSONObject();
-        String memberId=jsonObject.getString("id");
-
-        String phone=jsonObject.getString("phone");
-        String name=jsonObject.getString("name");
-        String idNum=jsonObject.getString("idNum");
-        Integer currentPage=jsonObject.getInteger("currentPage");
-        Integer pageSize=jsonObject.getInteger("pageSize");
-        if(pageSize==null){
+        if(pageSize<0){
             pageSize=10;
         }
-        if(currentPage==null){
+        if(currentPage<=0){
             currentPage=1;
         }
         List<Student> students= MemberStudentSQLConn.getStudentsFromMemberReStudent(memberId, phone, idNum, name);

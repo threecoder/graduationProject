@@ -192,6 +192,7 @@ public class TrainingServiceImpl implements TrainingService {
     @Override
     public JSONObject getJoinableTraining(String id) {
         JSONObject result=new JSONObject();
+        JSONArray data=new JSONArray();
 
         TrainingExample trainingExample=new TrainingExample();
         TrainingExample.Criteria criteria=trainingExample.createCriteria();
@@ -210,7 +211,6 @@ public class TrainingServiceImpl implements TrainingService {
                 isVip=1;
             }
         }
-        JSONArray data=new JSONArray();
         for(Training training:trainings){
             JSONObject object=new JSONObject();
             object.put("id", training.getTrainingId());

@@ -36,20 +36,22 @@ public class ExamController {
 
     @RequestMapping("/student/getExamInfo")
     @ResponseBody
-    public JSONObject getExamInfo(@RequestBody JSONObject jsonObject){
-        return examService.getExamInfo(jsonObject);
+    public Object getExamInfo(@RequestParam("id") String idcard,
+                                  @RequestParam("examId") Integer examId){
+        return examService.getExamInfo(idcard,examId);
     }
 
     @RequestMapping("/student/getExamQuestions")
     @ResponseBody
-    public JSONObject getExamQuestions(@RequestBody JSONObject jsonObject){
-        return examService.getExamQuestions(jsonObject);
+    public Object getExamQuestions(@RequestParam("examId") Integer examId){
+        return examService.getExamQuestions(examId);
     }
 
     @RequestMapping("/student/getExamDetail")
     @ResponseBody
-    public JSONObject getExamDetail(@RequestBody JSONObject jsonObject){
-        return examService.getExamDetail(jsonObject);
+    public Object getExamDetail(@RequestParam("id") String idcard,
+                                @RequestParam("examId") Integer examId){
+        return examService.getExamDetail(idcard,examId);
     }
 
     @RequestMapping("/student/submitExam")

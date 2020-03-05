@@ -28,5 +28,6 @@ public interface MemberService {
 
     JSONObject getStudentList(String memberId);
 
-    JSONObject getStudentListByCondition(JSONObject jsonObject);
+    JSONObject getStudentListByCondition(String memberId,String phone,String idNum,String name,
+                                         Integer currentPage,Integer pageSize);
 }

@@ -78,7 +78,12 @@ public class MemberController {
 
     @RequestMapping("/getStudentListByCondition")
     @ResponseBody
-    public JSONObject getStudentListByCondition(@RequestBody JSONObject jsonObject){
-        return memberService.getStudentListByCondition(jsonObject);
+    public Object getStudentListByCondition(@RequestParam("id") String memberId,
+                                            @RequestParam("phone") String phone,
+                                            @RequestParam("idNum") String idNum,
+                                            @RequestParam("name") String name,
+                                            @RequestParam("currentPage") Integer currentPage,
+                                            @RequestParam("pageSize") Integer pageSize){
+        return memberService.getStudentListByCondition(memberId,phone,idNum,name,currentPage,pageSize);
     }
 }

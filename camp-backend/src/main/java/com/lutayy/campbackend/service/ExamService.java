@@ -12,11 +12,11 @@ public interface ExamService {
 
     JSONObject getDoneExamList(String idcard);
 
-    JSONObject getExamInfo(JSONObject jsonObject);
+    JSONObject getExamInfo(String idcard,Integer examId);
 
-    JSONObject getExamQuestions(JSONObject jsonObject);
+    JSONObject getExamQuestions(Integer examId);
 
-    JSONObject getExamDetail(JSONObject jsonObject);
+    JSONObject getExamDetail(String idcard,Integer examId);
 
     JSONObject addNewExam(JSONObject jsonObject);
 
