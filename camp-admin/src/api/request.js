@@ -14,7 +14,7 @@ Axios.defaults.baseURL = '/';
  * @type          请求的类型，如get，post等
  * @responseType    返回类型
  */
-export function request(url, type, data = {}, responseType = "json") {
+export function request(url, type = "post", data = {}, responseType = "json") {
     return new Promise((resolve, reject) => {
         Axios({
             method: type,    //请求类型

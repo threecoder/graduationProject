@@ -4,27 +4,19 @@
         <el-form :model="userForm" :rules="rules" ref="loginForm">
             <el-form-item prop="username">
                 <el-input
-                    suffix="el-icon-user"
+                    prefix-icon="el-icon-user"
                     placeholder="请输入账号"
                     v-model.trim="userForm.username"
-                >
-                    <template slot="prepend">
-                        <i class="userIcon"></i>
-                    </template>
-                </el-input>
+                ></el-input>
             </el-form-item>
 
             <el-form-item prop="password">
                 <el-input
                     type="password"
-                    suffix="el-icon-user"
+                    prefix-icon="el-icon-user"
                     placeholder="请输入密码"
                     v-model.trim="userForm.password"
-                >
-                    <template slot="prepend">
-                        <i class="pasIcon"></i>
-                    </template>
-                </el-input>
+                ></el-input>
             </el-form-item>
             <el-form-item>
                 <span class="fr cursor" @click="forgetFlag=true">忘记密码</span>
@@ -41,7 +33,7 @@
 </template>
 <script>
 import { Encrypt, request } from "@/api/request.js";
-import { setLocalStorage  } from "@/assets/js/util.js";
+import { setLocalStorage } from "@/assets/js/util.js";
 export default {
     data() {
         let valid = (rule, value, callback) => {
@@ -99,14 +91,16 @@ export default {
                 password: Encrypt(this.userForm.password)
             };
 
-            request("/campback/student/login", params, "post").then(res => {
-                this.$message.success(res.msg)
-                this.$router.push({
-                    path: this.redirect ? this.redirect : "/personal"
-                });
-                // setLocalStorage("user",res.data);
-                setLocalStorage("user",{name:"张三",idType:1});
-            }).catch(error=>{});
+            request("/campback/login", params, "post")
+                .then(res => {
+                    this.$message.success(res.msg);
+                    this.$router.push({
+                        path: this.redirect ? this.redirect : "/admin"
+                    });
+                    setLocalStorage("user",res.data);
+                    // setLocalStorage("user", { name: "张三", idType: 1 });
+                })
+                .catch(error => {});
         }
     },
     computed: {
@@ -132,18 +126,7 @@ export default {
         ::v-deep .el-input-group__prepend {
             padding: 0 10px;
         }
-        .userIcon {
-            background: url("../login/images/user.png") no-repeat center center;
-            display: inline-block;
-            width: 40px;
-            height: 30px;
-        }
-        .pasIcon {
-            background: url("../login/images/psw.png") no-repeat center center;
-            display: inline-block;
-            width: 40px;
-            height: 30px;
-        }
+
         span {
             color: gray;
         }

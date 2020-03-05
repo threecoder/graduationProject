@@ -49,7 +49,6 @@
 </template>
 <script>
 import examApi from "@/api/modules/exam.js";
-import adminExamApi from "@/api/admin/exam.js";
 export default {
     props: [
         "isDone", //学生是否已经考过试，done表示考过

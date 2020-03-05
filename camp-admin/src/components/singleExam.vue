@@ -83,8 +83,7 @@
     </div>
 </template>
 <script>
-import examApi from "@/api/modules/exam.js";
-import adminExamApi from "@/api/admin/exam.js";
+import adminExamApi from "../api/admin/exam";
 export default {
     props: [
         "type", //学生是否已经考过试，done表示考过

@@ -27,9 +27,13 @@
                 </el-input>
             </el-form-item>
             <el-form-item>
-                <!-- <el-switch v-model="userForm.registerFlag" active-text="注册" inactive-text="登陆"></el-switch> -->
-                <!-- <span class="fr cursor" @click="forgetFlag=true">忘记密码</span> -->
+                <el-radio v-model="userForm.type" label="student">学员</el-radio>
+                <el-radio v-model="userForm.type" label="member">会员</el-radio>
             </el-form-item>
+            <!-- <el-form-item>
+                <el-switch v-model="userForm.registerFlag" active-text="注册" inactive-text="登陆"></el-switch>
+                <span class="fr cursor" @click="forgetFlag=true">忘记密码</span>
+            </el-form-item> -->
             <el-form-item>
                 <el-button type="primary" :loading="loading" @click="login">{{buttonText}}</el-button>
             </el-form-item>
@@ -41,8 +45,8 @@
     </div>
 </template>
 <script>
-import { Encrypt, request } from "@/api/request.js";
-import { setLocalStorage  } from "@/assets/js/util.js";
+import { Encrypt, request } from "../../api/request";
+import { setLocalStorage } from "../../assets/js/util";
 export default {
     data() {
         let valid = (rule, value, callback) => {
@@ -58,6 +62,7 @@ export default {
             userForm: {
                 username: null,
                 password: null,
+                type: 'student',
                 registerFlag: false
             },
             rules: {
@@ -97,17 +102,17 @@ export default {
                 return false;
             }
             this.loading = true;
-            let params = {
+            let data = {
                 username: this.userForm.username,
                 password: Encrypt(this.userForm.password)
             };
             try {
-                let res = await request("/campback/login", params, "post");
-                this.$message.success(res.msg)
+                let res = await request("/campback/login", "post", data);
+                this.$message.success(res.msg);
                 this.$router.push({
                     path: this.redirect ? this.redirect : "/personal"
                 });
-                setLocalStorage("user",res.data);
+                setLocalStorage("user", res.data);
             } catch (error) {
                 this.$message.error(error.message);
                 console.log(error);

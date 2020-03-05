@@ -105,10 +105,10 @@ export default {
                     { prop: "address", label: "地点" },
                     { prop: "fee", label: "费用" },
                     {
-                        prop: "opera",
                         label: "操作",
                         fixed: "right",
-                        slot: "oper"
+                        slot: "oper",
+                        width: "200px"
                     }
                 ],
                 tableData: [

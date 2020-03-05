@@ -1,18 +1,19 @@
-import { request } from '../request.js';
+import { request } from '../request';
+import { studentPrefix, memberPrefix } from '../../const';
 const getJoinableTraining = idType => {
-    let str = idType == 0 ? "/campback/student/getJoinableTraining" : "/campback/member/getJoinableTraining";
-    return request(str, {}, 'get', 'json');
+    let str = idType == 0 ? studentPrefix + '/getJoinableTraining' : memberPrefix + '/getJoinableTraining';
+    return request(str, 'get');
 }
-const studentJoinTraining = activityId => request('/campback/student/joinActivity', { activityId }, 'post', 'json');
+const studentJoinTraining = activityId => request(studentPrefix + '/joinActivity', 'post', { activityId });
 
 const getsignedTraining = idType => {
-    let str = idType == 0 ? "/campback/student/getSignedTraining" : "/campback/member/getSignedTraining";
-    return request(str, {}, 'get', 'json');
+    let str = idType == 0 ? studentPrefix + '/getSignedTraining' : memberPrefix + '/getSignedTraining';
+    return request(str, 'get');
 }
-const getSeatNum = activityId =>  request("/campback/student/getSeatNum", { activityId }, 'post', 'json');
+const getSeatNum = activityId => request(studentPrefix + '/getSeatNum', 'post', { activityId });
 
 //会员批量报名
-const memberJoinTraining = par => request("/campback/member/joinTraining", par, 'post', 'json');
+const memberJoinTraining = par => request(memberPrefix + '/joinTraining', 'post', par);
 
 export default {
     getJoinableTraining,

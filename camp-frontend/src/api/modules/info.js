@@ -1,22 +1,23 @@
-import { request } from "../request.js"
+import { request } from "../request";
+import { studentPrefix, memberPrefix } from '../../const';
 
 //设置学生信息
-const setStudentInfo = par => request('/campback/student/setUserInfo', par, 'post', 'json');
+const setStudentInfo = data => request(studentPrefix + '/setUserInfo', 'post', data);
 
 //设置会员信息
-const setMemberInfo = par => request('/campback/member/setUserInfo', par, 'post', 'json');
+const setMemberInfo = data => request(memberPrefix + '/setUserInfo', 'post', data);
 
 //获取学生信息
-const getStudentInfo = () => request('/campback/student/getUserInfo', {}, 'get', 'json');
+const getStudentInfo = () => request(studentPrefix + '/getUserInfo', 'get');
 
 //获取会员信息
-const getMemberInfo = () => request('/campback/member/getUserInfo', {}, 'get', 'json');
+const getMemberInfo = () => request(memberPrefix + '/getUserInfo', 'get');
 
 //修改学生密码
-const setStudentPassword = par => request('/campback/student/setNewPassword', par, 'post', 'json');
+const setStudentPassword = data => request(studentPrefix + '/setNewPassword', 'post', data);
 
 //修改会员密码
-const setMemberPassword = par => request('/campback/member/setNewPassword', par, 'post', 'json');
+const setMemberPassword = data => request(memberPrefix + '/setNewPassword', 'post', data);
 
 export default {
     setStudentInfo,

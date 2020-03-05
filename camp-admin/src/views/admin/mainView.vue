@@ -121,6 +121,7 @@ export default {
                 }
             ],
             name: getLocalStorage("user").name
+            // name: 'sasds'
         };
     },
     components: {
@@ -132,7 +133,7 @@ export default {
         },
         logout() {
             window.localStorage.removeItem("token");
-            this.$router.push("/login");
+            this.$router.push("/adminLogin");
         }
     }
 };
