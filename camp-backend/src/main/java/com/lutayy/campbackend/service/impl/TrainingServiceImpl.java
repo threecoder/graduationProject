@@ -138,11 +138,53 @@ public class TrainingServiceImpl implements TrainingService {
         data.put("currentPage", currentPage);
         result.put("data", data);
         if(size==0){
-            result.put("code","fail");
+            result.put("code","success");
             result.put("msg","无结果");
         }else {
             result.put("code", "success");
             result.put("msg", "查询成功!");
+        }
+        return result;
+    }
+
+    @Override
+    public JSONObject addNewTraining(JSONObject jsonObject) {
+        String trainingName=jsonObject.getString("name");
+        BigDecimal fee=jsonObject.getBigDecimal("fee");
+        BigDecimal vipFee=jsonObject.getBigDecimal("vipFee");
+        String contacts=jsonObject.getString("contacts");
+        Date startTime=jsonObject.getDate("openTime");
+        Date endTime=jsonObject.getDate("closeTime");
+        Byte level=jsonObject.getByte("level");
+        String address=jsonObject.getString("address");
+        String trainingIntro=jsonObject.getString("desc");
+        JSONObject result=new JSONObject();
+        //培训名称查重
+        TrainingExample trainingExample=new TrainingExample();
+        TrainingExample.Criteria criteria=trainingExample.createCriteria();
+        criteria.andTrainingNameEqualTo(trainingName);
+        if(trainingMapper.selectByExample(trainingExample).size()>0){
+            result.put("code", "fail");
+            result.put("msg", "已有同名的培训,新建失败！");
+            return result;
+        }
+        Training training=new Training();
+        training.setContacts(contacts);
+        training.setLevel(level);
+        training.setPostTime(new Date());
+        training.setTrainingAddress(address);
+        training.setTrainingFeeNormal(fee);
+        training.setTrainingFeeVip(vipFee);
+        training.setTrainingIntroduce(trainingIntro);
+        training.setTrainingName(trainingName);
+        training.setTrainingStartTime(startTime);
+        training.setTrainingEndTime(endTime);
+        if(trainingMapper.insert(training)>0){
+            result.put("code", "success");
+            result.put("msg", "新建培训成功！");
+        }else{
+            result.put("code", "fail");
+            result.put("msg", "新建培训失败！请重试");
         }
         return result;
     }
@@ -156,7 +198,7 @@ public class TrainingServiceImpl implements TrainingService {
         criteria.andTrainingStartTimeLessThan(new Date()).andTrainingEndTimeGreaterThan(new Date());
         List<Training> trainings=trainingMapper.selectByExample(trainingExample);
         if(trainings.size()==0){
-            result.put("code", "fail");
+            result.put("code", "success");
             result.put("msg", "无可报名培训");
             result.put("data", null);
             return result;
@@ -214,7 +256,7 @@ public class TrainingServiceImpl implements TrainingService {
         List<TrainingReStudent> trainingReStudents=trainingReStudentMapper.selectByExample(trainingReStudentExample);
 
         if(trainingOrders.size()==0 && trainingReStudents.size()==0){
-            result.put("code", "fail");
+            result.put("code", "success");
             result.put("msg", "用户暂无报名任何活动");
             result.put("data", null);
             return result;
@@ -340,7 +382,7 @@ public class TrainingServiceImpl implements TrainingService {
         List<Integer> trainingIds=TrainingStudentSQLConn.getTrainingIdByMemberId(id);
 
         if(trainingIds.size()==0 && trainingOrders.size()==0){
-            result.put("code", "fail");
+            result.put("code", "success");
             result.put("msg", "暂无已报名培训");
             result.put("data", null);
         }
@@ -390,7 +432,6 @@ public class TrainingServiceImpl implements TrainingService {
         result.put("data", data);
         return result;
     }
-
 
     @Override
     public JSONObject memberJoinTraining(JSONObject jsonObject) {
@@ -563,7 +604,7 @@ public class TrainingServiceImpl implements TrainingService {
         trainingExample.setOrderByClause("post_time DESC");
         List<Training> trainings=trainingMapper.selectByExample(trainingExample);
         if(trainings.size()==0){
-            result.put("code", "fail");
+            result.put("code", "success");
             result.put("msg", "系统中暂无已发布的培训");
             result.put("data", null);
             return result;

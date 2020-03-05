@@ -88,7 +88,7 @@ public class ActivityServiceImpl implements ActivityService {
         criteria.andOpenTimeLessThan(new Date()).andCloseTimeGreaterThan(new Date());
         List<Activity> activities=activityMapper.selectByExample(activityExample);
         if(activities.size()==0){
-            result.put("code", "fail");
+            result.put("code", "success");
             result.put("msg", "暂无可报名活动");
             result.put("data", null);
             return result;
@@ -132,7 +132,7 @@ public class ActivityServiceImpl implements ActivityService {
         List<ActivityOrder> activityOrders=activityOrderMapper.selectByExample(activityOrderExample);
 
         if(activityStudents.size()==0 && activityOrders.size()==0){
-            result.put("code", "fail");
+            result.put("code", "success");
             result.put("msg", "该用户暂无报名任何活动");
             result.put("data", null);
             return result;
@@ -540,7 +540,7 @@ public class ActivityServiceImpl implements ActivityService {
         activityExample.setOrderByClause("post_time DESC");
         List<Activity> activities=activityMapper.selectByExample(activityExample);
         if(activities.size()==0){
-            result.put("code", "fail");
+            result.put("code", "success");
             result.put("msg", "系统中暂无已发布活动");
             result.put("data", null);
             return result;

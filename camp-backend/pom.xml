@@ -14,6 +14,15 @@
     <name>camp-backend</name>
     <description>Demo project for Spring Boot</description>
 
+    <repositories>
+        <repository>
+            <id>huaweicloud</id>
+            <name>huaweicloud</name>
+            <url>>https://mirrors.huaweicloud.com/repository/maven/</url>
+        </repository>
+    </repositories>
+
+
     <properties>
         <java.version>1.8</java.version>
         <fastjson-version>1.2.47</fastjson-version>
@@ -31,6 +40,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
@@ -72,6 +82,17 @@
             <artifactId>poi-ooxml</artifactId>
             <version>3.13</version>
         </dependency>
+        <!-- 使用redis作为缓存中间件 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+        </dependency>
+
+
 
     </dependencies>
 
@@ -107,6 +128,7 @@
                         <artifactId>mybatis</artifactId>
                         <version>3.4.2</version>
                     </dependency>
+
                 </dependencies>
             </plugin>
         </plugins>
