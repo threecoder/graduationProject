@@ -11,17 +11,17 @@
                 class="demo-ruleForm"
             >
                 <el-row :gutter="40">
-                    <el-col :span="12">
+                    <el-col :span="8">
                         <el-form-item label="培训名称" prop="name">
                             <el-input v-model="ruleForm.name" placeholder="培训名称"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :span="8">
                         <el-form-item label="普通价格" prop="fee">
                             <el-input v-model="ruleForm.fee" placeholder="输入大于0的数字"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :span="8">
                         <el-form-item label="会员价格" prop="vipFee">
                             <el-input v-model="ruleForm.vipFee" placeholder="输入大于0的数字"></el-input>
                         </el-form-item>
@@ -29,7 +29,7 @@
                 </el-row>
 
                 <el-row>
-                    <el-col :span="6">
+                    <el-col :span="8">
                         <el-form-item label="联系人" prop="contacts">
                             <el-input v-model="ruleForm.contacts" placeholder="请输入联系人"></el-input>
                         </el-form-item>
@@ -42,8 +42,13 @@
                 </el-row>
 
                 <el-row :gutter="20">
-                    <el-col :span="10">
-                        <el-form-item label="培训开放时间" prop="dateRange">
+                    <el-col :span="12">
+                        <el-form-item
+                            label="培训开放时间"
+                            prop="dateRange"
+                            label-position="left"
+                            label-width="110px"
+                        >
                             <el-date-picker
                                 type="datetimerange"
                                 placeholder="选择日期"
@@ -80,6 +85,9 @@
                             <el-input
                                 type="textarea"
                                 v-model="ruleForm.desc"
+                                :show-word-limit="true"
+                                :maxlength="450"
+                                :autosize="{minRows: 4, maxRows: 11}"
                                 placeholder="请输入培训简介，段落可用回车符隔开"
                             ></el-input>
                         </el-form-item>
@@ -115,8 +123,8 @@
     </div>
 </template>
 <script>
-import { formatDate, formatTime, formatDateAndTime } from "@/assets/js/util.js";
-import adminTrainingApi from "@/api/admin/training.js";
+import { formatDate, formatTime, formatDateAndTime } from "../../../assets/js/util.js";
+import adminTrainingApi from "../../../api/admin/training";
 export default {
     data() {
         let valid = (rule, value, callback) => {
@@ -230,7 +238,7 @@ export default {
         submitForm(formName) {
             this.$refs[formName].validate(valid => {
                 if (valid) {
-                    let par = { ...this.ruleForm };                    
+                    let par = { ...this.ruleForm };
                     par.openTime = formatDateAndTime(par.dateRange[0]);
                     par.closeTime = formatDateAndTime(par.dateRange[1]);
                     par.contacts = par.contacts + " " + par.phone;
