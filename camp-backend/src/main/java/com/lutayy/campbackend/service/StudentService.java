@@ -7,7 +7,7 @@ import java.util.Map;
 
 public interface StudentService {
 
-    JSONObject getUserInfo(String idcard);
+    JSONObject getUserInfo(Integer studentId);
 
     JSONObject setUserInfo(JSONObject jsonObject,HttpServletResponse response);
 

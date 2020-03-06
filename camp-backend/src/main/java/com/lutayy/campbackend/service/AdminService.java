@@ -13,5 +13,5 @@ public interface AdminService {
 
     JSONObject getMemberList(JSONObject jsonObject);
 
-    JSONObject getOneMemberStudentList(String memberId);
+    JSONObject getOneMemberStudentList(Integer memberId);
 }

@@ -24,14 +24,14 @@ public class ActivityController {
 
     @RequestMapping("/student/getSignedActivities")
     @ResponseBody
-    public Object getSignedActivities(@RequestParam("id") String idcard){
-        return activityService.getSignedActivities(idcard);
+    public Object getSignedActivities(@RequestParam("id") Integer studentId){
+        return activityService.getSignedActivities(studentId);
     }
 
     @RequestMapping("/student/getSeatNum")
     @ResponseBody
-    public Object studentGetSeatNum(@RequestParam("id") String idcard,@RequestParam("activityId") int activityId){
-        return activityService.studentGetSeatNum(idcard,activityId);
+    public Object studentGetSeatNum(@RequestParam("id") Integer studentId,@RequestParam("activityId") int activityId){
+        return activityService.studentGetSeatNum(studentId,activityId);
     }
 
     @RequestMapping("/student/joinActivity")
@@ -48,14 +48,14 @@ public class ActivityController {
 
     @RequestMapping("/member/getSeatNum")
     @ResponseBody
-    public Object memberGetSeatNum(@RequestParam("id") String memberId,@RequestParam("activityId") int activityId){
+    public Object memberGetSeatNum(@RequestParam("id") Integer memberId,@RequestParam("activityId") int activityId){
         return activityService.memberGetSeatNum(memberId,activityId);
     }
 
     @RequestMapping("/member/getSignedActivities")
     @ResponseBody
-    public Object memberGetSignedActivities(@RequestParam("id") String id){
-        return activityService.memberGetSignedActivities(id);
+    public Object memberGetSignedActivities(@RequestParam("id") Integer memberId){
+        return activityService.memberGetSignedActivities(memberId);
     }
 
     @RequestMapping("/admin/addNewActivity")

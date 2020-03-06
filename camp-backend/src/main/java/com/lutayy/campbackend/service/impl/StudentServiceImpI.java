@@ -29,20 +29,16 @@ public class StudentServiceImpI implements StudentService {
 
 
     @Override
-    public JSONObject getUserInfo(String idcard) {
+    public JSONObject getUserInfo(Integer studentId) {
         JSONObject result=new JSONObject();
 
-        StudentExample studentExample=new StudentExample();
-        StudentExample.Criteria criteria=studentExample.createCriteria();
-        criteria.andStudentIdcardEqualTo(idcard);
-        List<Student> students=studentMapper.selectByExample(studentExample);
-        if(students.size()==0){
+        Student student=studentMapper.selectByPrimaryKey(studentId);
+        if(student==null){
             result.put("code", "fail");
             result.put("data","");
             result.put("msg","用户不存在！");
             return result;
         }
-        Student student=students.get(0);
         JSONObject data=new JSONObject();
         data.put("idNum", student.getStudentIdcard());
         data.put("phone", student.getStudentPhone());

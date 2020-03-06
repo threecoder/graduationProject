@@ -36,30 +36,9 @@ public class ActivityServiceImpl implements ActivityService {
     ActivityOrderStudentMapper activityOrderStudentMapper;
     @Autowired
     MemberReStudentMapper memberReStudentMapper;
+    @Autowired
+    GetObjectHelper getObjectHelper;
 
-    /** 由身份证获得学员Id **/
-    private int getStudentId(String idcard){
-        StudentExample studentExample=new StudentExample();
-        StudentExample.Criteria criteria=studentExample.createCriteria();
-        criteria.andStudentIdcardEqualTo(idcard);
-        List<Student> students=studentMapper.selectByExample(studentExample);
-        if(students.size()==0){
-            return -1;
-        }
-        Student student=students.get(0);
-        return student.getStudentId();
-    }
-
-    private Student getStudentByIdcard(String idcard){
-        StudentExample studentExample=new StudentExample();
-        StudentExample.Criteria criteria=studentExample.createCriteria();
-        criteria.andStudentIdcardEqualTo(idcard);
-        List<Student> students=studentMapper.selectByExample(studentExample);
-        if(students.size()==0){
-            return null;
-        }
-        return students.get(0);
-    }
 
     /**
      *  学员活动报名记录查询
@@ -76,7 +55,6 @@ public class ActivityServiceImpl implements ActivityService {
             return 1;
         }
     }
-
 
 
     @Override
@@ -102,7 +80,10 @@ public class ActivityServiceImpl implements ActivityService {
             object.put("address", activity.getActivityAddress());
             object.put("fee", activity.getActivityFee());
             JSONArray introduce=new JSONArray();
-            introduce.add(activity.getActivityIntroduction());
+            String[] introduceStrs=activity.getActivityIntroduction().split("\\|");
+            for(String intro:introduceStrs){
+                introduce.add(intro);
+            }
             object.put("introduce",introduce);
             object.put("contacts", activity.getContacts());
             data.add(object);
@@ -117,12 +98,11 @@ public class ActivityServiceImpl implements ActivityService {
      * 学员中心的活动管理
      * **/
     @Override
-    public JSONObject getSignedActivities(String idcard) {
+    public JSONObject getSignedActivities(Integer studentId) {
         JSONObject result =new JSONObject();
 
         ActivityStudentExample activityStudentExample=new ActivityStudentExample();
         ActivityStudentExample.Criteria criteria=activityStudentExample.createCriteria();
-        int studentId=getStudentId(idcard);
         criteria.andStudentIdEqualTo(studentId);
         List<ActivityStudent> activityStudents=activityStudentMapper.selectByExample(activityStudentExample);
 
@@ -148,7 +128,10 @@ public class ActivityServiceImpl implements ActivityService {
             object.put("address", activity.getActivityAddress());
             object.put("fee", activity.getActivityFee());
             JSONArray introduce=new JSONArray();
-            introduce.add(activity.getActivityIntroduction());
+            String[] introduceStrs=activity.getActivityIntroduction().split("\\|");
+            for(String intro:introduceStrs){
+                introduce.add(intro);
+            }
             object.put("introduce",introduce);
             object.put("contacts", activity.getContacts());
             object.put("status", "未支付");
@@ -177,12 +160,12 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public JSONObject studentGetSeatNum(String idcard,int activityId) {
+    public JSONObject studentGetSeatNum(Integer studentId,int activityId) {
         JSONObject result=new JSONObject();
 
         ActivityStudentExample activityStudentExample=new ActivityStudentExample();
         ActivityStudentExample.Criteria criteria=activityStudentExample.createCriteria();
-        criteria.andStudentIdEqualTo(getStudentId(idcard)).andActivityIdEqualTo(activityId);
+        criteria.andStudentIdEqualTo(studentId).andActivityIdEqualTo(activityId);
         List<ActivityStudent> activityStudents=activityStudentMapper.selectByExample(activityStudentExample);
         if(activityStudents.size()==0){
             result.put("code", "fail");
@@ -211,8 +194,7 @@ public class ActivityServiceImpl implements ActivityService {
             result.put("msg", "当前用户没有报名培训的权限");
             return result;
         }
-        String idcard=jsonObject.getString("id");
-        int studentId=getStudentId(idcard);
+        Integer studentId=jsonObject.getInteger("id");
         MemberReStudentExample memberReStudentExample=new MemberReStudentExample();
         MemberReStudentExample.Criteria criteria2=memberReStudentExample.createCriteria();
         criteria2.andStudentIdEqualTo(studentId);
@@ -245,7 +227,9 @@ public class ActivityServiceImpl implements ActivityService {
         criteria1.andActivityIdEqualTo(activityId).andStudentIdEqualTo(studentId).andCloseEqualTo(false).andPaymentStateEqualTo(false).andOrderTypeEqualTo(true);
         List<ActivityOrder> activityOrders=activityOrderMapper.selectByExample(activityOrderExample);
         if(activityOrders.size()!=0){
-            /** 此处可补一个订单失效判断 **/
+            /**
+             * 此处可补一个订单失效判断
+             * **/
             result.put("code", "fail");
             result.put("msg", "已报名此活动但未支付，请前往订单中心查看");
             return result;
@@ -294,7 +278,7 @@ public class ActivityServiceImpl implements ActivityService {
             activityOrder.setClose(false);
             if(activityOrderMapper.insert(activityOrder)>0){
                 result.put("code", "success");
-                result.put("msg", "订单生成生成!待支付");
+                result.put("msg", "订单生成成功!待支付");
             }else{
                 result.put("code", "fail");
                 result.put("msg", "订单生成失败!");
@@ -315,7 +299,7 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public JSONObject memberJoinActivity(JSONObject jsonObject) {
         JSONObject result=new JSONObject();
-        String memberId=jsonObject.getString("id");
+        Integer memberId=jsonObject.getInteger("id");
         int activityId=jsonObject.getInteger("activityId");
         JSONArray idNums=jsonObject.getJSONArray("idNums");
         Activity activity=activityMapper.selectByPrimaryKey(activityId);
@@ -348,7 +332,7 @@ public class ActivityServiceImpl implements ActivityService {
         ActivityOrder activityOrder=new ActivityOrder();
         activityOrder.setActivityOrderId(orderId);
         activityOrder.setActivityId(activityId);
-        activityOrder.setMemberId(memberId);
+        activityOrder.setMemberKeyId(memberId);
         activityOrder.setOrderType(false);//"0"即会员提交的订单
         //activityOrder.setOrderPrice(activity.getActivityFee());
         activityOrder.setOrderBeginTime(new Date());
@@ -361,7 +345,7 @@ public class ActivityServiceImpl implements ActivityService {
         int existOrderTotalCount=0;
         String existOrderTagTip="";
         for(int i=0;i<idNums.size();i++){
-            Student student=getStudentByIdcard(idNums.getString(i));
+            Student student=getObjectHelper.getStudentFromIdCard(idNums.getString(i));
             if(checkStudentActiviy(student.getStudentId(), activityId)!=0){
                 existTotalCount+=1;
                 existTagTip+=student.getStudentName()+"("+idNums.getString(i)+") ";
@@ -408,7 +392,7 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public JSONObject memberGetSeatNum(String memberId, int activityId) {
+    public JSONObject memberGetSeatNum(Integer memberId, int activityId) {
         JSONObject result=new JSONObject();
         JSONObject data=new JSONObject();
 
@@ -437,16 +421,16 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public JSONObject memberGetSignedActivities(String id) {
+    public JSONObject memberGetSignedActivities(Integer memberId) {
         JSONObject result=new JSONObject();
 
         ActivityOrderExample activityOrderExample=new ActivityOrderExample();
         ActivityOrderExample.Criteria criteria=activityOrderExample.createCriteria();
-        criteria.andOrderTypeEqualTo(false).andMemberIdEqualTo(id).andPaymentStateEqualTo(false).andCloseEqualTo(false);
+        criteria.andOrderTypeEqualTo(false).andMemberKeyIdEqualTo(memberId).andPaymentStateEqualTo(false).andCloseEqualTo(false);
         activityOrderExample.setOrderByClause("order_begin_time DESC");
         List<ActivityOrder> activityOrders=activityOrderMapper.selectByExample(activityOrderExample);
 
-        List<Integer> activityIds=ActivityStudentSQLConn.getActivityIdByMemberId(id);
+        List<Integer> activityIds=ActivityStudentSQLConn.getActivityIdByMemberId(memberId);
 
         if(activityIds.size()==0 && activityOrders.size()==0){
             result.put("code", "fail");
@@ -470,7 +454,10 @@ public class ActivityServiceImpl implements ActivityService {
             object.put("address", activity.getActivityAddress());
             object.put("fee", activity.getActivityFee());
             JSONArray introduce=new JSONArray();
-            introduce.add(activity.getActivityIntroduction());
+            String[] introduceStrs=activity.getActivityIntroduction().split("\\|");
+            for(String intro:introduceStrs){
+                introduce.add(intro);
+            }
             object.put("introduce",introduce);
             if(num<activityOrders.size()){
                 object.put("status", "有订单未支付");
@@ -503,11 +490,13 @@ public class ActivityServiceImpl implements ActivityService {
         Date openTime=jsonObject.getDate("openTime");//开放报名时间
         Date closeTime=jsonObject.getDate("closeTime");//关闭报名时间
         JSONArray description=jsonObject.getJSONArray("desc");
-        String introduction="";
+        StringBuilder introduction=new StringBuilder();
         if(description!=null){
-            for(int i=0;i<description.size();i++){
-                introduction+=description.getString(i)+"\n";
+            for(int i=0;i<description.size()-1;i++){
+                introduction.append(description.get(i));
+                introduction.append("|");
             }
+            introduction.append(description.get(description.size()-1));
         }
 
         Activity activity=new Activity();
@@ -519,7 +508,7 @@ public class ActivityServiceImpl implements ActivityService {
         activity.setOpenTime(openTime);
         activity.setCloseTime(closeTime);
         activity.setContacts(contacts);
-        activity.setActivityIntroduction(introduction);
+        activity.setActivityIntroduction(introduction.toString());
         activity.setPostTime(new Date());
         if(activityMapper.insertSelective(activity)>0){
             result.put("code", "success");
@@ -554,7 +543,10 @@ public class ActivityServiceImpl implements ActivityService {
             object.put("address", activity.getActivityAddress());
             object.put("fee", activity.getActivityFee());
             JSONArray introduce=new JSONArray();
-            introduce.add(activity.getActivityIntroduction());
+            String[] introduceStrs=activity.getActivityIntroduction().split("\\|");
+            for(String intro:introduceStrs){
+                introduce.add(intro);
+            }
             object.put("introduce",introduce);
             object.put("contacts", activity.getContacts());
             /* 获取参与活动的人数 */

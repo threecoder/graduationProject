@@ -6,7 +6,6 @@ import com.lutayy.campbackend.common.util.Md5;
 import com.lutayy.campbackend.dao.MemberMapper;
 import com.lutayy.campbackend.dao.StudentMapper;
 import com.lutayy.campbackend.pojo.Member;
-import com.lutayy.campbackend.pojo.MemberExample;
 import com.lutayy.campbackend.pojo.Student;
 import com.lutayy.campbackend.pojo.StudentExample;
 import com.lutayy.campbackend.pojo.request.TokenRequest;
@@ -28,6 +27,9 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     MemberMapper memberMapper;
 
+    @Autowired
+    GetObjectHelper getObjectHelper;
+
     @Value("${SECRET_KEY}")
     private String SECRET_KEY;
 
@@ -38,9 +40,9 @@ public class LoginServiceImpl implements LoginService {
 
         String password = jsonObject.getString("password");
         //手机号码或身份证号登录
-        String id = jsonObject.getString("username");
-        if(id.substring(0, 3).equals("mb_")){
-            Member member=memberMapper.selectByPrimaryKey(id);
+        String idString = jsonObject.getString("username");
+        if(idString.substring(0, 3).equals("mb_")){
+            Member member=getObjectHelper.getMemberFromUUID(idString);
             if(member==null){
                 result.put("code","fail");
                 result.put("msg","账号不存在！");
@@ -54,7 +56,8 @@ public class LoginServiceImpl implements LoginService {
                 return result;
             }
             TokenRequest tokenRequest=new TokenRequest();
-            tokenRequest.setName(id);
+            tokenRequest.setName(idString);
+            tokenRequest.setId(member.getMemberKeyId());
             tokenRequest.setRole("member");
             String token = JwtUtil.sign(tokenRequest, 30*60*1000, SECRET_KEY);
             Cookie cookie=new Cookie("token", token);
@@ -66,12 +69,12 @@ public class LoginServiceImpl implements LoginService {
         }else{
             StudentExample studentExample=new StudentExample();
             StudentExample.Criteria criteria=studentExample.createCriteria();
-            criteria.andStudentIdcardEqualTo(id);
+            criteria.andStudentIdcardEqualTo(idString);
             List<Student> students=studentMapper.selectByExample(studentExample);
             if(students.size()==0){
                 StudentExample studentExample0=new StudentExample();
                 StudentExample.Criteria criteria0=studentExample0.createCriteria();
-                criteria0.andStudentPhoneEqualTo(id);
+                criteria0.andStudentPhoneEqualTo(idString);
                 students=studentMapper.selectByExample(studentExample0);
             }
 
@@ -91,6 +94,7 @@ public class LoginServiceImpl implements LoginService {
             TokenRequest tokenRequest=new TokenRequest();
             tokenRequest.setName(student.getStudentIdcard());//身份证号码作为标识
             tokenRequest.setRole("student");
+            tokenRequest.setId(student.getStudentId());
             String token = JwtUtil.sign(tokenRequest, 30*60*1000, SECRET_KEY);
             Cookie cookie=new Cookie("token", token);
             //cookie.setMaxAge(3600);

@@ -7,8 +7,6 @@ import com.lutayy.campbackend.dao.MemberReStudentMapper;
 import com.lutayy.campbackend.dao.StudentMapper;
 import com.lutayy.campbackend.pojo.*;
 import com.lutayy.campbackend.service.AdminService;
-import com.lutayy.campbackend.service.SQLConn.SystemParamManager;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.STUnderline;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -31,20 +29,11 @@ public class AdminServiceImpl implements AdminService {
     MemberMapper memberMapper;
     @Autowired
     MemberReStudentMapper memberReStudentMapper;
+    @Autowired
+    GetObjectHelper getObjectHelper;
 
     private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
             "yyyy-MM-dd HH:mm:ss");
-
-    private Student getStudentByIdcard(String idcard){
-        StudentExample studentExample=new StudentExample();
-        StudentExample.Criteria criteria=studentExample.createCriteria();
-        criteria.andStudentIdcardEqualTo(idcard);
-        List<Student> students=studentMapper.selectByExample(studentExample);
-        if(students.size()==0){
-            return null;
-        }
-        return students.get(0);
-    }
 
     @Override
     public ResponseEntity<byte[]> getMemberTemplate(HttpServletRequest request) {
@@ -79,7 +68,7 @@ public class AdminServiceImpl implements AdminService {
     public JSONObject deleteOneStudentFromMember(JSONObject jsonObject) {
         JSONObject result=new JSONObject();
 
-        String memberId=jsonObject.getString("memberId");
+        Integer memberId=jsonObject.getInteger("memberId");
         String studentIdcard=jsonObject.getString("idNum");
         result.put("code", "fail");
         Member member=memberMapper.selectByPrimaryKey(memberId);
@@ -87,7 +76,7 @@ public class AdminServiceImpl implements AdminService {
             result.put("msg", "系统中不存在该会员用户");
             return result;
         }
-        Student student=getStudentByIdcard(studentIdcard);
+        Student student=getObjectHelper.getStudentFromIdCard(studentIdcard);
         if(student==null){
             result.put("msg", "系统中不存在该学员用户");
             return result;
@@ -95,7 +84,7 @@ public class AdminServiceImpl implements AdminService {
         int studentId=student.getStudentId();
         MemberReStudentExample memberReStudentExample=new MemberReStudentExample();
         MemberReStudentExample.Criteria criteria=memberReStudentExample.createCriteria();
-        criteria.andStudentIdEqualTo(studentId).andMemberIdEqualTo(memberId);
+        criteria.andStudentIdEqualTo(studentId).andMemberKeyIdEqualTo(member.getMemberKeyId());
         if(memberReStudentMapper.selectByExample(memberReStudentExample).size()==0){
             result.put("msg", "系统中无此挂靠关系");
             return result;
@@ -205,12 +194,12 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public JSONObject getOneMemberStudentList(String memberId) {
+    public JSONObject getOneMemberStudentList(Integer memberId) {
         JSONObject result=new JSONObject();
         JSONArray data=new JSONArray();
         MemberReStudentExample memberReStudentExample=new MemberReStudentExample();
         MemberReStudentExample.Criteria criteria=memberReStudentExample.createCriteria();
-        criteria.andMemberIdEqualTo(memberId);
+        criteria.andMemberKeyIdEqualTo(memberId);
         List<MemberReStudent> memberReStudents=memberReStudentMapper.selectByExample(memberReStudentExample);
         if(memberReStudents.size()==0){
             result.put("code", "success");

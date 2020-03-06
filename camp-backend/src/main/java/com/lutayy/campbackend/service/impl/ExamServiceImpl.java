@@ -34,49 +34,21 @@ public class ExamServiceImpl implements ExamService {
     ExamReQuestionMapper examReQuestionMapper;
     @Autowired
     ExamQuestionStudentAnswerMapper examQuestionStudentAnswerMapper;
-
-    /** 由身份证获得学员Id **/
-    private int getStudentId(String idcard){
-        StudentExample studentExample=new StudentExample();
-        StudentExample.Criteria criteria=studentExample.createCriteria();
-        criteria.andStudentIdcardEqualTo(idcard);
-        List<Student> students=studentMapper.selectByExample(studentExample);
-        if(students.size()==0){
-            return -1;
-        }
-        Student student=students.get(0);
-        return student.getStudentId();
-    }
-
-    private Student getStudentByIdcard(String idcard){
-        StudentExample studentExample=new StudentExample();
-        StudentExample.Criteria criteria=studentExample.createCriteria();
-        criteria.andStudentIdcardEqualTo(idcard);
-        List<Student> students=studentMapper.selectByExample(studentExample);
-        if(students.size()==0){
-            return null;
-        }
-        return students.get(0);
-    }
+    
 
     @Override
-    public JSONObject getHalfExamList(String idcard) {
+    public JSONObject getHalfExamList(Integer studentId) {
         JSONObject result=new JSONObject();
 
-        StudentExample studentExample=new StudentExample();
-        StudentExample.Criteria criteria=studentExample.createCriteria();
-        criteria.andStudentIdcardEqualTo(idcard);
-        List<Student> students=studentMapper.selectByExample(studentExample);
-        if(students.size()==0){
+        Student student=studentMapper.selectByPrimaryKey(studentId);
+        if(student==null){
             result.put("code", "fail");
             result.put("data",null);
             result.put("msg","用户不存在！");
             return result;
         }
-        Student student=students.get(0);
-        int userKey=student.getStudentId();
 
-        JSONArray exams = ExamStudentSQLConn.getExamByCondition(userKey,"r.score<e.exam_pass and r.remaining_times<3 and r.remaining_times>0");
+        JSONArray exams = ExamStudentSQLConn.getExamByCondition(studentId,"r.score<e.exam_pass and r.remaining_times<3 and r.remaining_times>0");
         if(exams.size()==0){
             result.put("code", "fail");
             result.put("data",null);
@@ -90,10 +62,8 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public JSONObject getTodoExamList(String idcard) {
+    public JSONObject getTodoExamList(Integer studentId) {
         JSONObject result=new JSONObject();
-
-        int studentId=getStudentId(idcard);
         if(studentId==-1){
             result.put("code", "fail");
             result.put("data",null);
@@ -147,23 +117,17 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public JSONObject getDoneExamList(String idcard){
+    public JSONObject getDoneExamList(Integer studentId){
         JSONObject result=new JSONObject();
-
-        StudentExample studentExample=new StudentExample();
-        StudentExample.Criteria criteria=studentExample.createCriteria();
-        criteria.andStudentIdcardEqualTo(idcard);
-        List<Student> students=studentMapper.selectByExample(studentExample);
-        if(students.size()==0){
+        Student student=studentMapper.selectByPrimaryKey(studentId);
+        if(student==null){
             result.put("code", "fail");
             result.put("data",null);
             result.put("msg","用户不存在！");
             return result;
         }
-        Student student=students.get(0);
-        int userKey=student.getStudentId();
 
-        JSONArray exams = ExamStudentSQLConn.getExamByCondition(userKey,"(r.remaining_times=0 or r.score>=e.exam_pass)");
+        JSONArray exams = ExamStudentSQLConn.getExamByCondition(studentId,"(r.remaining_times=0 or r.score>=e.exam_pass)");
         if(exams.size()==0){
             result.put("code", "fail");
             result.put("data",null);
@@ -177,7 +141,7 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public JSONObject getExamInfo(String idcard,Integer examId) {
+    public JSONObject getExamInfo(Integer studentId,Integer examId) {
         JSONObject result=new JSONObject();
         Exam exam=examMapper.selectByPrimaryKey(examId);
         if(exam==null){
@@ -190,7 +154,7 @@ public class ExamServiceImpl implements ExamService {
 
         ExamReStudentExample examReStudentExample=new ExamReStudentExample();
         ExamReStudentExample.Criteria criteria0=examReStudentExample.createCriteria();
-        criteria0.andExamIdEqualTo(examId).andStudentIdEqualTo(getStudentId(idcard)).andIsInvalidEqualTo(false);
+        criteria0.andExamIdEqualTo(examId).andStudentIdEqualTo(studentId).andIsInvalidEqualTo(false);
         List<ExamReStudent> examReStudents=examReStudentMapper.selectByExample(examReStudentExample);
         if(examReStudents.size()==0){
             result.put("code", "fail");
@@ -267,7 +231,7 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public JSONObject getExamDetail(String idcard,Integer examId) {
+    public JSONObject getExamDetail(Integer studentId,Integer examId) {
         JSONObject result=new JSONObject();
 
         Exam exam=examMapper.selectByPrimaryKey(examId);
@@ -277,7 +241,6 @@ public class ExamServiceImpl implements ExamService {
             result.put("msg", "查询不到该试卷!");
             return result;
         }
-        int studentId=getStudentId(idcard);
         ExamReStudentExample examReStudentExample=new ExamReStudentExample();
         ExamReStudentExample.Criteria criteria=examReStudentExample.createCriteria();
         criteria.andStudentIdEqualTo(studentId).andExamIdEqualTo(examId).andIsInvalidEqualTo(false);
@@ -357,8 +320,8 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public JSONObject submitExam(JSONObject jsonObject) {
         JSONObject result=new JSONObject();
-        String idcard=jsonObject.getString("id");
-        Student student=getStudentByIdcard(idcard);
+        Integer studentId=jsonObject.getInteger("id");
+        Student student=studentMapper.selectByPrimaryKey(studentId);
         if (student==null){
             result.put("code", "error");
             result.put("msg", "当前登录用户信息错误");
@@ -444,7 +407,7 @@ public class ExamServiceImpl implements ExamService {
                 examQuestionStudentAnswer.setAnswerOne(answer.getByte(i));
             }
             //保存做题记录
-            if(examQuestionStudentAnswerMapper.selectByPrimaryKey(examId, question.getQuestionId(), student.getStudentId())!=null){
+            if(examQuestionStudentAnswerMapper.selectByPrimaryKey(examId, question.getQuestionId(), studentId)!=null){
                 examQuestionStudentAnswerMapper.updateByPrimaryKeySelective(examQuestionStudentAnswer);
             }else {
                 examQuestionStudentAnswerMapper.insertSelective(examQuestionStudentAnswer);
@@ -463,7 +426,7 @@ public class ExamServiceImpl implements ExamService {
             examReStudentMapper.updateByPrimaryKeySelective(examReStudent);
         }else {
             ExamReStudent examReStudent=new ExamReStudent();
-            examReStudent.setScore(score);;
+            examReStudent.setScore(score);
             examReStudent.setRemainingTimes((byte)3);
             examReStudent.setExamId(examId);
             examReStudent.setStudentId(student.getStudentId());

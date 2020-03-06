@@ -41,46 +41,13 @@ public class MemberServiceImpl implements MemberService {
     StudentMapper studentMapper;
     @Autowired
     MemberReStudentMapper memberReStudentMapper;
+    @Autowired
+    GetObjectHelper getObjectHelper;
 
-    /** 由身份证获得学员Id **/
-    private Student getStudentIdFromIdCard(String idcard){
-        StudentExample studentExample=new StudentExample();
-        StudentExample.Criteria criteria=studentExample.createCriteria();
-        criteria.andStudentIdcardEqualTo(idcard);
-        List<Student> students=studentMapper.selectByExample(studentExample);
-        if(students.size()==0){
-            return null;
-        }
-        Student student=students.get(0);
-        return student;
-    }
-    /** 由手机号码获得学员Id **/
-    private Student getStudentIdFromPhone(String phone){
-        StudentExample studentExample=new StudentExample();
-        StudentExample.Criteria criteria=studentExample.createCriteria();
-        criteria.andStudentPhoneEqualTo(phone);
-        List<Student> students=studentMapper.selectByExample(studentExample);
-        if(students.size()==0){
-            return null;
-        }
-        Student student=students.get(0);
-        return student;
-    }
-    /** 检查学员是否已存在绑定关系 **/
-    private MemberReStudent getMemberReStudentByStudentId(int studentId){
-        MemberReStudentExample memberReStudentExample=new MemberReStudentExample();
-        MemberReStudentExample.Criteria criteria=memberReStudentExample.createCriteria();
-        criteria.andStudentIdEqualTo(studentId);
-        List<MemberReStudent> memberReStudents=memberReStudentMapper.selectByExample(memberReStudentExample);
-        if(memberReStudents.size()==0){
-            return null;
-        }else {
-            return memberReStudents.get(0);
-        }
-    }
+
 
     @Override
-    public Object getUserInfo(String id) {
+    public Object getUserInfo(Integer id) {
         JSONObject result=new JSONObject();
         Member member=memberMapper.selectByPrimaryKey(id);
         if(member==null){
@@ -114,7 +81,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public JSONObject setUserInfo(JSONObject jsonObject) {
         JSONObject result=new JSONObject();
-        String id=jsonObject.getString("id");
+        Integer id=jsonObject.getInteger("id");
 
         String phone=jsonObject.getString("phone");
         String name=jsonObject.getString("name");
@@ -153,7 +120,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public JSONObject rechargeVIP(String id) {
+    public JSONObject rechargeVIP(Integer id) {
         JSONObject result=new JSONObject();
         Member member=memberMapper.selectByPrimaryKey(id);
         if(member==null){
@@ -172,7 +139,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public JSONObject importSingleStudent(JSONObject jsonObject) {
         JSONObject result=new JSONObject();
-        String memberId=jsonObject.getString("id");
+        Integer memberId=jsonObject.getInteger("id");
         String idNum=jsonObject.getString("idNum");
         String phone=jsonObject.getString("phone");
         String name=jsonObject.getString("name");
@@ -184,14 +151,14 @@ public class MemberServiceImpl implements MemberService {
             return result;
         }
 
-        Student student=getStudentIdFromIdCard(idNum);
+        Student student=getObjectHelper.getStudentFromIdCard(idNum);
         if(student==null){
             Student newStudent=new Student();
             newStudent.setStudentName(name);
             newStudent.setStudentIdcard(idNum);
             String msg;
             //手机号已存在于系统中，则置为空，需对应学员自行设置
-            if(getStudentIdFromPhone(phone)==null){
+            if(getObjectHelper.getStudentFromPhone(phone)==null){
                 newStudent.setStudentPhone(phone);
                 msg="";
             }else{
@@ -199,8 +166,8 @@ public class MemberServiceImpl implements MemberService {
             }
             if(studentMapper.insertSelective(newStudent)>0){
                 MemberReStudent memberReStudent=new MemberReStudent();
-                memberReStudent.setMemberId(memberId);
-                int studentId=getStudentIdFromIdCard(idNum).getStudentId();
+                memberReStudent.setMemberKeyId(memberId);
+                int studentId=getObjectHelper.getStudentFromIdCard(idNum).getStudentId();
                 memberReStudent.setStudentId(studentId);
                 if(memberReStudentMapper.insert(memberReStudent)>0){
                     result.put("code", "success");
@@ -231,13 +198,13 @@ public class MemberServiceImpl implements MemberService {
             }
         }
 
-        if(getMemberReStudentByStudentId(student.getStudentId())!=null){
+        if(getObjectHelper.getMemberReStudentByStudentId(student.getStudentId())!=null){
             result.put("code", "fail");
             result.put("msg", "绑定失败!系统内已有该账号且有已有挂靠关系");
             return result;
         }
         MemberReStudent memberReStudent=new MemberReStudent();
-        memberReStudent.setMemberId(memberId);
+        memberReStudent.setMemberKeyId(memberId);
         memberReStudent.setStudentId(student.getStudentId());
         if(memberReStudentMapper.insert(memberReStudent)>0){
             result.put("code", "success");
@@ -253,7 +220,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public JSONObject deleteOneStudent(JSONObject jsonObject) {
         JSONObject result=new JSONObject();
-        String memberId=jsonObject.getString("id");
+        Integer memberId=jsonObject.getInteger("id");
         String idNum=jsonObject.getString("idNum");
         String phone=jsonObject.getString("phone");
 
@@ -263,7 +230,7 @@ public class MemberServiceImpl implements MemberService {
             result.put("msg","用户不存在!");
             return result;
         }
-        Student student=getStudentIdFromIdCard(idNum);
+        Student student=getObjectHelper.getStudentFromIdCard(idNum);
         if(student==null){
             result.put("code", "fail");
             result.put("msg","该账号不存在!");
@@ -279,7 +246,7 @@ public class MemberServiceImpl implements MemberService {
 
         MemberReStudentExample memberReStudentExample=new MemberReStudentExample();
         MemberReStudentExample.Criteria criteria=memberReStudentExample.createCriteria();
-        criteria.andMemberIdEqualTo(memberId).andStudentIdEqualTo(student.getStudentId());
+        criteria.andMemberKeyIdEqualTo(memberId).andStudentIdEqualTo(student.getStudentId());
         List<MemberReStudent> memberReStudents=memberReStudentMapper.selectByExample(memberReStudentExample);
         if(memberReStudents.size()==0){
             result.put("code", "fail");
@@ -361,7 +328,7 @@ public class MemberServiceImpl implements MemberService {
             result.put("msg","请重新登陆！");
             return result;
         }
-        String memberId = tokenRequest.getName();
+        Integer memberId = tokenRequest.getId();
         //System.out.println(memberId);
         Member member=memberMapper.selectByPrimaryKey(memberId);
         result.put("code", "fail");
@@ -400,11 +367,11 @@ public class MemberServiceImpl implements MemberService {
                 for (Map<String, String> row : list) {
                     // TODO 批量添加
                     Student student=excelRowToTeacher(row);
-                    Student studentCheck=getStudentIdFromIdCard(student.getStudentIdcard());
+                    Student studentCheck=getObjectHelper.getStudentFromIdCard(student.getStudentIdcard());
                     //系统已有该身份证的账号
                     if (studentCheck!=null){
                         //系统已有账号但无挂靠关系
-                        if(getMemberReStudentByStudentId(studentCheck.getStudentId())==null){
+                        if(getObjectHelper.getMemberReStudentByStudentId(studentCheck.getStudentId())==null){
                             //与系统已有账号的姓名身份证不一致，不予绑定
                             if(!studentCheck.getStudentName().equals(student.getStudentName())){
                                 nameWrongTotalCount+=1;
@@ -413,7 +380,7 @@ public class MemberServiceImpl implements MemberService {
                             }
                             MemberReStudent memberReStudent=new MemberReStudent();
                             memberReStudent.setStudentId(studentCheck.getStudentId());
-                            memberReStudent.setMemberId(memberId);
+                            memberReStudent.setMemberKeyId(memberId);
                             memberReStudentMapper.insert(memberReStudent);
                             studentCheck.setCompany(member.getMemberName());
                             studentMapper.updateByPrimaryKeySelective(studentCheck);
@@ -423,14 +390,14 @@ public class MemberServiceImpl implements MemberService {
                         existTotalCount+=1;
                         continue;
                     }
-                    if(getStudentIdFromPhone(student.getStudentPhone())!=null){
+                    if(getObjectHelper.getStudentFromPhone(student.getStudentPhone())!=null){
                         student.setStudentPhone(null);
                     }
                     student.setCompany(member.getMemberName());
                     studentMapper.insertSelective(student);
                     MemberReStudent memberReStudent=new MemberReStudent();
-                    memberReStudent.setStudentId(getStudentIdFromIdCard(student.getStudentIdcard()).getStudentId());
-                    memberReStudent.setMemberId(memberId);
+                    memberReStudent.setStudentId(getObjectHelper.getStudentFromIdCard(student.getStudentIdcard()).getStudentId());
+                    memberReStudent.setMemberKeyId(memberId);
                     memberReStudentMapper.insert(memberReStudent);
                 }
             }
@@ -472,7 +439,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public JSONObject getStudentList(String memberId) {
+    public JSONObject getStudentList(Integer memberId) {
         JSONObject result=new JSONObject();
         Member member=memberMapper.selectByPrimaryKey(memberId);
         if(member==null){
@@ -484,7 +451,7 @@ public class MemberServiceImpl implements MemberService {
         JSONArray data=new JSONArray();
         MemberReStudentExample memberReStudentExample=new MemberReStudentExample();
         MemberReStudentExample.Criteria criteria=memberReStudentExample.createCriteria();
-        criteria.andMemberIdEqualTo(memberId);
+        criteria.andMemberKeyIdEqualTo(memberId);
         List<MemberReStudent> memberReStudents=memberReStudentMapper.selectByExample(memberReStudentExample);
         if(memberReStudents.size()==0){
             result.put("code", "success");
@@ -513,7 +480,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public JSONObject getStudentListByCondition(String memberId,String phone,
+    public JSONObject getStudentListByCondition(Integer memberId,String phone,
                                                 String idNum,String name,
                                                 Integer currentPage,Integer pageSize) {
         JSONObject result=new JSONObject();

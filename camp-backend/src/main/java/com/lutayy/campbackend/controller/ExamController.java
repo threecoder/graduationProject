@@ -18,27 +18,27 @@ public class ExamController {
 
     @RequestMapping("/student/getHalfExamList")
     @ResponseBody
-    public Object getHalfExamList(@RequestParam("id") String idcard){
-        return examService.getHalfExamList(idcard);
+    public Object getHalfExamList(@RequestParam("id") Integer studentId){
+        return examService.getHalfExamList(studentId);
     }
 
     @RequestMapping("/student/getTodoExamList")
     @ResponseBody
-    public Object getTodoExamList(@RequestParam("id") String idcard){
-        return examService.getTodoExamList(idcard);
+    public Object getTodoExamList(@RequestParam("id") Integer studentId){
+        return examService.getTodoExamList(studentId);
     }
 
     @RequestMapping("/student/getDoneExamList")
     @ResponseBody
-    public Object getDoneExamList(@RequestParam("id") String idcard){
-        return examService.getDoneExamList(idcard);
+    public Object getDoneExamList(@RequestParam("id") Integer studentId){
+        return examService.getDoneExamList(studentId);
     }
 
     @RequestMapping("/student/getExamInfo")
     @ResponseBody
-    public Object getExamInfo(@RequestParam("id") String idcard,
+    public Object getExamInfo(@RequestParam("id") Integer studentId,
                                   @RequestParam("examId") Integer examId){
-        return examService.getExamInfo(idcard,examId);
+        return examService.getExamInfo(studentId,examId);
     }
 
     @RequestMapping("/student/getExamQuestions")
@@ -49,9 +49,9 @@ public class ExamController {
 
     @RequestMapping("/student/getExamDetail")
     @ResponseBody
-    public Object getExamDetail(@RequestParam("id") String idcard,
+    public Object getExamDetail(@RequestParam("id") Integer studentId,
                                 @RequestParam("examId") Integer examId){
-        return examService.getExamDetail(idcard,examId);
+        return examService.getExamDetail(studentId,examId);
     }
 
     @RequestMapping("/student/submitExam")

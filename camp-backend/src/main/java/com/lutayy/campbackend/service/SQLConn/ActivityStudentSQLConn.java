@@ -45,7 +45,7 @@ public class ActivityStudentSQLConn {
     /**
      * 获取某一活动会员名下的学员的报名信息
      **/
-    public static List<Map<String,String>> getStudentActivityInfoFromMember(String memberId, int activityId){
+    public static List<Map<String,String>> getStudentActivityInfoFromMember(Integer memberId, int activityId){
 
 //        List<ActivityStudent> activityStudents=new ArrayList<>();
         List<Map<String,String>> infos=new ArrayList<>();
@@ -58,7 +58,7 @@ public class ActivityStudentSQLConn {
             String sql="select distinct a.*,s.student_phone,s.student_name from " +
                     "(student s left join activity_student a on a.student_id=s.student_id) left join member_re_student m on m.student_id=s.student_id "+
                     "where a.activity_id=" + activityId +
-                    " and m.member_id='"+memberId+"'";
+                    " and m.member_key_id="+memberId;
 
             ResultSet rs=statement.executeQuery(sql);
             while (rs.next()){
@@ -87,7 +87,7 @@ public class ActivityStudentSQLConn {
     /**
      * 获取某会员名下学员已报名的活动 id 数组
      **/
-    public static List<Integer> getActivityIdByMemberId(String memberId){
+    public static List<Integer> getActivityIdByMemberId(Integer memberId){
 
         List<Integer> activityIds=new ArrayList<Integer>();
 
@@ -97,7 +97,7 @@ public class ActivityStudentSQLConn {
             conn= DriverManager.getConnection(URL,Name,Pwd);
             statement=conn.createStatement();
             String sql="select distinct a.activity_id from member_re_student m,activity_student a " +
-                    "where m.member_id='"+memberId+"' and m.student_id=a.student_id";
+                    "where m.member_key_id="+memberId+" and m.student_id=a.student_id";
 
             ResultSet rs=statement.executeQuery(sql);
             while (rs.next()){

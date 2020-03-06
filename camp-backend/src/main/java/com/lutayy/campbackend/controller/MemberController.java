@@ -24,8 +24,8 @@ public class MemberController {
 
     @RequestMapping("/getUserInfo")
     @ResponseBody
-    public Object getUserInfo(@RequestParam("id") String id){
-        return memberService.getUserInfo(id);
+    public Object getUserInfo(@RequestParam("id") Integer memberId){
+        return memberService.getUserInfo(memberId);
     }
 
     @RequestMapping("/setUserInfo")
@@ -42,8 +42,8 @@ public class MemberController {
 
     @RequestMapping("/rechargeVIP")
     @ResponseBody
-    public Object rechargeVIP(@RequestParam("id") String id){
-        return memberService.rechargeVIP(id);
+    public Object rechargeVIP(@RequestParam("id") Integer memberId){
+        return memberService.rechargeVIP(memberId);
     }
 
     @RequestMapping("/importSingleStudent")
@@ -72,13 +72,13 @@ public class MemberController {
 
     @RequestMapping("/getStudentList")
     @ResponseBody
-    public Object getStudentList(@RequestParam("id") String memberId){
+    public Object getStudentList(@RequestParam("id") Integer memberId){
         return memberService.getStudentList(memberId);
     }
 
     @RequestMapping("/getStudentListByCondition")
     @ResponseBody
-    public Object getStudentListByCondition(@RequestParam("id") String memberId,
+    public Object getStudentListByCondition(@RequestParam("id") Integer memberId,
                                             @RequestParam("phone") String phone,
                                             @RequestParam("idNum") String idNum,
                                             @RequestParam("name") String name,

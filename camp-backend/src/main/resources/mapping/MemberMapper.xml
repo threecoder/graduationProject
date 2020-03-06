@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lutayy.campbackend.dao.MemberMapper">
   <resultMap id="BaseResultMap" type="com.lutayy.campbackend.pojo.Member">
-    <id column="member_id" jdbcType="VARCHAR" property="memberId" />
+    <id column="member_key_id" jdbcType="INTEGER" property="memberKeyId" />
+    <result column="member_id" jdbcType="VARCHAR" property="memberId" />
     <result column="member_phone" jdbcType="VARCHAR" property="memberPhone" />
     <result column="member_email" jdbcType="VARCHAR" property="memberEmail" />
     <result column="member_password" jdbcType="VARCHAR" property="memberPassword" />
@@ -77,8 +78,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    member_id, member_phone, member_email, member_password, member_tel, member_name, 
-    is_vip, enter_date, vip_end_date, vip_begin_date, member_country, member_province, 
+    member_key_id, member_id, member_phone, member_email, member_password, member_tel, 
+    member_name, is_vip, enter_date, vip_end_date, vip_begin_date, member_country, member_province, 
     member_city, member_area, member_address
   </sql>
   <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.MemberExample" resultMap="BaseResultMap">
@@ -95,15 +96,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from member
-    where member_id = #{memberId,jdbcType=VARCHAR}
+    where member_key_id = #{memberKeyId,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from member
-    where member_id = #{memberId,jdbcType=VARCHAR}
+    where member_key_id = #{memberKeyId,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.lutayy.campbackend.pojo.MemberExample">
     delete from member
@@ -112,6 +113,9 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.lutayy.campbackend.pojo.Member">
+    <selectKey keyProperty="memberKeyId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into member (member_id, member_phone, member_email, 
       member_password, member_tel, member_name, 
       is_vip, enter_date, vip_end_date, 
@@ -126,6 +130,9 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.Member">
+    <selectKey keyProperty="memberKeyId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into member
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="memberId != null">
@@ -231,6 +238,9 @@
   <update id="updateByExampleSelective" parameterType="map">
     update member
     <set>
+      <if test="record.memberKeyId != null">
+        member_key_id = #{record.memberKeyId,jdbcType=INTEGER},
+      </if>
       <if test="record.memberId != null">
         member_id = #{record.memberId,jdbcType=VARCHAR},
       </if>
@@ -283,7 +293,8 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update member
-    set member_id = #{record.memberId,jdbcType=VARCHAR},
+    set member_key_id = #{record.memberKeyId,jdbcType=INTEGER},
+      member_id = #{record.memberId,jdbcType=VARCHAR},
       member_phone = #{record.memberPhone,jdbcType=VARCHAR},
       member_email = #{record.memberEmail,jdbcType=VARCHAR},
       member_password = #{record.memberPassword,jdbcType=VARCHAR},
@@ -305,6 +316,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.lutayy.campbackend.pojo.Member">
     update member
     <set>
+      <if test="memberId != null">
+        member_id = #{memberId,jdbcType=VARCHAR},
+      </if>
       <if test="memberPhone != null">
         member_phone = #{memberPhone,jdbcType=VARCHAR},
       </if>
@@ -348,11 +362,12 @@
         member_address = #{memberAddress,jdbcType=VARCHAR},
       </if>
     </set>
-    where member_id = #{memberId,jdbcType=VARCHAR}
+    where member_key_id = #{memberKeyId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.lutayy.campbackend.pojo.Member">
     update member
-    set member_phone = #{memberPhone,jdbcType=VARCHAR},
+    set member_id = #{memberId,jdbcType=VARCHAR},
+      member_phone = #{memberPhone,jdbcType=VARCHAR},
       member_email = #{memberEmail,jdbcType=VARCHAR},
       member_password = #{memberPassword,jdbcType=VARCHAR},
       member_tel = #{memberTel,jdbcType=VARCHAR},
@@ -366,6 +381,6 @@
       member_city = #{memberCity,jdbcType=VARCHAR},
       member_area = #{memberArea,jdbcType=VARCHAR},
       member_address = #{memberAddress,jdbcType=VARCHAR}
-    where member_id = #{memberId,jdbcType=VARCHAR}
+    where member_key_id = #{memberKeyId,jdbcType=INTEGER}
   </update>
 </mapper>

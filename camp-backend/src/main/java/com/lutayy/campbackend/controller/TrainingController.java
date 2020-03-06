@@ -36,20 +36,26 @@ public class TrainingController {
 
     @RequestMapping("/student/getSignedTraining")
     @ResponseBody
-    public Object getStudentSignedTraining(@RequestParam("id") String id){
-        return trainingService.getStudentSignedTraining(id);
+    public Object getStudentSignedTraining(@RequestParam("id") Integer studentId){
+        return trainingService.getStudentSignedTraining(studentId);
     }
 
-    @RequestMapping(value = {"/member/getJoinableTraining","/student/getJoinableTraining"})
+    @RequestMapping(value = {"/member/getJoinableTraining"})
     @ResponseBody
-    public Object getJoinableTraining(@RequestParam("id") String id){
-        return trainingService.getJoinableTraining(id);
+    public Object getJoinableTraining(@RequestParam("id") Integer memberId){
+        return trainingService.getJoinableTraining(memberId);
+    }
+
+    @RequestMapping(value = {"/student/getJoinableTraining"})
+    @ResponseBody
+    public Object getJoinableTraining(){
+        return trainingService.getJoinableTraining();
     }
 
     @RequestMapping("/member/getSignedTraining")
     @ResponseBody
-    public Object getMemberSignedTraining(@RequestParam("id") String id){
-        return trainingService.getMemberSignedTraining(id);
+    public Object getMemberSignedTraining(@RequestParam("id") Integer memberId){
+        return trainingService.getMemberSignedTraining(memberId);
     }
 
     @RequestMapping("/member/joinTraining")

@@ -17,8 +17,8 @@ public class StudentController {
 
     @RequestMapping("/getUserInfo")
     @ResponseBody
-    public Object getUserInfo(@RequestParam("id") String idcard){
-        return studentService.getUserInfo(idcard);
+    public Object getUserInfo(@RequestParam("id") Integer studentId){
+        return studentService.getUserInfo(studentId);
     }
 
     @RequestMapping("/setUserInfo")

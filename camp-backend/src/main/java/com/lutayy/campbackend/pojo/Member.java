@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class Member implements Serializable {
+    private Integer memberKeyId;
+
     private String memberId;
 
     private String memberPhone;
@@ -35,6 +37,14 @@ public class Member implements Serializable {
     private String memberAddress;
 
     private static final long serialVersionUID = 1L;
+
+    public Integer getMemberKeyId() {
+        return memberKeyId;
+    }
+
+    public void setMemberKeyId(Integer memberKeyId) {
+        this.memberKeyId = memberKeyId;
+    }
 
     public String getMemberId() {
         return memberId;

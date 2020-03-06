@@ -132,6 +132,66 @@ public class MemberExample {
             addCriterion(condition, new java.sql.Date(value1.getTime()), new java.sql.Date(value2.getTime()), property);
         }
 
+        public Criteria andMemberKeyIdIsNull() {
+            addCriterion("member_key_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberKeyIdIsNotNull() {
+            addCriterion("member_key_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberKeyIdEqualTo(Integer value) {
+            addCriterion("member_key_id =", value, "memberKeyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberKeyIdNotEqualTo(Integer value) {
+            addCriterion("member_key_id <>", value, "memberKeyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberKeyIdGreaterThan(Integer value) {
+            addCriterion("member_key_id >", value, "memberKeyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberKeyIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("member_key_id >=", value, "memberKeyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberKeyIdLessThan(Integer value) {
+            addCriterion("member_key_id <", value, "memberKeyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberKeyIdLessThanOrEqualTo(Integer value) {
+            addCriterion("member_key_id <=", value, "memberKeyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberKeyIdIn(List<Integer> values) {
+            addCriterion("member_key_id in", values, "memberKeyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberKeyIdNotIn(List<Integer> values) {
+            addCriterion("member_key_id not in", values, "memberKeyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberKeyIdBetween(Integer value1, Integer value2) {
+            addCriterion("member_key_id between", value1, value2, "memberKeyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberKeyIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("member_key_id not between", value1, value2, "memberKeyId");
+            return (Criteria) this;
+        }
+
         public Criteria andMemberIdIsNull() {
             addCriterion("member_id is null");
             return (Criteria) this;

@@ -6,17 +6,17 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 
 public interface ExamService {
 
-    JSONObject getHalfExamList(String idcard);
+    JSONObject getHalfExamList(Integer studentId);
 
-    JSONObject getTodoExamList(String idcard);
+    JSONObject getTodoExamList(Integer studentId);
 
-    JSONObject getDoneExamList(String idcard);
+    JSONObject getDoneExamList(Integer studentId);
 
-    JSONObject getExamInfo(String idcard,Integer examId);
+    JSONObject getExamInfo(Integer studentId,Integer examId);
 
     JSONObject getExamQuestions(Integer examId);
 
-    JSONObject getExamDetail(String idcard,Integer examId);
+    JSONObject getExamDetail(Integer studentId,Integer examId);
 
     JSONObject addNewExam(JSONObject jsonObject);
 

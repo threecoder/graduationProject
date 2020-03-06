@@ -12,11 +12,11 @@ public interface MemberService {
 
     JSONObject setUserInfo(@RequestBody JSONObject jsonObject);
 
-    Object getUserInfo(String id);
+    Object getUserInfo(Integer id);
 
     JSONObject setNewPassword(JSONObject jsonObject);
 
-    JSONObject rechargeVIP(String id);
+    JSONObject rechargeVIP(Integer id);
 
     JSONObject importSingleStudent(JSONObject jsonObject);
 
@@ -26,8 +26,8 @@ public interface MemberService {
 
     JSONObject importStudentByFile(HttpServletRequest request);
 
-    JSONObject getStudentList(String memberId);
+    JSONObject getStudentList(Integer memberId);
 
-    JSONObject getStudentListByCondition(String memberId,String phone,String idNum,String name,
+    JSONObject getStudentListByCondition(Integer memberId,String phone,String idNum,String name,
                                          Integer currentPage,Integer pageSize);
 }

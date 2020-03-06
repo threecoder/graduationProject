@@ -7,19 +7,19 @@ public interface ActivityService {
 
     JSONObject getJoinableActivities();
 
-    JSONObject getSignedActivities(String idcard);
+    JSONObject getSignedActivities(Integer studentId);
 
-    JSONObject studentGetSeatNum(String idcard,int activityId);
+    JSONObject studentGetSeatNum(Integer studentId,int activityId);
 
     JSONObject studentJoinActivity(JSONObject jsonObject);
 
     JSONObject memberJoinActivity(JSONObject jsonObject);
 
-    JSONObject memberGetSeatNum(String memberId,int activityId);
+    JSONObject memberGetSeatNum(Integer memberId,int activityId);
 
     JSONObject addNewActivity(JSONObject jsonObject);
 
     JSONObject adminGetActivityList();
 
-    JSONObject memberGetSignedActivities(String id);
+    JSONObject memberGetSignedActivities(Integer memberId);
 }

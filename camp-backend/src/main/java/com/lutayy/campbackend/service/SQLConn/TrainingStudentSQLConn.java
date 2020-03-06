@@ -17,7 +17,7 @@ public class TrainingStudentSQLConn {
     /**
      * 获取某会员名下学员已报名的培训 id 数组
      **/
-    public static List<Integer> getTrainingIdByMemberId(String memberId){
+    public static List<Integer> getTrainingIdByMemberId(Integer memberId){
 
         List<Integer> trainingIds=new ArrayList<Integer>();
 
@@ -27,7 +27,7 @@ public class TrainingStudentSQLConn {
             conn= DriverManager.getConnection(URL,Name,Pwd);
             statement=conn.createStatement();
             String sql="select distinct t.training_id from member_re_student m,training_re_student t " +
-                    "where m.member_id='"+memberId+"' and m.student_id=t.student_id";
+                    "where m.member_key_id='"+memberId+"' and m.student_id=t.student_id";
 
             ResultSet rs=statement.executeQuery(sql);
             while (rs.next()){

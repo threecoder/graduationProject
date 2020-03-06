@@ -11,7 +11,7 @@ public class TrainingOrder implements Serializable {
 
     private Boolean orderType;
 
-    private String memberId;
+    private Integer memberKeyId;
 
     private Integer studentId;
 
@@ -49,12 +49,12 @@ public class TrainingOrder implements Serializable {
         this.orderType = orderType;
     }
 
-    public String getMemberId() {
-        return memberId;
+    public Integer getMemberKeyId() {
+        return memberKeyId;
     }
 
-    public void setMemberId(String memberId) {
-        this.memberId = memberId;
+    public void setMemberKeyId(Integer memberKeyId) {
+        this.memberKeyId = memberKeyId;
     }
 
     public Integer getStudentId() {

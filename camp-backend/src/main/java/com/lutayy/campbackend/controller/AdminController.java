@@ -40,7 +40,7 @@ public class AdminController {
 
     @RequestMapping("/getOneMemberStudentList")
     @ResponseBody
-    public Object getOneMemberStudentList(@RequestParam("memberId") String memberId){
+    public Object getOneMemberStudentList(@RequestParam("memberId") Integer memberId){
         return adminService.getOneMemberStudentList(memberId);
     }
 

@@ -15,7 +15,7 @@ public class MemberStudentSQLConn {
     private static final String Name="root";
     private static final String Pwd="123456";
 
-    public static List<Student> getStudentsFromMemberReStudent(String memberId,String phone,String idNum,String name){
+    public static List<Student> getStudentsFromMemberReStudent(Integer memberId,String phone,String idNum,String name){
         List<Student> students=new ArrayList<>();
 
         Connection conn=null;
@@ -24,7 +24,7 @@ public class MemberStudentSQLConn {
             conn= DriverManager.getConnection(URL,Name,Pwd);
             statement=conn.createStatement();
             String sql="select distinct s.* from member_re_student r,student s " +
-                    "where r.student_id=s.student_id and r.member_id='"+memberId+"'";
+                    "where r.student_id=s.student_id and r.member_key_id="+memberId;
             if(phone!=null){
                 sql+=" and s.student_phone='"+phone+"'";
             }

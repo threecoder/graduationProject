@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lutayy.campbackend.dao.MemberReStudentMapper">
   <resultMap id="BaseResultMap" type="com.lutayy.campbackend.pojo.MemberReStudent">
-    <result column="member_id" jdbcType="VARCHAR" property="memberId" />
     <result column="student_id" jdbcType="INTEGER" property="studentId" />
+    <result column="member_key_id" jdbcType="INTEGER" property="memberKeyId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -64,7 +64,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    member_id, student_id
+    student_id, member_key_id
   </sql>
   <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.MemberReStudentExample" resultMap="BaseResultMap">
     select
@@ -87,25 +87,25 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.lutayy.campbackend.pojo.MemberReStudent">
-    insert into member_re_student (member_id, student_id)
-    values (#{memberId,jdbcType=VARCHAR}, #{studentId,jdbcType=INTEGER})
+    insert into member_re_student (student_id, member_key_id)
+    values (#{studentId,jdbcType=INTEGER}, #{memberKeyId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.MemberReStudent">
     insert into member_re_student
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="memberId != null">
-        member_id,
-      </if>
       <if test="studentId != null">
         student_id,
       </if>
+      <if test="memberKeyId != null">
+        member_key_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="memberId != null">
-        #{memberId,jdbcType=VARCHAR},
-      </if>
       <if test="studentId != null">
         #{studentId,jdbcType=INTEGER},
+      </if>
+      <if test="memberKeyId != null">
+        #{memberKeyId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -118,11 +118,11 @@
   <update id="updateByExampleSelective" parameterType="map">
     update member_re_student
     <set>
-      <if test="record.memberId != null">
-        member_id = #{record.memberId,jdbcType=VARCHAR},
-      </if>
       <if test="record.studentId != null">
         student_id = #{record.studentId,jdbcType=INTEGER},
+      </if>
+      <if test="record.memberKeyId != null">
+        member_key_id = #{record.memberKeyId,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null">
@@ -131,8 +131,8 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update member_re_student
-    set member_id = #{record.memberId,jdbcType=VARCHAR},
-      student_id = #{record.studentId,jdbcType=INTEGER}
+    set student_id = #{record.studentId,jdbcType=INTEGER},
+      member_key_id = #{record.memberKeyId,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

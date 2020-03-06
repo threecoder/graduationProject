@@ -5,7 +5,7 @@
     <id column="training_order_id" jdbcType="VARCHAR" property="trainingOrderId" />
     <result column="training_id" jdbcType="INTEGER" property="trainingId" />
     <result column="order_type" jdbcType="BIT" property="orderType" />
-    <result column="member_id" jdbcType="VARCHAR" property="memberId" />
+    <result column="member_key_id" jdbcType="INTEGER" property="memberKeyId" />
     <result column="student_id" jdbcType="INTEGER" property="studentId" />
     <result column="order_price" jdbcType="DECIMAL" property="orderPrice" />
     <result column="order_begin_time" jdbcType="TIMESTAMP" property="orderBeginTime" />
@@ -71,8 +71,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    training_order_id, training_id, order_type, member_id, student_id, order_price, order_begin_time, 
-    payment_state, close
+    training_order_id, training_id, order_type, member_key_id, student_id, order_price, 
+    order_begin_time, payment_state, close
   </sql>
   <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.TrainingOrderExample" resultMap="BaseResultMap">
     select
@@ -105,29 +105,30 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.lutayy.campbackend.pojo.TrainingOrder">
-    insert into training_order (training_order_id, training_id, order_type, 
-      member_id, student_id, order_price, 
-      order_begin_time, payment_state, close
-      )
-    values (#{trainingOrderId,jdbcType=VARCHAR}, #{trainingId,jdbcType=INTEGER}, #{orderType,jdbcType=BIT}, 
-      #{memberId,jdbcType=VARCHAR}, #{studentId,jdbcType=INTEGER}, #{orderPrice,jdbcType=DECIMAL}, 
-      #{orderBeginTime,jdbcType=TIMESTAMP}, #{paymentState,jdbcType=BIT}, #{close,jdbcType=BIT}
-      )
+    <selectKey keyProperty="trainingOrderId" order="AFTER" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into training_order (training_id, order_type, member_key_id, 
+      student_id, order_price, order_begin_time, 
+      payment_state, close)
+    values (#{trainingId,jdbcType=INTEGER}, #{orderType,jdbcType=BIT}, #{memberKeyId,jdbcType=INTEGER}, 
+      #{studentId,jdbcType=INTEGER}, #{orderPrice,jdbcType=DECIMAL}, #{orderBeginTime,jdbcType=TIMESTAMP}, 
+      #{paymentState,jdbcType=BIT}, #{close,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.TrainingOrder">
+    <selectKey keyProperty="trainingOrderId" order="AFTER" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into training_order
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="trainingOrderId != null">
-        training_order_id,
-      </if>
       <if test="trainingId != null">
         training_id,
       </if>
       <if test="orderType != null">
         order_type,
       </if>
-      <if test="memberId != null">
-        member_id,
+      <if test="memberKeyId != null">
+        member_key_id,
       </if>
       <if test="studentId != null">
         student_id,
@@ -146,17 +147,14 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="trainingOrderId != null">
-        #{trainingOrderId,jdbcType=VARCHAR},
-      </if>
       <if test="trainingId != null">
         #{trainingId,jdbcType=INTEGER},
       </if>
       <if test="orderType != null">
         #{orderType,jdbcType=BIT},
       </if>
-      <if test="memberId != null">
-        #{memberId,jdbcType=VARCHAR},
+      <if test="memberKeyId != null">
+        #{memberKeyId,jdbcType=INTEGER},
       </if>
       <if test="studentId != null">
         #{studentId,jdbcType=INTEGER},
@@ -193,8 +191,8 @@
       <if test="record.orderType != null">
         order_type = #{record.orderType,jdbcType=BIT},
       </if>
-      <if test="record.memberId != null">
-        member_id = #{record.memberId,jdbcType=VARCHAR},
+      <if test="record.memberKeyId != null">
+        member_key_id = #{record.memberKeyId,jdbcType=INTEGER},
       </if>
       <if test="record.studentId != null">
         student_id = #{record.studentId,jdbcType=INTEGER},
@@ -221,7 +219,7 @@
     set training_order_id = #{record.trainingOrderId,jdbcType=VARCHAR},
       training_id = #{record.trainingId,jdbcType=INTEGER},
       order_type = #{record.orderType,jdbcType=BIT},
-      member_id = #{record.memberId,jdbcType=VARCHAR},
+      member_key_id = #{record.memberKeyId,jdbcType=INTEGER},
       student_id = #{record.studentId,jdbcType=INTEGER},
       order_price = #{record.orderPrice,jdbcType=DECIMAL},
       order_begin_time = #{record.orderBeginTime,jdbcType=TIMESTAMP},
@@ -240,8 +238,8 @@
       <if test="orderType != null">
         order_type = #{orderType,jdbcType=BIT},
       </if>
-      <if test="memberId != null">
-        member_id = #{memberId,jdbcType=VARCHAR},
+      <if test="memberKeyId != null">
+        member_key_id = #{memberKeyId,jdbcType=INTEGER},
       </if>
       <if test="studentId != null">
         student_id = #{studentId,jdbcType=INTEGER},
@@ -265,7 +263,7 @@
     update training_order
     set training_id = #{trainingId,jdbcType=INTEGER},
       order_type = #{orderType,jdbcType=BIT},
-      member_id = #{memberId,jdbcType=VARCHAR},
+      member_key_id = #{memberKeyId,jdbcType=INTEGER},
       student_id = #{studentId,jdbcType=INTEGER},
       order_price = #{orderPrice,jdbcType=DECIMAL},
       order_begin_time = #{orderBeginTime,jdbcType=TIMESTAMP},

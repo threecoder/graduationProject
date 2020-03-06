@@ -93,7 +93,7 @@ public class TokenFilter implements Filter {
                     return;
                 }
             }
-            String id=tokenRequest.getName();
+            Integer id=tokenRequest.getId();
             Map<String, String[]> map = new HashMap<String, String[]>(request.getParameterMap());
             ParameterRequestWrapper requestWrapper;
             String method=request.getMethod().toLowerCase();
@@ -108,7 +108,7 @@ public class TokenFilter implements Filter {
                 requestWrapper.setBody(jsonObject.toJSONString().getBytes());
                 request = requestWrapper;
             } else if (method.equals("get")) {
-                map.put("id", new String[]{id});
+                map.put("id", new String[]{id.toString()});
                 requestWrapper = new ParameterRequestWrapper(request, map);
                 request = requestWrapper;
             }

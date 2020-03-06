@@ -9,17 +9,19 @@ public interface TrainingService {
 
     JSONObject getCourses(JSONObject jsonObject);
 
-    JSONObject addNewTraining(JSONObject jsonObject);
+    JSONObject getJoinableTraining(Integer memberId);
 
-    JSONObject getJoinableTraining(String id);
+    JSONObject getJoinableTraining();
 
-    JSONObject getStudentSignedTraining(String id);
+    JSONObject getStudentSignedTraining(Integer studentId);
 
     JSONObject studentJoinTraining(JSONObject jsonObject);
 
-    JSONObject getMemberSignedTraining(String id);
+    JSONObject getMemberSignedTraining(Integer memberId);
 
     JSONObject memberJoinTraining(JSONObject jsonObject);
+
+    JSONObject addNewTraining(JSONObject jsonObject);
 
     JSONObject adminGetTrainingList();
 }

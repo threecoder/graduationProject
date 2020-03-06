@@ -104,76 +104,6 @@ public class MemberReStudentExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andMemberIdIsNull() {
-            addCriterion("member_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMemberIdIsNotNull() {
-            addCriterion("member_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMemberIdEqualTo(String value) {
-            addCriterion("member_id =", value, "memberId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMemberIdNotEqualTo(String value) {
-            addCriterion("member_id <>", value, "memberId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMemberIdGreaterThan(String value) {
-            addCriterion("member_id >", value, "memberId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMemberIdGreaterThanOrEqualTo(String value) {
-            addCriterion("member_id >=", value, "memberId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMemberIdLessThan(String value) {
-            addCriterion("member_id <", value, "memberId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMemberIdLessThanOrEqualTo(String value) {
-            addCriterion("member_id <=", value, "memberId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMemberIdLike(String value) {
-            addCriterion("member_id like", value, "memberId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMemberIdNotLike(String value) {
-            addCriterion("member_id not like", value, "memberId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMemberIdIn(List<String> values) {
-            addCriterion("member_id in", values, "memberId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMemberIdNotIn(List<String> values) {
-            addCriterion("member_id not in", values, "memberId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMemberIdBetween(String value1, String value2) {
-            addCriterion("member_id between", value1, value2, "memberId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMemberIdNotBetween(String value1, String value2) {
-            addCriterion("member_id not between", value1, value2, "memberId");
-            return (Criteria) this;
-        }
-
         public Criteria andStudentIdIsNull() {
             addCriterion("student_id is null");
             return (Criteria) this;
@@ -231,6 +161,66 @@ public class MemberReStudentExample {
 
         public Criteria andStudentIdNotBetween(Integer value1, Integer value2) {
             addCriterion("student_id not between", value1, value2, "studentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberKeyIdIsNull() {
+            addCriterion("member_key_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberKeyIdIsNotNull() {
+            addCriterion("member_key_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberKeyIdEqualTo(Integer value) {
+            addCriterion("member_key_id =", value, "memberKeyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberKeyIdNotEqualTo(Integer value) {
+            addCriterion("member_key_id <>", value, "memberKeyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberKeyIdGreaterThan(Integer value) {
+            addCriterion("member_key_id >", value, "memberKeyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberKeyIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("member_key_id >=", value, "memberKeyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberKeyIdLessThan(Integer value) {
+            addCriterion("member_key_id <", value, "memberKeyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberKeyIdLessThanOrEqualTo(Integer value) {
+            addCriterion("member_key_id <=", value, "memberKeyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberKeyIdIn(List<Integer> values) {
+            addCriterion("member_key_id in", values, "memberKeyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberKeyIdNotIn(List<Integer> values) {
+            addCriterion("member_key_id not in", values, "memberKeyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberKeyIdBetween(Integer value1, Integer value2) {
+            addCriterion("member_key_id between", value1, value2, "memberKeyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberKeyIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("member_key_id not between", value1, value2, "memberKeyId");
             return (Criteria) this;
         }
     }
