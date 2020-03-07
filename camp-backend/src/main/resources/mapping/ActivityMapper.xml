@@ -8,11 +8,12 @@
     <result column="activity_introduction" jdbcType="VARCHAR" property="activityIntroduction" />
     <result column="activity_date" jdbcType="TIMESTAMP" property="activityDate" />
     <result column="activity_length_min" jdbcType="INTEGER" property="activityLengthMin" />
-    <result column="contacts" jdbcType="VARCHAR" property="contacts" />
     <result column="activity_address" jdbcType="VARCHAR" property="activityAddress" />
     <result column="open_time" jdbcType="TIMESTAMP" property="openTime" />
     <result column="close_time" jdbcType="TIMESTAMP" property="closeTime" />
     <result column="post_time" jdbcType="TIMESTAMP" property="postTime" />
+    <result column="contact_name" jdbcType="VARCHAR" property="contactName" />
+    <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone" />
     <result column="max_num" jdbcType="INTEGER" property="maxNum" />
     <result column="area_width" jdbcType="INTEGER" property="areaWidth" />
     <result column="area_length" jdbcType="INTEGER" property="areaLength" />
@@ -77,8 +78,8 @@
   </sql>
   <sql id="Base_Column_List">
     activity_id, activity_fee, activity_name, activity_introduction, activity_date, activity_length_min, 
-    contacts, activity_address, open_time, close_time, post_time, max_num, area_width, 
-    area_length
+    activity_address, open_time, close_time, post_time, contact_name, contact_phone, 
+    max_num, area_width, area_length
   </sql>
   <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.ActivityExample" resultMap="BaseResultMap">
     select
@@ -115,15 +116,15 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into activity (activity_fee, activity_name, activity_introduction, 
-      activity_date, activity_length_min, contacts, 
-      activity_address, open_time, close_time, 
-      post_time, max_num, area_width, 
-      area_length)
+      activity_date, activity_length_min, activity_address, 
+      open_time, close_time, post_time, 
+      contact_name, contact_phone, max_num, 
+      area_width, area_length)
     values (#{activityFee,jdbcType=DECIMAL}, #{activityName,jdbcType=VARCHAR}, #{activityIntroduction,jdbcType=VARCHAR}, 
-      #{activityDate,jdbcType=TIMESTAMP}, #{activityLengthMin,jdbcType=INTEGER}, #{contacts,jdbcType=VARCHAR}, 
-      #{activityAddress,jdbcType=VARCHAR}, #{openTime,jdbcType=TIMESTAMP}, #{closeTime,jdbcType=TIMESTAMP}, 
-      #{postTime,jdbcType=TIMESTAMP}, #{maxNum,jdbcType=INTEGER}, #{areaWidth,jdbcType=INTEGER}, 
-      #{areaLength,jdbcType=INTEGER})
+      #{activityDate,jdbcType=TIMESTAMP}, #{activityLengthMin,jdbcType=INTEGER}, #{activityAddress,jdbcType=VARCHAR}, 
+      #{openTime,jdbcType=TIMESTAMP}, #{closeTime,jdbcType=TIMESTAMP}, #{postTime,jdbcType=TIMESTAMP}, 
+      #{contactName,jdbcType=VARCHAR}, #{contactPhone,jdbcType=VARCHAR}, #{maxNum,jdbcType=INTEGER}, 
+      #{areaWidth,jdbcType=INTEGER}, #{areaLength,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.Activity">
     <selectKey keyProperty="activityId" order="AFTER" resultType="java.lang.Integer">
@@ -146,9 +147,6 @@
       <if test="activityLengthMin != null">
         activity_length_min,
       </if>
-      <if test="contacts != null">
-        contacts,
-      </if>
       <if test="activityAddress != null">
         activity_address,
       </if>
@@ -160,6 +158,12 @@
       </if>
       <if test="postTime != null">
         post_time,
+      </if>
+      <if test="contactName != null">
+        contact_name,
+      </if>
+      <if test="contactPhone != null">
+        contact_phone,
       </if>
       <if test="maxNum != null">
         max_num,
@@ -187,9 +191,6 @@
       <if test="activityLengthMin != null">
         #{activityLengthMin,jdbcType=INTEGER},
       </if>
-      <if test="contacts != null">
-        #{contacts,jdbcType=VARCHAR},
-      </if>
       <if test="activityAddress != null">
         #{activityAddress,jdbcType=VARCHAR},
       </if>
@@ -201,6 +202,12 @@
       </if>
       <if test="postTime != null">
         #{postTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contactName != null">
+        #{contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactPhone != null">
+        #{contactPhone,jdbcType=VARCHAR},
       </if>
       <if test="maxNum != null">
         #{maxNum,jdbcType=INTEGER},
@@ -240,9 +247,6 @@
       <if test="record.activityLengthMin != null">
         activity_length_min = #{record.activityLengthMin,jdbcType=INTEGER},
       </if>
-      <if test="record.contacts != null">
-        contacts = #{record.contacts,jdbcType=VARCHAR},
-      </if>
       <if test="record.activityAddress != null">
         activity_address = #{record.activityAddress,jdbcType=VARCHAR},
       </if>
@@ -254,6 +258,12 @@
       </if>
       <if test="record.postTime != null">
         post_time = #{record.postTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.contactName != null">
+        contact_name = #{record.contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactPhone != null">
+        contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
       </if>
       <if test="record.maxNum != null">
         max_num = #{record.maxNum,jdbcType=INTEGER},
@@ -277,11 +287,12 @@
       activity_introduction = #{record.activityIntroduction,jdbcType=VARCHAR},
       activity_date = #{record.activityDate,jdbcType=TIMESTAMP},
       activity_length_min = #{record.activityLengthMin,jdbcType=INTEGER},
-      contacts = #{record.contacts,jdbcType=VARCHAR},
       activity_address = #{record.activityAddress,jdbcType=VARCHAR},
       open_time = #{record.openTime,jdbcType=TIMESTAMP},
       close_time = #{record.closeTime,jdbcType=TIMESTAMP},
       post_time = #{record.postTime,jdbcType=TIMESTAMP},
+      contact_name = #{record.contactName,jdbcType=VARCHAR},
+      contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
       max_num = #{record.maxNum,jdbcType=INTEGER},
       area_width = #{record.areaWidth,jdbcType=INTEGER},
       area_length = #{record.areaLength,jdbcType=INTEGER}
@@ -307,9 +318,6 @@
       <if test="activityLengthMin != null">
         activity_length_min = #{activityLengthMin,jdbcType=INTEGER},
       </if>
-      <if test="contacts != null">
-        contacts = #{contacts,jdbcType=VARCHAR},
-      </if>
       <if test="activityAddress != null">
         activity_address = #{activityAddress,jdbcType=VARCHAR},
       </if>
@@ -321,6 +329,12 @@
       </if>
       <if test="postTime != null">
         post_time = #{postTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contactName != null">
+        contact_name = #{contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactPhone != null">
+        contact_phone = #{contactPhone,jdbcType=VARCHAR},
       </if>
       <if test="maxNum != null">
         max_num = #{maxNum,jdbcType=INTEGER},
@@ -341,11 +355,12 @@
       activity_introduction = #{activityIntroduction,jdbcType=VARCHAR},
       activity_date = #{activityDate,jdbcType=TIMESTAMP},
       activity_length_min = #{activityLengthMin,jdbcType=INTEGER},
-      contacts = #{contacts,jdbcType=VARCHAR},
       activity_address = #{activityAddress,jdbcType=VARCHAR},
       open_time = #{openTime,jdbcType=TIMESTAMP},
       close_time = #{closeTime,jdbcType=TIMESTAMP},
       post_time = #{postTime,jdbcType=TIMESTAMP},
+      contact_name = #{contactName,jdbcType=VARCHAR},
+      contact_phone = #{contactPhone,jdbcType=VARCHAR},
       max_num = #{maxNum,jdbcType=INTEGER},
       area_width = #{areaWidth,jdbcType=INTEGER},
       area_length = #{areaLength,jdbcType=INTEGER}

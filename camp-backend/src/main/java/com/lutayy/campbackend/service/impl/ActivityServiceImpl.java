@@ -85,7 +85,8 @@ public class ActivityServiceImpl implements ActivityService {
                 introduce.add(intro);
             }
             object.put("introduce",introduce);
-            object.put("contacts", activity.getContacts());
+            object.put("contacts", activity.getContactName());
+            object.put("phone", activity.getContactPhone());
             data.add(object);
         }
         result.put("code", "success");
@@ -133,7 +134,8 @@ public class ActivityServiceImpl implements ActivityService {
                 introduce.add(intro);
             }
             object.put("introduce",introduce);
-            object.put("contacts", activity.getContacts());
+            object.put("contacts", activity.getContactName());
+            object.put("phone", activity.getContactPhone());
             object.put("status", "未支付");
             data.add(object);
         }
@@ -149,7 +151,8 @@ public class ActivityServiceImpl implements ActivityService {
             JSONArray introduce=new JSONArray();
             introduce.add(activity.getActivityIntroduction());
             object.put("introduce",introduce);
-            object.put("contacts", activity.getContacts());
+            object.put("contacts", activity.getContactName());
+            object.put("phone", activity.getContactPhone());
             object.put("status", "已支付");
             data.add(object);
         }
@@ -464,7 +467,8 @@ public class ActivityServiceImpl implements ActivityService {
             }else {
                 object.put("status", "已支付");
             }
-            object.put("contacts", activity.getContacts());
+            object.put("contacts", activity.getContactName());
+            object.put("phone", activity.getContactPhone());
             data.add(object);
             num+=1;
         }
@@ -486,7 +490,8 @@ public class ActivityServiceImpl implements ActivityService {
         String address=jsonObject.getString("address");
         Date startDate=jsonObject.getDate("date");//活动举行时间
         float lenHour=jsonObject.getFloat("len");
-        String contacts=jsonObject.getString("contacts");
+        String contactName=jsonObject.getString("contacts");
+        String contactPhone=jsonObject.getString("phone");
         Date openTime=jsonObject.getDate("openTime");//开放报名时间
         Date closeTime=jsonObject.getDate("closeTime");//关闭报名时间
         JSONArray description=jsonObject.getJSONArray("desc");
@@ -507,7 +512,8 @@ public class ActivityServiceImpl implements ActivityService {
         activity.setActivityLengthMin((int)(lenHour*60));
         activity.setOpenTime(openTime);
         activity.setCloseTime(closeTime);
-        activity.setContacts(contacts);
+        activity.setContactName(contactName);
+        activity.setContactPhone(contactPhone);
         activity.setActivityIntroduction(introduction.toString());
         activity.setPostTime(new Date());
         if(activityMapper.insertSelective(activity)>0){
@@ -548,7 +554,8 @@ public class ActivityServiceImpl implements ActivityService {
                 introduce.add(intro);
             }
             object.put("introduce",introduce);
-            object.put("contacts", activity.getContacts());
+            object.put("contacts", activity.getContactName());
+            object.put("phone", activity.getContactPhone());
             /* 获取参与活动的人数 */
             ActivityStudentExample activityStudentExample=new ActivityStudentExample();
             ActivityStudentExample.Criteria criteria=activityStudentExample.createCriteria();

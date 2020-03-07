@@ -34,7 +34,7 @@ public class ExamServiceImpl implements ExamService {
     ExamReQuestionMapper examReQuestionMapper;
     @Autowired
     ExamQuestionStudentAnswerMapper examQuestionStudentAnswerMapper;
-    
+
 
     @Override
     public JSONObject getHalfExamList(Integer studentId) {

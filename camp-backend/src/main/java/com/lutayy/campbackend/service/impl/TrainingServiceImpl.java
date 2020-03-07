@@ -178,7 +178,8 @@ public class TrainingServiceImpl implements TrainingService {
             }else {
                 object.put("fee", training.getTrainingFeeVip());
             }
-            object.put("contacts", training.getContacts());
+            object.put("contacts", training.getContactName());
+            object.put("phone", training.getContactPhone());
             data.add(object);
         }
         result.put("code", "success");
@@ -215,7 +216,8 @@ public class TrainingServiceImpl implements TrainingService {
             }
             object.put("introduction", introduce);
             object.put("fee", training.getTrainingFeeNormal());
-            object.put("contacts", training.getContacts());
+            object.put("contacts", training.getContactName());
+            object.put("phone", training.getContactPhone());
             data.add(object);
         }
         result.put("code", "success");
@@ -278,7 +280,8 @@ public class TrainingServiceImpl implements TrainingService {
             } else {
                 object.put("status", "已支付");
             }
-            object.put("contacts", training.getContacts());
+            object.put("contacts", training.getContactName());
+            object.put("phone", training.getContactPhone());
             data.add(object);
             num+=1;
         }
@@ -386,7 +389,6 @@ public class TrainingServiceImpl implements TrainingService {
         for(int i=trainingIds.size()-1;i>=0;i--){
             trainings.add(trainingMapper.selectByPrimaryKey(trainingIds.get(i)));
         }
-        Collections.sort(trainings);
         int isVip=0;
         Member member=memberMapper.selectByPrimaryKey(memberId);
         if(member!=null){
@@ -418,7 +420,8 @@ public class TrainingServiceImpl implements TrainingService {
             } else {
                 object.put("status", "已支付");
             }
-            object.put("contacts", training.getContacts());
+            object.put("contacts", training.getContactName());
+            object.put("phone", training.getContactPhone());
             data.add(object);
             num+=1;
         }
@@ -598,7 +601,8 @@ public class TrainingServiceImpl implements TrainingService {
         String trainingName=jsonObject.getString("name");
         BigDecimal fee=jsonObject.getBigDecimal("fee");
         BigDecimal vipFee=jsonObject.getBigDecimal("vipFee");
-        String contacts=jsonObject.getString("contacts");
+        String contactName=jsonObject.getString("contacts");
+        String contactPhone=jsonObject.getString("phone");
         Date startTime=jsonObject.getDate("openTime");
         Date endTime=jsonObject.getDate("closeTime");
         Byte level=jsonObject.getByte("level");
@@ -622,7 +626,8 @@ public class TrainingServiceImpl implements TrainingService {
             return result;
         }
         Training training=new Training();
-        training.setContacts(contacts);
+        training.setContactName(contactName);
+        training.setContactPhone(contactPhone);
         training.setLevel(level);
         training.setPostTime(new Date());
         training.setTrainingAddress(address);

@@ -25,20 +25,21 @@ CREATE TABLE `activity` (
   `activity_introduction` varchar(1000) DEFAULT NULL COMMENT '活动介绍',
   `activity_date` datetime DEFAULT NULL COMMENT '活动开始时间',
   `activity_length_min` int(11) DEFAULT NULL COMMENT '活动时长(分钟)',
-  `contacts` varchar(50) DEFAULT NULL COMMENT '联系人 联系方式',
   `activity_address` varchar(200) DEFAULT NULL COMMENT '活动地址',
   `open_time` datetime DEFAULT NULL COMMENT '开放报名时间',
   `close_time` datetime DEFAULT NULL COMMENT '关闭报名时间',
   `post_time` datetime DEFAULT NULL COMMENT '活动发布时间',
+  `contact_name` varchar(10) DEFAULT NULL COMMENT '联系人',
+  `contact_phone` varchar(20) DEFAULT NULL COMMENT '联系人电话',
   `max_num` int(11) DEFAULT NULL COMMENT '活动可容纳最大人数',
   `area_width` int(11) DEFAULT NULL COMMENT '场地矩形行座位数',
   `area_length` int(11) DEFAULT NULL COMMENT '场地矩形列座位数',
   PRIMARY KEY (`activity_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 /*Data for the table `activity` */
 
-insert  into `activity`(`activity_id`,`activity_fee`,`activity_name`,`activity_introduction`,`activity_date`,`activity_length_min`,`contacts`,`activity_address`,`open_time`,`close_time`,`post_time`,`max_num`,`area_width`,`area_length`) values (1,'188.88','垃圾分类讲解','  今年夏天，垃圾分类无疑是最火的话题。作为全国46个垃圾分类试点城市之一，长沙市围绕垃圾分类开展了形式多样、内容丰富的宣传活动，趣味游戏、知识宣讲、在线答题、儿童手抄报……一场全民参与、声势浩大的“全民生活垃圾分类之旅”让环保理念深植人心。','2019-10-01 20:00:00',60,'王先生 13332122312','广东省广州市华南理工大学大学城校区','2019-09-25 20:00:00','2019-10-09 02:32:42','2019-10-05 02:41:10',50,NULL,NULL),(2,'299.99','英语角','  我们的英语俱乐部旨在为大家创造一个英语的交流环境，让所有想学英语，想说好英语的人们，在这样一个极具特色的氛围中学好英语，在外语老师的引导下，大家会积极交流，大胆开口说，培养纯正的外语语感，让你更加自信说英语，并结交更多的外国友人，避免找个好工作， 而因为英语困惑自己~~~~','2019-09-30 15:00:00',120,'李先生 13332122312','广东省广州市华南理工大学大学城校区','2019-09-25 13:00:00','2019-10-19 00:32:46','2019-10-04 02:41:14',59,NULL,NULL),(3,'199.99','“拥抱春天，播种绿色”植树节活动','  植树节是按照法律规定宣传保护树木，并组织动员群众积极参加以植树造林为活动内容的节日。按时间长短可分为植树日、植树周和植树月，共称为国际植树节。提倡通过这种活动，激发人们爱林造林的热情、意识到环保的重要性。',NULL,NULL,'李先生 13332122312','广东省广州市华南理工大学大学城校区','2019-09-24 02:28:46','2019-09-30 02:32:52','2019-10-18 02:41:16',46,NULL,NULL),(4,'213.22','主题餐厅','  主题餐厅旨在为大家提供一起品尝美食的机会','2019-11-09 14:28:55',NULL,NULL,NULL,'2019-10-09 14:29:09','2019-11-16 14:29:12','2019-09-05 02:41:20',40,NULL,NULL);
+insert  into `activity`(`activity_id`,`activity_fee`,`activity_name`,`activity_introduction`,`activity_date`,`activity_length_min`,`activity_address`,`open_time`,`close_time`,`post_time`,`contact_name`,`contact_phone`,`max_num`,`area_width`,`area_length`) values (1,'188.88','垃圾分类讲解','  今年夏天，垃圾分类无疑是最火的话题。|作为全国46个垃圾分类试点城市之一，|长沙市围绕垃圾分类开展了形式多样、内容丰富的宣传活动，趣味游戏、知识宣讲、在线答题、儿童手抄报……一场全民参与、声势浩大的“全民生活垃圾分类之旅”让环保理念深植人心。','2019-10-01 20:00:00',60,'广东省广州市华南理工大学大学城校区','2019-09-25 20:00:00','2019-10-09 02:32:42','2019-10-05 02:41:10','王先生','13333333333',50,NULL,NULL),(2,'299.99','英语角','  我们的英语俱乐部旨在为大家创造一个英语的交流环境，让所有想学英语，想说好英语的人们，在这样一个极具特色的氛围中学好英语，|在外语老师的引导下，大家会积极交流，大胆开口说，培养纯正的外语语感，让你更加自信说英语，并结交更多的外国友人，|避免找个好工作， 而因为英语困惑自己~~~~','2019-09-30 15:00:00',120,'广东省广州市华南理工大学大学城校区','2019-09-25 13:00:00','2019-10-19 00:32:46','2019-10-04 02:41:14','李先生','13555555555',59,NULL,NULL),(3,'199.99','“拥抱春天，播种绿色”植树节活动','  植树节是按照法律规定宣传保护树木，并组织动员群众积极参加以植树造林为活动内容的节日。按时间长短可分为植树日、植树周和植树月，共称为国际植树节。提倡通过这种活动，激发人们爱林造林的热情、意识到环保的重要性。',NULL,NULL,'广东省广州市华南理工大学大学城校区','2019-09-24 02:28:46','2019-09-30 02:32:52','2019-10-18 02:41:16','李先生','13666666666',46,NULL,NULL),(4,'213.22','主题餐厅','  主题餐厅旨在为大家提供一起品尝美食的机会','2019-11-09 14:28:55',NULL,NULL,'2019-10-09 14:29:09','2019-11-16 14:29:12','2019-09-05 02:41:20',NULL,NULL,40,NULL,NULL);
 
 /*Table structure for table `activity_order` */
 
@@ -480,6 +481,17 @@ CREATE TABLE `member_subscription_order` (
 
 /*Data for the table `member_subscription_order` */
 
+/*Table structure for table `message` */
+
+CREATE TABLE `message` (
+  `message_id` int(11) NOT NULL AUTO_INCREMENT,
+  `content` varchar(1000) DEFAULT NULL COMMENT '消息内容',
+  `send_time` datetime DEFAULT NULL COMMENT '站内信发送时间',
+  PRIMARY KEY (`message_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `message` */
+
 /*Table structure for table `news` */
 
 CREATE TABLE `news` (
@@ -596,13 +608,14 @@ CREATE TABLE `training` (
   `level` tinyint(4) DEFAULT '1',
   `training_pic` varchar(300) DEFAULT NULL,
   `training_address` varchar(200) DEFAULT NULL COMMENT '培训地点',
-  `contacts` varchar(50) DEFAULT NULL COMMENT '联系人 联系方式',
+  `contact_name` varchar(10) DEFAULT NULL COMMENT '联系人',
+  `contact_phone` varchar(20) DEFAULT NULL COMMENT '联系方式',
   PRIMARY KEY (`training_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 /*Data for the table `training` */
 
-insert  into `training`(`training_id`,`training_name`,`training_introduce`,`training_fee_normal`,`training_fee_vip`,`training_end_time`,`training_start_time`,`post_time`,`level`,`training_pic`,`training_address`,`contacts`) values (1,'质量检测','示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n示例范文示例范文示例范文示例范文','199.99','199.00','2019-11-02 16:13:03','2019-09-13 16:12:30','2019-10-31 00:41:14',1,NULL,NULL,NULL),(2,'食品安全','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','888.01','699.01','2019-11-01 12:00:00','2019-10-01 12:00:00','2019-07-15 00:41:19',2,NULL,NULL,NULL),(3,'食品监督','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','2000.00','1899.11','2020-11-12 16:14:32','2019-09-05 16:14:25','2021-01-08 00:41:22',1,NULL,NULL,NULL),(4,'网络工程','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','800.90','700.00','2019-11-22 16:14:40','2019-09-11 16:14:36','2019-11-01 00:41:27',3,NULL,NULL,NULL),(5,'产品规范','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','99.99','98.99','2019-11-08 16:14:56','2019-09-29 16:14:44','2019-10-17 00:41:35',1,NULL,NULL,NULL);
+insert  into `training`(`training_id`,`training_name`,`training_introduce`,`training_fee_normal`,`training_fee_vip`,`training_end_time`,`training_start_time`,`post_time`,`level`,`training_pic`,`training_address`,`contact_name`,`contact_phone`) values (1,'质量检测','示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n示例范文示例范文示例范文示例范文','199.99','199.00','2019-11-02 16:13:03','2019-09-13 16:12:30','2019-10-31 00:41:14',1,NULL,NULL,NULL,NULL),(2,'食品安全','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','888.01','699.01','2019-11-01 12:00:00','2019-10-01 12:00:00','2019-07-15 00:41:19',2,NULL,NULL,NULL,NULL),(3,'食品监督','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','2000.00','1899.11','2020-11-12 16:14:32','2019-09-05 16:14:25','2021-01-08 00:41:22',1,NULL,NULL,NULL,NULL),(4,'网络工程','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','800.90','700.00','2019-11-22 16:14:40','2019-09-11 16:14:36','2019-11-01 00:41:27',3,NULL,NULL,NULL,NULL),(5,'产品规范','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','99.99','98.99','2019-11-08 16:14:56','2019-09-29 16:14:44','2019-10-17 00:41:35',1,NULL,NULL,NULL,NULL);
 
 /*Table structure for table `training_order` */
 

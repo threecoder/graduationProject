@@ -1,12 +1,10 @@
 package com.lutayy.campbackend.pojo;
 
-import org.springframework.stereotype.Component;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class Training implements Serializable,Comparable<Training> {
+public class Training implements Serializable {
     private Integer trainingId;
 
     private String trainingName;
@@ -29,15 +27,11 @@ public class Training implements Serializable,Comparable<Training> {
 
     private String trainingAddress;
 
-    private String contacts;
+    private String contactName;
+
+    private String contactPhone;
 
     private static final long serialVersionUID = 1L;
-
-    @Override
-    public int compareTo(Training training){
-        return training.getPostTime().compareTo(this.getPostTime());
-    }
-
 
     public Integer getTrainingId() {
         return trainingId;
@@ -127,11 +121,19 @@ public class Training implements Serializable,Comparable<Training> {
         this.trainingAddress = trainingAddress;
     }
 
-    public String getContacts() {
-        return contacts;
+    public String getContactName() {
+        return contactName;
     }
 
-    public void setContacts(String contacts) {
-        this.contacts = contacts;
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
+    public String getContactPhone() {
+        return contactPhone;
+    }
+
+    public void setContactPhone(String contactPhone) {
+        this.contactPhone = contactPhone;
     }
 }

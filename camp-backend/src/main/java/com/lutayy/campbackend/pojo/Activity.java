@@ -17,8 +17,6 @@ public class Activity implements Serializable {
 
     private Integer activityLengthMin;
 
-    private String contacts;
-
     private String activityAddress;
 
     private Date openTime;
@@ -26,6 +24,10 @@ public class Activity implements Serializable {
     private Date closeTime;
 
     private Date postTime;
+
+    private String contactName;
+
+    private String contactPhone;
 
     private Integer maxNum;
 
@@ -83,14 +85,6 @@ public class Activity implements Serializable {
         this.activityLengthMin = activityLengthMin;
     }
 
-    public String getContacts() {
-        return contacts;
-    }
-
-    public void setContacts(String contacts) {
-        this.contacts = contacts;
-    }
-
     public String getActivityAddress() {
         return activityAddress;
     }
@@ -121,6 +115,22 @@ public class Activity implements Serializable {
 
     public void setPostTime(Date postTime) {
         this.postTime = postTime;
+    }
+
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
+    public String getContactPhone() {
+        return contactPhone;
+    }
+
+    public void setContactPhone(String contactPhone) {
+        this.contactPhone = contactPhone;
     }
 
     public Integer getMaxNum() {
