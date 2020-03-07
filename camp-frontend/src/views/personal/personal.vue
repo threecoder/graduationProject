@@ -149,7 +149,7 @@ export default {
         },
         logout() {
             try {
-                request("/campback/logout", {}, "get", "json").then(res => {
+                request("/campback/logout", "get").then(res => {
                     window.localStorage.removeItem("user");
                     this.$router.push("/login");
                 });

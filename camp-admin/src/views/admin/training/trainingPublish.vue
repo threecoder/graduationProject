@@ -241,7 +241,7 @@ export default {
                     let par = { ...this.ruleForm };
                     par.openTime = formatDateAndTime(par.dateRange[0]);
                     par.closeTime = formatDateAndTime(par.dateRange[1]);
-                    par.contacts = par.contacts + " " + par.phone;
+                    par.desc = par.desc.replace("|", " ");
                     par.desc = par.desc.split("\n");
                     console.log(par);
                     this.par = par;
@@ -259,6 +259,7 @@ export default {
                 try {
                     let res = await adminTrainingApi.addNewTraining(par);
                     this.$message.success("新建培训成功");
+                    this.$emit("cancel");
                 } catch (error) {
                     this.$message.error(error.message);
                 }

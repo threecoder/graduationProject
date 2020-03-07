@@ -95,7 +95,7 @@
                 <el-col>
                     <el-form-item class="tac">
                         <el-button type="primary" @click="submitForm('ruleForm')">修改活动</el-button>
-                        <el-button>取消</el-button>
+                        <el-button @click="$emit('cancel')">取消</el-button>
                     </el-form-item>
                 </el-col>
             </el-row>

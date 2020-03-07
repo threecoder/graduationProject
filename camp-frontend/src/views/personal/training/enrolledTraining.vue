@@ -36,10 +36,10 @@
     </div>
 </template>
 <script>
-import mTable from "@/components/mTable.vue";
+import mTable from "../../../components/mTable.vue";
 import trainingDetail from "./components/trainingDetail.vue";
-import { getLocalStorage } from "@/assets/js/util";
-import activityApi from "@/api/modules/activity";
+import { getLocalStorage } from "../../../assets/js/util";
+import activityApi from "../../../api/modules/activity";
 import trainingApi from "../../../api/modules/training";
 export default {
     components: {

@@ -10,8 +10,19 @@ const getPublishedTraining = par => request(`${apiPrefix}/getPublishedTraining`,
 //根据id修改培训
 const modifyTraining = data => request(`${apiPrefix}/modifyTraining`, 'post', data);
 
+//根据id获取已经报名的学生列表
+const getEnrolledStudent = trainingId => request(`${apiPrefix}/getEnrolledStudent`, 'get', {trainingId});
+
+//获取会员列表
+const getAllMemberList = () => request(`${apiPrefix}/getAllMemberList`, 'get');
+
+//提醒学员支付
+
+
 export default {
     addNewTraining,
     getPublishedTraining,
-    modifyTraining
+    modifyTraining,
+    getEnrolledStudent,
+    getAllMemberList
 }

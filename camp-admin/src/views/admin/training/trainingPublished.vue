@@ -33,7 +33,7 @@
                 <el-table-column slot="oper" slot-scope="{params}" v-bind="params" align="center">
                     <div slot-scope="{row}">
                         <el-button size="small" type="primary" @click="trainingDetail(row)">查看 / 修改</el-button>
-                        <el-button size="small" type="primary" @click="trainingDetail(row)">报名情况</el-button>
+                        <el-button size="small" type="primary" @click="situation(row)">报名情况</el-button>
                         <el-button size="small" type="primary" @click="trainingDetail(row)">订单</el-button>
                     </div>
                 </el-table-column>
@@ -54,7 +54,7 @@
             :title="detailDialog.title"
             width="50%"
         >
-            <training-detail :trainingInfo="detailDialog.info" />
+            <training-detail :trainingInfo="detailDialog.info" @cancel="detailDialog.flag=false" />
         </el-dialog>
     </div>
 </template>
@@ -147,6 +147,9 @@ export default {
             this.detailDialog.info = row;
             this.detailDialog.flag = true;
             this.detailDialog.title = row.name;
+        },
+        situation(row) {
+            this.$router.push("/trainingEnrollSituation?trainingId="+row.id);
         }
     }
 };
