@@ -28,14 +28,18 @@ public class AdminController {
 
     @RequestMapping("/deleteOneStudentFromMember")
     @ResponseBody
-    public JSONObject deleteOneStudentFromMember(@RequestBody JSONObject jsonObject){
+    public JSONObject deleteOneStudentFromMember(JSONObject jsonObject){
         return adminService.deleteOneStudentFromMember(jsonObject);
     }
 
     @RequestMapping("/getMemberList")
     @ResponseBody
-    public JSONObject getMemberList(@RequestBody JSONObject jsonObject){
-        return adminService.getMemberList(jsonObject);
+    public Object getMemberList(@RequestParam("type") int type,
+                                @RequestParam("deadline") int deadline,
+                                @RequestParam("name") String name,
+                                @RequestParam("currentPage") int currentPage,
+                                @RequestParam("pageSize") int pageSize){
+        return adminService.getMemberList(type,deadline,name,currentPage,pageSize);
     }
 
     @RequestMapping("/getOneMemberStudentList")

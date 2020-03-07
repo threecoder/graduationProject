@@ -11,7 +11,7 @@ public interface AdminService {
 
     JSONObject deleteOneStudentFromMember(JSONObject jsonObject);
 
-    JSONObject getMemberList(JSONObject jsonObject);
+    JSONObject getMemberList(int type,int deadline,String name,int currentPage,int pageSize);
 
     JSONObject getOneMemberStudentList(Integer memberId);
 }
