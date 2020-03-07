@@ -36,6 +36,7 @@
             <div class="activity-detail">
                 <p v-for="(item,i) in drwaerInfo.introduce" :key="i">{{item}}</p>
                 <p>如有疑问，请联系：{{drwaerInfo.contacts}}。</p>
+                <p>联系电话：{{drwaerInfo.phone}}。</p>
             </div>
             <div class="drawer-footer">
                 <el-upload

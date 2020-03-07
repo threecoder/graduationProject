@@ -34,9 +34,19 @@ export default new Router({
                 },
                 //培训
                 {
-                    path: '/publicTraining',
-                    name: 'publicTraining',
+                    path: '/publishTraining',
+                    name: 'publishTraining',
                     component: resolve => require([ '../views/admin/training/trainingPublish.vue' ], resolve)
+                },
+                {
+                    path: '/publishedTraining',
+                    name: 'publishedTraining',
+                    component: resolve => require([ '../views/admin/training/trainingPublished.vue' ], resolve)
+                },
+                {
+                    path: '/trainingEnrollSituation',
+                    name: 'trainingEnrollSituation',
+                    component: resolve => require(['../views/admin/training/enrollSituation.vue'], resolve)
                 },
                 //考试管理
                 {

@@ -7,7 +7,7 @@ const getQuestionList = par => request(apiPrefix + "/getQuestionList", 'get', pa
 const getTrainingList = () => request(apiPrefix + "/getTrainingList", 'get');
 
 //修改试题信息
-const modefyQuestionInfo = data => request(apiPrefix + "/modifyQuestion", 'post', data, 'post');
+const modefyQuestionInfo = data => request(apiPrefix + "/modifyQuestion", 'post', data);
 
 //添加考试
 const newExam = data => request(apiPrefix + "/addNewExam", 'post', data);

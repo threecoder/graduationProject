@@ -62,8 +62,8 @@ export default {
                     index: "3",
                     title: "培训管理",
                     children: [
-                        { index: "/publicTraining", title: "发布培训" },
-                        { index: "", title: "已发布的培训" }
+                        { index: "/publishTraining", title: "发布培训" },
+                        { index: "/publishedTraining", title: "已发布的培训" }
                     ]
                 },
                 {
