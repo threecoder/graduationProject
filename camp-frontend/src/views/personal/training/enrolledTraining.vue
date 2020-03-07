@@ -36,10 +36,10 @@
     </div>
 </template>
 <script>
-import mTable from "@/components/mTable.vue";
+import mTable from "../../../components/mTable.vue";
 import trainingDetail from "./components/trainingDetail.vue";
-import { getLocalStorage } from "@/assets/js/util";
-import activityApi from "@/api/modules/activity";
+import { getLocalStorage } from "../../../assets/js/util";
+import activityApi from "../../../api/modules/activity";
 import trainingApi from "../../../api/modules/training";
 export default {
     components: {
@@ -72,7 +72,7 @@ export default {
                         date: "2016-10-10 14:00:00-16:00:00",
                         address: "广州市番禺区小谷围街道华南理工大学",
                         fee: 1000,
-                        introduciotn: [
+                        introduction: [
                             `企业网站的作用是展示企业网站，
                     为企业提供产品展示、企业宣传、形象建设、
                     联系企业等方面提供了重要信息渠道，企业如果能够做好网站宣传和网络口碑建设，
@@ -88,7 +88,7 @@ export default {
                         date: "2016-11-11 14:00:00-16:00:00",
                         address: "广州市番禺区小谷围街道华南理工大学",
                         fee: 1000,
-                        introduciotn: [
+                        introduction: [
                             `企业网站的作用是展示企业网站，
                     为企业提供产品展示、企业宣传、形象建设、
                     联系企业等方面提供了重要信息渠道，企业如果能够做好网站宣传和网络口碑建设，
@@ -104,7 +104,7 @@ export default {
                         date: "2016-10-10 14:00:00-16:00:00",
                         address: "广州市番禺区小谷围街道华南理工大学",
                         fee: 1000,
-                        introduciotn: [
+                        introduction: [
                             `企业网站的作用是展示企业网站，
                     为企业提供产品展示、企业宣传、形象建设、
                     联系企业等方面提供了重要信息渠道，企业如果能够做好网站宣传和网络口碑建设，
@@ -126,7 +126,7 @@ export default {
                 date: null,
                 address: null,
                 fee: null,
-                introduciotn: [],
+                introduction: [],
                 contacts: "唐先生 13535789321"
             },
             drawerInfoFlag: false,

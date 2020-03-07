@@ -16,7 +16,7 @@ export function removeLocalStorage(key) {
 
 //返回月份，从1开始
 export function getMonth() {
-    return ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+    return [ '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12' ];
 }
 
 
@@ -30,12 +30,12 @@ export function getCookie(name) {
         arr = cookie.split("; ");
     arr.forEach(val => {
         let nameAndVal = val.split("=");
-        cookies[nameAndVal[0]] = JSON.parse(nameAndVal[1]);
+        cookies[ nameAndVal[ 0 ] ] = JSON.parse(nameAndVal[ 1 ]);
     });
     if (!name) {
         return cookies;
     } else {
-        return cookies[name] == undefined ? {} : cookies[name];
+        return cookies[ name ] == undefined ? {} : cookies[ name ];
     }
 }
 
@@ -64,18 +64,21 @@ export function deleteCookie(name) {
 //格式化日期
 export function formatDate(date) {
     let y = date.getYear() + 1900,
-        m = (date.getMonth() + 1).toString().padStart(2,"0"),
-        d = date.getDate().toString().padStart(2,"0");
+        m = (date.getMonth() + 1).toString().padStart(2, "0"),
+        d = date.getDate().toString().padStart(2, "0");
     return `${y}-${m}-${d}`;
 }
 //格式化时间
 export function formatTime(date) {
-    let h = date.getHours().toString().padStart(2,"0"),
-        min = date.getMinutes().toString().padStart(2,"0"),
-        s = date.getSeconds().toString().padStart(2,"0")
+    let h = date.getHours().toString().padStart(2, "0"),
+        min = date.getMinutes().toString().padStart(2, "0"),
+        s = date.getSeconds().toString().padStart(2, "0")
     return `${h}:${min}:${s}`;
 }
-export function formatDateAndTime(date){
+export function formatDateAndTime(date) {
+    if (!date) {
+        return null;
+    }
     return `${formatDate(date)} ${formatTime(date)}`;
 }
 

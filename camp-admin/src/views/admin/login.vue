@@ -22,7 +22,7 @@
                 <span class="fr cursor" @click="forgetFlag=true">忘记密码</span>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="login">{{buttonText}}</el-button>
+                <el-button type="primary" @click="login" :loading="loginLoading">{{buttonText}}</el-button>
             </el-form-item>
         </el-form>
 
@@ -74,11 +74,12 @@ export default {
                     }
                 ]
             },
-            forgetFlag: false
+            forgetFlag: false,
+            loginLoading: false
         };
     },
     methods: {
-        login() {
+        async login() {
             if (
                 this.userForm.username == null ||
                 this.userForm.password == null
@@ -90,19 +91,18 @@ export default {
                 username: this.userForm.username,
                 password: Encrypt(this.userForm.password)
             };
-
-            request("/campback/login", "post", params)
-                .then(res => {
-                    this.$message.success(res.msg);
-                    this.$router.push({
-                        path: this.redirect ? this.redirect : "/admin"
-                    });
-                    setLocalStorage("user", res.data);
-                    // setLocalStorage("user", { name: "张三", idType: 1 });
-                })
-                .catch(error => {
-                    this.$message.error(error.message);
+            this.loginLoading = true;
+            try {
+                let res = await request("/campback/login", "post", params);
+                this.$message.success(res.msg);
+                this.$router.push({
+                    path: this.redirect ? this.redirect : "/admin"
                 });
+                setLocalStorage("user", res.data);
+            } catch (error) {
+                this.$message.error(error.message);
+            }
+            this.loginLoading = false;
         }
     },
     computed: {
