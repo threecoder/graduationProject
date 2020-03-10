@@ -34,7 +34,7 @@
                     <div slot-scope="{row}">
                         <el-button size="small" type="primary" @click="trainingDetail(row)">查看 / 修改</el-button>
                         <el-button size="small" type="primary" @click="situation(row)">报名情况</el-button>
-                        <el-button size="small" type="primary" @click="trainingDetail(row)">订单</el-button>
+                        <el-button size="small" type="primary" @click="order(row)">订单</el-button>
                     </div>
                 </el-table-column>
             </m-table>
@@ -149,7 +149,14 @@ export default {
             this.detailDialog.title = row.name;
         },
         situation(row) {
-            this.$router.push("/trainingEnrollSituation?trainingId="+row.id);
+            let path = "/trainingEnrollSituation?trainingId=";
+            path = path + row.id + "&name=" + row.name;
+            this.$router.push(path);
+        },
+        order(row) {
+            let path = "/trainingOrder?trainingId=";
+            path = path + row.id + "&name=" + row.name;
+            this.$router.push(path);
         }
     }
 };

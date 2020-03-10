@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h3>培训名称</h3>
+        <h3>{{$route.query.name}}——报名详情</h3>
         <div class="divider"></div>
         <div class="form-container">
             <el-form inline :model="form">
@@ -24,20 +24,20 @@
                     <el-button size="medium" type="primary" @click="getSituation">查询</el-button>
                 </el-form-item>
                 <el-form-item>
-                    <el-button size="medium" type="primary" @click="getSituation">提醒学员报名</el-button>
+                    <el-button size="medium" type="primary" @click="promptStudent">提醒学员报名</el-button>
                 </el-form-item>
                 <el-form-item>
-                    <el-button size="medium" type="primary" @click="getSituation">提醒会员报名</el-button>
+                    <el-button size="medium" type="primary" @click="promptMember">提醒会员报名</el-button>
                 </el-form-item>
             </el-form>
         </div>
         <div class="table-container">
             <m-table :tableConfig="table.config" :data="table.data">
-                <el-table-column slot="oper" align="center" slot-scope="{params}" v-bind="params">
+                <!-- <el-table-column slot="oper" align="center" slot-scope="{params}" v-bind="params">
                     <div slot-scope="{row}">
                         <el-button size="small" type="primary" @click="prompt(row)">提示支付</el-button>
                     </div>
-                </el-table-column>
+                </el-table-column> -->
             </m-table>
         </div>
         <div class="page-container">
@@ -48,15 +48,25 @@
                 @curChange="curChange"
             />
         </div>
+        <el-dialog :visible.sync="studentDialog.flag" v-if="studentDialog.flag" title="未报名学员" width="60%">
+            <student :trainingId="studentDialog.trainingId" />
+        </el-dialog>
+        <el-dialog :visible.sync="memberDialog.flag" v-if="memberDialog.flag" title="所有会员" width="60%">
+            <member :trainingId="memberDialog.trainingId" />
+        </el-dialog>
     </div>
 </template>
 <script>
 import page from "../../../components/page.vue";
 import mTable from "../../../components/mTable.vue";
+import student from "./components/NotEnrollStudent.vue";
+import member from "./components/NotEnrollMember.vue";
 export default {
     components: {
         page,
-        mTable
+        mTable,
+        student,
+        member
     },
     data() {
         return {
@@ -94,7 +104,15 @@ export default {
                     id: 1,
                     phone: "2121"
                 }
-            ]
+            ],
+            studentDialog: {
+                flag: false,
+                trainingId: null
+            },
+            memberDialog: {
+                flag: false,
+                trainingId: null
+            }
         };
     },
     watch: {
@@ -105,13 +123,25 @@ export default {
     },
     methods: {
         async getSituation() {
+            try {
+                let res
+            } catch (error) {
+                
+            }
             console.log(this.trainingId);
         },
         curChange(newVal) {
             this.form.currentPage = newVal;
             this.getSituation();
         },
-        prompt(row) {}
+        promptStudent() {
+            this.studentDialog.trainingId = this.trainingId;
+            this.studentDialog.flag = true;
+        },
+        promptMember() {
+            this.memberDialog.trainingId = this.trainingId;
+            this.memberDialog.flag = true;
+        }
     }
 };
 </script>

@@ -48,6 +48,11 @@ export default new Router({
                     name: 'trainingEnrollSituation',
                     component: resolve => require(['../views/admin/training/enrollSituation.vue'], resolve)
                 },
+                {
+                    path: '/trainingOrder',
+                    name: 'trainingOrder',
+                    component: resolve => require([ '../views/admin/training/order.vue' ], resolve)
+                },
                 //考试管理
                 {
                     path: '/question',
