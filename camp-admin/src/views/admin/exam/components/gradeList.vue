@@ -6,9 +6,9 @@
                 :tableConfig="tableConfig"
                 :loading="loading"
                 :tableEvent="tableEvent"
+                :tableAttr="tableAttr"
             >
                 <el-table-column
-                    fixed
                     slot-scope="{params}"
                     v-bind="params"
                     align="center"
@@ -16,6 +16,11 @@
                     type="selection"
                     width="55"
                 ></el-table-column>
+                <el-table-column slot="oper" slot-scope="{params}" v-bind="params" align="center">
+                    <div slot-scope="{row}">
+                        <el-button type="primary" size="small" @click="modifyGrade(row)">修改成绩</el-button>
+                    </div>
+                </el-table-column>
             </m-table>
 
             <page
@@ -73,26 +78,38 @@ export default {
                     grade: 100,
                     times: 3,
                     id: "123"
+                },
+                {
+                    idNum: "111",
+                    name: "张三",
+                    member: "BB股份有限公司",
+                    grade: 201,
+                    times: 3,
+                    id: "11"
                 }
             ],
             // 试卷编号、学生编号、学员姓名、学员挂靠的会员名称，分数
             tableConfig: [
-                { slot: "select" },
+                { slot: "select", "reserve-selection": true },
                 { prop: "name", label: "学员姓名" },
                 { prop: "idNum", label: "学员编号" },
                 { prop: "member", label: "所属会员" },
                 { prop: "times", label: "作答次数" },
-                { prop: "grade", label: "分数" }
+                { prop: "grade", label: "分数" },
+                { slot: "oper", label: "操作" }
             ],
-            loading: false,
             tableEvent: {
                 "selection-change": this.handleSelectionChange
             },
+            tableAttr: {
+                "row-key": "id"
+            },
+            loading: false,
             form: {
                 selected: [],
                 checker: null,
                 total: 100,
-                pageSize: 10,
+                pageSize: 1,
                 currentPage: 1
             },
             checkers: []
@@ -120,6 +137,20 @@ export default {
                 this.$message.error(error.message);
             }
         },
+        modifyGrade(row) {
+            this.$prompt("请输入修改后的成绩", "提示", {
+                cancelButtonText: "取消",
+                confirmButtonText: "确定",
+                type: "info"
+            }).then(async ({ value }) => {
+                try {
+                    let res = await adminExamApi.modifyGrade();
+                    this.$message.success("修改成绩成功");
+                } catch (error) {
+                    this.$message.error(error.message);
+                }
+            });
+        },
         cancel() {
             this.$emit("submitClose");
         },
@@ -140,6 +171,29 @@ export default {
         },
         handleCurrentChange(val) {
             this.form.currentPage = val;
+            // if (val == 1) {
+            //     this.tableData = [
+            //         {
+            //             idNum: "111",
+            //             name: "张三",
+            //             member: "BB股份有限公司",
+            //             grade: 201,
+            //             times: 3,
+            //             id: "11"
+            //         }
+            //     ];
+            // } else {
+            //     this.tableData = [
+            //         {
+            //             idNum: "123",
+            //             name: "张三",
+            //             member: "BB股份有限公司",
+            //             grade: 201,
+            //             times: 3,
+            //             id: "12"
+            //         }
+            //     ];
+            // }
             this.getGradeList();
         }
     }

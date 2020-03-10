@@ -2,6 +2,25 @@
     <div class="all-container">
         <h3>试题管理</h3>
         <div class="divider"></div>
+        <div>
+            <p class="panel-title">添加试题</p>
+            <div class="button-container">
+                <el-button
+                    size="medium"
+                    style="margin-right:10px;"
+                    type="primary"
+                    @click="getQueTem"
+                >下载模板</el-button>
+                <upload
+                    :autoUpload="uploadAttr.autoUpload"
+                    :uploadUrl="uploadAttr.uploadUrl"
+                    :formData="uploadAttr.data"
+                    :size="'medium'"
+                />
+            </div>
+        </div>
+
+        <p class="panel-title">试题列表</p>
         <div class="form-container">
             <el-form :model="form" inline>
                 <el-form-item label="题目" label-position="left">
@@ -21,23 +40,8 @@
                         </template>
                     </el-select>
                 </el-form-item>-->
-                <el-button type="primary" @click="search">搜索</el-button>
+                <el-button size="medium" type="primary" @click="search">搜索</el-button>
             </el-form>
-        </div>
-
-        <div class="button-container">
-            <el-button
-                size="medium"
-                style="margin-right:10px;"
-                type="primary"
-                @click="getQueTem"
-            >下载模板</el-button>
-            <upload
-                :autoUpload="uploadAttr.autoUpload"
-                :uploadUrl="uploadAttr.uploadUrl"
-                :formData="uploadAttr.data"
-                :size="'medium'"
-            />
         </div>
 
         <div class="table-container">
@@ -278,11 +282,8 @@ export default {
     .button-container {
         width: 400px;
         display: flex;
-        justify-content: flex-end;
+        justify-content: flex-start;
         align-items: flex-start;
-        position: absolute;
-        right: 50px;
-        top: 70px;
     }
     .dialog-container {
         .question-type {
