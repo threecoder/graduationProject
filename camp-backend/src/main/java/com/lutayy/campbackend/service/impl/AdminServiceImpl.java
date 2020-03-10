@@ -101,26 +101,24 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public JSONObject getMemberList(JSONObject jsonObject) {
+    public JSONObject getMemberList(int type,int deadline,String name,int currentPage,int pageSize) {
         JSONObject result=new JSONObject();
         JSONObject data=new JSONObject();
 
-        Integer currentPage=jsonObject.getInteger("currentPage");
-        Integer pageSize=jsonObject.getInteger("pageSize");
-        if(pageSize==null){
+        if(pageSize<=0){
             pageSize=10;
         }
-        if(currentPage==null){
+        if(currentPage<=0){
             currentPage=1;
         }
-        String memberName=jsonObject.getString("name");
+        String memberName=name;
         int isInDeadLine=-1;
-        if(jsonObject.getInteger("deadline")!=null){
-            isInDeadLine=jsonObject.getInteger("deadline");
+        if(deadline==0||deadline==1){
+            isInDeadLine=deadline;
         }
         int isVip=-1;
-        if(jsonObject.getInteger("type")!=null){
-            isVip=jsonObject.getInteger("type");
+        if(type==0||type==1){
+            isVip=type;
         }
 
         //获取两个月后的时间
