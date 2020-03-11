@@ -1,3 +1,4 @@
+
 module.exports = {
     lintOnSave: false,
     productionSourceMap: false,
@@ -10,6 +11,7 @@ module.exports = {
         hotOnly:false,
         proxy: {
             '/campback':{
+                // target:'http://112.126.67.240:3000',
                 target:'http://localhost:3000',
                 pathRewrite:{
                     '^/campback':'/'
