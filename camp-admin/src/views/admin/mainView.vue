@@ -97,8 +97,8 @@ export default {
                     index: "7",
                     title: "投票管理",
                     children: [
-                        { index: "", title: "发起投票" },
-                        { index: "", title: "已发起的投票" },
+                        { index: "/publishVote", title: "发起投票" },
+                        { index: "/publishedVote", title: "已发起的投票" },
                     ]
                 },
                 {

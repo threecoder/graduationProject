@@ -46,7 +46,7 @@ export default new Router({
                 {
                     path: '/trainingEnrollSituation',
                     name: 'trainingEnrollSituation',
-                    component: resolve => require(['../views/admin/training/enrollSituation.vue'], resolve)
+                    component: resolve => require([ '../views/admin/training/enrollSituation.vue' ], resolve)
                 },
                 {
                     path: '/trainingOrder',
@@ -89,6 +89,17 @@ export default new Router({
                     path: '/activitiesList',
                     name: 'activitiesList',
                     component: resolve => require([ '../views/admin/activity/activitiesList.vue' ], resolve)
+                },
+                //投票管理
+                {
+                    path: '/publishVote',
+                    name: 'publishVote',
+                    component: resolve => require([ '../views/admin/vote/publishVote.vue' ], resolve)
+                },
+                {
+                    path: '/publishedVote',
+                    name: 'publishedVote',
+                    component: resolve => require([ '../views/admin/vote/publishedVote.vue' ], resolve)
                 }
             ]
         },
