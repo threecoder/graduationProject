@@ -484,10 +484,10 @@ public class MemberServiceImpl implements MemberService {
                                                 String idNum,String name,
                                                 Integer currentPage,Integer pageSize) {
         JSONObject result=new JSONObject();
-        if(pageSize<0){
+        if(pageSize==null||pageSize<0){
             pageSize=10;
         }
-        if(currentPage<=0){
+        if(currentPage==null||currentPage<=0){
             currentPage=1;
         }
         List<Student> students= MemberStudentSQLConn.getStudentsFromMemberReStudent(memberId, phone, idNum, name);

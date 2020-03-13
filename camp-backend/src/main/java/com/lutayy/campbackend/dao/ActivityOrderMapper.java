@@ -10,7 +10,7 @@ public interface ActivityOrderMapper {
 
     int deleteByExample(ActivityOrderExample example);
 
-    int deleteByPrimaryKey(String activityOrderId);
+    int deleteByPrimaryKey(Integer orderKeyId);
 
     int insert(ActivityOrder record);
 
@@ -18,7 +18,7 @@ public interface ActivityOrderMapper {
 
     List<ActivityOrder> selectByExample(ActivityOrderExample example);
 
-    ActivityOrder selectByPrimaryKey(String activityOrderId);
+    ActivityOrder selectByPrimaryKey(Integer orderKeyId);
 
     int updateByExampleSelective(@Param("record") ActivityOrder record, @Param("example") ActivityOrderExample example);
 

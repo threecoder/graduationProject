@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class ActivityOrder implements Serializable {
+    private Integer orderKeyId;
+
     private String activityOrderId;
 
     private Integer activityId;
@@ -24,6 +26,14 @@ public class ActivityOrder implements Serializable {
     private Boolean close;
 
     private static final long serialVersionUID = 1L;
+
+    public Integer getOrderKeyId() {
+        return orderKeyId;
+    }
+
+    public void setOrderKeyId(Integer orderKeyId) {
+        this.orderKeyId = orderKeyId;
+    }
 
     public String getActivityOrderId() {
         return activityOrderId;

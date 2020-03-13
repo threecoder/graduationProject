@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lutayy.campbackend.dao.TrainingOrderMapper">
   <resultMap id="BaseResultMap" type="com.lutayy.campbackend.pojo.TrainingOrder">
-    <id column="training_order_id" jdbcType="VARCHAR" property="trainingOrderId" />
+    <id column="order_key_id" jdbcType="INTEGER" property="orderKeyId" />
+    <result column="training_order_id" jdbcType="VARCHAR" property="trainingOrderId" />
     <result column="training_id" jdbcType="INTEGER" property="trainingId" />
     <result column="order_type" jdbcType="BIT" property="orderType" />
     <result column="member_key_id" jdbcType="INTEGER" property="memberKeyId" />
@@ -71,8 +72,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    training_order_id, training_id, order_type, member_key_id, student_id, order_price, 
-    order_begin_time, payment_state, close
+    order_key_id, training_order_id, training_id, order_type, member_key_id, student_id, 
+    order_price, order_begin_time, payment_state, close
   </sql>
   <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.TrainingOrderExample" resultMap="BaseResultMap">
     select
@@ -88,15 +89,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from training_order
-    where training_order_id = #{trainingOrderId,jdbcType=VARCHAR}
+    where order_key_id = #{orderKeyId,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from training_order
-    where training_order_id = #{trainingOrderId,jdbcType=VARCHAR}
+    where order_key_id = #{orderKeyId,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.lutayy.campbackend.pojo.TrainingOrderExample">
     delete from training_order
@@ -105,22 +106,27 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.lutayy.campbackend.pojo.TrainingOrder">
-    <selectKey keyProperty="trainingOrderId" order="AFTER" resultType="java.lang.String">
+    <selectKey keyProperty="orderKeyId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into training_order (training_id, order_type, member_key_id, 
-      student_id, order_price, order_begin_time, 
-      payment_state, close)
-    values (#{trainingId,jdbcType=INTEGER}, #{orderType,jdbcType=BIT}, #{memberKeyId,jdbcType=INTEGER}, 
-      #{studentId,jdbcType=INTEGER}, #{orderPrice,jdbcType=DECIMAL}, #{orderBeginTime,jdbcType=TIMESTAMP}, 
-      #{paymentState,jdbcType=BIT}, #{close,jdbcType=BIT})
+    insert into training_order (training_order_id, training_id, order_type, 
+      member_key_id, student_id, order_price, 
+      order_begin_time, payment_state, close
+      )
+    values (#{trainingOrderId,jdbcType=VARCHAR}, #{trainingId,jdbcType=INTEGER}, #{orderType,jdbcType=BIT}, 
+      #{memberKeyId,jdbcType=INTEGER}, #{studentId,jdbcType=INTEGER}, #{orderPrice,jdbcType=DECIMAL}, 
+      #{orderBeginTime,jdbcType=TIMESTAMP}, #{paymentState,jdbcType=BIT}, #{close,jdbcType=BIT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.TrainingOrder">
-    <selectKey keyProperty="trainingOrderId" order="AFTER" resultType="java.lang.String">
+    <selectKey keyProperty="orderKeyId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into training_order
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="trainingOrderId != null">
+        training_order_id,
+      </if>
       <if test="trainingId != null">
         training_id,
       </if>
@@ -147,6 +153,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="trainingOrderId != null">
+        #{trainingOrderId,jdbcType=VARCHAR},
+      </if>
       <if test="trainingId != null">
         #{trainingId,jdbcType=INTEGER},
       </if>
@@ -182,6 +191,9 @@
   <update id="updateByExampleSelective" parameterType="map">
     update training_order
     <set>
+      <if test="record.orderKeyId != null">
+        order_key_id = #{record.orderKeyId,jdbcType=INTEGER},
+      </if>
       <if test="record.trainingOrderId != null">
         training_order_id = #{record.trainingOrderId,jdbcType=VARCHAR},
       </if>
@@ -216,7 +228,8 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update training_order
-    set training_order_id = #{record.trainingOrderId,jdbcType=VARCHAR},
+    set order_key_id = #{record.orderKeyId,jdbcType=INTEGER},
+      training_order_id = #{record.trainingOrderId,jdbcType=VARCHAR},
       training_id = #{record.trainingId,jdbcType=INTEGER},
       order_type = #{record.orderType,jdbcType=BIT},
       member_key_id = #{record.memberKeyId,jdbcType=INTEGER},
@@ -232,6 +245,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.lutayy.campbackend.pojo.TrainingOrder">
     update training_order
     <set>
+      <if test="trainingOrderId != null">
+        training_order_id = #{trainingOrderId,jdbcType=VARCHAR},
+      </if>
       <if test="trainingId != null">
         training_id = #{trainingId,jdbcType=INTEGER},
       </if>
@@ -257,11 +273,12 @@
         close = #{close,jdbcType=BIT},
       </if>
     </set>
-    where training_order_id = #{trainingOrderId,jdbcType=VARCHAR}
+    where order_key_id = #{orderKeyId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.lutayy.campbackend.pojo.TrainingOrder">
     update training_order
-    set training_id = #{trainingId,jdbcType=INTEGER},
+    set training_order_id = #{trainingOrderId,jdbcType=VARCHAR},
+      training_id = #{trainingId,jdbcType=INTEGER},
       order_type = #{orderType,jdbcType=BIT},
       member_key_id = #{memberKeyId,jdbcType=INTEGER},
       student_id = #{studentId,jdbcType=INTEGER},
@@ -269,6 +286,6 @@
       order_begin_time = #{orderBeginTime,jdbcType=TIMESTAMP},
       payment_state = #{paymentState,jdbcType=BIT},
       close = #{close,jdbcType=BIT}
-    where training_order_id = #{trainingOrderId,jdbcType=VARCHAR}
+    where order_key_id = #{orderKeyId,jdbcType=INTEGER}
   </update>
 </mapper>

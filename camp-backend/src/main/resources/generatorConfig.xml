@@ -54,11 +54,11 @@
         <!--	identity：当设置为TRUE时，该列会被标记为identity列，并且selectKey标签会被插入insert后面-->
         <!--	type：type=post且identity=true时，生成的selectKey中order=After…… -->
 
-        <table tableName="training">
-            <generatedKey  column="training_id"  sqlStatement="Mysql"  identity="TRUE"/>
+        <table tableName="training_order">
+            <generatedKey  column="order_key_id"  sqlStatement="Mysql"  identity="TRUE"/>
         </table>
-        <table tableName="activity">
-            <generatedKey  column="activity_id"  sqlStatement="Mysql"  identity="TRUE"/>
+        <table tableName="training_order_student">
+
         </table>
 
     </context>

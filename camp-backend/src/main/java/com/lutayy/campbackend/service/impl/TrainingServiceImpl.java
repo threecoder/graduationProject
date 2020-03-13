@@ -58,12 +58,8 @@ public class TrainingServiceImpl implements TrainingService {
         TrainingReStudentExample trainingReStudentExample=new TrainingReStudentExample();
         TrainingReStudentExample.Criteria criteria=trainingReStudentExample.createCriteria();
         criteria.andStudentIdEqualTo(studentId).andTrainingIdEqualTo(trainingId).andIsInvalidEqualTo(false);
-        List<TrainingReStudent> trainingReStudents=trainingReStudentMapper.selectByExample(trainingReStudentExample);
-        if(trainingReStudents.size()==0){
-            return 0;
-        }else {
-            return 1;
-        }
+        long hasOrNot=trainingReStudentMapper.countByExample(trainingReStudentExample);
+        return (int)hasOrNot;
     }
 
 
@@ -337,9 +333,9 @@ public class TrainingServiceImpl implements TrainingService {
 
         String orderId=OrderIdGenerator.getUniqueId();
         //订单号生成并查重（查重如非高并发系统基本上可以省略）
-        while(trainingOrderMapper.selectByPrimaryKey(orderId)!=null){
-            orderId=OrderIdGenerator.getUniqueId();
-        }
+//        while(trainingOrderMapper.selectByPrimaryKey(orderId)!=null){
+//            orderId=OrderIdGenerator.getUniqueId();
+//        }
         /**
          * 由学员自行报名，对应的订单，无须插入“订单—学生”表
          * **/
@@ -446,9 +442,9 @@ public class TrainingServiceImpl implements TrainingService {
 
         String orderId= OrderIdGenerator.getUniqueId();
         //订单号生成并查重（如非高并发系统基本上可以省略）
-        while(trainingOrderMapper.selectByPrimaryKey(orderId)!=null){
-            orderId=OrderIdGenerator.getUniqueId();
-        }
+//        while(trainingOrderMapper.selectByPrimaryKey(orderId)!=null){
+//            orderId=OrderIdGenerator.getUniqueId();
+//        }
         /**
          * 由会员报名，对应的订单，还需插入“订单—学生”表
          **/
@@ -490,7 +486,7 @@ public class TrainingServiceImpl implements TrainingService {
             }
             //插入“订单—学生”表
             TrainingOrderStudent trainingOrderStudent=new TrainingOrderStudent();
-            trainingOrderStudent.setTrainingOrderId(orderId);
+            trainingOrderStudent.setOrderKeyId(trainingOrder.getOrderKeyId());
             trainingOrderStudent.setStudentId(student.getStudentId());
             trainingOrderStudentMapper.insertSelective(trainingOrderStudent);
         }
@@ -510,7 +506,7 @@ public class TrainingServiceImpl implements TrainingService {
             result.put("code", "fail");
             result.put("data",null);
             //提交的名单没有报名成功的，删除订单
-            trainingOrderMapper.deleteByPrimaryKey(orderId);
+            trainingOrderMapper.deleteByPrimaryKey(trainingOrder.getOrderKeyId());
         }else {
             result.put("code", "success");
             result.put("data", orderId);
@@ -528,11 +524,15 @@ public class TrainingServiceImpl implements TrainingService {
     /** 会员订单成功支付 **/
     private int confirmOrder(String orderId){
         System.out.println("---- 模拟订单支付确认 开启 ----");
-        TrainingOrder trainingOrder=trainingOrderMapper.selectByPrimaryKey(orderId);
-        if(trainingOrder==null){
+        TrainingOrderExample trainingOrderExample=new TrainingOrderExample();
+        TrainingOrderExample.Criteria criteriaOrder=trainingOrderExample.createCriteria();
+        criteriaOrder.andTrainingOrderIdEqualTo(orderId);
+        List<TrainingOrder> trainingOrders=trainingOrderMapper.selectByExample(trainingOrderExample);
+        if(trainingOrders.size()<1){
             System.out.println("---- 该订单不存在 ----");
             return -1;
         }
+        TrainingOrder trainingOrder=trainingOrders.get(0);
         int trainingId=trainingOrder.getTrainingId();
         trainingOrder.setPaymentState(true);
         trainingOrderMapper.updateByPrimaryKeySelective(trainingOrder);
@@ -540,7 +540,7 @@ public class TrainingServiceImpl implements TrainingService {
         if(trainingOrder.getOrderType()!=null && !trainingOrder.getOrderType()){
             TrainingOrderStudentExample trainingOrderStudentExample=new TrainingOrderStudentExample();
             TrainingOrderStudentExample.Criteria criteria=trainingOrderStudentExample.createCriteria();
-            criteria.andTrainingOrderIdEqualTo(orderId);
+            criteria.andOrderKeyIdEqualTo(trainingOrder.getOrderKeyId());
             List<TrainingOrderStudent> trainingOrderStudents=trainingOrderStudentMapper.selectByExample(trainingOrderStudentExample);
             if(trainingOrderStudents.size()==0){
                 System.out.println("---- 该订单下无学员 结束 ----");
