@@ -12,16 +12,16 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="getVoteList">搜索</el-button>
+                    <el-button type="primary" @click="getHasVotedList">搜索</el-button>
                 </el-form-item>
             </el-form>
         </div>
 
-        <div class="table-container">
+        <div class="table-container" v-loading="table.loading">
             <m-table :data="table.data" :tableConfig="table.config">
-                <el-table-column slot-scope="{params}" v-bind="params" align="center">
+                <el-table-column slot="oper" slot-scope="{params}" v-bind="params" align="center">
                     <div slot-scope="{row}">
-                        <el-button type="primary"></el-button>
+                        <el-button size="small" type="primary" @click="analysis(row)">投票情况</el-button>
                     </div>
                 </el-table-column>
             </m-table>
@@ -34,15 +34,20 @@
                 @curChange="curChange"
             />
         </div>
+        <el-dialog title="投票详情" :visible.sync="dialog.flag" v-if="dialog.flag" width="40%">
+            <vote-detail :voteId="dialog.voteId" @cancel="dialog.flag = false"/>
+        </el-dialog>
     </div>
 </template>
 <script>
 import page from "../../../components/page.vue";
 import mTable from "../../../components/mTable.vue";
+import voteDetail from "./components/voteDetail.vue";
 export default {
     components: {
         page,
-        mTable
+        mTable,
+        voteDetail
     },
     data() {
         return {
@@ -52,12 +57,58 @@ export default {
                 total: 100,
                 currentPage: 1,
                 pageSize: 10
+            },
+            table: {
+                config: [
+                    { prop: "id", label: "投票序号" },
+                    { prop: "name", label: "投票名称" },
+                    { prop: "type", label: "投票类型" },
+                    { prop: "time", label: "截止时间" },
+                    { slot: "oper", label: "操作" }
+                ],
+                data: [
+                    {
+                        id: "1",
+                        name: "模拟投票",
+                        type: "多选",
+                        time: "2016-10-12 16:00:00"
+                    }
+                ],
+                loading: false
+            },
+            dialog: {
+                flag: false,
+                voteId: null
             }
         };
+    },
+    computed: {
+        idType: function() {
+            return this.$store.getters.idType;
+        }
     },
     methods: {
         curChange(newVal) {
             this.form.currentPage = newVal;
+            this.getHasVotedList();
+        },
+        async getHasVotedList() {
+            try {
+                let res = null;
+                if (this.idType == 0) {
+                    res = await voteApi.getStudentHasVotedList(this.form);
+                } else {
+                    res = await voteApi.getMemberHasVotedList(this.form);
+                }
+                this.table.data = res.data.data;
+                this.form.total = res.data.total;
+            } catch (e) {
+                this.$message.error(e.message);
+            }
+        },
+        analysis(row) {
+            this.dialog.flag = true;
+            this.dialog.voteId = row.id;
         }
     }
 };

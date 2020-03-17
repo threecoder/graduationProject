@@ -88,8 +88,8 @@ export default {
                     index: "5",
                     title: "投票",
                     children: [
-                        { index: "/vote/0", title: "可参与投票" },
-                        { index: "/vote/1", title: "已参与投票" }
+                        { index: "/canVote", title: "可参与投票" },
+                        { index: "/hasVoted", title: "已参与投票" }
                     ]
                 }
             ],
@@ -130,8 +130,8 @@ export default {
                     index: "6",
                     title: "投票",
                     children: [
-                        { index: "/vote/0", title: "可参与投票" },
-                        { index: "/vote/1", title: "已参与投票" }
+                        { index: "/canVote", title: "可参与投票" },
+                        { index: "/hasVoted", title: "已参与投票" }
                     ]
                 }
             ]

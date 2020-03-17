@@ -102,9 +102,14 @@ export default new Router({
                     component: resolve => require([ '../views/personal/training/enrolledTraining.vue' ], resolve)
                 },
                 {
-                    path: '/vote/:id',
-                    name: 'vote',
-                    component: resolve => require(['../views/personal/vote/vote.vue'], resolve)
+                    path: '/canVote',
+                    name: 'canVote',
+                    component: resolve => require(['../views/personal/vote/canVote.vue'], resolve)
+                },
+                {
+                    path: '/hasVoted',
+                    name: 'hasVoted',
+                    component: resolve => require([ '../views/personal/vote/hasVoted.vue' ], resolve)
                 }
             ]
         },

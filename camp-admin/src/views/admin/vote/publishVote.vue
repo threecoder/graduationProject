@@ -5,12 +5,12 @@
         <el-col :span="16" :offset="4">
             <el-form :model="form" ref="ruleForm" label-position="top">
                 <el-row :gutter="80">
-                    <el-col :span="8">
+                    <el-col :span="10">
                         <el-form-item label="投票名称" prop="name">
                             <el-input v-model="form.name"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :span="10">
                         <el-form-item label="投票类型" prop="type">
                             <el-select v-model="form.type" placeholder="投票的类型">
                                 <el-option :value="0" label="仅限会员投票"></el-option>
@@ -19,11 +19,18 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                </el-row>
+                <el-row :gutter="80">
+                    <el-col :span="10">
                         <el-form-item label="最大可选数量" prop="num">
                             <el-select v-model="form.num" prop="num">
                                 <el-option v-for="i in optionsNum" :key="i" :label="i" :value="i"></el-option>
                             </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="10">
+                        <el-form-item label="投票截止时间" prop="time">
+                            <el-date-picker type="datetime" v-model="form.time" :clearable="false" />
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -55,13 +62,15 @@
 </template>
 <script>
 import voteApi from "../../../api/admin/vote";
+import { formatDateAndTime } from "../../../assets/js/util";
 export default {
     data() {
         return {
             form: {
                 name: null,
                 type: null,
-                num: null
+                num: null,
+                time: null
             },
             rules: {
                 name: [
@@ -89,6 +98,13 @@ export default {
                     {
                         required: true,
                         message: "可选选项数目不能为空",
+                        trigger: "blur"
+                    }
+                ],
+                time: [
+                    {
+                        required: true,
+                        message: "截止时间不能为空",
                         trigger: "blur"
                     }
                 ]
@@ -127,6 +143,9 @@ export default {
             } else if (this.form.num < 1) {
                 res.flag = false;
                 res.message = "最大可选数量必选";
+            } else if (this.form.time === null) {
+                res.flag = false;
+                res.message = "投票截止时间必填";
             } else {
                 for (let i = 0; i < this.options.length; i++) {
                     if (!this.options[i].text) {
@@ -152,6 +171,7 @@ export default {
                 ).then(async () => {
                     let data = { ...this.form };
                     data.options = this.options.map(val => val.text);
+                    data.time = formatDateAndTime(this.form.time);
                     console.log(data);
                     try {
                         let res = await voteApi.addNewVote(data);

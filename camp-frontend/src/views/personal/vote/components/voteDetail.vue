@@ -21,7 +21,8 @@
     </div>
 </template>
 <script>
-import voteApi from "../../../../api/admin/vote";
+import voteApi from "../../../../api/modules/vote";
+import vote from "../../../../api/modules/vote";
 export default {
     props: {
         voteId: {
@@ -33,7 +34,7 @@ export default {
         return {
             voteInfo: {
                 name: "投票名称",
-                type: "学员投票",
+                type: "多选",
                 num: 10,
                 options: [
                     { text: "发生发生发发睡沙发", per: 10 },
@@ -43,6 +44,11 @@ export default {
             loading: true
         };
     },
+    computed: {
+        idType: function() {
+            return this.$store.getters.idType;
+        }
+    },
     mounted() {
         this.getVoteDetail();
     },
@@ -50,7 +56,12 @@ export default {
         async getVoteDetail() {
             this.loading = true;
             try {
-                let res = await voteApi.getVoteDetail(this.voteId);
+                let res = null;
+                if (this.idType == 0) {
+                    res = await voteApi.studentGetVoteStatic(this.voteId);
+                } else {
+                    res = await voteApi.memberGetVoteStatic(this.voteId);
+                }
                 this.voteInfo = res.data;
             } catch (error) {
                 this.$message.error(error.message);
