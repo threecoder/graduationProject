@@ -5,8 +5,9 @@ import Axios from 'axios'
 import store from './store'
 import element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-import { getCanGoPath } from '@/assets/js/util.js';
 import Distpicker from 'v-distpicker'
+
+import { canGoPath } from './const';
 
 Vue.config.productionTip = false
 Vue.prototype.$message = element.Message;
@@ -18,8 +19,11 @@ Vue.component('v-distpicker', Distpicker)
 // 配置路由拦截
 router.beforeEach((to, from, next) => {
     let token = document.cookie.indexOf("token");
-    let canGoPath = getCanGoPath();
-    if (token == -1 && canGoPath.indexOf(to.path) == -1) {
+    if (!store.getters.isLogin) {
+        console.log(store.getters.isLogin)
+        store.commit("initState");
+    }
+    if ((token == -1 || !store.getters.isLogin) && canGoPath.indexOf(to.path) == -1) {
         let url = escape(to.fullPath);
         next({
             path: `/login?redirect=${url}`

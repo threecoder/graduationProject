@@ -78,15 +78,3 @@ export function formatTime(date) {
 export function formatDateAndTime(date){
     return `${formatDate(date)} ${formatTime(date)}`;
 }
-
-export function getCanGoPath() {
-    return [
-        '/login',
-        '/404',
-        '/courses/previous',
-        '/courses/now',
-        '/courses/future',
-        '/contact',
-        '/',
-    ]
-}

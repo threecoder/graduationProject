@@ -48,7 +48,6 @@ export default {
     },
     data() {
         return {
-            idType: getLocalStorage("user").type,
             trainingTable: {
                 tableConfig: [
                     { prop: "id", label: "培训序号", width: "100" },
@@ -278,6 +277,11 @@ export default {
             handler() {
                 this.studentList.data.length = 0;
             }
+        }
+    },
+    computed: {
+        idType: function() {
+            return this.$store.getters.idType;
         }
     },
     mounted() {

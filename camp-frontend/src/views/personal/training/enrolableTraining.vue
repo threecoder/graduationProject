@@ -69,7 +69,6 @@ export default {
     },
     data() {
         return {
-            idType: getLocalStorage("user").type,
             dialogVisible: false,
             trainingTable: {
                 tableConfig: [
@@ -172,6 +171,11 @@ export default {
             handler() {
                 this.studentList.data.length = 0;
             }
+        }
+    },
+    computed: {
+        idType: function() {
+            return this.$store.getters.idType;
         }
     },
     mounted() {

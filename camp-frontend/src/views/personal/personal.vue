@@ -40,8 +40,8 @@ import navmenu from "../../components/navmenu.vue";
 import { getLocalStorage } from "@/assets/js/util.js";
 import { request } from "@/api/request.js";
 export default {
-    mounted() {
-        // document.getElementsByTagName("aside")[0].style.height = window.innerHeight+'px';
+    components: {
+        navmenu
     },
     data() {
         return {
@@ -88,8 +88,8 @@ export default {
                     index: "5",
                     title: "投票",
                     children: [
-                        { index: "/vote/0",title: "全部投票" },
-                        { index: "/vote/1",title: "我参与的投票" }
+                        { index: "/vote/0", title: "可参与投票" },
+                        { index: "/vote/1", title: "已参与投票" }
                     ]
                 }
             ],
@@ -125,22 +125,24 @@ export default {
                         { index: "/enrolableActivities", title: "可报名活动" },
                         { index: "/enrolledActivities", title: "已报名活动" }
                     ]
+                },
+                {
+                    index: "6",
+                    title: "投票",
+                    children: [
+                        { index: "/vote/0", title: "可参与投票" },
+                        { index: "/vote/1", title: "已参与投票" }
+                    ]
                 }
-            ],
-            name: null,
-            type: null
+            ]
         };
     },
-    components: {
-        navmenu
-    },
-    mounted(){
-        let user = getLocalStorage("user");
-        this.name = user && user.name;
-        this.type = user && user.type;
-        if(this.type!==0 && this.type!=1){
-            this.$message.error("请先登录系统");
-            this.$router.push({path: '/login'});
+    computed: {
+        name: function() {
+            return this.$store.getters.userName;
+        },
+        type: function() {
+            return this.$store.getters.idType;
         }
     },
     methods: {
@@ -150,13 +152,13 @@ export default {
         logout() {
             try {
                 request("/campback/logout", "get").then(res => {
-                    window.localStorage.removeItem("user");
                     this.$message.success("注销成功");
                     this.$router.push("/login");
                 });
             } catch (error) {
-                this.$message.error(error.message);
+                this.$router.push("/login");
             }
+            this.$store.commit("removeState");
         }
     }
 };

@@ -38,7 +38,6 @@ export default {
     },
     data() {
         return {
-            idType: null,
             info: {
                 idNum: null,
                 phone: null,
@@ -68,6 +67,11 @@ export default {
             confirmLoading: false
         };
     },
+    computed: {
+        idType: function() {
+            return this.$store.getters.idType;
+        }
+    },
     watch: {
         dialogFormVisible() {
             if (this.dialogFormVisible == false) {
@@ -79,13 +83,7 @@ export default {
             }
         }
     },
-    beforeMount() {
-        this.initType();
-    },
     methods: {
-        initType() {
-            this.idType = getLocalStorage("user").type;
-        },
         async setNewPassword() {
             try {
                 this.confirmLoading = true;

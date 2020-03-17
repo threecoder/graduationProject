@@ -46,7 +46,6 @@ export default {
     },
     data() {
         return {
-            idType: getLocalStorage("user").type,
             type: this.$route.params.id,
             activityTable: {
                 tableConfig: [
@@ -133,6 +132,11 @@ export default {
     },
     mounted() {
         this.init();
+    },
+    computed: {
+        idType: function() {
+            return this.$store.getters.idType;
+        }
     },
     methods: {
         async init() {
