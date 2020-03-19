@@ -5,6 +5,10 @@
                 <h3 class="cursor" @click="toHomePage">协会首页</h3>
                 <div class="infoContainer fr">
                     <span>{{name}}</span>
+                    <span class="message" @click="toMessage">
+                        <i class="el-icon-message-solid"></i>
+                        {{unReadNum}}
+                    </span>
                     <span class="cursor" @click="logout">退出登录</span>
                 </div>
             </div>
@@ -14,7 +18,7 @@
             <aside>
                 <el-menu
                     mode="vertical"
-                    default-active="/login"
+                    :default-active="defaulUrl"
                     :router="true"
                     :unique-opened="true"
                     text-color="#fff"
@@ -37,7 +41,9 @@
 </template>
 <script>
 import navmenu from "../../components/navmenu.vue";
-import { getLocalStorage } from "@/assets/js/util.js";
+import msgApi from "../../api/admin/message";
+import { getLocalStorage } from "../../assets/js/util.js";
+import event from "../../assets/js/eventBus.js";
 export default {
     data() {
         return {
@@ -47,7 +53,7 @@ export default {
                     title: "会员管理",
                     children: [
                         { index: "/managerMember", title: "我的会员" },
-                        { index: "", title: "会员统计" },
+                        { index: "", title: "会员统计" }
                     ]
                 },
                 {
@@ -98,7 +104,7 @@ export default {
                     title: "投票管理",
                     children: [
                         { index: "/publishVote", title: "发起投票" },
-                        { index: "/publishedVote", title: "已发起的投票" },
+                        { index: "/publishedVote", title: "已发起的投票" }
                     ]
                 },
                 {
@@ -120,16 +126,49 @@ export default {
                     children: [{ index: "", title: "参与投票" }]
                 }
             ],
-            name: getLocalStorage("user").name
+            name: getLocalStorage("user").name,
+            unReadNum: 0,
+            defaulUrl: null
             // name: 'sasds'
         };
     },
     components: {
         navmenu
     },
+    watch: {
+        "$route.path"(newVal) {
+            this.defaulUrl = newVal;
+            if (newVal != "/message") {
+                this.getMessageNum();
+            }
+        }
+    },
+    mounted() {
+        this.getMessageNum();
+    },
     methods: {
         toHomePage() {
             this.$router.push("/");
+        },
+        toMessage() {
+            this.$router.push("/message");
+        },
+        async getMessageNum() {
+            try {
+                let oldTime = Number(window.localStorage.getItem("msgTime"));
+                let newTime = new Date().getTime();
+                if (oldTime) {
+                    if (newTime - oldTime < 2000) {
+                        return false;
+                    }
+                }
+                window.localStorage.setItem("msgTime", newTime);
+                console.log("更新未读消息");
+                let res = await msgApi.getUnReadMsgNum();
+                this.unReadNum = res.data;
+            } catch (error) {
+                this.$message.error(error.message);
+            }
         },
         logout() {
             window.localStorage.removeItem("token");
@@ -167,15 +206,24 @@ export default {
             line-height: 60px;
             span {
                 padding: 0 10px;
-                &:first-child::after {
+                &:nth-child(1):after,
+                &:nth-child(2):after {
                     content: "|";
                     height: 60px;
                     color: gray;
                     margin-left: 15px;
                 }
             }
-            & > :nth-child(2) {
+            & > :last-child {
                 color: red;
+            }
+            .message {
+                cursor: pointer;
+                font-size: 18px;
+                color: red;
+                &:hover {
+                    color: rgb(64, 158, 255);
+                }
             }
         }
     }
@@ -212,10 +260,10 @@ export default {
                 padding-left: 70px !important;
             }
             ::v-deep .el-menu-item:hover {
-                background-color: rgb(28,175, 157)!important;
+                background-color: rgb(28, 175, 157) !important;
             }
             ::v-deep .el-submenu__title:hover {
-                background-color: rgb(28,175, 157)!important;
+                background-color: rgb(28, 175, 157) !important;
             }
             ::v-deep .el-submenu .el-menu .el-submenu .el-submenu__title span {
                 padding-left: 30px !important;
@@ -233,6 +281,12 @@ export default {
             padding: 30px 40px;
             width: auto;
             background-color: rgb(244, 244, 244);
+            .el-row {
+                height: 100%;
+                .el-col {
+                    height: 100%;
+                }
+            }
         }
     }
 }

@@ -68,6 +68,15 @@ const getGradeList = examId => request(`${apiPrefix}/getGradeList`, 'get', { exa
 //提交成绩审核
 const submitGradeList = data => request(`${apiPrefix}/submitGradeList`, 'post', data);
 
+//获取本账号待审核成绩记录
+const getWaitingGradeList = par => request(`${apiPrefix}/getWaitingGradeList`, 'get', par);
+
+//通过某条记录
+const approvalSingleRecord = id => request(`${apiPrefix}/approvalSingleRecord`, 'post', { id });
+
+//通过一批记录
+const approvalManyRecords = ids => request(`${apiPrefix}/approvalManyRecords`, 'post', { ids });
+
 export default {
     getQuestionList,
     getTrainingList,
@@ -89,5 +98,8 @@ export default {
     getExamDetail,
     getCheckerList,
     getGradeList,
-    submitGradeList
+    submitGradeList,
+    getWaitingGradeList,
+    approvalSingleRecord,
+    approvalManyRecords
 }

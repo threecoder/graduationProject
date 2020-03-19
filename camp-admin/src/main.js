@@ -8,6 +8,10 @@ import 'element-ui/lib/theme-chalk/index.css'
 import { getCanGoPath } from '@/assets/js/util.js';
 import Distpicker from 'v-distpicker'
 
+// import 'vue-fabric/dist/vue-fabric.min.css';
+// import { Fabric } from 'vue-fabric';
+// Vue.use(Fabric);
+
 Vue.config.productionTip = false
 Vue.prototype.$message = element.Message;
 Vue.prototype.$msbox = element.MessageBox;

@@ -100,6 +100,12 @@ export default new Router({
                     path: '/publishedVote',
                     name: 'publishedVote',
                     component: resolve => require([ '../views/admin/vote/publishedVote.vue' ], resolve)
+                },
+                //消息页面
+                {
+                    path: '/message',
+                    name: 'message',
+                    component: resolve => require([ '../views/admin/message/index.vue'], resolve)
                 }
             ]
         },
