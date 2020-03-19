@@ -28,13 +28,13 @@ public class ActivityStudentSQLConn {
         try{
             conn= DriverManager.getConnection(URL,Name,Pwd);
             statement=conn.createStatement();
-            String sql="select o.activity_order_id from activity_order o,activity_order_student a " +
-                    "where o.activity_order_id=a.activity_order_id and a.student_id=" + studentId +
+            String sql="select o.order_key_id from activity_order o,activity_order_student a " +
+                    "where o.order_key_id=a.order_key_id and a.student_id=" + studentId +
                     " and o.payment_state=0 and o.close=0 and o.order_type=0 and o.activity_id="+activityId;
 
             ResultSet rs=statement.executeQuery(sql);
             while (rs.next()){
-                orderId = rs.getString("activity_order_id");
+                orderId = rs.getString("order_key_id");
             }
             return orderId;
         } catch (SQLException e){

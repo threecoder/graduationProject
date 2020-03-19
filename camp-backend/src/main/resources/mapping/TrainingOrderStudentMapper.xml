@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lutayy.campbackend.dao.TrainingOrderStudentMapper">
   <resultMap id="BaseResultMap" type="com.lutayy.campbackend.pojo.TrainingOrderStudent">
-    <result column="training_order_id" jdbcType="VARCHAR" property="trainingOrderId" />
+    <result column="order_key_id" jdbcType="INTEGER" property="orderKeyId" />
     <result column="student_id" jdbcType="INTEGER" property="studentId" />
     <result column="is_paid" jdbcType="BIT" property="isPaid" />
   </resultMap>
@@ -65,7 +65,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    training_order_id, student_id, is_paid
+    order_key_id, student_id, is_paid
   </sql>
   <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.TrainingOrderStudentExample" resultMap="BaseResultMap">
     select
@@ -88,16 +88,16 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.lutayy.campbackend.pojo.TrainingOrderStudent">
-    insert into training_order_student (training_order_id, student_id, is_paid
+    insert into training_order_student (order_key_id, student_id, is_paid
       )
-    values (#{trainingOrderId,jdbcType=VARCHAR}, #{studentId,jdbcType=INTEGER}, #{isPaid,jdbcType=BIT}
+    values (#{orderKeyId,jdbcType=INTEGER}, #{studentId,jdbcType=INTEGER}, #{isPaid,jdbcType=BIT}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.TrainingOrderStudent">
     insert into training_order_student
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="trainingOrderId != null">
-        training_order_id,
+      <if test="orderKeyId != null">
+        order_key_id,
       </if>
       <if test="studentId != null">
         student_id,
@@ -107,8 +107,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="trainingOrderId != null">
-        #{trainingOrderId,jdbcType=VARCHAR},
+      <if test="orderKeyId != null">
+        #{orderKeyId,jdbcType=INTEGER},
       </if>
       <if test="studentId != null">
         #{studentId,jdbcType=INTEGER},
@@ -127,8 +127,8 @@
   <update id="updateByExampleSelective" parameterType="map">
     update training_order_student
     <set>
-      <if test="record.trainingOrderId != null">
-        training_order_id = #{record.trainingOrderId,jdbcType=VARCHAR},
+      <if test="record.orderKeyId != null">
+        order_key_id = #{record.orderKeyId,jdbcType=INTEGER},
       </if>
       <if test="record.studentId != null">
         student_id = #{record.studentId,jdbcType=INTEGER},
@@ -143,7 +143,7 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update training_order_student
-    set training_order_id = #{record.trainingOrderId,jdbcType=VARCHAR},
+    set order_key_id = #{record.orderKeyId,jdbcType=INTEGER},
       student_id = #{record.studentId,jdbcType=INTEGER},
       is_paid = #{record.isPaid,jdbcType=BIT}
     <if test="_parameter != null">

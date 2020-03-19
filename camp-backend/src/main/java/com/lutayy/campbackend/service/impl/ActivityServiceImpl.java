@@ -48,12 +48,8 @@ public class ActivityServiceImpl implements ActivityService {
         ActivityStudentExample activityStudentExample=new ActivityStudentExample();
         ActivityStudentExample.Criteria criteria=activityStudentExample.createCriteria();
         criteria.andStudentIdEqualTo(studentId).andActivityIdEqualTo(activityId);
-        List<ActivityStudent> activityStudents=activityStudentMapper.selectByExample(activityStudentExample);
-        if(activityStudents.size()==0){
-            return 0;
-        }else {
-            return 1;
-        }
+        long hasOrNot=activityStudentMapper.countByExample(activityStudentExample);
+        return (int)hasOrNot;
     }
 
 
@@ -264,9 +260,9 @@ public class ActivityServiceImpl implements ActivityService {
 //        if(activityStudentMapper.insert(activityStudent)>0){
             String orderId=OrderIdGenerator.getUniqueId();
             //订单号生成并查重（查重如非高并发系统基本上可以省略）
-            while(activityOrderMapper.selectByPrimaryKey(orderId)!=null){
-                orderId=OrderIdGenerator.getUniqueId();
-            }
+            //while(activityOrderMapper.selectByPrimaryKey(orderId)!=null){
+            //    orderId=OrderIdGenerator.getUniqueId();
+            //}
             /**
              * 由学员自行报名，对应的订单，无须插入“订单—学生”表
              * **/
@@ -326,9 +322,9 @@ public class ActivityServiceImpl implements ActivityService {
 
         String orderId=OrderIdGenerator.getUniqueId();
         //订单号生成并查重（如非高并发系统基本上可以省略）
-        while(activityOrderMapper.selectByPrimaryKey(orderId)!=null){
-            orderId=OrderIdGenerator.getUniqueId();
-        }
+//        while(activityOrderMapper.selectByPrimaryKey(orderId)!=null){
+//            orderId=OrderIdGenerator.getUniqueId();
+//        }
         /**
          * 由会员报名，对应的订单，还需插入“订单—学生”表
          **/
@@ -337,7 +333,7 @@ public class ActivityServiceImpl implements ActivityService {
         activityOrder.setActivityId(activityId);
         activityOrder.setMemberKeyId(memberId);
         activityOrder.setOrderType(false);//"0"即会员提交的订单
-        //activityOrder.setOrderPrice(activity.getActivityFee());
+        // activityOrder.setOrderPrice(activity.getActivityFee());//在筛选人数后再添加
         activityOrder.setOrderBeginTime(new Date());
         activityOrder.setPaymentState(false);
         activityOrder.setClose(false);
@@ -363,7 +359,7 @@ public class ActivityServiceImpl implements ActivityService {
             }
             //插入“订单—学生”表
             ActivityOrderStudent activityOrderStudent=new ActivityOrderStudent();
-            activityOrderStudent.setActivityOrderId(orderId);
+            activityOrderStudent.setOrderKeyId(activityOrder.getOrderKeyId());
             activityOrderStudent.setStudentId(student.getStudentId());
             activityOrderStudentMapper.insertSelective(activityOrderStudent);
         }
@@ -383,7 +379,7 @@ public class ActivityServiceImpl implements ActivityService {
             result.put("code", "fail");
             result.put("data",null);
             //提交的名单没有报名成功的，删除订单
-            activityOrderMapper.deleteByPrimaryKey(orderId);
+            activityOrderMapper.deleteByPrimaryKey(activityOrder.getOrderKeyId());
         }else {
             result.put("code", "success");
             result.put("data", orderId);

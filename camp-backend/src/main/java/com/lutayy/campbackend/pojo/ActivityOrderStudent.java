@@ -3,7 +3,7 @@ package com.lutayy.campbackend.pojo;
 import java.io.Serializable;
 
 public class ActivityOrderStudent implements Serializable {
-    private String activityOrderId;
+    private Integer orderKeyId;
 
     private Integer studentId;
 
@@ -11,12 +11,12 @@ public class ActivityOrderStudent implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public String getActivityOrderId() {
-        return activityOrderId;
+    public Integer getOrderKeyId() {
+        return orderKeyId;
     }
 
-    public void setActivityOrderId(String activityOrderId) {
-        this.activityOrderId = activityOrderId;
+    public void setOrderKeyId(Integer orderKeyId) {
+        this.orderKeyId = orderKeyId;
     }
 
     public Integer getStudentId() {

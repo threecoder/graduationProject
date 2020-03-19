@@ -106,6 +106,66 @@ public class ActivityOrderExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
+        public Criteria andOrderKeyIdIsNull() {
+            addCriterion("order_key_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderKeyIdIsNotNull() {
+            addCriterion("order_key_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderKeyIdEqualTo(Integer value) {
+            addCriterion("order_key_id =", value, "orderKeyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderKeyIdNotEqualTo(Integer value) {
+            addCriterion("order_key_id <>", value, "orderKeyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderKeyIdGreaterThan(Integer value) {
+            addCriterion("order_key_id >", value, "orderKeyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderKeyIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("order_key_id >=", value, "orderKeyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderKeyIdLessThan(Integer value) {
+            addCriterion("order_key_id <", value, "orderKeyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderKeyIdLessThanOrEqualTo(Integer value) {
+            addCriterion("order_key_id <=", value, "orderKeyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderKeyIdIn(List<Integer> values) {
+            addCriterion("order_key_id in", values, "orderKeyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderKeyIdNotIn(List<Integer> values) {
+            addCriterion("order_key_id not in", values, "orderKeyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderKeyIdBetween(Integer value1, Integer value2) {
+            addCriterion("order_key_id between", value1, value2, "orderKeyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderKeyIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("order_key_id not between", value1, value2, "orderKeyId");
+            return (Criteria) this;
+        }
+
         public Criteria andActivityOrderIdIsNull() {
             addCriterion("activity_order_id is null");
             return (Criteria) this;
