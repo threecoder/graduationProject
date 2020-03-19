@@ -31,11 +31,14 @@
                 :loading="table.loading"
             >
                 <el-table-column slot="oper" align="center" slot-scope="{ params }" v-bind="params">
-                    <div slot-scope=" {row}">
-                        <el-button v-if="type==0" type="primary" size="small" @click="modifyInfo(row)">修改信息</el-button>
-                        <el-button v-if="type==0" type="primary" size="small" @click="deleteOneStudent(row)">解除挂靠</el-button>
-                        <el-button v-if="type==0" type="primary" size="small" @click="resetPass(row)">重置密码</el-button>
-                        
+                    <div v-if="type==0" slot-scope=" {row}">
+                        <el-button type="primary" size="small" @click="modifyInfo(row)">修改信息</el-button>
+                        <el-button type="primary" size="small" @click="deleteOneStudent(row)">解除挂靠</el-button>
+                        <el-button type="primary" size="small" @click="resetPass(row)">重置密码</el-button>
+                    </div>
+                    <div v-if="type==1" slot-scope="{row}">
+                        <el-button type="primary" size="small" @click="trainingHistory(row)">培训记录</el-button>
+                        <el-button type="primary" size="small" @click="certificate(row)">持有证书</el-button>
                     </div>
                 </el-table-column>
             </m-table>
@@ -115,34 +118,55 @@ export default {
         };
     },
     mounted() {
+        this.init();
         this.search();
-        console.log(this.$parent);
     },
     methods: {
+        init() {
+            if (this.type == 1) {
+                this.table.tableConfig = [
+                    { prop: "idNum", label: "学员身份证" },
+                    { prop: "name", label: "学员姓名" },
+                    { prop: "phone", label: "联系电话" },
+                    { prop: "email", label: "邮箱" },
+                    { prop: "company", label: "所属公司" },
+                    {
+                        slot: "oper",
+                        label: "操作",
+                        fixed: "right",
+                        width: "300px"
+                    }
+                ];
+            }
+        },
         async search() {
             try {
                 let que = "";
                 let res = await adminStudentApi.getStudentList(que);
-                console.log(res);
                 this.table.tableData = res.data.list;
                 this.form.total = res.data.total;
             } catch (error) {
                 this.$message.error(error.message);
-                console.log(error);
             }
         },
         curChange(val) {
             this.form.currentPage = val;
             this.search();
         },
-        modifyInfo(row){
-            this.$emit("modifyInfo",row)
+        modifyInfo(row) {
+            this.$emit("modifyInfo", row);
         },
-        deleteOneStudent(row){
-            this.$emit("delete",row)
+        deleteOneStudent(row) {
+            this.$emit("delete", row);
         },
-        resetPass(row){
-            this.$emit("resetPass",row)
+        resetPass(row) {
+            this.$emit("resetPass", row);
+        },
+        trainingHistory(row) {
+            this.$emit("trainingHistory", row);
+        },
+        certificate(row) {
+            this.$emit("certificate", row);
         }
     }
 };

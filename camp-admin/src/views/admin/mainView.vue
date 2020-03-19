@@ -42,8 +42,8 @@
 <script>
 import navmenu from "../../components/navmenu.vue";
 import msgApi from "../../api/admin/message";
-import { getLocalStorage } from "../../assets/js/util.js";
-import event from "../../assets/js/eventBus.js";
+import { getLocalStorage } from "../../assets/js/util";
+import event from "../../assets/js/eventBus";
 export default {
     data() {
         return {
@@ -61,7 +61,7 @@ export default {
                     title: "学员管理",
                     children: [
                         { index: "/studentInfo", title: "学员信息及挂靠管理" },
-                        { index: "/studentRecord", title: "学员培训及相关证书" }
+                        { index: "/studentRecord", title: "学员培训记录以及证书" }
                     ]
                 },
                 {
