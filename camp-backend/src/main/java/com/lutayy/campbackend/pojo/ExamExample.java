@@ -11,6 +11,26 @@ public class ExamExample {
 
     protected List<Criteria> oredCriteria;
 
+    //加入 offset 起始位置 和 limit 查询页数 用来分页
+    protected int offset;
+    protected int limit;
+
+    public int getOffset() {
+        return offset;
+    }
+
+    public void setOffset(int offset) {
+        this.offset = offset;
+    }
+
+    public int getLimit() {
+        return limit;
+    }
+
+    public void setLimit(int limit) {
+        this.limit = limit;
+    }
+
     public ExamExample() {
         oredCriteria = new ArrayList<Criteria>();
     }

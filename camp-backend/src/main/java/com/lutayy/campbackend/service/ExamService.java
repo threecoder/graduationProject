@@ -12,21 +12,28 @@ public interface ExamService {
 
     JSONObject getDoneExamList(Integer studentId);
 
-    JSONObject getExamInfo(Integer studentId,Integer examId);
+    JSONObject getExamInfo(Integer studentId, Integer examId);
 
     JSONObject getExamQuestions(Integer examId);
 
-    JSONObject getExamDetail(Integer studentId,Integer examId);
+    JSONObject getExamDetail(Integer studentId, Integer examId);
 
     JSONObject addNewExam(JSONObject jsonObject);
 
+    //管理员获取已发布考试列表
+    JSONObject getPublishedList(Integer currentPage, Integer pageSize);
+
     JSONObject getQuestionList(JSONObject jsonObject);
 
-    JSONObject getNotPostExam(Integer pageSize,Integer currentPage);
+    JSONObject getNotPostExam(Integer pageSize, Integer currentPage);
 
-    JSONObject randomFillExam(Integer examId);
+    JSONObject randomFillExam(JSONObject jsonObject);
 
-    JSONObject publishExam(Integer examId);
+    JSONObject publishExam(JSONObject jsonObject);
 
     JSONObject submitExam(JSONObject jsonObject);
+
+    JSONObject closeExam(JSONObject jsonObject);
+
+    JSONObject modifyExamInfo(JSONObject jsonObject);
 }

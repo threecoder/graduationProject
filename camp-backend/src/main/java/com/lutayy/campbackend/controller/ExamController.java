@@ -66,12 +66,18 @@ public class ExamController {
         return examService.addNewExam(jsonObject);
     }
 
+    @RequestMapping("/admin/getPublishedList")
+    @ResponseBody
+    public Object getPublishedList(@RequestParam("currentPage") Integer currentPage,
+                                   @RequestParam("pageSize") Integer pageSize) { //管理员获取已发布考试列表
+        return examService.getPublishedList(currentPage, pageSize);
+    }
+
     @RequestMapping("/admin/getQuestionList")
     @ResponseBody
     public JSONObject getQuestionList(@RequestBody JSONObject jsonObject){
         return examService.getQuestionList(jsonObject);
     }
-
 
     @RequestMapping("/admin/getNotPostExam")
     @ResponseBody
@@ -81,13 +87,25 @@ public class ExamController {
 
     @RequestMapping("/admin/randomFillExam")
     @ResponseBody
-    public Object randomFillExam(@RequestParam("examId") Integer examId){
-        return examService.randomFillExam(examId);
+    public JSONObject randomFillExam(JSONObject jsonObject){
+        return examService.randomFillExam(jsonObject);
     }
 
     @RequestMapping("/admin/publishExam")
     @ResponseBody
-    public Object publishExam(@RequestParam("examId") Integer examId){
-        return examService.publishExam(examId);
+    public JSONObject publishExam(JSONObject jsonObject){
+        return examService.publishExam(jsonObject);
+    }
+
+    @RequestMapping("/admin/closeExam")
+    @ResponseBody
+    public JSONObject closeExam(@RequestBody JSONObject jsonObject){
+        return examService.closeExam(jsonObject);
+    }
+
+    @RequestMapping("/admin/modifyExamInfo")
+    @ResponseBody
+    public JSONObject modifyExamInfo(@RequestBody JSONObject jsonObject){
+        return examService.modifyExamInfo(jsonObject);
     }
 }
