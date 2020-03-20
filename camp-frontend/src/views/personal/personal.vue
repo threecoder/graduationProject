@@ -1,51 +1,90 @@
 <template>
-    <el-row class="allContainer">
-        <el-col :span="24" class="header">
-            <div style="margin-left:250px;width:100%">
-                <h3 class="cursor" @click="toHomePage">协会首页</h3>
-                <div class="infoContainer fr">
-                    <span>{{name}}</span>
-                    <span class="message" @click="toMessage">
-                        <i class="el-icon-message-solid"></i>
-                        {{unReadNum}}
-                    </span>
-                    <span class="cursor" @click="logout">退出登录</span>
+    <div>
+        <el-row class="allContainer">
+            <el-col :span="24" class="header">
+                <div style="margin-left:250px;width:100%">
+                    <h3 class="cursor" @click="toHomePage">协会首页</h3>
+                    <div class="infoContainer fr">
+                        <el-dropdown @command="handleCommand" trigger="click">
+                            <span class="el-dropdown-link">
+                                {{name}}
+                                <span>
+                                    <i class="el-icon-message-solid"></i>
+                                    ({{unReadNum}})
+                                </span>
+                                <i class="el-icon-arrow-down el-icon--right"></i>
+                            </span>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item command="msg">
+                                    <span class="message">
+                                        <i class="el-icon-message-solid"></i>
+                                        我的消息({{unReadNum}})
+                                    </span>
+                                </el-dropdown-item>
+                                <el-dropdown-item command="pas">
+                                    <span>
+                                        <i class="el-icon-message-solid"></i>
+                                        修改密码
+                                    </span>
+                                </el-dropdown-item>
+                                <el-dropdown-item command="logout">
+                                    <span class="cursor">
+                                        <i class="el-icon-close"></i>
+                                        退出登录
+                                    </span>
+                                </el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
+                    </div>
                 </div>
-            </div>
-        </el-col>
+            </el-col>
 
-        <el-col :span="24" class="mainContainer">
-            <aside>
-                <el-menu
-                    mode="vertical"
-                    :default-active="defaulUrl"
-                    :router="true"
-                    :unique-opened="true"
-                    text-color="#fff"
-                >
-                    <navmenu v-if="type==1" :data="memberList"></navmenu>
-                    <navmenu v-if="type==0" :data="studentList"></navmenu>
-                </el-menu>
-            </aside>
-            <section class="content-container">
-                <el-row>
-                    <el-col :span="24" class>
-                        <transition name="fade" mode="out-in">
-                            <router-view :key="$route.path" />
-                        </transition>
-                    </el-col>
-                </el-row>
-            </section>
-        </el-col>
-    </el-row>
+            <el-col :span="24" class="mainContainer">
+                <aside>
+                    <el-menu
+                        mode="vertical"
+                        :default-active="defaulUrl"
+                        :router="true"
+                        :unique-opened="true"
+                        text-color="#fff"
+                    >
+                        <navmenu v-if="type==1" :data="memberList"></navmenu>
+                        <navmenu v-if="type==0" :data="studentList"></navmenu>
+                    </el-menu>
+                </aside>
+                <section class="content-container">
+                    <el-row>
+                        <el-col :span="24" class>
+                            <transition name="fade" mode="out-in">
+                                <router-view :key="$route.path" />
+                            </transition>
+                        </el-col>
+                    </el-row>
+                </section>
+            </el-col>
+        </el-row>
+
+        <!-- 修改密码弹窗 -->
+        <el-dialog
+            title="修改密码"
+            :visible.sync="dialogFlag"
+            v-if="dialogFlag"
+            :close-on-click-modal="false"
+        >
+            <modify-pass @hide="dialogFlag=false" />
+        </el-dialog>
+    </div>
 </template>
 <script>
 import navmenu from "../../components/navmenu.vue";
-import { getLocalStorage } from "@/assets/js/util.js";
-import { request } from "@/api/request.js";
+import modifyPass from "./components/modifyPassword.vue";
+import { getLocalStorage } from "../../assets/js/util";
+import { request } from "../../api/request";
+import msgApi from "../../api/modules/message";
 export default {
     components: {
-        navmenu
+        navmenu,
+        modifyPass
     },
     data() {
         return {
@@ -140,7 +179,8 @@ export default {
                 }
             ],
             unReadNum: 0,
-            defaulUrl: null
+            defaulUrl: null,
+            dialogFlag: false
         };
     },
     watch: {
@@ -162,6 +202,15 @@ export default {
     methods: {
         toHomePage() {
             this.$router.push("/");
+        },
+        handleCommand(c) {
+            if (c == "msg") {
+                this.toMessage();
+            } else if (c == "logout") {
+                this.logout();
+            } else if (c == "pas") {
+                this.dialogFlag = true;
+            }
         },
         logout() {
             try {
@@ -188,7 +237,7 @@ export default {
                 }
                 window.localStorage.setItem("msgTime", newTime);
                 console.log("更新未读消息");
-                let res = await msgApi.getUnReadMsgNum();
+                let res = await msgApi.getUnReadMsgNum(this.type);
                 this.unReadNum = res.data;
             } catch (error) {
                 this.$message.error(error.message);
@@ -218,25 +267,24 @@ export default {
         margin: 0 !important;
     }
     .infoContainer {
+        cursor: pointer;
         display: inline-block;
         height: 60px;
         text-align: center;
         margin-right: 60px;
         line-height: 60px;
+        .el-dropdown-link:hover {
+            color: rgb(64, 158, 255);
+        }
         span {
             padding: 0 10px;
-            &:nth-child(1):after,
-            &:nth-child(2):after {
-                content: "|";
-                height: 60px;
-                color: gray;
-                margin-left: 15px;
-            }
         }
         & > :last-child {
             color: red;
         }
         .message {
+            display: block;
+            width: 100%;
             cursor: pointer;
             font-size: 18px;
             color: red;

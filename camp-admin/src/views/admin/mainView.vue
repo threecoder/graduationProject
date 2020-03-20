@@ -4,12 +4,30 @@
             <div style="margin-left:250px;width:100%">
                 <h3 class="cursor" @click="toHomePage">协会首页</h3>
                 <div class="infoContainer fr">
-                    <span>{{name}}</span>
-                    <span class="message" @click="toMessage">
-                        <i class="el-icon-message-solid"></i>
-                        {{unReadNum}}
-                    </span>
-                    <span class="cursor" @click="logout">退出登录</span>
+                    <el-dropdown @command="handleCommand" trigger="click">
+                        <span class="el-dropdown-link">
+                            {{name}}
+                            <span>
+                                <i class="el-icon-message-solid"></i>
+                                ({{unReadNum}})
+                            </span>
+                            <i class="el-icon-arrow-down el-icon--right"></i>
+                        </span>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item command="msg">
+                                <span class="message">
+                                    <i class="el-icon-message-solid"></i>
+                                    我的消息({{unReadNum}})
+                                </span>
+                            </el-dropdown-item>
+                            <el-dropdown-item command="logout">
+                                <span class="cursor">
+                                    <i class="el-icon-close"></i>
+                                    退出登录
+                                </span>
+                            </el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
                 </div>
             </div>
         </el-col>
@@ -61,7 +79,10 @@ export default {
                     title: "学员管理",
                     children: [
                         { index: "/studentInfo", title: "学员信息及挂靠管理" },
-                        { index: "/studentRecord", title: "学员培训记录以及证书" }
+                        {
+                            index: "/studentRecord",
+                            title: "学员培训记录以及证书"
+                        }
                     ]
                 },
                 {
@@ -156,6 +177,13 @@ export default {
         toMessage() {
             this.$router.push("/message");
         },
+        handleCommand(c) {
+            if (c == "msg") {
+                this.toMessage();
+            } else if (c == "logout") {
+                this.logout();
+            }
+        },
         async getMessageNum() {
             try {
                 let oldTime = Number(window.localStorage.getItem("msgTime"));
@@ -202,20 +230,17 @@ export default {
             margin: 0 !important;
         }
         .infoContainer {
+            cursor: pointer;
             display: inline-block;
             height: 60px;
             text-align: center;
             margin-right: 60px;
             line-height: 60px;
+            .el-dropdown-link:hover {
+                color: rgb(64, 158, 255);
+            }
             span {
                 padding: 0 10px;
-                &:nth-child(1):after,
-                &:nth-child(2):after {
-                    content: "|";
-                    height: 60px;
-                    color: gray;
-                    margin-left: 15px;
-                }
             }
             & > :last-child {
                 color: red;

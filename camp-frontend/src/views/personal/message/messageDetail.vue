@@ -54,13 +54,18 @@ export default {
             this.getMsgDetail();
         }
     },
+    computed: {
+        idType: function() {
+            return this.$store.getters.idType;
+        }
+    },
     methods: {
         async getMsgDetail() {
             this.loading = true;
             try {
-                let res = await msgApi.getMsgDetail(this.msgID);
+                let res = await msgApi.getMsgDetail(this.idType, this.msgID);
                 this.msgInfo = res.data;
-                await msgApi.signAsRead(this.msgID);
+                await msgApi.signAsRead(this.idType, this.msgID);
             } catch (e) {
                 this.$message.error(e.message);
                 this.msgID = null;
@@ -74,7 +79,7 @@ export default {
                 type: "warning"
             }).then(async () => {
                 try {
-                    let res = await msgApi.deleteMsg(this.msgID);
+                    let res = await msgApi.deleteMsg(this.idType, this.msgID);
                     this.$message.success("删除消息成功！");
                     this.msgID = null;
                     event.$emit("updateMsgList");

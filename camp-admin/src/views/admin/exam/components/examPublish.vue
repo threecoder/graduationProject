@@ -245,7 +245,7 @@ export default {
         },
         async getTraining() {
             try {
-                let res = await getTrainingList();
+                let res = await adminExamApi.getTrainingList();
                 this.trainingList = res.data;
                 console.log(res);
             } catch (error) {

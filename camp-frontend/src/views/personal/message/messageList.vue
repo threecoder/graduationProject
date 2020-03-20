@@ -59,6 +59,11 @@ export default {
             loading: true
         };
     },
+    computed: {
+        idType: function() {
+            return this.$store.getters.idType;
+        }
+    },
     mounted() {
         this.getMessageList();
         if (event._events.updateMsgList) {
@@ -72,7 +77,7 @@ export default {
         async getMessageList() {
             this.loading = true;
             try {
-                let res = await msgApi.getMsgList(this.form);
+                let res = await msgApi.getMsgList(this.idType, this.form);
                 this.msgList = res.data.data;
                 this.form.total = res.data.total;
             } catch (e) {

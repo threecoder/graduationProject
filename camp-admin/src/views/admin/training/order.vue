@@ -133,4 +133,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+::v-deep .el-message-box__content {
+    ::v-deep .el-message-box__status {
+        top: 20%;
+    }
+}
 </style>

@@ -16,9 +16,15 @@
                     class="myoper"
                 >
                     <div slot-scope="{ row }">
-                        <el-button type="primary" @click="checkDetail(row)">详情</el-button>
-                        <el-button type="primary" v-if="idType==0" @click="dialogVisible = true">报名</el-button>
+                        <el-button size="small" type="primary" @click="checkDetail(row)">详情</el-button>
                         <el-button
+                            size="small"
+                            type="primary"
+                            v-if="idType==0"
+                            @click="studentJoin"
+                        >报名</el-button>
+                        <el-button
+                            size="small"
                             type="primary"
                             v-if="idType==1"
                             @click="studentList.listFlag = true;studentList.id=row.id"
@@ -31,6 +37,7 @@
         <activity-detail
             :drawerInfo="drawerInfo"
             :flag.sync="drawerInfoFlag"
+            :isEnrolable="true"
             @notDisplay="drawerInfoFlag = false"
             @enroll="enroll"
         />
@@ -54,11 +61,11 @@
     </div>
 </template>
 <script>
-import mTable from "@/components/mTable.vue";
+import mTable from "../../../components/mTable.vue";
 import activityDetail from "./components/activityDetail.vue";
-import list from "@/components/studentList.vue";
-import { getLocalStorage } from "@/assets/js/util.js";
-import activityApi from "@/api/modules/activity.js";
+import list from "../../../components/studentList.vue";
+import { getLocalStorage } from "../../../assets/js/util";
+import activityApi from "../../../api/modules/activity";
 export default {
     components: {
         mTable,
@@ -317,7 +324,6 @@ export default {
                 this.activityTable.tableData = res.data;
             } catch (error) {
                 this.$message.error(error.message);
-                console.log(error);
             }
         },
         enroll() {
@@ -334,13 +340,13 @@ export default {
                 confirmButtonText: "确定",
                 type: "warning"
             }).then(async () => {
+                this.joinLoading = true;
                 try {
-                    this.joinLoading = true;
                     let id = params ? params.id : this.drawerInfo.id;
                     let res = await activityApi.studentJoinActivties(id);
                     this.$message.success("报名成功");
                 } catch (error) {
-                    this.$message.error(error);
+                    this.$message.error(error.message);
                 }
                 this.joinLoading = false;
             });
@@ -349,7 +355,9 @@ export default {
             try {
                 let res = await activityApi.getList();
                 this.studentList.list = res.data;
-            } catch (error) {}
+            } catch (error) {
+                this.$message.error(error.message);
+            }
         },
         async memberJoin(id) {
             if (this.studentList.data.length == 0) {

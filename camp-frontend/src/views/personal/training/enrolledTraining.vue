@@ -16,13 +16,13 @@
                     class="myoper"
                 >
                     <div slot-scope="{ row }">
-                        <el-button type="primary" @click="checkDetail(row)">培训详情</el-button>
-                        <el-button type="primary" v-if="row.status=='未支付'" @click="pay">支付</el-button>
-                        <el-button
+                        <el-button size="small" type="primary" @click="checkDetail(row)">培训详情</el-button>
+                        <el-button size="small" type="primary" v-if="row.status=='未支付'" @click="pay">支付</el-button>
+                        <!-- <el-button
                             type="primary"
                             v-if="row.status=='已支付'"
                             @click="checkSEAT(row)"
-                        >座位号</el-button>
+                        >座位号</el-button> -->
                     </div>
                 </el-table-column>
             </m-table>
@@ -31,6 +31,7 @@
         <training-detail
             :drawerInfo="drawerInfo"
             :flag.sync="drawerInfoFlag"
+            :isEnrollable="false"
             @notDisplay="drawerInfoFlag = false"
         />
     </div>

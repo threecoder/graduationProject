@@ -14,7 +14,7 @@
             </div>
             <div class="drawer-footer">
                 <el-button @click="notDisplay">取 消</el-button>
-                <el-button type="primary" @click="enroll">立即报名</el-button>
+                <el-button v-if="isEnrolableFlag" type="primary" @click="enroll">立即报名</el-button>
             </div>
         </el-drawer>
     </div>

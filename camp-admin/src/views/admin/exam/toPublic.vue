@@ -57,60 +57,60 @@ export default {
     data() {
         return {
             examList: [
-                {
-                    examId: "1",
-                    examName: "考试名称",
-                    date: "2016-10-10",
-                    startTime: "14:00:00",
-                    endTime: "16:00:00",
-                    min: "120分钟",
-                    belong: "HTML入门",
-                    status: 0,
-                    grade: null
-                },
-                {
-                    examId: "1",
-                    examName: "考试名称",
-                    date: "2016-10-10",
-                    startTime: "14:00:00",
-                    endTime: "16:00:00",
-                    min: "120分钟",
-                    belong: "HTML入门",
-                    status: 0,
-                    grade: null
-                },
-                {
-                    examId: "1",
-                    examName: "考试名称",
-                    startTime: "2016-10-10 14:00:00",
-                    endTime: "2016-10-10 16:00:00",
-                    min: "120分钟",
-                    belong: "HTML入门",
-                    status: 1,
-                    grade: null
-                },
-                {
-                    examId: "1",
-                    examName: "考试名称",
-                    date: "2016-10-10",
-                    startTime: "14:00:00",
-                    endTime: "16:00:00",
-                    min: "120分钟",
-                    belong: "HTML入门",
-                    status: 0,
-                    grade: null
-                },
-                {
-                    examId: "1",
-                    examName: "考试名称",
-                    date: "2016-10-10",
-                    startTime: "14:00:00",
-                    endTime: "16:00:00",
-                    min: "120分钟",
-                    belong: "HTML入门",
-                    status: 0,
-                    grade: null
-                }
+                // {
+                //     examId: "1",
+                //     examName: "考试名称",
+                //     date: "2016-10-10",
+                //     startTime: "14:00:00",
+                //     endTime: "16:00:00",
+                //     min: "120分钟",
+                //     belong: "HTML入门",
+                //     status: 0,
+                //     grade: null
+                // },
+                // {
+                //     examId: "1",
+                //     examName: "考试名称",
+                //     date: "2016-10-10",
+                //     startTime: "14:00:00",
+                //     endTime: "16:00:00",
+                //     min: "120分钟",
+                //     belong: "HTML入门",
+                //     status: 0,
+                //     grade: null
+                // },
+                // {
+                //     examId: "1",
+                //     examName: "考试名称",
+                //     startTime: "2016-10-10 14:00:00",
+                //     endTime: "2016-10-10 16:00:00",
+                //     min: "120分钟",
+                //     belong: "HTML入门",
+                //     status: 1,
+                //     grade: null
+                // },
+                // {
+                //     examId: "1",
+                //     examName: "考试名称",
+                //     date: "2016-10-10",
+                //     startTime: "14:00:00",
+                //     endTime: "16:00:00",
+                //     min: "120分钟",
+                //     belong: "HTML入门",
+                //     status: 0,
+                //     grade: null
+                // },
+                // {
+                //     examId: "1",
+                //     examName: "考试名称",
+                //     date: "2016-10-10",
+                //     startTime: "14:00:00",
+                //     endTime: "16:00:00",
+                //     min: "120分钟",
+                //     belong: "HTML入门",
+                //     status: 0,
+                //     grade: null
+                // }
             ],
             currentPage: 1,
             total: 10,
@@ -125,7 +125,7 @@ export default {
     },
 
     mounted() {
-        // this.fresh();
+        this.fresh();
     },
     methods: {
         fresh() {

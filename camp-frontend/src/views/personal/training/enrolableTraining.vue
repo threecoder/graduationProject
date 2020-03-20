@@ -16,10 +16,16 @@
                     class="myoper"
                 >
                     <div slot-scope="{ row }">
-                        <el-button type="primary" @click="checkDetail(row)">培训详情</el-button>
-                        <el-button type="primary" v-if="idType==0" @click="studentJoin(row)">报名</el-button>
+                        <el-button size="small" type="primary" @click="checkDetail(row)">培训详情</el-button>
+                        <el-button
+                            size="small"
+                            type="primary"
+                            v-if="idType==0"
+                            @click="studentJoin(row)"
+                        >报名</el-button>
 
                         <el-button
+                            size="small"
                             type="primary"
                             v-if="idType==1"
                             @click="studentList.listFlag = true;studentList.id=row.id"
@@ -32,6 +38,7 @@
         <training-detail
             :drawerInfo="drawerInfo"
             :flag.sync="drawerInfoFlag"
+            :isEnrolable="true"
             @notDisplay="drawerInfoFlag = false"
             @enroll="enroll"
         />
@@ -55,12 +62,12 @@
     </div>
 </template>
 <script>
-import mTable from "@/components/mTable.vue";
-import list from "@/components/studentList.vue";
+import mTable from "../../../components/mTable.vue";
+import list from "../../../components/studentList.vue";
 import trainingDetail from "./components/trainingDetail.vue";
-import { getLocalStorage } from "@/assets/js/util";
-import activityApi from "@/api/modules/activity";
-import trainingApi from "@/api/modules/training";
+import { getLocalStorage } from "../../../assets/js/util";
+import activityApi from "../../../api/modules/activity";
+import trainingApi from "../../../api/modules/training";
 export default {
     components: {
         mTable,
@@ -85,56 +92,7 @@ export default {
                         slot: "oper"
                     }
                 ],
-                tableData: [
-                    {
-                        id: 1,
-                        name: "培训测试",
-                        date: "2016-10-10 14:00:00-16:00:00",
-                        address: "广州市番禺区小谷围街道华南理工大学",
-                        fee: 1000,
-                        introduciotn: [
-                            `企业网站的作用是展示企业网站，
-                    为企业提供产品展示、企业宣传、形象建设、
-                    联系企业等方面提供了重要信息渠道，企业如果能够做好网站宣传和网络口碑建设，
-                    那么用户转化率就会大大提高，企业客户资源的源源不断带给我们企业的将会是订单，
-                    所以企业网站建设不能只是摆设性的搭建一个域名、空间和程序，需要融合企业文化和企业精华到网站中。`
-                        ],
-                        status: "未支付",
-                        contacts: "唐先生 13535789321"
-                    },
-                    {
-                        id: 2,
-                        name: "培训测试",
-                        date: "2016-11-11 14:00:00-16:00:00",
-                        address: "广州市番禺区小谷围街道华南理工大学",
-                        fee: 1000,
-                        introduciotn: [
-                            `企业网站的作用是展示企业网站，
-                    为企业提供产品展示、企业宣传、形象建设、
-                    联系企业等方面提供了重要信息渠道，企业如果能够做好网站宣传和网络口碑建设，
-                    那么用户转化率就会大大提高，企业客户资源的源源不断带给我们企业的将会是订单，
-                    所以企业网站建设不能只是摆设性的搭建一个域名、空间和程序，需要融合企业文化和企业精华到网站中。`
-                        ],
-                        status: "已支付",
-                        contacts: "唐先生 13535789321"
-                    },
-                    {
-                        id: 3,
-                        name: "培训测试",
-                        date: "2016-10-10 14:00:00-16:00:00",
-                        address: "广州市番禺区小谷围街道华南理工大学",
-                        fee: 1000,
-                        introduciotn: [
-                            `企业网站的作用是展示企业网站，
-                    为企业提供产品展示、企业宣传、形象建设、
-                    联系企业等方面提供了重要信息渠道，企业如果能够做好网站宣传和网络口碑建设，
-                    那么用户转化率就会大大提高，企业客户资源的源源不断带给我们企业的将会是订单，
-                    所以企业网站建设不能只是摆设性的搭建一个域名、空间和程序，需要融合企业文化和企业精华到网站中。`
-                        ],
-                        status: "已完结",
-                        contacts: "唐先生 13535789321"
-                    }
-                ],
+                tableData: [],
                 tableAttr: {
                     stripe: true
                 },
@@ -203,7 +161,7 @@ export default {
             }
         },
         async studentJoin(params) {
-            this.$confirm("确定报名这个活动吗？", "提示", {
+            this.$confirm("确定报名这个培训吗？", "提示", {
                 cancelButtonText: "取消",
                 confirmButtonText: "确定",
                 type: "warning"
@@ -214,7 +172,7 @@ export default {
                     let res = await trainingApi.studentJoinTraining(id);
                     this.$message.success("报名成功");
                 } catch (error) {
-                    this.$message.error(error);
+                    this.$message.error(error.message);
                 }
                 this.joinLoading = false;
             });
@@ -232,7 +190,7 @@ export default {
                 this.$message.error("报名人数不能为0");
                 return false;
             }
-            this.$confirm("确定报名这个活动吗？", "提示", {
+            this.$confirm("确定报名这个培训吗？", "提示", {
                 cancelButtonText: "取消",
                 confirmButtonText: "确定",
                 type: "warning"

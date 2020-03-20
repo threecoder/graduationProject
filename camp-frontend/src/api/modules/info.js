@@ -19,11 +19,20 @@ const setStudentPassword = data => request(studentPrefix + '/setNewPassword', 'p
 //修改会员密码
 const setMemberPassword = data => request(memberPrefix + '/setNewPassword', 'post', data);
 
+const setPassword = (idType, data) => {
+    if (idType == 0) {
+        return setStudentPassword(data);
+    } else {
+        return setMemberPassword(data);
+    }
+}
+
 export default {
     setStudentInfo,
     setMemberInfo,
     getStudentInfo,
     getMemberInfo,
     setStudentPassword,
-    setMemberPassword
+    setMemberPassword,
+    setPassword
 }

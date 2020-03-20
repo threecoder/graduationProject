@@ -16,9 +16,15 @@
                     class="myoper"
                 >
                     <div slot-scope="{ row }">
-                        <el-button type="primary" @click="checkDetail(row)">详情</el-button>
-                        <el-button type="primary" v-if="row.status=='未支付'" @click="pay">支付</el-button>
+                        <el-button size="small" type="primary" @click="checkDetail(row)">详情</el-button>
                         <el-button
+                            size="small"
+                            type="primary"
+                            v-if="row.status=='未支付'"
+                            @click="pay"
+                        >支付</el-button>
+                        <el-button
+                            size="small"
                             type="primary"
                             v-if="row.status=='已支付'"
                             @click="checkSEAT(row)"
@@ -29,20 +35,27 @@
         </div>
         <activity-detail
             :drawerInfo="drawerInfo"
+            :isEnrolable="false"
             :flag.sync="drawerInfoFlag"
             @notDisplay="drawerInfoFlag = false"
         />
+
+        <el-dialog :visible.sync="seatDia.flag" v-if="seatDia.flag" title="座位情况">
+            <seat-dialog :seatList="seatDia.seatList" />
+        </el-dialog>
     </div>
 </template>
 <script>
 import mTable from "@/components/mTable.vue";
 import activityDetail from "./components/activityDetail.vue";
-import { getLocalStorage } from "@/assets/js/util.js";
-import activityApi from "@/api/modules/activity.js";
+import seatDialog from "./components/seatNumTable.vue";
+import { getLocalStorage } from "../../../assets/js/util";
+import activityApi from "../../../api/modules/activity";
 export default {
     components: {
         mTable,
-        activityDetail
+        activityDetail,
+        seatDialog
     },
     data() {
         return {
@@ -63,56 +76,7 @@ export default {
                         slot: "oper"
                     }
                 ],
-                tableData: [
-                    {
-                        id: 1,
-                        name: "活动测试",
-                        date: "2016-10-10 14:00:00-16:00:00",
-                        address: "广州市番禺区小谷围街道华南理工大学",
-                        fee: 1000,
-                        introduciotn: [
-                            `企业网站的作用是展示企业网站，
-                    为企业提供产品展示、企业宣传、形象建设、
-                    联系企业等方面提供了重要信息渠道，企业如果能够做好网站宣传和网络口碑建设，
-                    那么用户转化率就会大大提高，企业客户资源的源源不断带给我们企业的将会是订单，
-                    所以企业网站建设不能只是摆设性的搭建一个域名、空间和程序，需要融合企业文化和企业精华到网站中。`
-                        ],
-                        status: "未支付",
-                        contacts: "唐先生 13535789321"
-                    },
-                    {
-                        id: 2,
-                        name: "活动测试",
-                        date: "2016-11-11 14:00:00-16:00:00",
-                        address: "广州市番禺区小谷围街道华南理工大学",
-                        fee: 1000,
-                        introduciotn: [
-                            `企业网站的作用是展示企业网站，
-                    为企业提供产品展示、企业宣传、形象建设、
-                    联系企业等方面提供了重要信息渠道，企业如果能够做好网站宣传和网络口碑建设，
-                    那么用户转化率就会大大提高，企业客户资源的源源不断带给我们企业的将会是订单，
-                    所以企业网站建设不能只是摆设性的搭建一个域名、空间和程序，需要融合企业文化和企业精华到网站中。`
-                        ],
-                        status: "已支付",
-                        contacts: "唐先生 13535789321"
-                    },
-                    {
-                        id: 3,
-                        name: "活动测试",
-                        date: "2016-10-10 14:00:00-16:00:00",
-                        address: "广州市番禺区小谷围街道华南理工大学",
-                        fee: 1000,
-                        introduciotn: [
-                            `企业网站的作用是展示企业网站，
-                    为企业提供产品展示、企业宣传、形象建设、
-                    联系企业等方面提供了重要信息渠道，企业如果能够做好网站宣传和网络口碑建设，
-                    那么用户转化率就会大大提高，企业客户资源的源源不断带给我们企业的将会是订单，
-                    所以企业网站建设不能只是摆设性的搭建一个域名、空间和程序，需要融合企业文化和企业精华到网站中。`
-                        ],
-                        status: "已完结",
-                        contacts: "唐先生 13535789321"
-                    }
-                ],
+                tableData: [],
                 tableAttr: {
                     stripe: true
                 },
@@ -127,7 +91,11 @@ export default {
                 introduciotn: [],
                 contacts: "唐先生 13535789321"
             },
-            drawerInfoFlag: false
+            drawerInfoFlag: false,
+            seatDia: {
+                seatList: [],
+                flag: false
+            }
         };
     },
     mounted() {
@@ -144,7 +112,7 @@ export default {
                 let res = await activityApi.getsignedActivities(this.idType);
                 this.activityTable.tableData = res.data;
             } catch (error) {
-                this.$message.error(error);
+                this.$message.error(error.message);
                 console.log(error);
             }
         },
@@ -155,8 +123,22 @@ export default {
         pay() {},
         async checkSEAT(row) {
             try {
-                let res = await activityApi.getSeatNum(row.id);
-            } catch (error) {}
+                let res = await activityApi.getSeatNum(this.idType, row.id);
+                //显示查询到的结果
+                if (this.idType == 0) {
+                    this.$alert("你的座位号是 " + res.data, "查询结果", {
+                        confirmButtonText: "确定",
+                        cancelButton: false,
+                        customClass: "myclass",
+                        type: "info"
+                    });
+                } else {
+                    this.seatDia.seatList = res.data.list;
+                    this.seatDia.flag = true;
+                }
+            } catch (error) {
+                this.$message.error(error.message);
+            }
         }
     }
 };

@@ -14,6 +14,7 @@
                             type="primary"
                         >修改信息</el-button>
                         <el-button
+                            size="small"
                             @click="close(row)"
                             v-if="row.status==2||row.status==3"
                             type="primary"
@@ -232,8 +233,9 @@ export default {
             })
                 .then(async () => {
                     try {
-                        let res = await closeExam(row.examId);
+                        let res = await adminExamApi.closeExam(row.examId);
                         this.$message.success("关闭考试成功");
+                        this.getPubedList();
                     } catch (error) {
                         this.$message.error(error.message);
                     }

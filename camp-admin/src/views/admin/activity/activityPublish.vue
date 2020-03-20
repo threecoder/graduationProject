@@ -270,7 +270,6 @@ export default {
                     par.date = `${formatDate(par.date)} ${formatTime(par.time)}`;
                     par.openTime = formatDateAndTime(par.dateRange[0]);
                     par.closeTime = formatDateAndTime(par.dateRange[1]);
-                    par.contacts = par.contacts + " " + par.phone;
                     par.desc = par.desc.split("\n");
                     console.log(par);
                     this.par = par;
@@ -288,6 +287,7 @@ export default {
                 try {
                     let res = await adminActivityApi.newActivity(par);
                     this.$message.success("新建活动成功");
+                    this.$router.push("/activitiesList");
                 } catch (error) {
                     this.$message.error(error.message);
                 }
