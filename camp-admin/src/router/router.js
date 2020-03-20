@@ -32,6 +32,11 @@ export default new Router({
                     name: 'studentInfo',
                     component: resolve => require([ '../views/admin/student/infoManagement.vue' ], resolve)
                 },
+                {
+                    path: '/studentRecord',
+                    name: 'studentRecord',
+                    component: resolve => require([ '../views/admin/student/recordManagement.vue' ], resolve)
+                },
                 //培训
                 {
                     path: '/publishTraining',

@@ -22,6 +22,12 @@ const getStudentTemplate = () => request(`${apiPrefix}/getStudentTemplate`, 'get
 //添加单个学员员
 const addSingleStudent = data => request(`${apiPrefix}/addSingleStudent`, 'post', data);
 
+//获取某个学员参加过的培训记录
+const getStudentTrainingHistory = par => request(`${apiPrefix}/getStudentTrainingHistory`, 'get', par);
+
+//获取某个学员所拥有的证书
+const getStudentCertificate = par => request(`${apiPrefix}/getStudentCertificate`, 'get', par);
+
 export default {
     getStudentList,
     getMemSelectList,
@@ -29,5 +35,7 @@ export default {
     resetPassword,
     modifyInfo,
     getStudentTemplate,
-    addSingleStudent
+    addSingleStudent,
+    getStudentTrainingHistory,
+    getStudentCertificate
 }

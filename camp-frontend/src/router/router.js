@@ -110,6 +110,11 @@ export default new Router({
                     path: '/hasVoted',
                     name: 'hasVoted',
                     component: resolve => require([ '../views/personal/vote/hasVoted.vue' ], resolve)
+                },
+                {
+                    path: '/message',
+                    name: 'message',
+                    component: resolve => require([ '../views/personal/message/message.vue' ], resolve)
                 }
             ]
         },
