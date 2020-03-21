@@ -7,11 +7,16 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface AdminService {
 
-    ResponseEntity<byte[]> getMemberTemplate(HttpServletRequest request);
+    JSONObject getStudentList(String name, String idNum, String phone, String company, Integer hasOrg,
+                              Integer currentPage, Integer pageSize);
 
     JSONObject deleteOneStudentFromMember(JSONObject jsonObject);
 
-    JSONObject getMemberList(int type,int deadline,String name,int currentPage,int pageSize);
+    ResponseEntity<byte[]> getMemberTemplate(HttpServletRequest request);
+
+    JSONObject getMemberList(Integer type, Integer deadline, String name,
+                             Integer currentPage, Integer pageSize);
 
     JSONObject getOneMemberStudentList(Integer memberId);
+
 }

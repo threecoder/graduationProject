@@ -11,32 +11,35 @@ import java.util.List;
 @Component
 public class MemberStudentSQLConn {
 
-    private static final String URL="jdbc:mysql://127.0.0.1:3306/association?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC";
-    private static final String Name="root";
-    private static final String Pwd="123456";
+    private static final String URL = "jdbc:mysql://127.0.0.1:3306/association?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC";
+    private static final String Name = "root";
+    private static final String Pwd = "123456";
 
-    public static List<Student> getStudentsFromMemberReStudent(Integer memberId,String phone,String idNum,String name){
-        List<Student> students=new ArrayList<>();
+    public static List<Student> getStudentsFromMemberReStudent(Integer memberId, String phone, String idNum, String name,
+                                                               Integer currentPage, Integer pageSize) {
+        List<Student> students = new ArrayList<>();
 
-        Connection conn=null;
-        Statement statement=null;
-        try{
-            conn= DriverManager.getConnection(URL,Name,Pwd);
-            statement=conn.createStatement();
-            String sql="select distinct s.* from member_re_student r,student s " +
-                    "where r.student_id=s.student_id and r.member_key_id="+memberId;
-            if(phone!=null){
-                sql+=" and s.student_phone='"+phone+"'";
+        Connection conn = null;
+        Statement statement = null;
+        try {
+            conn = DriverManager.getConnection(URL, Name, Pwd);
+            statement = conn.createStatement();
+
+            String sql = "select distinct s.* from member_re_student r,student s " +
+                    "where r.student_id=s.student_id and r.member_key_id=" + memberId;
+            if (phone != null) {
+                sql += " and s.student_phone='" + phone + "'";
             }
-            if(idNum!=null){
-                sql+=" and s.student_idcard='"+idNum+"'";
+            if (idNum != null) {
+                sql += " and s.student_idcard='" + idNum + "'";
             }
-            if(name!=null){
-                sql+=" and s.student_name='"+name+"'";
+            if (name != null) {
+                sql += " and s.student_name='" + name + "'";
             }
-            ResultSet rs=statement.executeQuery(sql);
-            while (rs.next()){
-                Student student=new Student();
+            sql += " limit " + (currentPage - 1) * pageSize + "," + pageSize;
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()) {
+                Student student = new Student();
                 student.setCompany(rs.getString("company"));
                 student.setStudentId(rs.getInt("student_id"));
                 student.setStudentPassword(rs.getString("student_password"));
@@ -54,7 +57,7 @@ public class MemberStudentSQLConn {
                 students.add(student);
             }
             return students;
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             return students;
         }

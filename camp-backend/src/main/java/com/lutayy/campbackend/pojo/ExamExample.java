@@ -12,14 +12,14 @@ public class ExamExample {
     protected List<Criteria> oredCriteria;
 
     //加入 offset 起始位置 和 limit 查询页数 用来分页
-    protected int offset;
-    protected int limit;
+    protected Integer offset;
+    protected Integer limit;
 
-    public int getOffset() {
+    public Integer getOffset() {
         return offset;
     }
 
-    public void setOffset(int offset) {
+    public void setOffset(Integer offset) {
         this.offset = offset;
     }
 
@@ -27,7 +27,7 @@ public class ExamExample {
         return limit;
     }
 
-    public void setLimit(int limit) {
+    public void setLimit(Integer limit) {
         this.limit = limit;
     }
 

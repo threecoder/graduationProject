@@ -3,6 +3,7 @@ package com.lutayy.campbackend.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lutayy.campbackend.service.AdminService;
+import com.lutayy.campbackend.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,26 +20,48 @@ public class AdminController {
 
     @Autowired
     AdminService adminService;
+    @Autowired
+    MemberService memberService;
 
+    //学员管理
+    @RequestMapping("/getStudentTemplate")
+    @ResponseBody
+    public ResponseEntity<byte[]> getTemplate(HttpServletRequest request){
+        return memberService.getStudentTemplate(request);
+    }
+
+    @RequestMapping("/getStudentList")
+    @ResponseBody
+    public Object getStudentList(@RequestParam(value = "name",required = false) String name,
+                                 @RequestParam(value = "idNum",required = false) String idNum,
+                                 @RequestParam(value = "phone",required = false) String phone,
+                                 @RequestParam(value = "company",required = false) String company,
+                                 @RequestParam(value = "hasOrg",required = false) Integer hasOrg,
+                                 @RequestParam("currentPage") int currentPage,
+                                 @RequestParam("pageSize") int pageSize){
+        return adminService.getStudentList(name,idNum,phone,company,hasOrg,currentPage,pageSize);
+    }
+
+    @RequestMapping("/deleteOneStudentFromMember")
+    @ResponseBody
+    public JSONObject deleteOneStudentFromMember(@RequestBody JSONObject jsonObject){
+        return adminService.deleteOneStudentFromMember(jsonObject);
+    }
+
+    //会员管理
     @RequestMapping("/getMemberTemplate")
     @ResponseBody
     public ResponseEntity<byte[]> getMemberTemplate(HttpServletRequest request){
         return adminService.getMemberTemplate(request);
     }
 
-    @RequestMapping("/deleteOneStudentFromMember")
-    @ResponseBody
-    public JSONObject deleteOneStudentFromMember(JSONObject jsonObject){
-        return adminService.deleteOneStudentFromMember(jsonObject);
-    }
-
     @RequestMapping("/getMemberList")
     @ResponseBody
-    public Object getMemberList(@RequestParam("type") int type,
-                                @RequestParam("deadline") int deadline,
-                                @RequestParam("name") String name,
-                                @RequestParam("currentPage") int currentPage,
-                                @RequestParam("pageSize") int pageSize){
+    public Object getMemberList(@RequestParam(value = "type",required = false) Integer type,
+                                @RequestParam(value = "deadline",required = false) Integer deadline,
+                                @RequestParam(value = "name",required = false) String name,
+                                @RequestParam("currentPage") Integer currentPage,
+                                @RequestParam("pageSize") Integer pageSize){
         return adminService.getMemberList(type,deadline,name,currentPage,pageSize);
     }
 

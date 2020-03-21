@@ -73,7 +73,7 @@ public class ActivityStudentSQLConn {
                 HashMap<String,String> info=new HashMap<>();
                 info.put("name", rs.getString("student_name"));
                 info.put("phone", rs.getString("student_phone"));
-                info.put("seatNumber", "seat_number");
+                info.put("seatNumber", rs.getString("seat_number"));
                 info.put("applyNumber", rs.getString("apply_number"));
                 info.put("applyTime", rs.getString("apply_time"));
                 infos.add(info);

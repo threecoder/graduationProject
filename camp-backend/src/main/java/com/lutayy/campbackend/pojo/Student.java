@@ -32,6 +32,8 @@ public class Student implements Serializable {
 
     private Date enterTime;
 
+    private Boolean hasOrg;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getStudentId() {
@@ -144,5 +146,13 @@ public class Student implements Serializable {
 
     public void setEnterTime(Date enterTime) {
         this.enterTime = enterTime;
+    }
+
+    public Boolean getHasOrg() {
+        return hasOrg;
+    }
+
+    public void setHasOrg(Boolean hasOrg) {
+        this.hasOrg = hasOrg;
     }
 }

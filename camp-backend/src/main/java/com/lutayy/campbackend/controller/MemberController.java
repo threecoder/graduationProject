@@ -79,9 +79,9 @@ public class MemberController {
     @RequestMapping("/getStudentListByCondition")
     @ResponseBody
     public Object getStudentListByCondition(@RequestParam("id") Integer memberId,
-                                            @RequestParam("phone") String phone,
-                                            @RequestParam("idNum") String idNum,
-                                            @RequestParam("name") String name,
+                                            @RequestParam(value = "phone",required = false) String phone,
+                                            @RequestParam(value = "idNum",required = false) String idNum,
+                                            @RequestParam(value = "name",required = false) String name,
                                             @RequestParam("currentPage") Integer currentPage,
                                             @RequestParam("pageSize") Integer pageSize){
         return memberService.getStudentListByCondition(memberId,phone,idNum,name,currentPage,pageSize);

@@ -67,7 +67,7 @@ CREATE TABLE `activity_order` (
   CONSTRAINT `activity_order_ibfk_1` FOREIGN KEY (`activity_id`) REFERENCES `activity` (`activity_id`),
   CONSTRAINT `activity_order_ibfk_3` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`),
   CONSTRAINT `activity_order_ibfk_4` FOREIGN KEY (`member_key_id`) REFERENCES `member` (`member_key_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 /*Data for the table `activity_order` */
 
@@ -139,7 +139,8 @@ insert  into `activity_student`(`apply_number`,`activity_id`,`student_id`,`apply
 DROP TABLE IF EXISTS `admin`;
 
 CREATE TABLE `admin` (
-  `admin_id` varchar(20) NOT NULL,
+  `admin_id` int(11) NOT NULL AUTO_INCREMENT,
+  `admin_account` varchar(20) DEFAULT NULL COMMENT '管理员账号',
   `admin_password` varchar(20) DEFAULT NULL,
   `permission_value` tinyint(1) DEFAULT '0' COMMENT '0位普通管理员，1为审核管理员',
   `is_locked` tinyint(1) DEFAULT '0' COMMENT '状态：0正常，1锁定',
@@ -335,19 +336,36 @@ CREATE TABLE `certificate_recheck_queue` (
 
 /*Data for the table `certificate_recheck_queue` */
 
+/*Table structure for table `coupon` */
+
+DROP TABLE IF EXISTS `coupon`;
+
+CREATE TABLE `coupon` (
+  `coupon_id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` tinyint(4) DEFAULT NULL COMMENT '金额折扣:0  百分比折扣:1',
+  `amount_discount` decimal(10,2) DEFAULT NULL COMMENT '金额折扣形式(两位小数)',
+  `percent_discount` int(11) DEFAULT NULL COMMENT '百分比折扣形式(-1~100%)',
+  PRIMARY KEY (`coupon_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `coupon` */
+
 /*Table structure for table `coupon_member` */
 
 DROP TABLE IF EXISTS `coupon_member`;
 
 CREATE TABLE `coupon_member` (
-  `coupon_id` int(11) NOT NULL AUTO_INCREMENT,
-  `coupon_code` varchar(20) NOT NULL COMMENT '优惠券码',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `coupon_id` int(11) DEFAULT NULL,
+  `coupon_code` varchar(20) NOT NULL COMMENT '优惠券码（唯一）',
   `member_key_id` int(11) DEFAULT NULL COMMENT '所属会员',
-  `value` smallint(6) DEFAULT NULL COMMENT '券值',
   `state` tinyint(1) DEFAULT '0' COMMENT '0为未使用，1为已使用',
-  PRIMARY KEY (`coupon_id`),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `coupon_code` (`coupon_code`),
   KEY `member_key_id` (`member_key_id`),
-  CONSTRAINT `coupon_member_ibfk_1` FOREIGN KEY (`member_key_id`) REFERENCES `member` (`member_key_id`)
+  KEY `coupon_id` (`coupon_id`),
+  CONSTRAINT `coupon_member_ibfk_1` FOREIGN KEY (`member_key_id`) REFERENCES `member` (`member_key_id`),
+  CONSTRAINT `coupon_member_ibfk_2` FOREIGN KEY (`coupon_id`) REFERENCES `coupon` (`coupon_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `coupon_member` */
@@ -371,11 +389,11 @@ CREATE TABLE `exam` (
   PRIMARY KEY (`exam_id`),
   KEY `training_id` (`training_id`),
   CONSTRAINT `exam_ibfk_1` FOREIGN KEY (`training_id`) REFERENCES `training` (`training_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 /*Data for the table `exam` */
 
-insert  into `exam`(`exam_id`,`exam_name`,`training_id`,`exam_num`,`exam_pass`,`exam_length_min`,`exam_start_time`,`exam_end_time`,`is_posted`,`have_questions`,`create_time`) values (8,'网络工程考试',4,20,60,60,'2019-10-01 00:00:00','2019-10-31 00:00:00',1,1,NULL),(9,'网络工程考试2',4,10,40,40,'2019-10-01 00:00:00','2019-11-05 00:00:00',1,1,NULL);
+insert  into `exam`(`exam_id`,`exam_name`,`training_id`,`exam_num`,`exam_pass`,`exam_length_min`,`exam_start_time`,`exam_end_time`,`is_posted`,`have_questions`,`create_time`) values (8,'网络工程考试1',4,20,60,120,'2019-10-01 00:00:00','2019-10-31 00:00:00',1,1,NULL),(9,'网络工程考试2',4,10,40,40,'2019-10-01 00:00:00','2019-11-05 00:00:00',1,1,NULL),(10,'我',1,22,55,33,NULL,NULL,0,0,NULL),(11,'444',2,34,34,55,NULL,NULL,0,0,NULL);
 
 /*Table structure for table `exam_question_student_answer` */
 
@@ -465,7 +483,7 @@ DROP TABLE IF EXISTS `exam_report_verify_queue`;
 
 CREATE TABLE `exam_report_verify_queue` (
   `report_id` int(11) DEFAULT NULL,
-  `admin_id` varchar(20) DEFAULT NULL,
+  `admin_id` int(11) DEFAULT NULL,
   KEY `report_id` (`report_id`),
   KEY `admin_id` (`admin_id`),
   CONSTRAINT `exam_report_verify_queue_ibfk_1` FOREIGN KEY (`report_id`) REFERENCES `exam_re_student` (`report_id`),
@@ -539,18 +557,81 @@ CREATE TABLE `member_subscription_order` (
 
 /*Data for the table `member_subscription_order` */
 
-/*Table structure for table `message` */
+/*Table structure for table `message_text` */
 
-DROP TABLE IF EXISTS `message`;
+DROP TABLE IF EXISTS `message_text`;
 
-CREATE TABLE `message` (
+CREATE TABLE `message_text` (
   `message_id` int(11) NOT NULL AUTO_INCREMENT,
-  `content` varchar(1000) DEFAULT NULL COMMENT '消息内容',
-  `send_time` datetime DEFAULT NULL COMMENT '站内信发送时间',
+  `message` text,
+  `send_date` datetime DEFAULT NULL,
   PRIMARY KEY (`message_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-/*Data for the table `message` */
+/*Data for the table `message_text` */
+
+/*Table structure for table `message_to_admin` */
+
+DROP TABLE IF EXISTS `message_to_admin`;
+
+CREATE TABLE `message_to_admin` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `admin_id` int(11) DEFAULT NULL COMMENT '三选一',
+  `member_id` int(11) DEFAULT NULL COMMENT '三选一',
+  `student_id` int(11) DEFAULT NULL COMMENT '三选一',
+  `who_send` tinyint(4) DEFAULT NULL COMMENT '管理员法:0 学生发:1 会员发:2',
+  `message_id` int(11) DEFAULT NULL COMMENT '对应的站内信id',
+  `send_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `admin_id` (`admin_id`),
+  KEY `member_id` (`member_id`),
+  KEY `student_id` (`student_id`),
+  KEY `message_id` (`message_id`),
+  CONSTRAINT `message_to_admin_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`admin_id`),
+  CONSTRAINT `message_to_admin_ibfk_2` FOREIGN KEY (`member_id`) REFERENCES `member` (`member_key_id`),
+  CONSTRAINT `message_to_admin_ibfk_3` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`),
+  CONSTRAINT `message_to_admin_ibfk_4` FOREIGN KEY (`message_id`) REFERENCES `message_text` (`message_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `message_to_admin` */
+
+/*Table structure for table `message_to_member` */
+
+DROP TABLE IF EXISTS `message_to_member`;
+
+CREATE TABLE `message_to_member` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `admin_id` int(11) DEFAULT NULL COMMENT '发送信息的管理员id',
+  `member_id` int(11) DEFAULT NULL COMMENT '接收信息的会员id',
+  `message_id` int(11) DEFAULT NULL COMMENT '站内信id',
+  `status` tinyint(1) DEFAULT '0' COMMENT '1为已读',
+  `send_date` datetime DEFAULT NULL COMMENT '发送时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `message_to_member` */
+
+/*Table structure for table `message_to_student` */
+
+DROP TABLE IF EXISTS `message_to_student`;
+
+CREATE TABLE `message_to_student` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `admin_id` int(11) DEFAULT NULL COMMENT '发出信息的管理员',
+  `student_id` int(11) DEFAULT NULL COMMENT '接收的学员编号',
+  `message_id` int(11) DEFAULT NULL COMMENT '站内信编号',
+  `status` tinyint(1) DEFAULT '0' COMMENT '1为已读',
+  `send_date` datetime DEFAULT NULL COMMENT '发送时间',
+  PRIMARY KEY (`id`),
+  KEY `admin_id` (`admin_id`),
+  KEY `student_id` (`student_id`),
+  KEY `message_to_student_ibfk_1` (`message_id`),
+  CONSTRAINT `message_to_student_ibfk_1` FOREIGN KEY (`message_id`) REFERENCES `message_text` (`message_id`),
+  CONSTRAINT `message_to_student_ibfk_2` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`admin_id`),
+  CONSTRAINT `message_to_student_ibfk_3` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `message_to_student` */
 
 /*Table structure for table `news` */
 
@@ -558,15 +639,15 @@ DROP TABLE IF EXISTS `news`;
 
 CREATE TABLE `news` (
   `news_id` int(11) NOT NULL AUTO_INCREMENT,
-  `as_admin_id` varchar(20) DEFAULT NULL COMMENT '发布的管理员',
+  `admin_id` int(11) DEFAULT NULL COMMENT '发布的管理员',
   `title` varchar(50) DEFAULT NULL COMMENT '标题',
   `description` text COMMENT '简介',
   `content` text COMMENT '内容',
   `post_time` datetime DEFAULT NULL COMMENT '发布时间',
   `type` varchar(10) DEFAULT NULL COMMENT '新闻类别',
   PRIMARY KEY (`news_id`),
-  KEY `as_admin_id` (`as_admin_id`),
-  CONSTRAINT `news_ibfk_1` FOREIGN KEY (`as_admin_id`) REFERENCES `admin` (`admin_id`)
+  KEY `admin_id` (`admin_id`),
+  CONSTRAINT `news_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`admin_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `news` */
@@ -632,9 +713,10 @@ CREATE TABLE `student` (
   `student_province` varchar(20) DEFAULT NULL,
   `student_city` varchar(20) DEFAULT NULL,
   `student_area` varchar(20) DEFAULT NULL COMMENT '所在区镇',
-  `student_address` varchar(200) DEFAULT NULL,
+  `student_address` varchar(200) DEFAULT NULL COMMENT '详细地址',
   `company` varchar(30) DEFAULT NULL COMMENT '所属机构',
   `enter_time` datetime DEFAULT NULL COMMENT '入会时间',
+  `has_org` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`student_id`),
   UNIQUE KEY `UNIQUE1` (`student_phone`),
   UNIQUE KEY `UNIQUE2` (`student_idcard`)
@@ -642,7 +724,7 @@ CREATE TABLE `student` (
 
 /*Data for the table `student` */
 
-insert  into `student`(`student_id`,`student_password`,`student_idcard`,`student_phone`,`student_name`,`student_email`,`student_position`,`student_country`,`student_province`,`student_city`,`student_area`,`student_address`,`company`,`enter_time`) values (1,'123456','445281199308310056','15521054785','张三','11@qq.com','经理','中国','广东省','广州市','番禺区','大学城华南理工大学',NULL,NULL),(2,'123456','445281199308310037','15521064789','李四','22@qq.com',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(8,'123456','445281199707774569','13112114587','王建国',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'',NULL),(38,'123456','4342323432','15521065436','张英语',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL),(39,'123456','134455','15521065326','李数学',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL),(40,'123456','445281199302210226','15521065416','陈政治',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL);
+insert  into `student`(`student_id`,`student_password`,`student_idcard`,`student_phone`,`student_name`,`student_email`,`student_position`,`student_country`,`student_province`,`student_city`,`student_area`,`student_address`,`company`,`enter_time`,`has_org`) values (1,'123456','445281199308310056','15521054785','张三','11@qq.com','经理','中国','广东省','广州市','番禺区','大学城华南理工大学',NULL,NULL,1),(2,'123456','445281199308310037','15521064789','李四','22@qq.com',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(8,'123456','445281199707774569','13112114587','王建国',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'',NULL,1),(38,'123456','4342323432','15521065436','张英语',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL,1),(39,'123456','134455','15521065326','李数学',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL,1),(40,'123456','445281199302210226','15521065416','陈政治',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL,1);
 
 /*Table structure for table `system_parameter` */
 
@@ -763,25 +845,35 @@ DROP TABLE IF EXISTS `vote`;
 
 CREATE TABLE `vote` (
   `vote_id` int(11) NOT NULL AUTO_INCREMENT,
-  `vote_type` tinyint(4) DEFAULT NULL COMMENT '0为会员投票，1为学院投票，2为皆可',
+  `vote_content` varchar(255) DEFAULT NULL,
+  `end_time` datetime DEFAULT NULL COMMENT '投票截止时间',
+  `vote_type` tinyint(4) DEFAULT '2' COMMENT '0为会员投票，1为学院投票，2为皆可',
   `optional_sum` tinyint(4) DEFAULT NULL COMMENT '选项总数量',
   `optional_num` tinyint(4) DEFAULT NULL COMMENT '可多选数目',
-  `vote_one` varchar(50) DEFAULT NULL,
-  `vote_two` varchar(50) DEFAULT NULL,
-  `vote_three` varchar(50) DEFAULT NULL,
-  `vote_four` varchar(50) DEFAULT NULL,
-  `vote_five` varchar(50) DEFAULT NULL,
-  `vote_six` varchar(50) DEFAULT NULL,
-  `vote_seven` varchar(50) DEFAULT NULL,
-  `vote_eight` varchar(50) DEFAULT NULL,
-  `vote_nine` varchar(50) DEFAULT NULL,
-  `vote_ten` varchar(50) DEFAULT NULL,
-  `vote_eleven` varchar(50) DEFAULT NULL,
-  `vote_twelve` varchar(50) DEFAULT NULL,
+  `post_time` datetime DEFAULT NULL COMMENT '发布时间',
   PRIMARY KEY (`vote_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 /*Data for the table `vote` */
+
+insert  into `vote`(`vote_id`,`vote_content`,`end_time`,`vote_type`,`optional_sum`,`optional_num`,`post_time`) values (1,'投票测试1','2020-11-01 15:00:00',2,4,3,'2020-03-22 02:45:55');
+
+/*Table structure for table `vote_option` */
+
+DROP TABLE IF EXISTS `vote_option`;
+
+CREATE TABLE `vote_option` (
+  `option_id` int(11) NOT NULL AUTO_INCREMENT,
+  `vote_id` int(11) DEFAULT NULL,
+  `option_text` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`option_id`),
+  KEY `vote_id` (`vote_id`),
+  CONSTRAINT `vote_option_ibfk_1` FOREIGN KEY (`vote_id`) REFERENCES `vote` (`vote_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+
+/*Data for the table `vote_option` */
+
+insert  into `vote_option`(`option_id`,`vote_id`,`option_text`) values (1,1,'选项1'),(3,1,'选项3'),(4,1,'选项4');
 
 /*Table structure for table `vote_student_member` */
 
@@ -791,36 +883,19 @@ CREATE TABLE `vote_student_member` (
   `vote_id` int(11) DEFAULT NULL,
   `student_id` int(11) DEFAULT NULL,
   `member_key_id` int(11) DEFAULT NULL,
-  `choice` tinyint(4) DEFAULT NULL COMMENT '选项1~12',
-  KEY `vote_id` (`vote_id`),
+  `option_id` int(11) DEFAULT NULL COMMENT '选项表的外键',
   KEY `student_id` (`student_id`),
   KEY `member_key_id` (`member_key_id`),
+  KEY `option_id` (`option_id`),
+  KEY `vote_id` (`vote_id`,`student_id`),
+  KEY `vote_id_2` (`vote_id`,`member_key_id`),
   CONSTRAINT `vote_student_member_ibfk_1` FOREIGN KEY (`vote_id`) REFERENCES `vote` (`vote_id`),
   CONSTRAINT `vote_student_member_ibfk_4` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`),
-  CONSTRAINT `vote_student_member_ibfk_5` FOREIGN KEY (`member_key_id`) REFERENCES `member` (`member_key_id`)
+  CONSTRAINT `vote_student_member_ibfk_5` FOREIGN KEY (`member_key_id`) REFERENCES `member` (`member_key_id`),
+  CONSTRAINT `vote_student_member_ibfk_6` FOREIGN KEY (`option_id`) REFERENCES `vote_option` (`option_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `vote_student_member` */
-
-/*Table structure for table `web_mail` */
-
-DROP TABLE IF EXISTS `web_mail`;
-
-CREATE TABLE `web_mail` (
-  `mail_id` int(11) NOT NULL AUTO_INCREMENT,
-  `type` tinyint(1) DEFAULT NULL COMMENT '0发给会员，1发给学员',
-  `student_id` int(11) DEFAULT NULL,
-  `member_key_id` int(11) DEFAULT NULL,
-  `message_content` varchar(1000) DEFAULT NULL COMMENT '信息内容',
-  `send_time` datetime DEFAULT NULL COMMENT '站内信发送时间',
-  PRIMARY KEY (`mail_id`),
-  KEY `student_id` (`student_id`),
-  KEY `member_key_id` (`member_key_id`),
-  CONSTRAINT `web_mail_ibfk_3` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`),
-  CONSTRAINT `web_mail_ibfk_4` FOREIGN KEY (`member_key_id`) REFERENCES `member` (`member_key_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `web_mail` */
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

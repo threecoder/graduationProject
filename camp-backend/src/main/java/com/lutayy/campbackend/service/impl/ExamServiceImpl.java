@@ -508,6 +508,8 @@ public class ExamServiceImpl implements ExamService {
         currentPage = (currentPage == null || currentPage < 1) ? 1 : currentPage;
         pageSize = (pageSize == null || pageSize < 1) ? 10 : pageSize;
         ExamExample examExample = new ExamExample();
+        ExamExample.Criteria criteria = examExample.createCriteria();
+        criteria.andIsPostedEqualTo(true); //已发布的考试
         examExample.setOrderByClause("exam_id DESC");
         examExample.setOffset((currentPage - 1) * pageSize);
         examExample.setLimit(pageSize);
