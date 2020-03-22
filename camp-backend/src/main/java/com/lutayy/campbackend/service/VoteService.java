@@ -8,4 +8,7 @@ public interface VoteService {
 
     JSONObject deleteVote(JSONObject jsonObject);
 
+    JSONObject getMemberCanVoteList(String name, Integer isFinish, Integer currentPage, Integer pageSize);
+
+    JSONObject getVoteDetail(Integer voteId);
 }

@@ -11,6 +11,26 @@ public class VoteExample {
 
     protected List<Criteria> oredCriteria;
 
+    //加入 offset 起始位置 和 limit 查询页数 用来分页
+    protected Integer offset;
+    protected Integer limit;
+
+    public Integer getOffset() {
+        return offset;
+    }
+
+    public void setOffset(Integer offset) {
+        this.offset = offset;
+    }
+
+    public int getLimit() {
+        return limit;
+    }
+
+    public void setLimit(Integer limit) {
+        this.limit = limit;
+    }
+
     public VoteExample() {
         oredCriteria = new ArrayList<Criteria>();
     }

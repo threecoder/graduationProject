@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -14,16 +15,32 @@ public class VoteController {
     @Autowired
     VoteService voteService;
 
-    //管理员——投票
+    //管理员——投票管理
     @RequestMapping("/admin/addNewVote")
     @ResponseBody
-    public JSONObject addNewVote(@RequestBody JSONObject jsonObject){
+    public JSONObject addNewVote(@RequestBody JSONObject jsonObject) {
         return voteService.addNewVote(jsonObject);
     }
 
     @RequestMapping("/admin/deleteVote")
     @ResponseBody
-    public JSONObject deleteVote(@RequestBody JSONObject jsonObject){
+    public JSONObject deleteVote(@RequestBody JSONObject jsonObject) {
         return voteService.deleteVote(jsonObject);
+    }
+
+    //会员--投票管理
+    @RequestMapping("/member/getMemberCanVoteList")
+    @ResponseBody
+    public Object getMemberCanVoteList(@RequestParam(value = "name", required = false) String name,
+                                       @RequestParam(value = "isFinish", required = false) Integer isFinish,
+                                       @RequestParam("currentPage") Integer currentPage,
+                                       @RequestParam("pageSize") Integer pageSize) {
+        return voteService.getMemberCanVoteList(name, isFinish, currentPage, pageSize);
+    }
+
+    @RequestMapping("/member/getVoteDetail")
+    @ResponseBody
+    public Object getVoteDetail(@RequestParam("voteId") Integer voteId) {
+        return voteService.getVoteDetail(voteId);
     }
 }
