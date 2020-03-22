@@ -147,6 +147,10 @@ export default {
                 {
                     index: "/coupon",
                     title: "优惠券管理"
+                },
+                {
+                    index: "/order",
+                    title: "订单管理"
                 }
             ],
             name: getLocalStorage("user").name,

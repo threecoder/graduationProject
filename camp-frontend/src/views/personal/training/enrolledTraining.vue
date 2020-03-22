@@ -17,12 +17,12 @@
                 >
                     <div slot-scope="{ row }">
                         <el-button size="small" type="primary" @click="checkDetail(row)">培训详情</el-button>
-                        <el-button size="small" type="primary" v-if="row.status=='未支付'" @click="pay">支付</el-button>
-                        <!-- <el-button
+                        <el-button
+                            size="small"
                             type="primary"
-                            v-if="row.status=='已支付'"
-                            @click="checkSEAT(row)"
-                        >座位号</el-button> -->
+                            v-if="row.status=='未支付'"
+                            @click="toPay"
+                        >去支付</el-button>
                     </div>
                 </el-table-column>
             </m-table>
@@ -302,13 +302,8 @@ export default {
             this.drawerInfo = row;
             this.drawerInfoFlag = true;
         },
-        pay() {},
-        async checkSEAT(row) {
-            try {
-                // let res = await trainingApi.getSeatNum(row.id);
-            } catch (error) {
-                this.$message.error(error.message);
-            }
+        toPay() {
+            this.$router.push("/order")
         },
         selectChange(val) {
             this.studentList.data = val.map(val => val.idNum);

@@ -56,7 +56,7 @@ export default new Router({
                 {
                     path: '/trainingOrder',
                     name: 'trainingOrder',
-                    component: resolve => require([ '../views/admin/training/order.vue' ], resolve)
+                    component: resolve => require([ '../views/admin/training/trainingOrder.vue' ], resolve)
                 },
                 //考试管理
                 {
@@ -117,6 +117,12 @@ export default new Router({
                     path: '/coupon',
                     name: 'coupon',
                     component: resolve => require([ '../views/admin/coupon/coupon.vue'], resolve)
+                },
+                //订单管理
+                {
+                    path:'/order',
+                    name: 'order',
+                    component: resolve => require([ '../views/admin/order/order.vue' ], resolve)                    
                 }
             ]
         },
