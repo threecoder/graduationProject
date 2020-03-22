@@ -111,6 +111,12 @@ export default new Router({
                     path: '/message',
                     name: 'message',
                     component: resolve => require([ '../views/admin/message/index.vue'], resolve)
+                },
+                //优惠券管理
+                {
+                    path: '/coupon',
+                    name: 'coupon',
+                    component: resolve => require([ '../views/admin/coupon/coupon.vue'], resolve)
                 }
             ]
         },

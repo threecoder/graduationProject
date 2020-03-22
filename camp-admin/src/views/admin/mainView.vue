@@ -145,9 +145,8 @@ export default {
                     ]
                 },
                 {
-                    index: "10",
-                    title: "管理员权限管理",
-                    children: [{ index: "", title: "参与投票" }]
+                    index: "/coupon",
+                    title: "优惠券管理"
                 }
             ],
             name: getLocalStorage("user").name,
