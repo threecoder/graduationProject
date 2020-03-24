@@ -77,6 +77,15 @@ const approvalSingleRecord = id => request(`${apiPrefix}/approvalSingleRecord`, 
 //通过一批记录
 const approvalManyRecords = ids => request(`${apiPrefix}/approvalManyRecords`, 'post', { ids });
 
+//拒绝某条记录
+const refuseSingleRecord = data => request(`${apiPrefix}/refuseSingleRecord`, 'post', data);
+
+//拒绝一批记录
+const refuseManyRecords = data => request(`${apiPrefix}/refuseManyRecords`, 'post', data);
+
+//获取某次考试的审核记录
+const getCheckRecordList = par => request(`${apiPrefix}/getCheckRecordList`, 'get', par);
+
 export default {
     getQuestionList,
     getTrainingList,
@@ -101,5 +110,8 @@ export default {
     submitGradeList,
     getWaitingGradeList,
     approvalSingleRecord,
-    approvalManyRecords
+    approvalManyRecords,
+    refuseSingleRecord,
+    refuseManyRecords,
+    getCheckRecordList
 }

@@ -1,6 +1,13 @@
 <template>
     <div>
-        <h3>我的订单</h3>
+        <el-row>
+            <el-col :span="22">
+                <h3>我的订单</h3>
+            </el-col>
+            <el-col :span="2">
+                <el-button v-if="idType==1" type="primary" size="medium" @click="couponList">我的优惠券</el-button>
+            </el-col>
+        </el-row>
         <div class="divider"></div>
         <div class="form-item">
             <el-form :model="form" inline>
@@ -42,18 +49,24 @@
         <el-dialog title="订单支付" :visible.sync="payment.flag" v-if="payment.flag">
             <payment :orderId="payment.orderId" />
         </el-dialog>
+
+        <el-dialog title="我的优惠券" :visible.sync="couponFlag" v-if="couponFlag">
+            <coupon-list />
+        </el-dialog>
     </div>
 </template>
 <script>
 import mTable from "../../../components/mTable.vue";
 import page from "../../../components/page.vue";
 import payment from "./components/payment.vue";
+import couponList from "./components/couponList.vue";
 import orderAPi from "../../../api/modules/order";
 export default {
     components: {
         mTable,
         page,
-        payment
+        payment,
+        couponList
     },
     data() {
         return {
@@ -72,6 +85,7 @@ export default {
                     { prop: "businessType", label: "属培训/活动" },
                     { prop: "builder", label: "下单人" },
                     { prop: "buildTime", label: "创建时间" },
+                    { prop: "startTime", label: "生效时间" },
                     { prop: "endTime", label: "失效时间" },
                     { prop: "status", label: "状态" },
                     { prop: "price", label: "订单金额" },
@@ -99,7 +113,8 @@ export default {
             payment: {
                 flag: false,
                 orderId: null
-            }
+            },
+            couponFlag: false
         };
     },
     computed: {
@@ -111,6 +126,9 @@ export default {
         this.getOrderList();
     },
     methods: {
+        couponList() {
+            this.couponFlag = true;
+        },
         curChange(newVal) {
             this.form.currentPage = newVal;
             this.getOrderList();

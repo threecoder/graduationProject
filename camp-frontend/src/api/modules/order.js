@@ -10,7 +10,10 @@ const getOrderList = (idType, par) => {
     }
 }
 
+//会员获取自己拥有的优惠券
+const getCouponList = par => request(`${memberPrefix}/getCouponList`, 'get', par);
 
 export default {
-    getOrderList
+    getOrderList,
+    getCouponList
 }

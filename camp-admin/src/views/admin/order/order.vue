@@ -80,6 +80,7 @@ export default {
                     { prop: "businessType", label: "属培训/活动" },
                     { prop: "builder", label: "下单人" },
                     { prop: "buildTime", label: "创建时间" },
+                    { prop: "startTime", label: "生效时间" },
                     { prop: "endTime", label: "失效时间" },
                     { prop: "status", label: "状态" },
                     { prop: "price", label: "订单金额" },
