@@ -28,6 +28,21 @@ public class VoteController {
         return voteService.deleteVote(jsonObject);
     }
 
+    @RequestMapping("/admin/getVoteStatistic")
+    @ResponseBody
+    public Object getVoteStatistic(@RequestParam("voteId") Integer voteId) {
+        return voteService.getVoteStatistic(voteId);
+    }
+
+    @RequestMapping("/admin/getVoteList")
+    @ResponseBody
+    public Object getVoteList(@RequestParam(value = "name", required = false) String name,
+                                       @RequestParam(value = "type", required = false) Integer type,
+                                       @RequestParam("currentPage") Integer currentPage,
+                                       @RequestParam("pageSize") Integer pageSize) {
+        return voteService.getVoteList(name, type, currentPage, pageSize);
+    }
+
     //会员--投票管理
     @RequestMapping("/member/getMemberCanVoteList")
     @ResponseBody
@@ -38,9 +53,26 @@ public class VoteController {
         return voteService.getMemberCanVoteList(name, isFinish, currentPage, pageSize);
     }
 
-    @RequestMapping("/member/getVoteDetail")
+
+    @RequestMapping(value = {"/member/getVoteDetail","/student/getVoteDetail"})
     @ResponseBody
     public Object getVoteDetail(@RequestParam("voteId") Integer voteId) {
         return voteService.getVoteDetail(voteId);
+    }
+
+    @RequestMapping("/admin/memberVote")
+    @ResponseBody
+    public JSONObject memberVote(@RequestBody JSONObject jsonObject) {
+        return voteService.memberVote(jsonObject);
+    }
+
+    //学员--投票管理
+    @RequestMapping("/member/getStudentCanVoteList")
+    @ResponseBody
+    public Object getStudentCanVoteList(@RequestParam(value = "name", required = false) String name,
+                                       @RequestParam(value = "isFinish", required = false) Integer isFinish,
+                                       @RequestParam("currentPage") Integer currentPage,
+                                       @RequestParam("pageSize") Integer pageSize) {
+        return voteService.getStudentCanVoteList(name, isFinish, currentPage, pageSize);
     }
 }
