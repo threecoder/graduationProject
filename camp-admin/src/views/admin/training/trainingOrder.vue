@@ -66,9 +66,9 @@ export default {
                 config: [
                     { prop: "orderNum", label: "订单号" },
                     { prop: "orderType", label: "订单类型" },
-                    { prop: "userId", label: "用户id" },
-                    { prop: "userName", label: "用户名" },
-                    { prop: "builtTime", label: "创建时间" },
+                    { prop: "builderId", label: "用户id" },
+                    { prop: "builderName", label: "用户名" },
+                    { prop: "buildTime", label: "创建时间" },
                     { prop: "price", label: "订单金额" },
                     { prop: "status", label: "订单状态" },
                     { slot: "oper", label: "操作", fixed: "right" }
@@ -77,9 +77,9 @@ export default {
                     {
                         orderNum: "111",
                         orderType: "学员",
-                        userId: "123",
-                        userName: "用户名",
-                        builtTime: "2020-10-10",
+                        builderId: "123",
+                        builderName: "用户名",
+                        buildTime: "2020-10-10",
                         price: "111",
                         status: "未支付"
                     }
@@ -106,6 +106,8 @@ export default {
             this.$prompt("请输入目标金额", "提示", {
                 cancelButtonText: "取消",
                 confirmButtonText: "确定",
+                inputPattern: /^[1-9]\d*$|^\d+(\.\d+)?$/,
+                inputErrorMessage: "请输入正确的金额",
                 type: "info"
             }).then(async ({ value }) => {
                 if (value === null) {

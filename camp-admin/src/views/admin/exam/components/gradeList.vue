@@ -159,8 +159,13 @@ export default {
                 this.$message.error("请选择要提交的成绩列表");
                 return false;
             }
+            if (this.form.checker === null) {
+                this.$message.error("请选择审核员");
+                return false;
+            }
             try {
                 let res = await adminExamApi.submitGradeList(this.form);
+                this.$message.success("提交审核成功");
             } catch (error) {
                 this.$message.error(error.message);
             }

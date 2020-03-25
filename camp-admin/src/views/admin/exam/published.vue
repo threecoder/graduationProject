@@ -39,6 +39,12 @@
                         >提交审核</el-button>
                         <el-button
                             size="small"
+                            type="primary"
+                            v-if="row.status==4"
+                            @click="checkHistory(row)"
+                        >审核记录</el-button>
+                        <el-button
+                            size="small"
                             @click="finishedNumber(row)"
                             v-if="row.status==4||row.status==5"
                             type="primary"
@@ -65,17 +71,7 @@
 
         <!-- 查看已完成考试学生弹窗 -->
         <el-dialog v-if="diaFini.flag" :visible.sync="diaFini.flag" title="学生列表（已完成考试）">
-            <p class="tip">
-                当前完成人数为{{diaFini.num}} ，
-                <span v-if="diaFini.type=='已完成'">其中及格人数为：{{diaFini.pass}}，</span>列表如下：
-            </p>
-            <m-table :data="diaFini.data" :tableConfig="diaFini.config" :loading="diaFini.loading">
-                <el-table-column align="center" slot="oper" slot-scope="{params}" v-bind="params">
-                    <div slot-scope="{row}">
-                        <el-button size="small" type="primary" @click="checkDetail(row)">查看</el-button>
-                    </div>
-                </el-table-column>
-            </m-table>
+            <finish-detail :examInfo="diaFini.info" />
         </el-dialog>
 
         <!-- 下载模板和上传成绩弹窗 -->
@@ -96,6 +92,16 @@
         <el-dialog :visible.sync="submit.flag" v-if="submit.flag" title="提交成绩给审核员审核">
             <grade-list :examId="submit.examId" @submitClose="submit.flag=false" />
         </el-dialog>
+
+        <el-dialog
+            :visible.sync="history.flag"
+            v-if="history.flag"
+            title="成绩审查记录"
+            width="60%"
+            :close-on-click-modal="false"
+        >
+            <check-history :examId="history.examId" />
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -104,6 +110,8 @@ import page from "../../../components/page.vue";
 import examPublish from "./components/examPublish.vue";
 import gradeList from "./components/gradeList.vue";
 import upload from "../../../components/upload.vue";
+import finishDetail from "./components/finishDetail.vue";
+import checkHistory from "./components/checkHistory.vue";
 import adminExamApi from "../../../api/admin/exam.js";
 import { download } from "../../../api/request.js";
 export default {
@@ -112,7 +120,9 @@ export default {
         page,
         examPublish,
         upload,
-        gradeList
+        gradeList,
+        finishDetail,
+        checkHistory
     },
     data() {
         return {
@@ -129,7 +139,7 @@ export default {
                         slot: "oper",
                         label: "操作",
                         fixed: "right",
-                        width: "300px"
+                        width: "400px"
                     }
                 ],
                 data: [
@@ -156,29 +166,8 @@ export default {
                 examId: null
             },
             diaFini: {
-                examId: null,
-                flag: false,
-                config: [
-                    { prop: "name", label: "学员姓名" },
-                    { prop: "idNum", label: "学员编号" },
-                    { prop: "member", label: "所属会员" },
-                    { prop: "times", label: "作答次数" },
-                    { prop: "grade", label: "分数" },
-                    { slot: "oper", label: "操作" }
-                ],
-                data: [
-                    {
-                        idNum: "11111",
-                        name: "张",
-                        member: "所属公司",
-                        grade: 60,
-                        times: 2
-                    }
-                ],
-                loading: false,
-                num: 0,
-                pass: 0,
-                type: "考试中"
+                info: {},
+                flag: false
             },
             diaGrade: {
                 flag: false,
@@ -189,6 +178,10 @@ export default {
                 }
             },
             submit: {
+                flag: false,
+                examId: null
+            },
+            history: {
                 flag: false,
                 examId: null
             }
@@ -247,17 +240,8 @@ export default {
             this.diaInfo.flag = true;
         },
         async finishedNumber(row) {
-            this.diaFini.examId = row.examId;
+            this.diaFini.info = row;
             this.diaFini.flag = true;
-            this.diaFini.loading = true;
-            this.diaFini.type = row.status == 3 ? "考试中" : "已完成";
-            try {
-                let res = await adminExamApi.getFinishedStudentList(row.examId);
-                this.diaFini.data = res.data;
-            } catch (error) {
-                this.$message.error(error.message);
-            }
-            this.diaFini.loading = false;
         },
         beforeSubmit(row) {
             this.submit.examId = row.examId;
@@ -276,10 +260,9 @@ export default {
                 this.$message.error(error.message);
             }
         },
-        checkDetail(row) {
-            this.$router.push({
-                path: `/studentExamDetail/${row.name}/${this.diaFini.examId}/${row.idNum}`
-            });
+        checkHistory(row) {
+            this.history.examId = row.examId;
+            this.history.flag = true;
         }
     }
 };

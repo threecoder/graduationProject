@@ -1,11 +1,21 @@
 <template>
     <div>
-        <h3>发布考试</h3>
+        <el-row>
+            <el-col :span="22">
+                <h3>发布考试</h3>
+            </el-col>
+            <el-col :span="2">
+                <div class="switcher">
+                    <el-button
+                        type="primary"
+                        @click="examForm.newFlag=true;examForm.formType=true"
+                    >新建考试</el-button>
+                </div>
+            </el-col>
+        </el-row>
         <div class="divider"></div>
-        <div class="switcher">
-            <el-button type="primary" @click="examForm.newFlag=true;examForm.formType=true">新建考试</el-button>
-        </div>
-        <div>
+
+        <div class="panel-contaner">
             <span class="panel-title">已有考试</span>
             <div class="all-exam-container" :loading="loading">
                 <div class="single-exam-container" v-for="(item,i) in examList" :key="i">
@@ -57,60 +67,60 @@ export default {
     data() {
         return {
             examList: [
-                // {
-                //     examId: "1",
-                //     examName: "考试名称",
-                //     date: "2016-10-10",
-                //     startTime: "14:00:00",
-                //     endTime: "16:00:00",
-                //     min: "120分钟",
-                //     belong: "HTML入门",
-                //     status: 0,
-                //     grade: null
-                // },
-                // {
-                //     examId: "1",
-                //     examName: "考试名称",
-                //     date: "2016-10-10",
-                //     startTime: "14:00:00",
-                //     endTime: "16:00:00",
-                //     min: "120分钟",
-                //     belong: "HTML入门",
-                //     status: 0,
-                //     grade: null
-                // },
-                // {
-                //     examId: "1",
-                //     examName: "考试名称",
-                //     startTime: "2016-10-10 14:00:00",
-                //     endTime: "2016-10-10 16:00:00",
-                //     min: "120分钟",
-                //     belong: "HTML入门",
-                //     status: 1,
-                //     grade: null
-                // },
-                // {
-                //     examId: "1",
-                //     examName: "考试名称",
-                //     date: "2016-10-10",
-                //     startTime: "14:00:00",
-                //     endTime: "16:00:00",
-                //     min: "120分钟",
-                //     belong: "HTML入门",
-                //     status: 0,
-                //     grade: null
-                // },
-                // {
-                //     examId: "1",
-                //     examName: "考试名称",
-                //     date: "2016-10-10",
-                //     startTime: "14:00:00",
-                //     endTime: "16:00:00",
-                //     min: "120分钟",
-                //     belong: "HTML入门",
-                //     status: 0,
-                //     grade: null
-                // }
+                {
+                    examId: "1",
+                    examName: "考试名称",
+                    date: "2016-10-10",
+                    startTime: "14:00:00",
+                    endTime: "16:00:00",
+                    min: "120分钟",
+                    belong: "HTML入门",
+                    status: 0,
+                    grade: null
+                },
+                {
+                    examId: "1",
+                    examName: "考试名称",
+                    date: "2016-10-10",
+                    startTime: "14:00:00",
+                    endTime: "16:00:00",
+                    min: "120分钟",
+                    belong: "HTML入门",
+                    status: 0,
+                    grade: null
+                },
+                {
+                    examId: "1",
+                    examName: "考试名称",
+                    startTime: "2016-10-10 14:00:00",
+                    endTime: "2016-10-10 16:00:00",
+                    min: "120分钟",
+                    belong: "HTML入门",
+                    status: 1,
+                    grade: null
+                },
+                {
+                    examId: "1",
+                    examName: "考试名称",
+                    date: "2016-10-10",
+                    startTime: "14:00:00",
+                    endTime: "16:00:00",
+                    min: "120分钟",
+                    belong: "HTML入门",
+                    status: 0,
+                    grade: null
+                },
+                {
+                    examId: "1",
+                    examName: "考试名称",
+                    date: "2016-10-10",
+                    startTime: "14:00:00",
+                    endTime: "16:00:00",
+                    min: "120分钟",
+                    belong: "HTML入门",
+                    status: 0,
+                    grade: null
+                }
             ],
             currentPage: 1,
             total: 10,
@@ -125,7 +135,7 @@ export default {
     },
 
     mounted() {
-        this.fresh();
+        // this.fresh();
     },
     methods: {
         fresh() {
@@ -160,17 +170,22 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.all-exam-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    .single-exam-container {
-        margin: 10px;
-        width: 30%;
+.panel-contaner {
+    padding: 10px;
+    .all-exam-container {
+        min-height: 200px;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        .single-exam-container {
+            margin: 10px;
+            width: 30%;
+        }
     }
 }
+
 .switcher {
     overflow: hidden;
     float: right;

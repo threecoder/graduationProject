@@ -63,6 +63,9 @@ export function deleteCookie(name) {
 
 //格式化日期
 export function formatDate(date) {
+    if (!date) {
+        return null;
+    }
     let y = date.getYear() + 1900,
         m = (date.getMonth() + 1).toString().padStart(2, "0"),
         d = date.getDate().toString().padStart(2, "0");
@@ -70,6 +73,9 @@ export function formatDate(date) {
 }
 //格式化时间
 export function formatTime(date) {
+    if (!date) {
+        return null;
+    }
     let h = date.getHours().toString().padStart(2, "0"),
         min = date.getMinutes().toString().padStart(2, "0"),
         s = date.getSeconds().toString().padStart(2, "0")

@@ -1,6 +1,13 @@
 <template>
     <div>
-        <h3>我的会员</h3>
+        <el-row>
+            <el-col :span="22">
+                <h3>我的会员</h3>
+            </el-col>
+            <el-col :span="2">
+                <el-button @click="newFlag=true" type="primary">添加会员</el-button>
+            </el-col>
+        </el-row>
         <div class="divider"></div>
         <div class="form-container">
             <el-form :model="form" inline>
@@ -20,7 +27,6 @@
                     </el-select>
                 </el-form-item>
                 <el-button type="primary" @click="search">搜索</el-button>
-                <el-button @click="newFlag=true" type="primary">添加会员</el-button>
             </el-form>
         </div>
 

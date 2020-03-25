@@ -1,5 +1,7 @@
 <template>
     <div>
+        <h3>已参与的投票</h3>
+        <div class="divider"></div>
         <div class="form-item">
             <el-form :model="form" inline>
                 <el-form-item label="名称">

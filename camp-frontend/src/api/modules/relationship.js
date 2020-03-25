@@ -16,9 +16,13 @@ const getTemplate = () => request(memberPrefix + '/getTemplate', 'get', {}, 'blo
 
 //上传学生账号Excel文件，upload的action写了路径
 
+//获取学生的培训记录
+const getStudentTrainingHistory = par => request(memberPrefix + "/getStudentTrainingHistory", 'get', par);
+
 export default {
     getStudentList,
     deleteOneStudent,
     addOneStudent,
-    getTemplate
+    getTemplate,
+    getStudentTrainingHistory
 }

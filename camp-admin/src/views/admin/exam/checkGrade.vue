@@ -1,6 +1,16 @@
 <template>
     <div>
-        <h4>成绩审核</h4>
+        <el-row>
+            <el-col :span="18">
+                <h3>成绩审核</h3>
+            </el-col>
+            <el-col :span="6">
+                <div class="tac">
+                    <el-button type="primary" size="small" @click="ApprovalSelected">通过选中记录</el-button>
+                    <el-button type="primary" size="small" @click="refuseSelected">拒绝选中记录</el-button>
+                </div>
+            </el-col>
+        </el-row>
         <div class="divider"></div>
         <div class="form-container">
             <el-form inline></el-form>
@@ -25,6 +35,7 @@
                     <div slot-scope="{row}">
                         <el-button type="primary" size="small" @click="detail(row)">作答详情</el-button>
                         <el-button type="primary" size="small" @click="ApprovalRow(row)">通过</el-button>
+                        <el-button type="primary" size="small" @click="refuseRow(row)">拒绝</el-button>
                     </div>
                 </el-table-column>
             </m-table>
@@ -71,7 +82,7 @@ export default {
                         slot: "oper",
                         label: "操作",
                         fixed: "right",
-                        width: "200px"
+                        width: "250px"
                     }
                 ],
                 data: [
@@ -97,7 +108,7 @@ export default {
             selected: []
         };
     },
-    mounted(){
+    mounted() {
         this.getCheckList();
     },
     methods: {
@@ -142,7 +153,30 @@ export default {
                 this.table.loading = false;
             });
         },
+        refuseRow(row) {
+            this.$prompt("确定要拒绝该条成绩记录的理由", "提示", {
+                cancelButtonText: "取消",
+                confirmButtonText: "确定",
+                type: "warning"
+            }).then(async ({ value }) => {
+                try {
+                    let data = {
+                        id: row.id,
+                        tip: value
+                    };
+                    let res = await examApi.refuseSingleRecord(data);
+                    this.$message.success(res.msg);
+                    this.getCheckList();
+                } catch (error) {
+                    this.$message.error(error.message);
+                }
+            });
+        },
         ApprovalSelected() {
+            if (this.selected.length == 0) {
+                this.$message.error("请选择目标");
+                return false;
+            }
             this.$confirm("确定要通过这批成绩记录的申请吗？", "提示", {
                 cancelButtonText: "取消",
                 confirmButtonText: "确定",
@@ -152,6 +186,32 @@ export default {
                 try {
                     let ids = this.selected.map(val => val.id);
                     let res = await examApi.approvalManyRecords(ids);
+                    this.$message.success("审批成功！");
+                    this.getCheckList();
+                } catch (e) {
+                    this.$message.error(e.message);
+                }
+                this.table.loading = false;
+            });
+        },
+        refuseSelected() {
+            if (this.selected.length == 0) {
+                this.$message.error("请选择目标");
+                return false;
+            }
+            this.$prompt("拒绝这批成绩审核的理由", "提示", {
+                cancelButtonText: "取消",
+                confirmButtonText: "确定",
+                type: "warning"
+            }).then(async ({ value }) => {
+                this.table.loading = true;
+                try {
+                    let ids = this.selected.map(val => val.id);
+                    let data = {
+                        ids,
+                        tip: value
+                    };
+                    let res = await examApi.refuseManyRecords(data);
                     this.$message.success("审批成功！");
                     this.getCheckList();
                 } catch (e) {

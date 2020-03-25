@@ -134,6 +134,10 @@ export default {
                         { index: "/canVote", title: "可参与投票" },
                         { index: "/hasVoted", title: "已参与投票" }
                     ]
+                },
+                {
+                    index: "/order",
+                    title: "我的订单"
                 }
             ],
             //会员菜单
@@ -176,6 +180,10 @@ export default {
                         { index: "/canVote", title: "可参与投票" },
                         { index: "/hasVoted", title: "已参与投票" }
                     ]
+                },
+                {
+                    index: "/order",
+                    title: "我的订单"
                 }
             ],
             unReadNum: 0,
