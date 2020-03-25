@@ -8,7 +8,7 @@
             </el-form>
         </div>
         <div class="table-container">
-            <m-table :data="table.data" :tableConfig="table.config" :loading="loading"></m-table>
+            <m-table :data="table.data" :tableConfig="table.config" :loading="table.loading"></m-table>
         </div>
         <div class="page-container">
             <page

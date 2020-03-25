@@ -163,8 +163,8 @@ export default {
                     index: "9",
                     title: "系统设置",
                     children: [
-                        { index: "", title: "功能设置" },
-                        { index: "", title: "管理员账号管理" }
+                        { index: "/paramsSetting", title: "功能设置" },
+                        { index: "/adminUser", title: "管理员账号管理" }
                     ]
                 },
                 {

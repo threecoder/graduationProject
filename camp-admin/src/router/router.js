@@ -30,7 +30,7 @@ export default new Router({
                     path: '/memberStatistics',
                     name: 'memberStatistics',
                     component: resolve => require([ '../views/admin/member/statistics.vue' ], resolve)
-                }, 
+                },
                 //学员管理
                 {
                     path: '/studentInfo',
@@ -115,19 +115,30 @@ export default new Router({
                 {
                     path: '/message',
                     name: 'message',
-                    component: resolve => require([ '../views/admin/message/index.vue'], resolve)
+                    component: resolve => require([ '../views/admin/message/index.vue' ], resolve)
                 },
                 //优惠券管理
                 {
                     path: '/coupon',
                     name: 'coupon',
-                    component: resolve => require([ '../views/admin/coupon/coupon.vue'], resolve)
+                    component: resolve => require([ '../views/admin/coupon/coupon.vue' ], resolve)
                 },
                 //订单管理
                 {
-                    path:'/order',
+                    path: '/order',
                     name: 'order',
-                    component: resolve => require([ '../views/admin/order/order.vue' ], resolve)                    
+                    component: resolve => require([ '../views/admin/order/order.vue' ], resolve)
+                },
+                //系统管理
+                {
+                    path: '/adminUser',
+                    name: 'adminUer',
+                    component: resolve => require([ '../views/admin/system/adminUser.vue' ], resolve)
+                },
+                {
+                    path: '/paramsSetting',
+                    name: 'paramsSetting',
+                    component: resolve => require([ '../views/admin/system/paramsSetting.vue' ], resolve)
                 }
             ]
         },
