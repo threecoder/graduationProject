@@ -94,7 +94,7 @@ export default {
                     title: "会员管理",
                     children: [
                         { index: "/managerMember", title: "我的会员" },
-                        { index: "", title: "会员统计" }
+                        { index: "memberStatistics", title: "会员统计" }
                     ]
                 },
                 {

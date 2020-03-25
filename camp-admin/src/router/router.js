@@ -26,6 +26,11 @@ export default new Router({
                     name: 'managerMember',
                     component: resolve => require([ '../views/admin/member/myMember.vue' ], resolve)
                 },
+                {
+                    path: '/memberStatistics',
+                    name: 'memberStatistics',
+                    component: resolve => require([ '../views/admin/member/statistics.vue' ], resolve)
+                }, 
                 //学员管理
                 {
                     path: '/studentInfo',
