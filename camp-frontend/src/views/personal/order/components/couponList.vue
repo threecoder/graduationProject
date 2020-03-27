@@ -26,7 +26,7 @@ export default {
         return {
             form: {
                 pageSize: 10,
-                currentPae: 1,
+                currentPage: 1,
                 total: 100
             },
             table: {
@@ -47,14 +47,14 @@ export default {
     },
     methods: {
         curChange(newVal) {
-            this.form.currentPae = newVal;
+            this.form.currentPage = newVal;
             this.getCouponList();
         },
         async getCouponList() {
             try {
                 let res = await orderApi.getCouponList(this.form);
                 this.table.data = res.data.data;
-                this.form.total = res.data.tota;
+                this.form.total = res.data.total;
             } catch (error) {
                 this.$message.error(error.message);
             }

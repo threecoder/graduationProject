@@ -1,13 +1,6 @@
 <template>
     <div>
-        <el-row>
-            <el-col :span="22">
-                <h3>管理挂靠关系</h3>
-            </el-col>
-            <el-col :span="2">
-                <el-button type="primary" @click="dialogFlag=true">添加学员</el-button>
-            </el-col>
-        </el-row>
+        <h3>学员列表</h3>
         <div class="divider"></div>
 
         <div class="form-container">
@@ -34,8 +27,7 @@
                     class="myoper"
                 >
                     <div slot-scope="{ row }">
-                        <el-button size="small" type="primary" @click="deleteRelation(row)">解除挂靠</el-button>
-                        <el-button size="small" type="primary" @click="trainingHistory(row)">培训记录</el-button>
+                        <el-button size="small" type="primary" @click="showCertificate(row)">查看证书</el-button>
                     </div>
                 </el-table-column>
             </m-table>
@@ -49,32 +41,30 @@
             />
         </div>
 
-        <div class="modifyButton"></div>
-
-        <!-- 添加学员弹框 -->
-        <el-dialog title="添加学员" :visible.sync="dialogFlag" v-if="dialogFlag" width="40%">
-            <new-student @hideDialog="dialogFlag=false" />
-        </el-dialog>
-
-        <!-- 学员培训记录弹框 -->
-        <el-dialog title="添加学员" :visible.sync="history.flag" v-if="history.flag">
-            <training-history :idNum="history.idNum" />
+        <!-- 学员证书列表弹框弹框 -->
+        <el-dialog
+            title="现有证书"
+            :visible.sync="cerList.flag"
+            v-if="cerList.flag"
+            width="70%"
+            :close-on-click-modal="false"
+            :append-to-body="true"
+        >
+            <cer-list :idNum="cerList.idNum" />
         </el-dialog>
     </div>
 </template>
 <script>
 import mTable from "../../../components/mTable.vue";
 import page from "../../../components/page.vue";
-import newStudent from "./components/newStudent.vue";
-import trainingHistory from "./components/trainingHistory.vue";
 import relaApi from "../../../api/modules/relationship";
+import cerList from "./components/studentCerList.vue";
 import { download } from "../../../api/request";
 export default {
     components: {
         mTable,
         page,
-        newStudent,
-        trainingHistory
+        cerList
     },
     data() {
         return {
@@ -84,7 +74,7 @@ export default {
                 name: null,
                 currentPage: 1,
                 total: 100,
-                pageSize: 1
+                pageSize: 10
             },
             tableData: [
                 {
@@ -119,7 +109,7 @@ export default {
             ],
             loading: false,
             dialogFlag: false,
-            history: {
+            cerList: {
                 idNum: null,
                 flag: false
             }
@@ -144,24 +134,9 @@ export default {
             }
             this.loading = false;
         },
-        async deleteRelation(row) {
-            try {
-                this.loading = true;
-                let par = {
-                    idNum: row.idNum,
-                    phone: row.phone
-                };
-                let res = await relaApi.deleteOneStudent(par);
-                this.$message.success("解除挂靠关系成功");
-                this.search();
-            } catch (e) {
-                this.$message.error(e.message);
-            }
-            this.loading = false;
-        },
-        trainingHistory(row) {
-            this.history.idNum = row.idNum;
-            this.history.flag = true;
+        showCertificate(row) {
+            this.cerList.idNum = row.idNum;
+            this.cerList.flag = true;
         }
     }
 };

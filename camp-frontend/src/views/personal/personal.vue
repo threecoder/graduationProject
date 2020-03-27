@@ -88,6 +88,7 @@ export default {
     },
     data() {
         return {
+            //学生菜单
             studentList: [
                 {
                     index: "1",
@@ -96,12 +97,12 @@ export default {
                 },
                 {
                     index: "",
-                    title: "我的证书"
-                    // children: [
-                    //     { index: "/personal", title: "个人证书" },
-                    //     { index: "/personal", title: "证书复审" },
-                    //     { index: "/personal", title: "证书变更" }
-                    // ]
+                    title: "我的证书",
+                    children: [
+                        { index: "/certificate", title: "现有证书" },
+                        { index: "/overdueCertificate", title: "过期证书" },
+                        { index: "/cerOperHistory", title: "审核记录" }
+                    ]
                 },
                 {
                     index: "2",
@@ -163,7 +164,10 @@ export default {
                 {
                     index: "4",
                     title: "学员证件",
-                    children: [{ index: "", title: "管理证件" }]
+                    children: [
+                        { index: "/certificate", title: "管理证件" },
+                        { index: "/cerOperHistory", title: "审核记录" }
+                    ]
                 },
                 {
                     index: "5",

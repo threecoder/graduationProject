@@ -130,9 +130,9 @@ export default {
                     index: "5",
                     title: "证书管理",
                     children: [
-                        { index: "", title: "设置证书" },
-                        { index: "", title: "发放证书" },
-                        { index: "", title: "证书审核" }
+                        { index: "/setCertificate", title: "设置证书" },
+                        { index: "/grantCertificate", title: "发放证书" },
+                        { index: "/examineCertificate", title: "证书审核" }
                     ]
                 },
                 {

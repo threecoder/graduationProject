@@ -61,11 +61,29 @@ export default new Router({
             name: 'personal',
             component: resolve => require([ "../views/personal/personal.vue" ], resolve),
             children: [
+                //我的资料
                 {
                     path: '/info',
                     name: 'info',
                     component: resolve => require([ '../views/personal/info/info.vue' ], resolve)
                 },
+                //证书相关
+                {
+                    path: '/certificate',
+                    name: 'certificate',
+                    component: resolve => require([ '../views/personal/certificate/index.vue' ], resolve)
+                },
+                {
+                    path: '/overdueCertificate',
+                    name: 'overdueCertificate',
+                    component: resolve => require([ '../views/personal/certificate/index.vue' ], resolve)
+                },
+                {
+                    path: '/cerOperHistory',
+                    name: 'cerOperHistory',
+                    component: resolve => require([ '../views/personal/certificate/cerOperHistory.vue' ], resolve)
+                },
+                //考试相关
                 {
                     path: '/examTodo',
                     name: 'examTodo',
@@ -76,6 +94,7 @@ export default new Router({
                     name: 'examDone',
                     component: resolve => require([ '../views/personal/exam/examDone.vue' ], resolve)
                 },
+                //活动页面
                 {
                     path: '/enrolableActivities',
                     name: 'enrolableActivities',
@@ -86,11 +105,13 @@ export default new Router({
                     name: 'enrolledActivities',
                     component: resolve => require([ '../views/personal/activities/enrolledActivities.vue' ], resolve)
                 },
+                //学员管理
                 {
                     path: '/management',
                     name: 'management',
                     component: resolve => require([ '../views/personal/relationship/management.vue' ], resolve)
                 },
+                //培训页面
                 {
                     path: '/enrolableTraining',
                     name: 'enrolableTraining',
@@ -101,6 +122,7 @@ export default new Router({
                     name: 'enrolledTraining',
                     component: resolve => require([ '../views/personal/training/enrolledTraining.vue' ], resolve)
                 },
+                //投票页面
                 {
                     path: '/canVote',
                     name: 'canVote',
@@ -111,6 +133,7 @@ export default new Router({
                     name: 'hasVoted',
                     component: resolve => require([ '../views/personal/vote/hasVoted.vue' ], resolve)
                 },
+                //站内信页面
                 {
                     path: '/message',
                     name: 'message',
@@ -124,6 +147,7 @@ export default new Router({
                 }
             ]
         },
+        //考试页面
         {
             path: "/examIndex/:id",
             component: resolve => require([ '@/views/personal/exam/examIndex.vue' ], resolve)

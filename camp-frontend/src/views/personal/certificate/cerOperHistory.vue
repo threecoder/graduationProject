@@ -1,12 +1,17 @@
 <template>
     <div>
+        <h3>证书操作记录</h3>
+        <div class="divider"></div>
         <div class="form-container">
             <el-form :model="form" inline>
-                <el-form-item label="名字">
-                    <el-input v-model="form.name" placeholder clearable></el-input>
+                <el-form-item label="证书名字">
+                    <el-input v-model="form.cerName" placeholder="操作的目标证书名字" clearable></el-input>
+                </el-form-item>
+                <el-form-item label="操作人名字">
+                    <el-input v-model="form.userName" placeholder="操作人的名字" clearable></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button @click="getList" type="primary" size="medium">查询</el-button>
+                    <el-button @click="getOperList" type="primary" size="medium">查询</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -30,8 +35,9 @@
     </div>
 </template>
 <script>
-import mTable from "../../../../components/mTable.vue";
-import page from "../../../../components/page.vue";
+import mTable from "../../../components/mTable.vue";
+import page from "../../../components/page.vue";
+import cerApi from "../../../api/modules/certificate";
 export default {
     components: {
         mTable,
@@ -43,23 +49,39 @@ export default {
                 pageSize: 10,
                 currentPage: 1,
                 total: 100,
-                name: null
+                cerName: null,
+                userName: null
             },
             table: {
-                config: [],
+                config: [
+                    { prop: "userName", label: "操作人" },
+                    { prop: "userType", label: "操作人身份" },
+                    { prop: "cerName", label: "对应证书" },
+                    { prop: "desc", label: "操作描述" },
+                    { prop: "operTime", label: "时间" },
+                    { prop: "success", label: "是否成功" }
+                ],
                 data: [],
                 loading: false
             }
         };
     },
+    computed: {
+        idType: function() {
+            return this.$store.getters.idType;
+        }
+    },
+    mounted() {
+        this.getOperList();
+    },
     methods: {
         curChange(newVal) {
             this.form.currentPage = newVal;
-            this.getList();
+            this.getOperList();
         },
-        async getList() {
+        async getOperList() {
             try {
-                let res = await api.getList(par);
+                let res = await cerApi.getOperList(this.idType, this.form);
                 this.table.data = res.data.data;
                 this.form.total = res.data.total;
             } catch (error) {

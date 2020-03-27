@@ -89,6 +89,22 @@ export default new Router({
                     name: 'pickQuestion',
                     component: resolve => require([ '../views/admin/exam/pickQuestion.vue' ], resolve)
                 },
+                //证书管理
+                {
+                    path: '/examineCertificate',
+                    name: 'examineCertificate',
+                    component: resolve => require([ '../views/admin/certificate/examine.vue' ], resolve)
+                },
+                {
+                    path: '/setCertificate',
+                    name: 'setCertificate',
+                    component: resolve => require([ '../views/admin/certificate/setCertificate.vue' ], resolve)
+                },
+                {
+                    path: '/grantCertificate',
+                    name: 'grantCertificate',
+                    component: resolve => require([ '../views/admin/certificate/grantCertificate.vue' ], resolve)
+                },
                 //活动管理
                 {
                     path: '/publicActivity',
