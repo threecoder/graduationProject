@@ -852,11 +852,11 @@ CREATE TABLE `vote` (
   `optional_num` tinyint(4) DEFAULT NULL COMMENT '可多选数目',
   `post_time` datetime DEFAULT NULL COMMENT '发布时间',
   PRIMARY KEY (`vote_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 /*Data for the table `vote` */
 
-insert  into `vote`(`vote_id`,`vote_content`,`end_time`,`vote_type`,`optional_sum`,`optional_num`,`post_time`) values (1,'投票测试1','2020-11-01 15:00:00',2,4,3,'2020-03-22 02:45:55');
+insert  into `vote`(`vote_id`,`vote_content`,`end_time`,`vote_type`,`optional_sum`,`optional_num`,`post_time`) values (1,'投票测试1','2020-11-01 15:00:00',2,3,3,'2020-03-22 02:45:55'),(3,'投票测试2','2020-11-01 15:00:00',1,4,3,'2020-03-23 00:30:04');
 
 /*Table structure for table `vote_option` */
 
@@ -869,33 +869,51 @@ CREATE TABLE `vote_option` (
   PRIMARY KEY (`option_id`),
   KEY `vote_id` (`vote_id`),
   CONSTRAINT `vote_option_ibfk_1` FOREIGN KEY (`vote_id`) REFERENCES `vote` (`vote_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 /*Data for the table `vote_option` */
 
-insert  into `vote_option`(`option_id`,`vote_id`,`option_text`) values (1,1,'选项1'),(3,1,'选项3'),(4,1,'选项4');
+insert  into `vote_option`(`option_id`,`vote_id`,`option_text`) values (1,1,'选项1'),(3,1,'选项3'),(4,1,'选项4'),(8,3,'选项1'),(9,3,'选项2'),(10,3,'选项3'),(11,3,'选项4');
 
-/*Table structure for table `vote_student_member` */
+/*Table structure for table `vote_option_member` */
 
-DROP TABLE IF EXISTS `vote_student_member`;
+DROP TABLE IF EXISTS `vote_option_member`;
 
-CREATE TABLE `vote_student_member` (
+CREATE TABLE `vote_option_member` (
   `vote_id` int(11) DEFAULT NULL,
-  `student_id` int(11) DEFAULT NULL,
+  `option_id` int(11) DEFAULT NULL,
   `member_key_id` int(11) DEFAULT NULL,
-  `option_id` int(11) DEFAULT NULL COMMENT '选项表的外键',
-  KEY `student_id` (`student_id`),
-  KEY `member_key_id` (`member_key_id`),
+  KEY `vote_id` (`vote_id`),
   KEY `option_id` (`option_id`),
-  KEY `vote_id` (`vote_id`,`student_id`),
-  KEY `vote_id_2` (`vote_id`,`member_key_id`),
-  CONSTRAINT `vote_student_member_ibfk_1` FOREIGN KEY (`vote_id`) REFERENCES `vote` (`vote_id`),
-  CONSTRAINT `vote_student_member_ibfk_4` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`),
-  CONSTRAINT `vote_student_member_ibfk_5` FOREIGN KEY (`member_key_id`) REFERENCES `member` (`member_key_id`),
-  CONSTRAINT `vote_student_member_ibfk_6` FOREIGN KEY (`option_id`) REFERENCES `vote_option` (`option_id`)
+  KEY `member_id` (`member_key_id`),
+  CONSTRAINT `vote_option_member_ibfk_1` FOREIGN KEY (`vote_id`) REFERENCES `vote` (`vote_id`),
+  CONSTRAINT `vote_option_member_ibfk_2` FOREIGN KEY (`option_id`) REFERENCES `vote_option` (`option_id`),
+  CONSTRAINT `vote_option_member_ibfk_3` FOREIGN KEY (`member_key_id`) REFERENCES `member` (`member_key_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-/*Data for the table `vote_student_member` */
+/*Data for the table `vote_option_member` */
+
+insert  into `vote_option_member`(`vote_id`,`option_id`,`member_key_id`) values (1,1,1),(1,3,1);
+
+/*Table structure for table `vote_option_student` */
+
+DROP TABLE IF EXISTS `vote_option_student`;
+
+CREATE TABLE `vote_option_student` (
+  `vote_id` int(11) DEFAULT NULL,
+  `option_id` int(11) DEFAULT NULL,
+  `student_id` int(11) DEFAULT NULL,
+  KEY `vote_id` (`vote_id`),
+  KEY `option_id` (`option_id`),
+  KEY `student_id` (`student_id`),
+  CONSTRAINT `vote_option_student_ibfk_1` FOREIGN KEY (`vote_id`) REFERENCES `vote` (`vote_id`),
+  CONSTRAINT `vote_option_student_ibfk_2` FOREIGN KEY (`option_id`) REFERENCES `vote_option` (`option_id`),
+  CONSTRAINT `vote_option_student_ibfk_3` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `vote_option_student` */
+
+insert  into `vote_option_student`(`vote_id`,`option_id`,`student_id`) values (1,1,2),(1,3,2),(1,1,2),(1,3,2);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

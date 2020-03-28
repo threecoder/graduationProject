@@ -3,14 +3,14 @@ package com.lutayy.campbackend.pojo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VoteStudentMemberExample {
+public class VoteOptionStudentExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public VoteStudentMemberExample() {
+    public VoteOptionStudentExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -164,126 +164,6 @@ public class VoteStudentMemberExample {
             return (Criteria) this;
         }
 
-        public Criteria andStudentIdIsNull() {
-            addCriterion("student_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdIsNotNull() {
-            addCriterion("student_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdEqualTo(Integer value) {
-            addCriterion("student_id =", value, "studentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdNotEqualTo(Integer value) {
-            addCriterion("student_id <>", value, "studentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdGreaterThan(Integer value) {
-            addCriterion("student_id >", value, "studentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("student_id >=", value, "studentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdLessThan(Integer value) {
-            addCriterion("student_id <", value, "studentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdLessThanOrEqualTo(Integer value) {
-            addCriterion("student_id <=", value, "studentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdIn(List<Integer> values) {
-            addCriterion("student_id in", values, "studentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdNotIn(List<Integer> values) {
-            addCriterion("student_id not in", values, "studentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdBetween(Integer value1, Integer value2) {
-            addCriterion("student_id between", value1, value2, "studentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("student_id not between", value1, value2, "studentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMemberKeyIdIsNull() {
-            addCriterion("member_key_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMemberKeyIdIsNotNull() {
-            addCriterion("member_key_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMemberKeyIdEqualTo(Integer value) {
-            addCriterion("member_key_id =", value, "memberKeyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMemberKeyIdNotEqualTo(Integer value) {
-            addCriterion("member_key_id <>", value, "memberKeyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMemberKeyIdGreaterThan(Integer value) {
-            addCriterion("member_key_id >", value, "memberKeyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMemberKeyIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("member_key_id >=", value, "memberKeyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMemberKeyIdLessThan(Integer value) {
-            addCriterion("member_key_id <", value, "memberKeyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMemberKeyIdLessThanOrEqualTo(Integer value) {
-            addCriterion("member_key_id <=", value, "memberKeyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMemberKeyIdIn(List<Integer> values) {
-            addCriterion("member_key_id in", values, "memberKeyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMemberKeyIdNotIn(List<Integer> values) {
-            addCriterion("member_key_id not in", values, "memberKeyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMemberKeyIdBetween(Integer value1, Integer value2) {
-            addCriterion("member_key_id between", value1, value2, "memberKeyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMemberKeyIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("member_key_id not between", value1, value2, "memberKeyId");
-            return (Criteria) this;
-        }
-
         public Criteria andOptionIdIsNull() {
             addCriterion("option_id is null");
             return (Criteria) this;
@@ -341,6 +221,66 @@ public class VoteStudentMemberExample {
 
         public Criteria andOptionIdNotBetween(Integer value1, Integer value2) {
             addCriterion("option_id not between", value1, value2, "optionId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentIdIsNull() {
+            addCriterion("student_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentIdIsNotNull() {
+            addCriterion("student_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentIdEqualTo(Integer value) {
+            addCriterion("student_id =", value, "studentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentIdNotEqualTo(Integer value) {
+            addCriterion("student_id <>", value, "studentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentIdGreaterThan(Integer value) {
+            addCriterion("student_id >", value, "studentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("student_id >=", value, "studentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentIdLessThan(Integer value) {
+            addCriterion("student_id <", value, "studentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentIdLessThanOrEqualTo(Integer value) {
+            addCriterion("student_id <=", value, "studentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentIdIn(List<Integer> values) {
+            addCriterion("student_id in", values, "studentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentIdNotIn(List<Integer> values) {
+            addCriterion("student_id not in", values, "studentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentIdBetween(Integer value1, Integer value2) {
+            addCriterion("student_id between", value1, value2, "studentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("student_id not between", value1, value2, "studentId");
             return (Criteria) this;
         }
     }

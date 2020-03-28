@@ -4,7 +4,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.lutayy.campbackend.dao.VoteMapper;
 import com.lutayy.campbackend.dao.VoteOptionMapper;
-import com.lutayy.campbackend.dao.VoteStudentMemberMapper;
+import com.lutayy.campbackend.dao.VoteOptionMemberMapper;
+import com.lutayy.campbackend.dao.VoteOptionStudentMapper;
 import com.lutayy.campbackend.pojo.*;
 import com.lutayy.campbackend.service.VoteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,9 @@ public class VoteServiceImpl implements VoteService {
     @Autowired
     VoteOptionMapper voteOptionMapper;
     @Autowired
-    VoteStudentMemberMapper voteStudentMemberMapper;
+    VoteOptionMemberMapper voteOptionMemberMapper;
+    @Autowired
+    VoteOptionStudentMapper voteOptionStudentMapper;
 
     //管理员
     @Override
@@ -77,10 +80,12 @@ public class VoteServiceImpl implements VoteService {
         }
 
         //删除“投票-学员-会员”表的内容
-        VoteStudentMemberExample voteStudentMemberExample = new VoteStudentMemberExample();
-        VoteStudentMemberExample.Criteria criteria = voteStudentMemberExample.createCriteria();
-        criteria.andVoteIdEqualTo(voteId);
-        voteStudentMemberMapper.deleteByExample(voteStudentMemberExample);
+        VoteOptionMemberExample voteOptionMemberExample = new VoteOptionMemberExample();
+        voteOptionMemberExample.createCriteria().andVoteIdEqualTo(voteId);
+        voteOptionMemberMapper.deleteByExample(voteOptionMemberExample);
+        VoteOptionStudentExample voteOptionStudentExample=new VoteOptionStudentExample();
+        voteOptionStudentExample.createCriteria().andVoteIdEqualTo(voteId);
+        voteOptionStudentMapper.deleteByExample(voteOptionStudentExample);
 
         //删除“投票-选项”表的内容
         VoteOptionExample voteOptionExample = new VoteOptionExample();
@@ -108,7 +113,7 @@ public class VoteServiceImpl implements VoteService {
             return result;
         }
         data.put("name", vote.getVoteContent());
-        data.put("type", vote.getOptionalNum() > 0 ? "多选" : "单选");
+        data.put("type", vote.getOptionalNum() > 1 ? "多选" : "单选");
         data.put("num", vote.getOptionalSum());
         JSONArray options = new JSONArray();
 
@@ -117,16 +122,32 @@ public class VoteServiceImpl implements VoteService {
         criteria.andVoteIdEqualTo(voteId);
         List<VoteOption> voteOptions = voteOptionMapper.selectByExample(voteOptionExample);
         //计算投票总参与数
-        VoteStudentMemberExample voteStudentMemberExample = new VoteStudentMemberExample();
-        voteStudentMemberExample.createCriteria().andVoteIdEqualTo(voteId);
-        long sum = voteStudentMemberMapper.countByExample(voteStudentMemberExample);
+        long sum = 0;
+        if (vote.getVoteType().equals((byte) 0) || vote.getVoteType().equals((byte) 2)) {
+            VoteOptionMemberExample voteOptionMemberExample = new VoteOptionMemberExample();
+            voteOptionMemberExample.createCriteria().andVoteIdEqualTo(voteId);
+            sum += voteOptionMemberMapper.countByExample(voteOptionMemberExample);
+        }
+        if (vote.getVoteType().equals((byte) 1) || vote.getVoteType().equals((byte) 2)) {
+            VoteOptionStudentExample voteOptionStudentExample = new VoteOptionStudentExample();
+            voteOptionStudentExample.createCriteria().andVoteIdEqualTo(voteId);
+            sum += voteOptionStudentMapper.countByExample(voteOptionStudentExample);
+        }
         for (VoteOption voteOption : voteOptions) {
             JSONObject object = new JSONObject();
             object.put("text", voteOption.getOptionText());
-            VoteStudentMemberExample voteStudentMemberExamplePer = new VoteStudentMemberExample();
-            voteStudentMemberExamplePer.createCriteria().andVoteIdEqualTo(voteId).andOptionIdEqualTo(voteOption.getOptionId());
-            long num = voteStudentMemberMapper.countByExample(voteStudentMemberExamplePer);
-            object.put("per", (int)((float)num/sum*100));
+            long num = 0;
+            if (vote.getVoteType().equals((byte) 0) || vote.getVoteType().equals((byte) 2)) {
+                VoteOptionMemberExample voteOptionMemberExample = new VoteOptionMemberExample();
+                voteOptionMemberExample.createCriteria().andVoteIdEqualTo(voteId).andOptionIdEqualTo(voteOption.getOptionId());
+                num += voteOptionMemberMapper.countByExample(voteOptionMemberExample);
+            }
+            if (vote.getVoteType().equals((byte) 1) || vote.getVoteType().equals((byte) 2)) {
+                VoteOptionStudentExample voteOptionStudentExample = new VoteOptionStudentExample();
+                voteOptionStudentExample.createCriteria().andVoteIdEqualTo(voteId).andOptionIdEqualTo(voteOption.getOptionId());
+                num += voteOptionStudentMapper.countByExample(voteOptionStudentExample);
+            }
+            object.put("per", sum == 0 ? 0 : (int) ((float) num / sum * 100));
             options.add(object);
         }
         data.put("options", options);
@@ -249,6 +270,43 @@ public class VoteServiceImpl implements VoteService {
 
     @Override
     public JSONObject memberVote(JSONObject jsonObject) {
+        JSONObject result = new JSONObject();
+        int voteId = jsonObject.getInteger("voteId");
+        VoteOptionExample voteOptionExample = new VoteOptionExample();
+        voteOptionExample.createCriteria().andVoteIdEqualTo(voteId);
+        List<VoteOption> voteOptions = voteOptionMapper.selectByExample(voteOptionExample);
+
+        JSONArray array = jsonObject.getJSONArray("data");
+        if (array.size() > voteOptions.size()) {
+            result.put("code", "fail");
+            result.put("msg", "投票选项已变更，请刷新页面");
+            return result;
+        }
+        for (int i = 0; i < array.size(); i++) {
+            JSONObject object = array.getJSONObject(i);
+            int index = object.getInteger("index");
+            VoteOptionMember voteOptionMember = new VoteOptionMember();
+            voteOptionMember.setMemberKeyId(jsonObject.getInteger("id"));
+            if (voteOptions.get(index - 1) == null) {
+                result.put("code", "fail");
+                result.put("msg", "该投票下无第" + index + "个选项");
+                return result;
+            }
+            voteOptionMember.setOptionId(voteOptions.get(index - 1).getOptionId());
+            voteOptionMember.setVoteId(voteId);
+            VoteOptionMemberExample voteOptionMemberExample = new VoteOptionMemberExample();
+            voteOptionMemberExample.createCriteria().andOptionIdEqualTo(voteOptions.get(index - 1).getOptionId()).andVoteIdEqualTo(voteId).andMemberKeyIdEqualTo(jsonObject.getInteger("id"));
+            if (voteOptionMemberMapper.countByExample(voteOptionMemberExample) == 0) {
+                voteOptionMemberMapper.insert(voteOptionMember);
+            }
+        }
+        result.put("code", "success");
+        result.put("msg", "投票已提交！");
+        return result;
+    }
+
+    @Override
+    public JSONObject getMemberHasVotedList(String name, Integer isFinish, Integer currentPage, Integer pageSize) {
         return null;
     }
 
@@ -295,6 +353,43 @@ public class VoteServiceImpl implements VoteService {
         result.put("data", data);
         result.put("code", "success");
         result.put("msg", "查询成功！");
+        return result;
+    }
+
+    @Override
+    public JSONObject studentVote(JSONObject jsonObject) {
+        JSONObject result = new JSONObject();
+        int voteId = jsonObject.getInteger("voteId");
+        VoteOptionExample voteOptionExample = new VoteOptionExample();
+        voteOptionExample.createCriteria().andVoteIdEqualTo(voteId);
+        List<VoteOption> voteOptions = voteOptionMapper.selectByExample(voteOptionExample);
+
+        JSONArray array = jsonObject.getJSONArray("data");
+        if (array.size() > voteOptions.size()) {
+            result.put("code", "fail");
+            result.put("msg", "投票选项已变更，请刷新页面");
+            return result;
+        }
+        for (int i = 0; i < array.size(); i++) {
+            JSONObject object = array.getJSONObject(i);
+            int index = object.getInteger("index");
+            VoteOptionStudent voteOptionStudent = new VoteOptionStudent();
+            voteOptionStudent.setStudentId(jsonObject.getInteger("id"));
+            if (voteOptions.get(index - 1) == null) {
+                result.put("code", "fail");
+                result.put("msg", "该投票下无第" + index + "个选项");
+                return result;
+            }
+            voteOptionStudent.setOptionId(voteOptions.get(index - 1).getOptionId());
+            voteOptionStudent.setVoteId(voteId);
+            VoteOptionStudentExample voteOptionStudentExample = new VoteOptionStudentExample();
+            voteOptionStudentExample.createCriteria().andOptionIdEqualTo(voteOptions.get(index - 1).getOptionId()).andVoteIdEqualTo(voteId).andVoteIdEqualTo(jsonObject.getInteger("id"));
+            if (voteOptionStudentMapper.countByExample(voteOptionStudentExample) == 0) {
+                voteOptionStudentMapper.insert(voteOptionStudent);
+            }
+        }
+        result.put("code", "success");
+        result.put("msg", "投票已提交！");
         return result;
     }
 }

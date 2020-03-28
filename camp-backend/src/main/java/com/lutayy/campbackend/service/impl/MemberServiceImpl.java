@@ -496,19 +496,11 @@ public class MemberServiceImpl implements MemberService {
         if (currentPage == null || currentPage <= 0) {
             currentPage = 1;
         }
+        int total = MemberStudentSQLConn.countStudentsFromMemberReStudent(memberId, phone, idNum, name);
         List<Student> students = MemberStudentSQLConn.getStudentsFromMemberReStudent(memberId, phone, idNum, name, currentPage, pageSize);
         JSONObject data = new JSONObject();
         JSONArray list = new JSONArray();
-        int totalNum = students.size();
-        if (totalNum == 0) {
-            data.put("list", null);
-            data.put("currentPage", "1");
-            data.put("total", totalNum);
-            result.put("data", data);
-            result.put("code", "success");
-            result.put("msg", "名下没有符合条件的学员");
-            return result;
-        }
+
 //        int i = 1;//计数
 //        int sum = 0;//每页数目计数
         for (Student student : students) {
@@ -534,7 +526,7 @@ public class MemberServiceImpl implements MemberService {
         }
         data.put("list", list);
         data.put("currentPage", currentPage);
-        data.put("total", totalNum);
+        data.put("total", total);
         result.put("data", data);
         result.put("code", "success");
         result.put("msg", "获取学员列表成功");

@@ -18,5 +18,10 @@ public interface VoteService {
 
     JSONObject memberVote(JSONObject jsonObject);
 
+    JSONObject getMemberHasVotedList(String name, Integer isFinish, Integer currentPage, Integer pageSize);
+
     JSONObject getStudentCanVoteList(String name, Integer isFinish, Integer currentPage, Integer pageSize);
+
+    JSONObject studentVote(JSONObject jsonObject);
+
 }

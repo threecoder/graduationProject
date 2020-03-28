@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.lutayy.campbackend.dao.VoteStudentMemberMapper">
-  <resultMap id="BaseResultMap" type="com.lutayy.campbackend.pojo.VoteStudentMember">
+<mapper namespace="com.lutayy.campbackend.dao.VoteOptionStudentMapper">
+  <resultMap id="BaseResultMap" type="com.lutayy.campbackend.pojo.VoteOptionStudent">
     <result column="vote_id" jdbcType="INTEGER" property="voteId" />
-    <result column="student_id" jdbcType="INTEGER" property="studentId" />
-    <result column="member_key_id" jdbcType="INTEGER" property="memberKeyId" />
     <result column="option_id" jdbcType="INTEGER" property="optionId" />
+    <result column="student_id" jdbcType="INTEGER" property="studentId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -66,15 +65,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    vote_id, student_id, member_key_id, option_id
+    vote_id, option_id, student_id
   </sql>
-  <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.VoteStudentMemberExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.VoteOptionStudentExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from vote_student_member
+    from vote_option_student
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -82,69 +81,60 @@
       order by ${orderByClause}
     </if>
   </select>
-  <delete id="deleteByExample" parameterType="com.lutayy.campbackend.pojo.VoteStudentMemberExample">
-    delete from vote_student_member
+  <delete id="deleteByExample" parameterType="com.lutayy.campbackend.pojo.VoteOptionStudentExample">
+    delete from vote_option_student
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.lutayy.campbackend.pojo.VoteStudentMember">
-    insert into vote_student_member (vote_id, student_id, member_key_id, 
-      option_id)
-    values (#{voteId,jdbcType=INTEGER}, #{studentId,jdbcType=INTEGER}, #{memberKeyId,jdbcType=INTEGER}, 
-      #{optionId,jdbcType=INTEGER})
+  <insert id="insert" parameterType="com.lutayy.campbackend.pojo.VoteOptionStudent">
+    insert into vote_option_student (vote_id, option_id, student_id
+      )
+    values (#{voteId,jdbcType=INTEGER}, #{optionId,jdbcType=INTEGER}, #{studentId,jdbcType=INTEGER}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.VoteStudentMember">
-    insert into vote_student_member
+  <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.VoteOptionStudent">
+    insert into vote_option_student
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="voteId != null">
         vote_id,
       </if>
-      <if test="studentId != null">
-        student_id,
-      </if>
-      <if test="memberKeyId != null">
-        member_key_id,
-      </if>
       <if test="optionId != null">
         option_id,
+      </if>
+      <if test="studentId != null">
+        student_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="voteId != null">
         #{voteId,jdbcType=INTEGER},
       </if>
-      <if test="studentId != null">
-        #{studentId,jdbcType=INTEGER},
-      </if>
-      <if test="memberKeyId != null">
-        #{memberKeyId,jdbcType=INTEGER},
-      </if>
       <if test="optionId != null">
         #{optionId,jdbcType=INTEGER},
       </if>
+      <if test="studentId != null">
+        #{studentId,jdbcType=INTEGER},
+      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.lutayy.campbackend.pojo.VoteStudentMemberExample" resultType="java.lang.Long">
-    select count(*) from vote_student_member
+  <select id="countByExample" parameterType="com.lutayy.campbackend.pojo.VoteOptionStudentExample" resultType="java.lang.Long">
+    select count(*) from vote_option_student
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update vote_student_member
+    update vote_option_student
     <set>
       <if test="record.voteId != null">
         vote_id = #{record.voteId,jdbcType=INTEGER},
       </if>
-      <if test="record.studentId != null">
-        student_id = #{record.studentId,jdbcType=INTEGER},
-      </if>
-      <if test="record.memberKeyId != null">
-        member_key_id = #{record.memberKeyId,jdbcType=INTEGER},
-      </if>
       <if test="record.optionId != null">
         option_id = #{record.optionId,jdbcType=INTEGER},
+      </if>
+      <if test="record.studentId != null">
+        student_id = #{record.studentId,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null">
@@ -152,11 +142,10 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update vote_student_member
+    update vote_option_student
     set vote_id = #{record.voteId,jdbcType=INTEGER},
-      student_id = #{record.studentId,jdbcType=INTEGER},
-      member_key_id = #{record.memberKeyId,jdbcType=INTEGER},
-      option_id = #{record.optionId,jdbcType=INTEGER}
+      option_id = #{record.optionId,jdbcType=INTEGER},
+      student_id = #{record.studentId,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

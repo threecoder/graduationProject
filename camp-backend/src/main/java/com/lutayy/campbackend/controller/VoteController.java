@@ -28,7 +28,7 @@ public class VoteController {
         return voteService.deleteVote(jsonObject);
     }
 
-    @RequestMapping("/admin/getVoteStatistic")
+    @RequestMapping(value = {"/admin/getVoteStatistic", "/member/memberGetVoteStatic", "/student/studentGetVoteStatic"})
     @ResponseBody
     public Object getVoteStatistic(@RequestParam("voteId") Integer voteId) {
         return voteService.getVoteStatistic(voteId);
@@ -37,9 +37,9 @@ public class VoteController {
     @RequestMapping("/admin/getVoteList")
     @ResponseBody
     public Object getVoteList(@RequestParam(value = "name", required = false) String name,
-                                       @RequestParam(value = "type", required = false) Integer type,
-                                       @RequestParam("currentPage") Integer currentPage,
-                                       @RequestParam("pageSize") Integer pageSize) {
+                              @RequestParam(value = "type", required = false) Integer type,
+                              @RequestParam("currentPage") Integer currentPage,
+                              @RequestParam("pageSize") Integer pageSize) {
         return voteService.getVoteList(name, type, currentPage, pageSize);
     }
 
@@ -54,25 +54,41 @@ public class VoteController {
     }
 
 
-    @RequestMapping(value = {"/member/getVoteDetail","/student/getVoteDetail"})
+    @RequestMapping(value = {"/member/getVoteDetail", "/student/getVoteDetail"})
     @ResponseBody
     public Object getVoteDetail(@RequestParam("voteId") Integer voteId) {
         return voteService.getVoteDetail(voteId);
     }
 
-    @RequestMapping("/admin/memberVote")
+    @RequestMapping("/member/memberVote")
     @ResponseBody
     public JSONObject memberVote(@RequestBody JSONObject jsonObject) {
         return voteService.memberVote(jsonObject);
+    }
+
+    @RequestMapping("/member/getMemberHasVotedList")
+    @ResponseBody
+    public Object getMemberHasVotedList(@RequestParam(value = "name", required = false) String name,
+                                       @RequestParam(value = "isFinish", required = false) Integer isFinish,
+                                       @RequestParam("currentPage") Integer currentPage,
+                                       @RequestParam("pageSize") Integer pageSize) {
+        return voteService.getMemberHasVotedList(name, isFinish, currentPage, pageSize);
     }
 
     //学员--投票管理
     @RequestMapping("/member/getStudentCanVoteList")
     @ResponseBody
     public Object getStudentCanVoteList(@RequestParam(value = "name", required = false) String name,
-                                       @RequestParam(value = "isFinish", required = false) Integer isFinish,
-                                       @RequestParam("currentPage") Integer currentPage,
-                                       @RequestParam("pageSize") Integer pageSize) {
+                                        @RequestParam(value = "isFinish", required = false) Integer isFinish,
+                                        @RequestParam("currentPage") Integer currentPage,
+                                        @RequestParam("pageSize") Integer pageSize) {
         return voteService.getStudentCanVoteList(name, isFinish, currentPage, pageSize);
     }
+
+    @RequestMapping("/student/studentVote")
+    @ResponseBody
+    public JSONObject studentVote(@RequestBody JSONObject jsonObject) {
+        return voteService.studentVote(jsonObject);
+    }
+
 }
