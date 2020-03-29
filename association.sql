@@ -852,11 +852,11 @@ CREATE TABLE `vote` (
   `optional_num` tinyint(4) DEFAULT NULL COMMENT '可多选数目',
   `post_time` datetime DEFAULT NULL COMMENT '发布时间',
   PRIMARY KEY (`vote_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 /*Data for the table `vote` */
 
-insert  into `vote`(`vote_id`,`vote_content`,`end_time`,`vote_type`,`optional_sum`,`optional_num`,`post_time`) values (1,'投票测试1','2020-11-01 15:00:00',2,3,3,'2020-03-22 02:45:55'),(3,'投票测试2','2020-11-01 15:00:00',1,4,3,'2020-03-23 00:30:04');
+insert  into `vote`(`vote_id`,`vote_content`,`end_time`,`vote_type`,`optional_sum`,`optional_num`,`post_time`) values (1,'投票测试1','2020-11-01 15:00:00',2,3,3,'2020-03-22 02:45:55'),(3,'投票测试2','2020-11-01 15:00:00',1,4,3,'2020-03-23 00:30:04'),(4,'投票测试3','2020-03-20 12:49:41',2,3,3,'2020-03-29 12:50:02');
 
 /*Table structure for table `vote_option` */
 
@@ -869,11 +869,11 @@ CREATE TABLE `vote_option` (
   PRIMARY KEY (`option_id`),
   KEY `vote_id` (`vote_id`),
   CONSTRAINT `vote_option_ibfk_1` FOREIGN KEY (`vote_id`) REFERENCES `vote` (`vote_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 /*Data for the table `vote_option` */
 
-insert  into `vote_option`(`option_id`,`vote_id`,`option_text`) values (1,1,'选项1'),(3,1,'选项3'),(4,1,'选项4'),(8,3,'选项1'),(9,3,'选项2'),(10,3,'选项3'),(11,3,'选项4');
+insert  into `vote_option`(`option_id`,`vote_id`,`option_text`) values (1,1,'选项1'),(3,1,'选项3'),(4,1,'选项4'),(8,3,'选项1'),(9,3,'选项2'),(10,3,'选项3'),(11,3,'选项4'),(12,4,'选项1'),(13,4,'选项2'),(14,4,'选项3');
 
 /*Table structure for table `vote_option_member` */
 
@@ -893,7 +893,7 @@ CREATE TABLE `vote_option_member` (
 
 /*Data for the table `vote_option_member` */
 
-insert  into `vote_option_member`(`vote_id`,`option_id`,`member_key_id`) values (1,1,1),(1,3,1);
+insert  into `vote_option_member`(`vote_id`,`option_id`,`member_key_id`) values (1,1,1),(1,3,1),(3,8,1),(3,9,1),(4,12,1);
 
 /*Table structure for table `vote_option_student` */
 

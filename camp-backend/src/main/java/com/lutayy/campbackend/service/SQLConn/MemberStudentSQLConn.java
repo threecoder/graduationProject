@@ -84,7 +84,9 @@ public class MemberStudentSQLConn {
                 sql += " and s.student_name='" + name + "'";
             }
             ResultSet rs = statement.executeQuery(sql);
-            sum = rs.getInt("c");
+            while(rs.next()) {
+                sum = rs.getInt("c");
+            }
             return sum;
         } catch (SQLException e) {
             e.printStackTrace();

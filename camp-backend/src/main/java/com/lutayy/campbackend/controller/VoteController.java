@@ -69,10 +69,11 @@ public class VoteController {
     @RequestMapping("/member/getMemberHasVotedList")
     @ResponseBody
     public Object getMemberHasVotedList(@RequestParam(value = "name", required = false) String name,
-                                       @RequestParam(value = "isFinish", required = false) Integer isFinish,
-                                       @RequestParam("currentPage") Integer currentPage,
-                                       @RequestParam("pageSize") Integer pageSize) {
-        return voteService.getMemberHasVotedList(name, isFinish, currentPage, pageSize);
+                                        @RequestParam(value = "isFinish", required = false) Integer isFinish,
+                                        @RequestParam("currentPage") Integer currentPage,
+                                        @RequestParam("pageSize") Integer pageSize,
+                                        @RequestParam("id") int memberKeyId) {
+        return voteService.getMemberHasVotedList(name, isFinish, currentPage, pageSize, memberKeyId);
     }
 
     //学员--投票管理
@@ -89,6 +90,16 @@ public class VoteController {
     @ResponseBody
     public JSONObject studentVote(@RequestBody JSONObject jsonObject) {
         return voteService.studentVote(jsonObject);
+    }
+
+    @RequestMapping("/student/getStudentHasVotedList")
+    @ResponseBody
+    public Object getStudentHasVotedList(@RequestParam(value = "name", required = false) String name,
+                                        @RequestParam(value = "isFinish", required = false) Integer isFinish,
+                                        @RequestParam("currentPage") Integer currentPage,
+                                        @RequestParam("pageSize") Integer pageSize,
+                                        @RequestParam("id") int studentId) {
+        return voteService.getStudentHasVotedList(name, isFinish, currentPage, pageSize, studentId);
     }
 
 }

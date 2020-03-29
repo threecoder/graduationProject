@@ -7,6 +7,7 @@ import com.lutayy.campbackend.dao.VoteOptionMapper;
 import com.lutayy.campbackend.dao.VoteOptionMemberMapper;
 import com.lutayy.campbackend.dao.VoteOptionStudentMapper;
 import com.lutayy.campbackend.pojo.*;
+import com.lutayy.campbackend.service.SQLConn.VoteSQLConn;
 import com.lutayy.campbackend.service.VoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -306,8 +307,32 @@ public class VoteServiceImpl implements VoteService {
     }
 
     @Override
-    public JSONObject getMemberHasVotedList(String name, Integer isFinish, Integer currentPage, Integer pageSize) {
-        return null;
+    public JSONObject getMemberHasVotedList(String name, Integer isFinish, Integer currentPage, Integer pageSize, int memberKeyId) {
+        JSONObject result=new JSONObject();
+        if (pageSize == null || pageSize < 1) {
+            pageSize = 10;
+        }
+        if (currentPage == null || currentPage < 1) {
+            currentPage = 1;
+        }
+        JSONObject data=new JSONObject();
+        int total=VoteSQLConn.countHasVoted(0, name, isFinish,memberKeyId);
+        List<Vote> voteList=VoteSQLConn.getHasVotedList(0, name, isFinish, memberKeyId, currentPage, pageSize);
+        data.put("total", total);
+        JSONArray list=new JSONArray();
+        for(Vote vote:voteList){
+            JSONObject object=new JSONObject();
+            object.put("id", vote.getVoteId());
+            object.put("name", vote.getVoteContent());
+            object.put("type", vote.getVoteType());
+            object.put("time", vote.getEndTime());
+            list.add(object);
+        }
+        data.put("list", list);
+        result.put("data", data);
+        result.put("code", "success");
+        result.put("msg", "查询成功！");
+        return result;
     }
 
     //学员
@@ -390,6 +415,35 @@ public class VoteServiceImpl implements VoteService {
         }
         result.put("code", "success");
         result.put("msg", "投票已提交！");
+        return result;
+    }
+
+    @Override
+    public JSONObject getStudentHasVotedList(String name, Integer isFinish, Integer currentPage, Integer pageSize, int studentId) {
+        JSONObject result=new JSONObject();
+        if (pageSize == null || pageSize < 1) {
+            pageSize = 10;
+        }
+        if (currentPage == null || currentPage < 1) {
+            currentPage = 1;
+        }
+        JSONObject data=new JSONObject();
+        int total=VoteSQLConn.countHasVoted(1, name, isFinish,studentId);
+        List<Vote> voteList=VoteSQLConn.getHasVotedList(1, name, isFinish, studentId, currentPage, pageSize);
+        data.put("total", total);
+        JSONArray list=new JSONArray();
+        for(Vote vote:voteList){
+            JSONObject object=new JSONObject();
+            object.put("id", vote.getVoteId());
+            object.put("name", vote.getVoteContent());
+            object.put("type", vote.getVoteType());
+            object.put("time", vote.getEndTime());
+            list.add(object);
+        }
+        data.put("list", list);
+        result.put("data", data);
+        result.put("code", "success");
+        result.put("msg", "查询成功！");
         return result;
     }
 }
