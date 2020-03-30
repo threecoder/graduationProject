@@ -9,6 +9,10 @@ export default new Router({
     routes: [
         {
             path: '/',
+            redirect: '/index'
+        },
+        {
+            path: '/',
             name: 'home',
             component: resolve => require([ "../views/home/home.vue" ], resolve),
             children: [

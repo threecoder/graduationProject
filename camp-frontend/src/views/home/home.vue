@@ -1,7 +1,6 @@
 <template>
     <div class="all-container">
         <el-menu
-            :class="{'fixed':fixed}"
             mode="horizontal"
             default-active="/"
             :router="true"
@@ -23,17 +22,19 @@
                 <el-menu-item index="/courses/now">正在上课</el-menu-item>
                 <el-menu-item index="/courses/future">近期开课</el-menu-item>
             </el-submenu>
+            <el-menu-item index="/index">新闻</el-menu-item>
+            <el-menu-item index="/index">活动</el-menu-item>
+            <!-- 
             <el-submenu index="3">
                 <template slot="title">协会动态</template>
                 <el-menu-item index>新闻</el-menu-item>
                 <el-menu-item index>活动</el-menu-item>
                 <el-menu-item index>培训</el-menu-item>
-            </el-submenu>
+            </el-submenu>-->
             <el-menu-item index>协会公告</el-menu-item>
             <el-menu-item index="/contact">联系我们</el-menu-item>
             <el-menu-item index="/personal" class="fr">个人中心</el-menu-item>
         </el-menu>
-        <div style="margin-top:60px" v-show="fixed"></div>
         <div class="container">
             <router-view :key="$route.path" />
         </div>
@@ -41,55 +42,24 @@
 </template>
 
 <script>
-export default {
-    data() {
-        return {
-            fixed: false
-        };
-    },
-    mounted() {
-        this.setNavFixed();
-    },
-    methods: {
-        mouseenter() {},
-        setNavFixed() {
-            window.onscroll = () => {
-                let top =
-                    document.documentElement.scrollTop ||
-                    document.body.scrollTop;
-                if (top >= 60) {
-                    this.fixed = true;
-                } else {
-                    this.fixed = false;
-                }
-            };
-        }
-    }
-};
+export default {};
 </script>
 
 <style lang="scss" scoped>
-.el-menu {
-    padding-left: 5%;
-    // background-color: black;
-    .one {
-        margin-left: 16%!important;
+.all-container {
+    background-color: rgb(242, 243, 244);
+    height: 100%;
+    .el-menu {
+        z-index: 999;
+        width: 62.5%;
+        margin: 0 auto;
+        min-width: 1030px;
     }
-    .el-submenu {
-        margin: 0 1.5%;
+    .is-opened {
+        background-color: rgb(25, 80, 139);
     }
-    .el-menu-item {
-        margin: 0 1.5%;
+    .container {
+        min-width: 1030px;
     }
-    z-index: 999;
-}
-.fixed {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-}
-.is-opened {
-    background-color: rgb(25,80,139);
 }
 </style>

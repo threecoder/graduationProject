@@ -11,5 +11,9 @@ export const canGoPath = [
     '/courses/now',
     '/courses/future',
     '/contact',
+    '/index',
+    '/brief',
+    '/constitution',
+    '/framework',
     '/',
 ]
