@@ -7,6 +7,7 @@ export const indexPrefix = '/campback/index';
 export const canGoPath = [
     '/login',
     '/404',
+    '/introduction',
     '/courses/previous',
     '/courses/now',
     '/courses/future',

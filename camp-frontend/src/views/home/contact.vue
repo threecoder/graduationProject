@@ -40,7 +40,7 @@ export default {};
 .img-container {
     height: 150px;
     width: 100%;
-    background: url("../assets/images/contact.jpg") no-repeat center;
+    background: url("../../assets/images/contact.jpg") no-repeat center;
     p {
         font-size: 30px;
         line-height: 150px;

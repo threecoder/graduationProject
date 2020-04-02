@@ -1,33 +1,62 @@
 <template>
     <div>
-        <h3>{{title}}</h3>
-        <search-form @searchInfo="searchCourses" />
+        <courses-menu @switch="changeContent" />
         <div class="divider"></div>
-        <list v-if="list.length!=0" :list="list" />
-        <h3 v-else class="tip">暂无课程</h3>
-        <div class="divider"></div>
-        <page :total="pagination.total" :pageSize="pagination.pageSize" :currentPage="pagination.currentPage" @curChange="curChange" />
+        <div v-loading="loading">
+            <div>
+                <el-form :model="searchParams" inline>
+                    <el-form-item label="培训名称">
+                        <el-input v-model="searchParams.keyWord" placeholder="课程关键字"></el-input>
+                    </el-form-item>
+                    <el-form-item label="培训时间">
+                        <el-date-picker
+                            type="daterange"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            v-model="searchParams.date"
+                        ></el-date-picker>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" round @click="searchCourses">搜索</el-button>
+                    </el-form-item>
+                </el-form>
+            </div>
+            <list v-if="list.length!=0" :list="list" />
+            <h3 v-else class="tip">暂无课程</h3>
+            <page
+                :total="pagination.total"
+                :pageSize="pagination.pageSize"
+                :currentPage="pagination.currentPage"
+                @curChange="curChange"
+            />
+        </div>
     </div>
 </template>
 <script>
-import searchForm from "./components/searchForm.vue";
 import list from "./components/list.vue";
-import page from "@/components/page.vue";
-import coursesApi from "@/api/modules/courses.js";
+import page from "../../../components/page.vue";
+import coursesMenu from "./components/coursesMenu.vue";
+import coursesApi from "../../../api/modules/courses.js";
 export default {
+    components: {
+        list,
+        page,
+        coursesMenu
+    },
     data() {
         return {
-            type: this.$route.params.type,
+            type: "previous",
             pagination: {
                 total: 0,
                 pageSize: 10,
                 currentPage: 1
             },
-            searchPar: {
-                keyWord:"",
-                date:null,
-                startDate:"",
-                endDate:""
+            searchParams: {
+                keyWord: "",
+                date: null,
+                startDate: "",
+                endDate: ""
             },
             list: [
                 {
@@ -84,13 +113,9 @@ export default {
                     abstract:
                         "HTML+CSS基础教程8小时带领大家步步深入学习标签用法和意义"
                 }
-            ]
+            ],
+            loading: true
         };
-    },
-    components: {
-        searchForm,
-        list,
-        page
     },
     watch: {
         currentPage() {
@@ -98,39 +123,34 @@ export default {
             this.searchCourses();
         }
     },
-    computed: {
-        title() {
-            if (this.type == "previous") {
-                return "往期课程";
-            } else if (this.type == "now") {
-                return "正在上课";
-            } else if (this.type == "future") {
-                return "近期开课";
-            }
-        }
-    },
     mounted() {
         this.searchCourses();
     },
     methods: {
+        changeContent(val) {
+            this.type = val;
+            this.searchCourses();
+        },
         curChange(val) {
             this.pagination.currentPage = val;
             this.searchCourses();
         },
-        async searchCourses(par) {
-            if (par) {
-                this.searchPar = par;
+        async searchCourses() {
+            this.loading = true;
+            try {
+                let params = {
+                    ...this.searchParams,
+                    ...this.pagination,
+                    type: this.type
+                };
+                let res = await coursesApi.getCourses(params);
+                this.list = res.data.list;
+                this.pagination.total = res.data.allNum;
+                this.pagination.currentPage = res.data.currentPage;
+            } catch (error) {
+                this.$message.error(error.message);
             }
-            let params = {
-                ...this.searchPar,
-                ...this.pagination,
-                type: this.type
-            };
-            let res = await coursesApi.getCourses(params);
-            console.log(res);
-            this.list = res.data.list;
-            this.pagination.total = res.data.allNum;
-            this.pagination.currentPage = res.data.currentPage;
+            this.loading = false;
         }
     }
 };

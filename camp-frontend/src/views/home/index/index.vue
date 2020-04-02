@@ -51,22 +51,22 @@ export default {
             },
             clist: [
                 {
-                    url: require("../../assets/images/index1.jpg"),
+                    url: require("../../../assets/images/index1.jpg"),
                     title: "图片1",
                     link: ""
                 },
                 {
-                    url: require("../../assets/images/index2.jpg"),
+                    url: require("../../../assets/images/index2.jpg"),
                     title: "图片2",
                     link: ""
                 },
                 {
-                    url: require("../../assets/images/index3.jpg"),
+                    url: require("../../../assets/images/index3.jpg"),
                     title: "图片3",
                     link: ""
                 },
                 {
-                    url: require("../../assets/images/index4.jpg"),
+                    url: require("../../../assets/images/index4.jpg"),
                     title: "图片4",
                     link: ""
                 }
@@ -178,17 +178,17 @@ export default {
             ],
             imglist: [
                 {
-                    url: require("../../assets/images/index1.jpg"),
+                    url: require("../../../assets/images/index1.jpg"),
                     title: "图片1",
                     link: ""
                 },
                 {
-                    url: require("../../assets/images/index1.jpg"),
+                    url: require("../../../assets/images/index1.jpg"),
                     title: "图片2",
                     link: ""
                 },
                 {
-                    url: require("../../assets/images/index1.jpg"),
+                    url: require("../../../assets/images/index1.jpg"),
                     title: "图片3",
                     link: ""
                 }

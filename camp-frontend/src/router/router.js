@@ -19,39 +19,32 @@ export default new Router({
                 {
                     path: '/index',
                     name: 'index',
-                    component: resolve => require([ '../views/index/index.vue' ], resolve)
-                },
-                {
-                    path: '/courses/:type',
-                    name: 'courses',
-                    component: resolve => require([ "../views/courses/courses.vue" ], resolve)
-                },
-                {
-                    path: '/contact',
-                    name: 'contact',
-                    component: resolve => require([ '../views/contact.vue' ], resolve)
+                    component: resolve => require([ '../views/home/index/index.vue' ], resolve)
                 },
                 {
                     path: '/introduction',
                     name: 'introduction',
-                    component: resolve => require([ "../views/introduction/introduction.vue" ], resolve),
-                    children: [
-                        {
-                            path: '/brief',
-                            name: 'brief',
-                            component: resolve => require([ "../views/introduction/components/brief.vue" ], resolve)
-                        },
-                        {
-                            path: '/constitution',
-                            name: 'constitution',
-                            component: resolve => require([ "../views/introduction/components/constitution.vue" ], resolve)
-                        },
-                        {
-                            path: '/framework',
-                            name: 'framework',
-                            component: resolve => require([ "../views/introduction/components/framework.vue" ], resolve)
-                        }
-                    ]
+                    component: resolve => require([ '../views/home/introduction/introduction.vue' ], resolve)
+                },
+                {
+                    path: '/courses',
+                    name: 'courses',
+                    component: resolve => require([ "../views/home/courses/courses.vue" ], resolve)
+                },
+                {
+                    path: '/contact',
+                    name: 'contact',
+                    component: resolve => require([ '../views/home/contact.vue' ], resolve)
+                },
+                {
+                    path: '/notice',
+                    name: 'notice',
+                    component: resolve => require([ '../views/home/notice/notice.vue' ], resolve)
+                },
+                {
+                    path: '/news',
+                    name: 'news',
+                    component: resolve => require([ '../views/home/dynamic/dynamic.vue' ], resolve)
                 }
             ]
         },

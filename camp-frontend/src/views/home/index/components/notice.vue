@@ -48,6 +48,12 @@ export default {
 <style lang="scss" scoped>
 .box-card {
     width: 100%;
+    ::v-deep.el-card__header {
+        background-image: linear-gradient(
+            rgb(187, 221, 230),
+            rgb(255, 255, 255)
+        );
+    }
     .more-button {
         padding: 3px 0;
         color: rgb(96, 98, 102);
@@ -56,7 +62,8 @@ export default {
         }
     }
     .title {
-        color: rgb(64, 158, 255);
+        // color: rgb(64, 158, 255);
+        color: rgb(86, 88, 92);
         font-weight: 700;
     }
     ul {
