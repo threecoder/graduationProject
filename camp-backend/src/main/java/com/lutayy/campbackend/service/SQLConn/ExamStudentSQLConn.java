@@ -29,8 +29,7 @@ public class ExamStudentSQLConn {
 
     private static ExamStudentSQLConn examStudentSQLConn;
 
-    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
-            "yyyy-MM-dd HH:mm:ss");
+
 
     @PostConstruct
     public void init(){

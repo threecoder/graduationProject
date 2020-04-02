@@ -65,70 +65,70 @@ public class TrainingServiceImpl implements TrainingService {
 
     @Override
     public JSONObject getCourses(JSONObject jsonObject) {
-        String keyword=jsonObject.getString("keyWord");
-        Date startDate=jsonObject.getDate("startDate");
-        Date endDate=jsonObject.getDate("endDate");
-        Integer pageSize=jsonObject.getInteger("pageSize");
-        Integer currentPage=jsonObject.getInteger("currentPage");
-        if(pageSize==null){
-            pageSize=10;
+        String keyword = jsonObject.getString("keyWord");
+        Date startDate = jsonObject.getDate("startDate");
+        Date endDate = jsonObject.getDate("endDate");
+        Integer pageSize = jsonObject.getInteger("pageSize");
+        Integer currentPage = jsonObject.getInteger("currentPage");
+        if (pageSize == null || pageSize < 1) {
+            pageSize = 10;
         }
-        if(currentPage==null){
-            currentPage=1;
+        if (currentPage == null || currentPage < 1) {
+            currentPage = 1;
         }
-        TrainingExample trainingExample=new TrainingExample();
-        TrainingExample.Criteria criteria=trainingExample.createCriteria();
-        criteria.andTrainingNameLike("%"+keyword+"%");
-        if(startDate!=null){
+        TrainingExample trainingExample = new TrainingExample();
+        TrainingExample.Criteria criteria = trainingExample.createCriteria();
+        criteria.andTrainingNameLike("%" + keyword + "%");
+        if (startDate != null) {
             criteria.andTrainingStartTimeGreaterThanOrEqualTo(startDate);
         }
-        if(endDate!=null){
+        if (endDate != null) {
             Calendar c = Calendar.getInstance();
             c.setTime(endDate);
             c.add(Calendar.DAY_OF_MONTH, +1);
             criteria.andTrainingEndTimeLessThanOrEqualTo(c.getTime());
         }
         trainingExample.setOrderByClause("post_time DESC");
-        List<Training> trainings=trainingMapper.selectByExample(trainingExample);
-        int size=trainings.size();
+        List<Training> trainings = trainingMapper.selectByExample(trainingExample);
+        int size = trainings.size();
         JSONArray list = new JSONArray();
-        int i=1;//计数
-        int sum=0;//每页数目;
-        for(Training training:trainings){
-            if(i<=pageSize*(currentPage-1)){
+        int i = 1;//计数
+        int sum = 0;//每页数目;
+        for (Training training : trainings) {
+            if (i <= pageSize * (currentPage - 1)) {
                 i++;
                 continue;
             }
             /*获取参与培训的学生数目*/
-            TrainingReStudentExample trainingReStudentExample=new TrainingReStudentExample();
-            TrainingReStudentExample.Criteria criteria1=trainingReStudentExample.createCriteria();
+            TrainingReStudentExample trainingReStudentExample = new TrainingReStudentExample();
+            TrainingReStudentExample.Criteria criteria1 = trainingReStudentExample.createCriteria();
             criteria1.andTrainingIdEqualTo(training.getTrainingId());
-            List<TrainingReStudent> trainingReStudents=trainingReStudentMapper.selectByExample(trainingReStudentExample);
-            int studentNums=trainingReStudents.size();
+            List<TrainingReStudent> trainingReStudents = trainingReStudentMapper.selectByExample(trainingReStudentExample);
+            int studentNums = trainingReStudents.size();
 
-            JSONObject data0=new JSONObject();
+            JSONObject data0 = new JSONObject();
             data0.put("title", training.getTrainingName());
-            data0.put("abstract",training.getTrainingIntroduce());
-            data0.put("viewers",studentNums);
-            data0.put("url",training.getTrainingPic());
-            data0.put("level",training.getLevel());
+            data0.put("abstract", training.getTrainingIntroduce());
+            data0.put("viewers", studentNums);
+            data0.put("url", training.getTrainingPic());
+            data0.put("level", training.getLevel());
             list.add(data0);
             sum++;
-            if(sum==pageSize){
+            if (sum == pageSize) {
                 break;
             }
         }
         JSONObject result = new JSONObject();
-        JSONObject data=new JSONObject();
+        JSONObject data = new JSONObject();
         data.put("list", list);
         data.put("allNum", size);
-        data.put("pageSize",sum);
+        data.put("pageSize", sum);
         data.put("currentPage", currentPage);
         result.put("data", data);
-        if(size==0){
-            result.put("code","success");
-            result.put("msg","无结果");
-        }else {
+        if (size == 0) {
+            result.put("code", "success");
+            result.put("msg", "无结果");
+        } else {
             result.put("code", "success");
             result.put("msg", "查询成功!");
         }

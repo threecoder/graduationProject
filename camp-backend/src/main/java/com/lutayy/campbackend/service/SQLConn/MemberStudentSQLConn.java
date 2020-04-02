@@ -63,4 +63,34 @@ public class MemberStudentSQLConn {
         }
     }
 
+    public static int countStudentsFromMemberReStudent(Integer memberId, String phone, String idNum, String name) {
+        int sum = 0;
+
+        Connection conn = null;
+        Statement statement = null;
+        try {
+            conn = DriverManager.getConnection(URL, Name, Pwd);
+            statement = conn.createStatement();
+
+            String sql = "select count(*) c from member_re_student r inner join student s " +
+                    "where r.student_id=s.student_id and r.member_key_id=" + memberId;
+            if (phone != null) {
+                sql += " and s.student_phone='" + phone + "'";
+            }
+            if (idNum != null) {
+                sql += " and s.student_idcard='" + idNum + "'";
+            }
+            if (name != null) {
+                sql += " and s.student_name='" + name + "'";
+            }
+            ResultSet rs = statement.executeQuery(sql);
+            while(rs.next()) {
+                sum = rs.getInt("c");
+            }
+            return sum;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return sum;
+        }
+    }
 }

@@ -2,14 +2,12 @@ package com.lutayy.campbackend.pojo;
 
 import java.io.Serializable;
 
-public class VoteStudentMember implements Serializable {
+public class VoteOptionMember implements Serializable {
     private Integer voteId;
 
-    private Integer studentId;
+    private Integer optionId;
 
     private Integer memberKeyId;
-
-    private Integer optionId;
 
     private static final long serialVersionUID = 1L;
 
@@ -21,12 +19,12 @@ public class VoteStudentMember implements Serializable {
         this.voteId = voteId;
     }
 
-    public Integer getStudentId() {
-        return studentId;
+    public Integer getOptionId() {
+        return optionId;
     }
 
-    public void setStudentId(Integer studentId) {
-        this.studentId = studentId;
+    public void setOptionId(Integer optionId) {
+        this.optionId = optionId;
     }
 
     public Integer getMemberKeyId() {
@@ -35,13 +33,5 @@ public class VoteStudentMember implements Serializable {
 
     public void setMemberKeyId(Integer memberKeyId) {
         this.memberKeyId = memberKeyId;
-    }
-
-    public Integer getOptionId() {
-        return optionId;
-    }
-
-    public void setOptionId(Integer optionId) {
-        this.optionId = optionId;
     }
 }
