@@ -3,44 +3,94 @@
         <el-card class="box-card">
             <div slot="header" class="clearfix">
                 <span class="title">协会公告</span>
-                <el-button class="fr more-button" type="text">更多>></el-button>
+                <el-button class="fr more-button" type="text" @click="getMore">更多>></el-button>
             </div>
-            <ul>
-                <li v-for="(newsitem,key) in list" :key="key" class="newsitem">
+            <ul v-loading="loading" v-if="list.length!=0">
+                <li v-for="(item,key) in list" :key="key" class="notice-item">
                     <div class="date-container">
-                        <p class="day">{{newsitem.day}}</p>
-                        <p class="year-month">{{newsitem.yearAndMonth}}</p>
+                        <p class="day">{{item.day}}</p>
+                        <p class="year-month">{{item.yearAndMonth}}</p>
                     </div>
                     <div class="info-container">
-                        <p class="news-title">{{newsitem.title}}</p>
+                        <p class="news-title" @click="detail(item)">{{item.title}}</p>
                     </div>
                 </li>
             </ul>
+            <p v-else class="tac">暂无数据</p>
         </el-card>
     </div>
 </template>
 <script>
+import noticeApi from "../../../../api/index/notice";
 export default {
-    props: ["noticeList"],
     data() {
         return {
-            list: []
+            list: [
+                {
+                    title: "公告1",
+                    date: "2019-09-01",
+                    id: "111"
+                },
+                {
+                    title: "公告2",
+                    date: "2019-09-01",
+                    link: ""
+                },
+                {
+                    title: "公告3",
+                    date: "2019-09-01",
+                    link: ""
+                },
+                {
+                    title: "公告4",
+                    date: "2019-09-01",
+                    link: ""
+                },
+                {
+                    title: "公告5",
+                    date: "2019-09-01",
+                    link: ""
+                },
+                {
+                    title: "公告6",
+                    date: "2019-09-01",
+                    link: ""
+                }
+            ],
+            loading: false
         };
     },
     mounted() {
-        this.handleData();
+        this.getNoticeList();
     },
     methods: {
-        getmore(str) {},
-        handleData() {
-            this.noticeList.forEach(val => {
+        getMore() {
+            this.$router.push("/notice");
+        },
+        handleData(data) {
+            data.forEach(val => {
                 let obj = { ...val };
-                let temArr = obj.date.split("-");
+                let temArr = obj.date.split(" ")[0];
+                temArr = temArr.split("-");
                 obj.day = temArr.pop();
                 obj.yearAndMonth = temArr.join("-");
                 delete obj.date;
                 this.list.push(obj);
             });
+        },
+        async getNoticeList() {
+            this.loading = true;
+            let par = { currentPage: 1, pageSize: 6 };
+            try {
+                let res = await noticeApi.getNoticeList(par);
+                this.handleData(res.data.list);
+            } catch (error) {
+                this.$message.error(error.message);
+            }
+            this.loading = false;
+        },
+        detail(item) {
+            this.$router.push(`/dynamicDetail?type=notice&id=${item.id}`);
         }
     }
 };
@@ -48,6 +98,7 @@ export default {
 <style lang="scss" scoped>
 .box-card {
     width: 100%;
+    min-height: 370px;
     ::v-deep.el-card__header {
         background-image: linear-gradient(
             rgb(187, 221, 230),
@@ -68,7 +119,7 @@ export default {
     }
     ul {
         list-style: none;
-        li.newsitem {
+        li.notice-item {
             height: 66px;
             line-height: 66px;
             padding-left: 1%;

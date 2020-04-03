@@ -45,6 +45,16 @@ export default new Router({
                     path: '/news',
                     name: 'news',
                     component: resolve => require([ '../views/home/dynamic/dynamic.vue' ], resolve)
+                },
+                {
+                    path: '/activities',
+                    name: 'activities',
+                    component: resolve => require([ '../views/home/dynamic/dynamic.vue' ], resolve)
+                }, 
+                {
+                    path: '/dynamicDetail',
+                    name: 'dynamicDetail',
+                    component: resolve => require([ '../views/home/dynamicDetail/dynamicDetail.vue' ], resolve)
                 }
             ]
         },

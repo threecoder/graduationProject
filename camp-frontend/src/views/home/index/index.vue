@@ -2,21 +2,21 @@
     <div class="index">
         <div class="first-node">
             <div class="carousel-container">
-                <carousel :clist="clist"></carousel>
+                <carousel />
             </div>
             <div class="news-container">
                 <div class="newscard">
-                    <newscard :newslist="newslist" :cardInfo="newscardname"></newscard>
+                    <newscard :cardInfo="newscardname" />
                 </div>
             </div>
         </div>
 
         <div class="second-node">
             <div class="notice">
-                <noticecard :noticeList="nolist" />
+                <noticecard />
             </div>
             <div class="news-container">
-                <newscard :newslist="dynamiclist" :cardInfo="dynamiccardname"></newscard>
+                <newscard :cardInfo="dynamiccardname"></newscard>
             </div>
         </div>
     </div>
@@ -49,133 +49,6 @@ export default {
                 name: "协会优秀成果展示",
                 link: ""
             },
-            clist: [
-                {
-                    url: require("../../../assets/images/index1.jpg"),
-                    title: "图片1",
-                    link: ""
-                },
-                {
-                    url: require("../../../assets/images/index2.jpg"),
-                    title: "图片2",
-                    link: ""
-                },
-                {
-                    url: require("../../../assets/images/index3.jpg"),
-                    title: "图片3",
-                    link: ""
-                },
-                {
-                    url: require("../../../assets/images/index4.jpg"),
-                    title: "图片4",
-                    link: ""
-                }
-            ],
-            nolist: [
-                {
-                    title: "公告1",
-                    date: "2019-09-01",
-                    link: ""
-                },
-                {
-                    title: "公告2",
-                    date: "2019-09-01",
-                    link: ""
-                },
-                {
-                    title: "公告3",
-                    date: "2019-09-01",
-                    link: ""
-                },
-                {
-                    title: "公告4",
-                    date: "2019-09-01",
-                    link: ""
-                },
-                {
-                    title: "公告5",
-                    date: "2019-09-01",
-                    link: ""
-                },
-                {
-                    title: "公告6",
-                    date: "2019-09-01",
-                    link: ""
-                },
-                {
-                    title: "公告7",
-                    date: "2019-09-01",
-                    link: ""
-                }
-            ],
-            newslist: [
-                {
-                    title: "新闻新闻新闻新闻新闻新闻新闻新闻新闻",
-                    date: "2019-09-01"
-                },
-                {
-                    title: "新闻2",
-                    date: "2019-09-01"
-                },
-                {
-                    title: "新闻3",
-                    date: "2019-09-01"
-                },
-                {
-                    title: "新闻4",
-                    date: "2019-09-01"
-                },
-                {
-                    title: "新闻5",
-                    date: "2019-09-01"
-                },
-                {
-                    title: "新闻6",
-                    date: "2019-09-01"
-                },
-                {
-                    title: "新闻7",
-                    date: "2019-09-01"
-                },
-                {
-                    title: "新闻8",
-                    date: "2019-09-01"
-                }
-            ],
-            dynamiclist: [
-                {
-                    title: "动态1",
-                    date: "2019-09-01"
-                },
-                {
-                    title: "动态2",
-                    date: "2019-09-01"
-                },
-                {
-                    title: "动态3",
-                    date: "2019-09-01"
-                },
-                {
-                    title: "动态4",
-                    date: "2019-09-01"
-                },
-                {
-                    title: "动态5",
-                    date: "2019-09-01"
-                },
-                {
-                    title: "动态6",
-                    date: "2019-09-01"
-                },
-                {
-                    title: "动态6",
-                    date: "2019-09-01"
-                },
-                {
-                    title: "动态6",
-                    date: "2019-09-01"
-                }
-            ],
             imglist: [
                 {
                     url: require("../../../assets/images/index1.jpg"),

@@ -1,11 +1,12 @@
 <template>
     <div class="new-notice-container">
         <div class="info-container">
-            <ul>
+            <ul v-loading="loading">
                 <li v-for="(item,i) in list" :key="i">
-                    <span class="title">{{item.title}}</span>
+                    <span class="title" @click="detail(item.id)">{{item.title}}</span>
                     <div class="content">
-                        <img :src="item.src" alt="新闻图片" :width="item.src?'130px':'0px'" />
+                        <!-- <img :src="item.src" alt="新闻图片" :width="item.src?'130px':'0px'" /> -->
+                        <img src="../../../assets/images/index1.jpg" alt="新闻图片" width="130px" />
                         <p>{{item.desc}}</p>
                     </div>
                     <p class="date">{{item.date}}</p>
@@ -25,13 +26,15 @@
 
 <script>
 import page from "../../../components/page.vue";
+import newsApi from "../../../api/index/news";
+import dynamicApi from "../../../api/index/dynamic";
 export default {
     components: {
         page
     },
     data() {
         return {
-            type: this.$route.path,
+            path: this.$route.path,
             form: {
                 currentPage: 1,
                 pageSize: 10,
@@ -39,6 +42,7 @@ export default {
             },
             list: [
                 {
+                    id: 111,
                     title: "科威特新增25例新冠肺炎确诊病例",
                     desc:
                         "原标题：钟南山：疫情防控关键是保持距离、戴口罩 新京报快讯（记者 徐美慧）4月2日，新冠疫情防控经验国际分享会暨健康中国国际公共卫生管理培训项目启动会以线上直播的方...",
@@ -53,23 +57,50 @@ export default {
                     title: "科威特新增25例新冠肺炎确诊病例",
                     date: "2020-04-02 21:05"
                 }
-            ]
+            ],
+            loading: false
         };
+    },
+    mounted() {
+        let dynamic = this.$store.getters.dynamic;
+        if (dynamic.path == this.path) {
+            this.form.currentPage = dynamic.currentPage;
+        } else {
+            this.form.currentPage = 1;
+            this.$store.commit("setDynamic", {
+                path: this.path,
+                currentPage: 1
+            });
+        }
+        this.getList();
     },
     methods: {
         curChange(val) {
             this.form.currentPage = val;
+            this.$store.commit("setDynamic", {
+                currentPage: val,
+                path: this.path
+            });
             this.getList();
         },
         async getList() {
+            this.loading = true;
             try {
                 let res = null;
                 if (this.type == "news") {
+                    res = await newsApi.getNewsList(this.form);
                 } else {
+                    res = await dynamicApi.getDynamicList(this.form);
                 }
+                this.form.total = res.data.total;
+                this.list = res.data.list;
             } catch (error) {
                 this.$message.error(error.message);
             }
+            this.loading = false;
+        },
+        detail(id) {
+            this.$router.push(`/dynamicDetail?type=${this.path}&id=${id}`);
         }
     }
 };
@@ -97,6 +128,9 @@ export default {
                         cursor: pointer;
                     }
                 }
+                &:last-of-type {
+                    border-bottom: none;
+                }
                 span.title {
                     line-height: 40px;
                     font-size: 18px;
@@ -106,6 +140,8 @@ export default {
                     margin-top: 10px;
                     margin-left: 20px;
                     overflow: hidden;
+                    display: flex;
+                    justify-content: space-around;
                     img {
                         float: left;
                         // width: 130px;
@@ -114,7 +150,7 @@ export default {
                     p {
                         float: left;
                         margin-left: 20px;
-                        width: 540px;
+                        // width: 540px;
                         color: rgba(96, 98, 102, 0.8);
                     }
                 }

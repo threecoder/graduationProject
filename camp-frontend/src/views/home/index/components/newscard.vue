@@ -3,31 +3,83 @@
         <el-card class="box-card">
             <div slot="header" class="clearfix">
                 <span class="title">{{cardInfo.name}}</span>
-                <el-button class="fr more-button" type="text">更多>></el-button>
+                <el-button class="fr more-button" type="text" @click="getMore">更多>></el-button>
             </div>
-            <ul>
-                <li v-for="(newsitem,key) in newslist" :key="key" class="newsitem">
-                    <span class="news-title">{{newsitem.title}}</span>
+            <ul v-if="list.length!=0" v-loading="loading">
+                <li v-for="(newsitem,key) in list" :key="key" class="newsitem">
+                    <span class="news-title" @click="detail(newsitem)">{{newsitem.title}}</span>
                     <span class="newsdate">{{newsitem.date}}</span>
                 </li>
             </ul>
+            <p v-else class="tac">暂无数据</p>
         </el-card>
     </div>
 </template>
 <script>
+import newsApi from "../../../../api/index/news";
+import dynamicApi from "../../../../api/index/dynamic";
 export default {
-    props: ["newslist", "cardInfo"],
+    props: ["cardInfo"],
     data() {
-        return {};
+        return {
+            list: [
+                {
+                    title: "新闻新闻新闻新闻新闻新闻新闻新闻新闻",
+                    date: "2019-09-01",
+                    id: "111"
+                }
+            ],
+            loading: false
+        };
+    },
+    mounted() {
+        this.getList();
     },
     methods: {
-        getmore(str) {}
+        async getList() {
+            this.loading = true;
+            try {
+                let res = null;
+                let par = {
+                    currentPage: 1,
+                    pageSize: 7
+                };
+                if (this.cardInfo.name == "协会新闻") {
+                    res = await newsApi.getNewsList(par);
+                } else {
+                    res = await dynamicApi.getDynamicList(par);
+                }
+                this.list = res.data.list;
+            } catch (error) {
+                this.$message.error(error.message);
+            }
+            this.loading = false;
+        },
+        getMore() {
+            let path = null;
+            if (this.cardInfo.name == "协会新闻") {
+                path = "/news";
+            } else {
+                path = "/activities";
+            }
+            this.$router.push(path);
+        },
+        detail(newsitem) {
+            if (this.cardInfo.name == "协会新闻") {
+                this.$router.push(`/dynamicDetail?type=news&id=${newsitem.id}`);
+            } else {
+                this.$router.push(
+                    `/dynamicDetail?type=dynamic&id=${newsitem.id}`
+                );
+            }
+        }
     }
 };
 </script>
 <style lang="scss" scoped>
 .box-card {
     width: 100%;
+    min-height: 370px;
     ::v-deep.el-card__header {
         background-image: linear-gradient(
             rgb(187, 221, 230),

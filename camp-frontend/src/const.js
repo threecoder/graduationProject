@@ -18,3 +18,6 @@ export const canGoPath = [
     '/framework',
     '/',
 ]
+
+//图片占位符
+export const imgStr = "@#$#@";

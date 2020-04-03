@@ -3,7 +3,7 @@
         <div class="info-container">
             <ul>
                 <li v-for="(item,i) in list" :key="i">
-                    <span class="title">
+                    <span class="title" @click="detail(item.id)">
                         <i class="el-icon-s-flag"></i>
                         {{item.title}}
                     </span>
@@ -24,13 +24,14 @@
 
 <script>
 import page from "../../../components/page.vue";
+import noticeApi from "../../../api/index/notice";
 export default {
     components: {
         page
     },
     data() {
         return {
-            type: this.$route.path,
+            path: this.$route.path,
             form: {
                 currentPage: 1,
                 pageSize: 10,
@@ -38,6 +39,7 @@ export default {
             },
             list: [
                 {
+                    id: "111",
                     title: "科威特新增25例新冠肺炎确诊病例",
                     date: "2020-04-02 21:05"
                 },
@@ -52,20 +54,39 @@ export default {
             ]
         };
     },
+    mounted() {
+        let dynamic = this.$store.getters.dynamic;
+        if (dynamic.path == this.path) {
+            this.form.currentPage = dynamic.currentPage;
+        } else {
+            this.form.currentPage = 1;
+            this.$store.commit("setDynamic", {
+                path: this.path,
+                currentPage: 1
+            });
+        }
+        this.getList();
+    },
     methods: {
         curChange(val) {
             this.form.currentPage = val;
+            this.$store.commit("setDynamic", {
+                currentPage: val,
+                path: this.path
+            });
             this.getList();
         },
         async getList() {
             try {
-                let res = null;
-                if (this.type == "news") {
-                } else {
-                }
+                let res = await noticeApi.getNoticeList(this.form);
+                this.form.total = res.data.total;
+                this.list = res.data.list;
             } catch (error) {
                 this.$message.error(error.message);
             }
+        },
+        detail(id) {
+            this.$router.push(`/dynamicDetail?type=notice&id=${id}`);
         }
     }
 };
@@ -87,7 +108,9 @@ export default {
                 border-bottom: 1px solid rgba(0, 0, 0, 0.1);
                 height: 60px;
                 padding: 10px 5px;
-
+                &:last-of-type {
+                    border-bottom: none;
+                }
                 span.title {
                     line-height: 40px;
                     font-size: 18px;
