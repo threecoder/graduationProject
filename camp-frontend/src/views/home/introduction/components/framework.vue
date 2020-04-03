@@ -4,19 +4,33 @@
             <p class="el-icon-caret-right">组织架构</p>
         </div>
         <div class="msg">
-            <p>{{message}}</p>
+            <p v-for="(item,i) in msgList" :key="i">{{item}}</p>
         </div>
     </div>
 </template>
 <script>
+import intrApi from "../../../../api/index/introduction";
 export default {
     data() {
         return {
-            message:
+            msgList: [
                 "这里是组织架构这里是组织架构这里是组织架构这里是组织架构这里是组织架构这里是组织架构这里是组织架构这里是组织架构这里是组织架构"
+            ]
         };
     },
-    methods: {}
+    mounted() {
+        this.getFramework();
+    },
+    methods: {
+        async getFramework() {
+            try {
+                let res = await intrApi.getFramework();
+                this.msgList = res.data;
+            } catch (error) {
+                this.$message.error(error.message);
+            }
+        }
+    }
 };
 </script>
 <style lang="scss" scoped>
@@ -39,6 +53,7 @@ export default {
         p {
             line-height: 30px;
             color: rgb(96, 98, 102);
+            text-indent: 2rem;
         }
     }
 }

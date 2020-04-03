@@ -4,19 +4,39 @@
             <p class="el-icon-caret-right">协会简介</p>
         </div>
         <div class="msg">
-            <p>{{message}}</p>
+            <p v-for="(item,i) in msgList" :key="i">{{item}}</p>
         </div>
     </div>
 </template>
 <script>
+import intrApi from "../../../../api/index/introduction";
 export default {
     data() {
         return {
-            message:
-                "这里是协会简介这里是协会简介这里是协会简介这里是协会简介这里是协会简介这里是协会简介这里是协会简介这里是协会简介这里是协会简介这里是协会简介这里是协会简介这里是协会简介这里是协会简介这里是协会简介这里是协会简介这里是协会简介这里是协会简介这里是协会简介这里是协会简介这里是协会简介"
+            msgList: [
+                "这里是协会简介这里是协会简介这里是协会简介",
+                "这里是协会简介这里是协会简介这里是协会简介",
+                "这里是协会简介这里是协会简介这里是协会简介",
+                "这里是协会简介这里是协会简介这里是协会简介",
+                "这里是协会简介这里是协会简介这里是协会简介",
+                "这里是协会简介这里是协会简介这里是协会简介",
+                "这里是协会简介这里是协会简介"
+            ]
         };
     },
-    methods: {}
+    mounted() {
+        this.getBrief();
+    },
+    methods: {
+        async getBrief() {
+            try {
+                let res = await intrApi.getBrief();
+                this.msgList = res.data;
+            } catch (error) {
+                this.$message.error(error.message);
+            }
+        }
+    }
 };
 </script>
 <style lang="scss" scoped>
@@ -39,6 +59,7 @@ export default {
         p {
             line-height: 30px;
             color: rgb(96, 98, 102);
+            text-indent: 2rem;
         }
     }
 }
