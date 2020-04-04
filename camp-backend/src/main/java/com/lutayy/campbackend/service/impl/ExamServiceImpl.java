@@ -64,8 +64,8 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public JSONObject getTodoExamList(Integer studentId) {
         JSONObject result = new JSONObject();
-        Student student=studentMapper.selectByPrimaryKey(studentId);
-        if (student==null) {
+        Student student = studentMapper.selectByPrimaryKey(studentId);
+        if (student == null) {
             result.put("code", "fail");
             result.put("data", null);
             result.put("msg", "用户不存在！");
@@ -302,10 +302,14 @@ public class ExamServiceImpl implements ExamService {
             }
             object.put("rightAnswer", rightAnswer);
             JSONArray studentAnswer = new JSONArray();
-            ExamQuestionStudentAnswer examQuestionStudentAnswer = examQuestionStudentAnswerMapper.selectByPrimaryKey(examId, question.getQuestionId(), studentId);
-            if (examQuestionStudentAnswer == null) {
+            ExamQuestionStudentAnswerExample eqsaE = new ExamQuestionStudentAnswerExample();
+            eqsaE.createCriteria().andExamIdEqualTo(examId).andQuestionIdEqualTo(question.getQuestionId()).andStudentIdEqualTo(studentId);
+            List<ExamQuestionStudentAnswer> examQuestionStudentAnswers = examQuestionStudentAnswerMapper.selectByExample(eqsaE);
+            ExamQuestionStudentAnswer examQuestionStudentAnswer;
+            if (examQuestionStudentAnswers.size() == 0) {
                 object.put("studentAnswer", null);
             } else {
+                examQuestionStudentAnswer = examQuestionStudentAnswers.get(0);
                 studentAnswer.add(examQuestionStudentAnswer.getAnswerOne());
                 if (question.getType() == 1) {
                     if (examQuestionStudentAnswer.getAnswerTwo() != null) {
@@ -424,9 +428,9 @@ public class ExamServiceImpl implements ExamService {
                 examQuestionStudentAnswer.setAnswerOne(answer.getByte(i));
             }
             //保存做题记录
-            ExamQuestionStudentAnswerExample eqsaE=new ExamQuestionStudentAnswerExample();
+            ExamQuestionStudentAnswerExample eqsaE = new ExamQuestionStudentAnswerExample();
             eqsaE.createCriteria().andExamIdEqualTo(examId).andQuestionIdEqualTo(question.getQuestionId()).andStudentIdEqualTo(studentId);
-            if (examQuestionStudentAnswerMapper.selectByExample(eqsaE).size()>0) {
+            if (examQuestionStudentAnswerMapper.selectByExample(eqsaE).size() > 0) {
                 examQuestionStudentAnswerMapper.updateByExampleSelective(examQuestionStudentAnswer, eqsaE);
             } else {
                 examQuestionStudentAnswerMapper.insertSelective(examQuestionStudentAnswer);
@@ -469,7 +473,7 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public JSONObject rejoinExam(JSONObject jsonObject) {
         Integer examId = jsonObject.getInteger("examId");
-        Integer studentId=jsonObject.getInteger("id");
+        Integer studentId = jsonObject.getInteger("id");
         JSONObject result = new JSONObject();
         result.put("code", "fail");
         Exam exam = examMapper.selectByPrimaryKey(examId);
@@ -477,27 +481,27 @@ public class ExamServiceImpl implements ExamService {
             result.put("msg", "系统中找不到该考试！");
             return result;
         }
-        ExamReStudentExample examReStudentExample=new ExamReStudentExample();
+        ExamReStudentExample examReStudentExample = new ExamReStudentExample();
         examReStudentExample.createCriteria().andStudentIdEqualTo(studentId).andExamIdEqualTo(examId).andIsInvalidEqualTo(false);
-        List<ExamReStudent> examReStudents=examReStudentMapper.selectByExample(examReStudentExample);
-        if(examReStudents.size()==0){
+        List<ExamReStudent> examReStudents = examReStudentMapper.selectByExample(examReStudentExample);
+        if (examReStudents.size() == 0) {
             result.put("msg", "学生无报名该考试！");
             return result;
         }
-        ExamReStudent examReStudent=examReStudents.get(0);
-        if(examReStudent.getRemainingTimes()<1){
+        ExamReStudent examReStudent = examReStudents.get(0);
+        if (examReStudent.getRemainingTimes() < 1) {
             result.put("msg", "剩余考试次数为0");
             return result;
         }
-        if(examReStudent.getInLine()){
+        if (examReStudent.getInLine()) {
             result.put("msg", "当前考试正在审核队列中，请耐心等待审核");
             return result;
         }
-        if (examReStudent.getIsVerify().equals(2)){
+        if (examReStudent.getIsVerify().equals(2)) {
             result.put("msg", "当前考试已审核通过，无须重考");
             return result;
         }
-        examReStudent.setRemainingTimes((byte)(examReStudent.getRemainingTimes()-1));
+        examReStudent.setRemainingTimes((byte) (examReStudent.getRemainingTimes() - 1));
         examReStudentMapper.updateByPrimaryKeySelective(examReStudent);
         result.put("code", "success");
         result.put("msg", "重新报名考试成功");
