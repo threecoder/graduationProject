@@ -2,25 +2,34 @@ package com.lutayy.campbackend.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.lutayy.campbackend.common.util.ExcelUtil;
+import com.lutayy.campbackend.common.util.JwtUtil;
 import com.lutayy.campbackend.dao.*;
 import com.lutayy.campbackend.pojo.*;
+import com.lutayy.campbackend.pojo.request.TokenRequest;
 import com.lutayy.campbackend.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class AdminServiceImpl implements AdminService {
 
+    @Value("${SECRET_KEY}")
+    private String SECRET_KEY;
+    @Autowired
+    AdminMapper adminMapper;
     @Autowired
     StudentMapper studentMapper;
     @Autowired
@@ -37,7 +46,152 @@ public class AdminServiceImpl implements AdminService {
     private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
             "yyyy-MM-dd HH:mm:ss");
 
+    @Override
+    public JSONObject setNewPassword(JSONObject jsonObject) {
+        JSONObject result = new JSONObject();
+        result.put("code", "fail");
+        String oldPassword = jsonObject.getString("oldPassword");
+        String newPassword = jsonObject.getString("newPassword");
+        if (oldPassword.equals(newPassword)) {
+            result.put("msg", "旧密码与新密码不能相同！");
+            return result;
+        }
+        Integer adminId = jsonObject.getInteger("id");
+        Admin admin = adminMapper.selectByPrimaryKey(adminId);
+        if (admin == null) {
+            result.put("msg", "系统中无该管理员！");
+            return result;
+        }
+        if (!admin.getAdminPassword().equals(oldPassword)) {
+            result.put("msg", "旧密码错误！");
+        } else {
+            admin.setAdminPassword(newPassword);
+            if (adminMapper.updateByPrimaryKeySelective(admin) > 0) {
+                result.put("code", "success");
+                result.put("msg", "密码更新成功！");
+            } else {
+                result.put("msg", "密码更新失败！请重试");
+            }
+        }
+        return result;
+    }
+
     //学员管理
+
+    @Override
+    public JSONObject importStudentByFile(Integer memberId, MultipartFile file) {
+        JSONObject result = new JSONObject();
+
+        //System.out.println(memberId);
+        Member member = memberMapper.selectByPrimaryKey(memberId);
+        result.put("code", "fail");
+        if (member == null) {
+            result.put("msg", "用户不存在!");
+            return result;
+        }
+        if (file == null || file.isEmpty()) {
+            result.put("msg", "文件不能为空");
+            return result;
+        }
+        String fileName = file.getOriginalFilename().toLowerCase();
+        if (!fileName.endsWith("xls") && !fileName.endsWith("xlsx")) {
+            result.put("msg", "文件格式错误");
+            return result;
+        }
+        InputStream in;
+        try {
+            in = file.getInputStream();
+            Map<String, List<Map<String, String>>> map = ExcelUtil.readXls(in);
+            if (map.isEmpty()) {
+                result.put("msg", "上传文件数据为空");
+                return result;
+            }
+            Set<String> excelSheets = map.keySet();
+            int totalCount = 0;
+            String existTagTip = "";
+            int existTotalCount = 0;
+            String nameWrongTagTip = "";
+            int nameWrongTotalCount = 0;
+            for (String excelSheet : excelSheets) {
+                List<Map<String, String>> list = map.get(excelSheet);
+                totalCount = totalCount + list.size();
+                for (Map<String, String> row : list) {
+                    // TODO 批量添加
+                    Student student = excelRowToTeacher(row);
+                    Student studentCheck = getObjectHelper.getStudentFromIdCard(student.getStudentIdcard());
+                    //系统已有该身份证的账号
+                    if (studentCheck != null) {
+                        //系统已有账号但无挂靠关系
+                        if (getObjectHelper.getMemberReStudentByStudentId(studentCheck.getStudentId()) == null) {
+                            //与系统已有账号的姓名身份证不一致，不予绑定
+                            if (!studentCheck.getStudentName().equals(student.getStudentName())) {
+                                nameWrongTotalCount += 1;
+                                nameWrongTagTip += student.getStudentName() + "(" + student.getStudentIdcard() + ")；";
+                                continue;
+                            }
+                            MemberReStudent memberReStudent = new MemberReStudent();
+                            memberReStudent.setStudentId(studentCheck.getStudentId());
+                            memberReStudent.setMemberKeyId(memberId);
+                            memberReStudentMapper.insert(memberReStudent);
+                            studentCheck.setCompany(member.getMemberName());
+                            studentCheck.setHasOrg(true);
+                            studentMapper.updateByPrimaryKeySelective(studentCheck);
+                            continue;
+                        }
+                        existTagTip += student.getStudentName() + "(" + student.getStudentIdcard() + ")；";
+                        existTotalCount += 1;
+                        continue;
+                    }
+                    if (getObjectHelper.getStudentFromPhone(student.getStudentPhone()) != null) {
+                        student.setStudentPhone(null);
+                    }
+                    student.setHasOrg(true);
+                    student.setCompany(member.getMemberName());
+                    studentMapper.insertSelective(student);
+                    MemberReStudent memberReStudent = new MemberReStudent();
+                    memberReStudent.setStudentId(getObjectHelper.getStudentFromIdCard(student.getStudentIdcard()).getStudentId());
+                    memberReStudent.setMemberKeyId(memberId);
+                    memberReStudentMapper.insert(memberReStudent);
+                }
+            }
+            String msg = "";
+            if (existTotalCount > 0 && nameWrongTotalCount == 0) {
+                msg = "尝试导入学员" + totalCount + "个，" + (totalCount - existTotalCount) + "个导入并绑定成功，"
+                        + existTotalCount + "个在系统中已有挂靠关系，分别是：" + existTagTip;
+            } else if (existTotalCount == 0 && nameWrongTotalCount > 0) {
+                msg = "尝试导入学员" + totalCount + "个，" + (totalCount - nameWrongTotalCount) + "个导入并绑定成功，"
+                        + nameWrongTotalCount + "个与已有账号姓名不一致，分别是：" + nameWrongTagTip;
+            } else if (existTotalCount > 0 && nameWrongTotalCount > 0) {
+                msg = "尝试导入学员" + totalCount + "个，" + (totalCount - nameWrongTotalCount - existTotalCount) + "个导入并绑定成功，"
+                        + nameWrongTotalCount + "个与已有账号姓名不一致，分别是：" + nameWrongTagTip
+                        + existTotalCount + "个在系统中已有挂靠关系，分别是：" + existTagTip;
+            } else {
+                msg = "全部学员信息导入成功，一共" + totalCount + "个";
+            }
+            result.put("code", "success");
+            result.put("msg", msg);
+            return result;
+        } catch (Exception e) {
+            result.put("msg", "导入异常，请检查格式");
+            return result;
+        }
+    }
+
+    private Student excelRowToTeacher(Map<String, String> row) {
+        Student student = new Student();
+        String value;
+        value = row.get("姓名");
+        if (value != null && !value.equals(""))
+            student.setStudentName(value);
+        value = row.get("身份证");
+        if (value != null && !value.equals(""))
+            student.setStudentIdcard(value);
+        value = row.get("手机号码");
+        if (value != null && !value.equals(""))
+            student.setStudentPhone(value);
+        return student;
+    }
+
     @Override
     public JSONObject getStudentList(String name, String idNum, String phone, String company, Integer hasOrg,
                                      Integer currentPage, Integer pageSize) {
@@ -54,7 +208,7 @@ public class AdminServiceImpl implements AdminService {
         studentExample.setOffset((currentPage - 1) * pageSize);
         studentExample.setLimit(pageSize);
         List<Student> students = studentMapper.selectByExample(studentExample);
-        long total=studentMapper.countByExample(studentExample);
+        long total = studentMapper.countByExample(studentExample);
         result.put("code", "success");
         if (students.size() == 0) {
             result.put("msg", "无符合查询条件的学员！");
@@ -166,11 +320,11 @@ public class AdminServiceImpl implements AdminService {
         }
         String memberName = name;
         int isInDeadLine = -1;
-        if (deadline!=null) {
+        if (deadline != null) {
             isInDeadLine = deadline;
         }
         int isVip = -1;
-        if (type!=null) {
+        if (type != null) {
             isVip = type;
         }
 

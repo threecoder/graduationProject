@@ -165,63 +165,133 @@ public class MessageTextExample {
             return (Criteria) this;
         }
 
-        public Criteria andSendDateIsNull() {
-            addCriterion("send_date is null");
+        public Criteria andMessageIsNull() {
+            addCriterion("message is null");
             return (Criteria) this;
         }
 
-        public Criteria andSendDateIsNotNull() {
-            addCriterion("send_date is not null");
+        public Criteria andMessageIsNotNull() {
+            addCriterion("message is not null");
             return (Criteria) this;
         }
 
-        public Criteria andSendDateEqualTo(Date value) {
-            addCriterion("send_date =", value, "sendDate");
+        public Criteria andMessageEqualTo(String value) {
+            addCriterion("message =", value, "message");
             return (Criteria) this;
         }
 
-        public Criteria andSendDateNotEqualTo(Date value) {
-            addCriterion("send_date <>", value, "sendDate");
+        public Criteria andMessageNotEqualTo(String value) {
+            addCriterion("message <>", value, "message");
             return (Criteria) this;
         }
 
-        public Criteria andSendDateGreaterThan(Date value) {
-            addCriterion("send_date >", value, "sendDate");
+        public Criteria andMessageGreaterThan(String value) {
+            addCriterion("message >", value, "message");
             return (Criteria) this;
         }
 
-        public Criteria andSendDateGreaterThanOrEqualTo(Date value) {
-            addCriterion("send_date >=", value, "sendDate");
+        public Criteria andMessageGreaterThanOrEqualTo(String value) {
+            addCriterion("message >=", value, "message");
             return (Criteria) this;
         }
 
-        public Criteria andSendDateLessThan(Date value) {
-            addCriterion("send_date <", value, "sendDate");
+        public Criteria andMessageLessThan(String value) {
+            addCriterion("message <", value, "message");
             return (Criteria) this;
         }
 
-        public Criteria andSendDateLessThanOrEqualTo(Date value) {
-            addCriterion("send_date <=", value, "sendDate");
+        public Criteria andMessageLessThanOrEqualTo(String value) {
+            addCriterion("message <=", value, "message");
             return (Criteria) this;
         }
 
-        public Criteria andSendDateIn(List<Date> values) {
-            addCriterion("send_date in", values, "sendDate");
+        public Criteria andMessageLike(String value) {
+            addCriterion("message like", value, "message");
             return (Criteria) this;
         }
 
-        public Criteria andSendDateNotIn(List<Date> values) {
-            addCriterion("send_date not in", values, "sendDate");
+        public Criteria andMessageNotLike(String value) {
+            addCriterion("message not like", value, "message");
             return (Criteria) this;
         }
 
-        public Criteria andSendDateBetween(Date value1, Date value2) {
-            addCriterion("send_date between", value1, value2, "sendDate");
+        public Criteria andMessageIn(List<String> values) {
+            addCriterion("message in", values, "message");
             return (Criteria) this;
         }
 
-        public Criteria andSendDateNotBetween(Date value1, Date value2) {
-            addCriterion("send_date not between", value1, value2, "sendDate");
+        public Criteria andMessageNotIn(List<String> values) {
+            addCriterion("message not in", values, "message");
+            return (Criteria) this;
+        }
+
+        public Criteria andMessageBetween(String value1, String value2) {
+            addCriterion("message between", value1, value2, "message");
+            return (Criteria) this;
+        }
+
+        public Criteria andMessageNotBetween(String value1, String value2) {
+            addCriterion("message not between", value1, value2, "message");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeIsNull() {
+            addCriterion("send_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeIsNotNull() {
+            addCriterion("send_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeEqualTo(Date value) {
+            addCriterion("send_time =", value, "sendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeNotEqualTo(Date value) {
+            addCriterion("send_time <>", value, "sendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeGreaterThan(Date value) {
+            addCriterion("send_time >", value, "sendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("send_time >=", value, "sendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeLessThan(Date value) {
+            addCriterion("send_time <", value, "sendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeLessThanOrEqualTo(Date value) {
+            addCriterion("send_time <=", value, "sendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeIn(List<Date> values) {
+            addCriterion("send_time in", values, "sendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeNotIn(List<Date> values) {
+            addCriterion("send_time not in", values, "sendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeBetween(Date value1, Date value2) {
+            addCriterion("send_time between", value1, value2, "sendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendTimeNotBetween(Date value1, Date value2) {
+            addCriterion("send_time not between", value1, value2, "sendTime");
             return (Criteria) this;
         }
     }

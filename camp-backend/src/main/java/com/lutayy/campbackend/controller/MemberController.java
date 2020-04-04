@@ -24,66 +24,76 @@ public class MemberController {
 
     @RequestMapping("/getUserInfo")
     @ResponseBody
-    public Object getUserInfo(@RequestParam("id") Integer memberId){
+    public Object getUserInfo(@RequestParam("id") Integer memberId) {
         return memberService.getUserInfo(memberId);
     }
 
     @RequestMapping("/setUserInfo")
     @ResponseBody
-    public JSONObject setUserInfo(@RequestBody JSONObject jsonObject){
+    public JSONObject setUserInfo(@RequestBody JSONObject jsonObject) {
         return memberService.setUserInfo(jsonObject);
     }
 
     @RequestMapping("/setNewPassword")
     @ResponseBody
-    public JSONObject setNewPassword(@RequestBody JSONObject jsonObject){
+    public JSONObject setNewPassword(@RequestBody JSONObject jsonObject) {
         return memberService.setNewPassword(jsonObject);
     }
 
     @RequestMapping("/rechargeVIP")
     @ResponseBody
-    public Object rechargeVIP(@RequestParam("id") Integer memberId){
+    public Object rechargeVIP(@RequestParam("id") Integer memberId) {
         return memberService.rechargeVIP(memberId);
     }
 
     @RequestMapping("/importSingleStudent")
     @ResponseBody
-    public JSONObject importSingleStudent(@RequestBody JSONObject jsonObject){
+    public JSONObject importSingleStudent(@RequestBody JSONObject jsonObject) {
         return memberService.importSingleStudent(jsonObject);
     }
 
     @RequestMapping("/deleteOneStudent")
     @ResponseBody
-    public JSONObject deleteOneStudent(@RequestBody JSONObject jsonObject){
+    public JSONObject deleteOneStudent(@RequestBody JSONObject jsonObject) {
         return memberService.deleteOneStudent(jsonObject);
     }
 
     @RequestMapping("/getTemplate")
     @ResponseBody
-    public ResponseEntity<byte[]> getTemplate(HttpServletRequest request){
+    public ResponseEntity<byte[]> getTemplate(HttpServletRequest request) {
         return memberService.getStudentTemplate(request);
     }
 
     @RequestMapping("/importStudentByFile")
     @ResponseBody
-    public JSONObject importStudentByFile(HttpServletRequest request){
+    public JSONObject importStudentByFile(HttpServletRequest request) {
         return memberService.importStudentByFile(request);
     }
 
     @RequestMapping("/getStudentList")
     @ResponseBody
-    public Object getStudentList(@RequestParam("id") Integer memberId){
+    public Object getStudentList(@RequestParam("id") Integer memberId) {
         return memberService.getStudentList(memberId);
     }
 
     @RequestMapping("/getStudentListByCondition")
     @ResponseBody
     public Object getStudentListByCondition(@RequestParam("id") Integer memberId,
-                                            @RequestParam(value = "phone",required = false) String phone,
-                                            @RequestParam(value = "idNum",required = false) String idNum,
-                                            @RequestParam(value = "name",required = false) String name,
+                                            @RequestParam(value = "phone", required = false) String phone,
+                                            @RequestParam(value = "idNum", required = false) String idNum,
+                                            @RequestParam(value = "name", required = false) String name,
                                             @RequestParam("currentPage") Integer currentPage,
-                                            @RequestParam("pageSize") Integer pageSize){
-        return memberService.getStudentListByCondition(memberId,phone,idNum,name,currentPage,pageSize);
+                                            @RequestParam("pageSize") Integer pageSize) {
+        return memberService.getStudentListByCondition(memberId, phone, idNum, name, currentPage, pageSize);
     }
+
+    @RequestMapping("/getStudentTrainingHistory")
+    @ResponseBody
+    public Object getStudentTrainingHistory(@RequestParam("id") Integer memberId,
+                                            @RequestParam("idNum") String idNum,
+                                            @RequestParam("currentPage") Integer currentPage,
+                                            @RequestParam("pageSize") Integer pageSize) {
+        return memberService.getStudentTrainingHistory(memberId, idNum, currentPage, pageSize);
+    }
+
 }

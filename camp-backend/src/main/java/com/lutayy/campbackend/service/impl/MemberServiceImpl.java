@@ -4,9 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.lutayy.campbackend.common.util.ExcelUtil;
 import com.lutayy.campbackend.common.util.JwtUtil;
-import com.lutayy.campbackend.dao.MemberMapper;
-import com.lutayy.campbackend.dao.MemberReStudentMapper;
-import com.lutayy.campbackend.dao.StudentMapper;
+import com.lutayy.campbackend.dao.*;
 import com.lutayy.campbackend.pojo.*;
 import com.lutayy.campbackend.pojo.request.TokenRequest;
 import com.lutayy.campbackend.service.MemberService;
@@ -41,6 +39,10 @@ public class MemberServiceImpl implements MemberService {
     StudentMapper studentMapper;
     @Autowired
     MemberReStudentMapper memberReStudentMapper;
+    @Autowired
+    TrainingReStudentMapper trainingReStudentMapper;
+    @Autowired
+    TrainingMapper trainingMapper;
     @Autowired
     GetObjectHelper getObjectHelper;
 
@@ -530,6 +532,68 @@ public class MemberServiceImpl implements MemberService {
         result.put("data", data);
         result.put("code", "success");
         result.put("msg", "获取学员列表成功");
+        return result;
+    }
+
+    @Override
+    public JSONObject getStudentTrainingHistory(Integer memberId, String idNum, Integer currentPage, Integer pageSize) {
+        if (pageSize == null || pageSize < 0) {
+            pageSize = 10;
+        }
+        if (currentPage == null || currentPage <= 0) {
+            currentPage = 1;
+        }
+        JSONObject result = new JSONObject();
+        JSONObject data = new JSONObject();
+        result.put("data", data);
+        StudentExample studentExample = new StudentExample();
+        studentExample.createCriteria().andStudentIdcardEqualTo(idNum);
+        List<Student> students = studentMapper.selectByExample(studentExample);
+        if (students.size() == 0) {
+            result.put("code", "fail");
+            result.put("msg", "系统中无此身份证号");
+            return result;
+        }
+        int studentId = students.get(0).getStudentId();
+        MemberReStudentExample memberReStudentExample = new MemberReStudentExample();
+        memberReStudentExample.createCriteria().andMemberKeyIdEqualTo(memberId).andStudentIdEqualTo(studentId);
+        List<MemberReStudent> memberReStudents = memberReStudentMapper.selectByExample(memberReStudentExample);
+        if (memberReStudents.size() == 0) {
+            result.put("code", "fail");
+            result.put("msg", "无操作该成员的权限！");
+            return result;
+        }
+        TrainingReStudentExample trainingReStudentExample = new TrainingReStudentExample();
+        trainingReStudentExample.createCriteria().andStudentIdEqualTo(studentId);
+        long total = trainingReStudentMapper.countByExample(trainingReStudentExample);
+        trainingReStudentExample.setOffset(pageSize * (currentPage - 1));
+        trainingReStudentExample.setLimit(pageSize);
+        List<TrainingReStudent> trainingReStudents = trainingReStudentMapper.selectByExample(trainingReStudentExample);
+        data.put("total", total);
+        JSONArray list = new JSONArray();
+        for (TrainingReStudent trainingReStudent : trainingReStudents) {
+            JSONObject object = new JSONObject();
+            Training training = trainingMapper.selectByPrimaryKey(trainingReStudent.getTrainingId());
+            object.put("id", trainingReStudent.getTrainingId());
+            object.put("name", training == null ? "系统中已无此培训信息" : training.getTrainingName());
+            object.put("startTime", trainingReStudent.getBeginTime());
+            object.put("endTime", trainingReStudent.getFinishTime());
+            object.put("address", training == null ? "系统中已无此培训信息" : training.getTrainingAddress());
+            if (trainingReStudent.getIsInvalid().equals(1)) {
+                object.put("status", "考试不通过");
+            } else {
+                if (trainingReStudent.getIsDone().equals(1)) {
+                    object.put("status", "已完成培训");
+                } else {
+                    object.put("status", "培训进行中");
+                }
+            }
+            list.add(object);
+        }
+        data.put("list", list);
+        result.put("data", data);
+        result.put("code", "success");
+        result.put("msg", "查询成功！");
         return result;
     }
 }

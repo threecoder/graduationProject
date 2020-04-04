@@ -12,6 +12,8 @@ public class TrainingReStudent implements Serializable {
 
     private Date beginTime;
 
+    private Date finishTime;
+
     private Boolean isDone;
 
     private Boolean isInvalid;
@@ -48,6 +50,14 @@ public class TrainingReStudent implements Serializable {
 
     public void setBeginTime(Date beginTime) {
         this.beginTime = beginTime;
+    }
+
+    public Date getFinishTime() {
+        return finishTime;
+    }
+
+    public void setFinishTime(Date finishTime) {
+        this.finishTime = finishTime;
     }
 
     public Boolean getIsDone() {

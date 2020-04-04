@@ -9,7 +9,9 @@ public class Md5 {
         return md5word.toUpperCase();
     }
     public static void main(String[] args){
-        String a="123456";
-        System.out.println(digest(a));
+        String a="admin";
+        StringBuilder stringBuilder=new StringBuilder();
+        stringBuilder.append("");
+
     }
 }

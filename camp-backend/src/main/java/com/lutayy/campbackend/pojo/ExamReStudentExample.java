@@ -474,52 +474,52 @@ public class ExamReStudentExample {
             return (Criteria) this;
         }
 
-        public Criteria andIsVerifyEqualTo(Boolean value) {
+        public Criteria andIsVerifyEqualTo(Byte value) {
             addCriterion("is_verify =", value, "isVerify");
             return (Criteria) this;
         }
 
-        public Criteria andIsVerifyNotEqualTo(Boolean value) {
+        public Criteria andIsVerifyNotEqualTo(Byte value) {
             addCriterion("is_verify <>", value, "isVerify");
             return (Criteria) this;
         }
 
-        public Criteria andIsVerifyGreaterThan(Boolean value) {
+        public Criteria andIsVerifyGreaterThan(Byte value) {
             addCriterion("is_verify >", value, "isVerify");
             return (Criteria) this;
         }
 
-        public Criteria andIsVerifyGreaterThanOrEqualTo(Boolean value) {
+        public Criteria andIsVerifyGreaterThanOrEqualTo(Byte value) {
             addCriterion("is_verify >=", value, "isVerify");
             return (Criteria) this;
         }
 
-        public Criteria andIsVerifyLessThan(Boolean value) {
+        public Criteria andIsVerifyLessThan(Byte value) {
             addCriterion("is_verify <", value, "isVerify");
             return (Criteria) this;
         }
 
-        public Criteria andIsVerifyLessThanOrEqualTo(Boolean value) {
+        public Criteria andIsVerifyLessThanOrEqualTo(Byte value) {
             addCriterion("is_verify <=", value, "isVerify");
             return (Criteria) this;
         }
 
-        public Criteria andIsVerifyIn(List<Boolean> values) {
+        public Criteria andIsVerifyIn(List<Byte> values) {
             addCriterion("is_verify in", values, "isVerify");
             return (Criteria) this;
         }
 
-        public Criteria andIsVerifyNotIn(List<Boolean> values) {
+        public Criteria andIsVerifyNotIn(List<Byte> values) {
             addCriterion("is_verify not in", values, "isVerify");
             return (Criteria) this;
         }
 
-        public Criteria andIsVerifyBetween(Boolean value1, Boolean value2) {
+        public Criteria andIsVerifyBetween(Byte value1, Byte value2) {
             addCriterion("is_verify between", value1, value2, "isVerify");
             return (Criteria) this;
         }
 
-        public Criteria andIsVerifyNotBetween(Boolean value1, Boolean value2) {
+        public Criteria andIsVerifyNotBetween(Byte value1, Byte value2) {
             addCriterion("is_verify not between", value1, value2, "isVerify");
             return (Criteria) this;
         }

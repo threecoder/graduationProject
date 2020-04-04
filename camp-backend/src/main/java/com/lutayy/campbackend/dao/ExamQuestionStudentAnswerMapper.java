@@ -10,7 +10,7 @@ public interface ExamQuestionStudentAnswerMapper {
 
     int deleteByExample(ExamQuestionStudentAnswerExample example);
 
-    int deleteByPrimaryKey(@Param("examId") Integer examId, @Param("questionId") Integer questionId, @Param("studentId") Integer studentId);
+    int deleteByPrimaryKey(Integer id);
 
     int insert(ExamQuestionStudentAnswer record);
 
@@ -18,7 +18,7 @@ public interface ExamQuestionStudentAnswerMapper {
 
     List<ExamQuestionStudentAnswer> selectByExample(ExamQuestionStudentAnswerExample example);
 
-    ExamQuestionStudentAnswer selectByPrimaryKey(@Param("examId") Integer examId, @Param("questionId") Integer questionId, @Param("studentId") Integer studentId);
+    ExamQuestionStudentAnswer selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") ExamQuestionStudentAnswer record, @Param("example") ExamQuestionStudentAnswerExample example);
 

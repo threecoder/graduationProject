@@ -54,6 +54,12 @@ public class ExamController {
         return examService.getExamDetail(studentId,examId);
     }
 
+    @RequestMapping("/student/rejoinExam")
+    @ResponseBody
+    public JSONObject rejoinExam(@RequestBody JSONObject jsonObject){
+        return examService.rejoinExam(jsonObject);
+    }
+
     @RequestMapping("/student/submitExam")
     @ResponseBody
     public JSONObject submitExam(@RequestBody JSONObject jsonObject){
@@ -91,9 +97,15 @@ public class ExamController {
         return examService.randomFillExam(jsonObject);
     }
 
+    @RequestMapping("/admin/saveQuestionForExam")
+    @ResponseBody
+    public JSONObject saveQuestionForExam(@RequestBody JSONObject jsonObject){
+        return examService.saveQuestionForExam(jsonObject);
+    }
+
     @RequestMapping("/admin/publishExam")
     @ResponseBody
-    public JSONObject publishExam(JSONObject jsonObject){
+    public JSONObject publishExam(@RequestBody JSONObject jsonObject){
         return examService.publishExam(jsonObject);
     }
 
@@ -101,6 +113,18 @@ public class ExamController {
     @ResponseBody
     public JSONObject closeExam(@RequestBody JSONObject jsonObject){
         return examService.closeExam(jsonObject);
+    }
+
+    @RequestMapping("/admin/getExamInfo")
+    @ResponseBody
+    public Object adminGetExamInfo(@RequestParam("examId") Integer examId){
+        return examService.adminGetExamInfo(examId);
+    }
+
+    @RequestMapping("/admin/getExamQuestionList")
+    @ResponseBody
+    public Object getExamQuestionList(@RequestParam("examId") Integer examId){
+        return examService.getExamQuestionList(examId);
     }
 
     @RequestMapping("/admin/modifyExamInfo")

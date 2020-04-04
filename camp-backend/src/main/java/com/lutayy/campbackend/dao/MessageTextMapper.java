@@ -16,21 +16,15 @@ public interface MessageTextMapper {
 
     int insertSelective(MessageText record);
 
-    List<MessageText> selectByExampleWithBLOBs(MessageTextExample example);
-
     List<MessageText> selectByExample(MessageTextExample example);
 
     MessageText selectByPrimaryKey(Integer messageId);
 
     int updateByExampleSelective(@Param("record") MessageText record, @Param("example") MessageTextExample example);
 
-    int updateByExampleWithBLOBs(@Param("record") MessageText record, @Param("example") MessageTextExample example);
-
     int updateByExample(@Param("record") MessageText record, @Param("example") MessageTextExample example);
 
     int updateByPrimaryKeySelective(MessageText record);
-
-    int updateByPrimaryKeyWithBLOBs(MessageText record);
 
     int updateByPrimaryKey(MessageText record);
 }

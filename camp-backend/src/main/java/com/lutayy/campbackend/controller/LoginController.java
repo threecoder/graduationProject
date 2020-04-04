@@ -20,12 +20,18 @@ public class LoginController {
     @RequestMapping("/login")
     @ResponseBody
     public JSONObject login(@RequestBody JSONObject jsonObject, HttpServletResponse response) {
-        return loginService.login(jsonObject,response);
+        return loginService.login(jsonObject, response);
     }
 
-    @RequestMapping("/logout")
+    @RequestMapping(value = {"/logout", "/admin/logout"})
     @ResponseBody
-    public Object getJoinableActivities(HttpServletResponse response){
+    public Object logout(HttpServletResponse response) {
         return loginService.logout(response);
+    }
+
+    @RequestMapping("/admin/login")
+    @ResponseBody
+    public JSONObject adminLogin(@RequestBody JSONObject jsonObject, HttpServletResponse response) {
+        return loginService.adminLogin(jsonObject, response);
     }
 }
