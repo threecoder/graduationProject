@@ -41,7 +41,7 @@ public class ExamController {
         return examService.getExamInfo(studentId,examId);
     }
 
-    @RequestMapping("/student/getExamQuestions")
+    @RequestMapping(value = {"/student/getExamQuestions","/admin/getExamDetail"})
     @ResponseBody
     public Object getExamQuestions(@RequestParam("examId") Integer examId){
         return examService.getExamQuestions(examId);
@@ -131,5 +131,17 @@ public class ExamController {
     @ResponseBody
     public JSONObject modifyExamInfo(@RequestBody JSONObject jsonObject){
         return examService.modifyExamInfo(jsonObject);
+    }
+
+    @RequestMapping("/admin/getFinishedStudentList")
+    @ResponseBody
+    public Object getFinishedStudentList(@RequestParam("examId") Integer examId){
+        return examService.getFinishedStudentList(examId);
+    }
+
+    @RequestMapping("/admin/getGradeList")
+    @ResponseBody
+    public Object getGradeList(@RequestParam("examId") Integer examId){
+        return examService.getGradeList(examId);
     }
 }

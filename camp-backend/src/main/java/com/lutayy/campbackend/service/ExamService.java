@@ -45,4 +45,8 @@ public interface ExamService {
     JSONObject getExamQuestionList(Integer examId);
 
     JSONObject modifyExamInfo(JSONObject jsonObject);
+    //管理员获取已经作答的学生情况
+    JSONObject getFinishedStudentList(Integer examId);
+    //管理员获取待审核成绩列表
+    JSONObject getGradeList(Integer examId);
 }

@@ -685,5 +685,11 @@ public class TrainingServiceImpl implements TrainingService {
         return result;
 
     }
+
+    //管理员获取学员参加过的培训记录
+    @Override
+    public JSONObject getStudentTrainingHistory(String idCard, Integer currentPage, Integer pageSize) {
+        return null;
+    }
 }
 

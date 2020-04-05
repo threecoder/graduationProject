@@ -77,6 +77,36 @@ public class AdminServiceImpl implements AdminService {
     }
 
     //学员管理
+    //管理员添加单个学员
+    @Override
+    public JSONObject addSingleStudent(JSONObject jsonObject) {
+        JSONObject result = new JSONObject();
+        result.put("code", "fail");
+
+        String idCard = jsonObject.getString("idNum");
+        String phone = jsonObject.getString("phone");
+        String name = jsonObject.getString("name");
+        if (getObjectHelper.getStudentFromIdCard(idCard) != null) {
+            result.put("msg", "身份证已存在");
+            return result;
+        }
+        if (getObjectHelper.getStudentFromPhone(phone) != null) {
+            result.put("msg", "手机号已存在");
+            return result;
+        }
+        Student student = new Student();
+        student.setStudentName(name);
+        student.setStudentPhone(phone);
+        student.setStudentIdcard(idCard);
+        student.setEnterTime(new Date());
+        if (studentMapper.insertSelective(student) > 0) {
+            result.put("code", "success");
+            result.put("msg", "添加学员成功！");
+        } else {
+            result.put("msg", "系统繁忙，请稍后再试");
+        }
+        return result;
+    }
 
     @Override
     public JSONObject importStudentByFile(Integer memberId, MultipartFile file) {
@@ -276,6 +306,91 @@ public class AdminServiceImpl implements AdminService {
         return result;
     }
 
+    //管理员修改学员挂靠公司
+    @Override
+    public JSONObject modifyRely(JSONObject jsonObject) {
+        JSONObject result = new JSONObject();
+        result.put("code", "fail");
+        Student student = getObjectHelper.getStudentFromIdCard(jsonObject.getString("idNum"));
+        if (student == null) {
+            result.put("msg", "系统中无该学员信息！");
+            return result;
+        }
+        int memberId=jsonObject.getInteger("memberId");
+        if(memberId!=0) {
+            Member member = memberMapper.selectByPrimaryKey(memberId);
+            if (member == null) {
+                result.put("msg", "系统中无对应会员信息，修改失败！");
+                return result;
+            }
+            MemberReStudentExample memberReStudentExample = new MemberReStudentExample();
+            memberReStudentExample.createCriteria().andStudentIdEqualTo(student.getStudentId());
+            List<MemberReStudent> memberReStudents = memberReStudentMapper.selectByExample(memberReStudentExample);
+            if (memberReStudents.size() > 0) {
+                MemberReStudent memberReStudent = memberReStudents.get(0);
+                memberReStudent.setMemberKeyId(member.getMemberKeyId());
+                memberReStudentMapper.updateByExample(memberReStudent, memberReStudentExample);
+            } else {
+                MemberReStudent memberReStudent = new MemberReStudent();
+                memberReStudent.setStudentId(student.getStudentId());
+                memberReStudent.setMemberKeyId(memberId);
+                memberReStudentMapper.insert(memberReStudent);
+            }
+            student.setCompany(member.getMemberName());
+            student.setHasOrg(true);
+            studentMapper.updateByPrimaryKeySelective(student);
+        }else {
+            MemberReStudentExample memberReStudentExample = new MemberReStudentExample();
+            memberReStudentExample.createCriteria().andStudentIdEqualTo(student.getStudentId());
+            memberReStudentMapper.deleteByExample(memberReStudentExample);
+            student.setCompany(null);
+            student.setHasOrg(false);
+            studentMapper.updateByPrimaryKey(student);
+        }
+        result.put("code", "success");
+        result.put("msg", "更改学员挂靠成功！");
+        return result;
+    }
+
+    //管理员修改学员资料
+    @Override
+    public JSONObject modifyStudentInfo(JSONObject jsonObject) {
+        JSONObject result=new JSONObject();
+        result.put("code", "fail");
+
+        String idCard=jsonObject.getString("idNum");
+        Student student=getObjectHelper.getStudentFromIdCard(idCard);
+        if (student == null) {
+            result.put("msg", "系统中无该学员信息！");
+            return result;
+        }
+
+        String name=jsonObject.getString("name");
+        String phone=jsonObject.getString("phone");
+        String email=jsonObject.getString("email");
+        String position=jsonObject.getString("position");
+        String province=jsonObject.getString("province");
+        String city=jsonObject.getString("city");
+        String area=jsonObject.getString("area");
+        String address=jsonObject.getString("zone");
+
+        student.setStudentName(name);
+        student.setStudentPhone(phone);
+        student.setStudentEmail(email);
+        student.setStudentPosition(position);
+        student.setStudentProvince(province);
+        student.setStudentCity(city);
+        student.setStudentArea(area);
+        student.setStudentAddress(address);
+        if(studentMapper.updateByPrimaryKey(student)>0){
+            result.put("code", "success");
+            result.put("msg", "学员信息修改成功！");
+        }else {
+            result.put("msg", "系统繁忙，请重试");
+        }
+        return result;
+    }
+
     //会员管理
     @Override
     public ResponseEntity<byte[]> getMemberTemplate(HttpServletRequest request) {
@@ -364,7 +479,7 @@ public class AdminServiceImpl implements AdminService {
             }
             JSONObject object = new JSONObject();
             object.put("name", member.getMemberName());
-            object.put("id", member.getMemberId());
+            object.put("id", member.getMemberKeyId());
             object.put("phone", member.getMemberPhone());
             object.put("enterDate", member.getEnterDate());
             object.put("email", member.getMemberEmail());
@@ -396,6 +511,27 @@ public class AdminServiceImpl implements AdminService {
         result.put("data", data);
         return result;
 
+    }
+    //管理员获取会员列表用于下拉框
+    @Override
+    public JSONObject getMemSelectList() {
+        JSONObject result=new JSONObject();
+        JSONArray data=new JSONArray();
+
+        MemberExample memberExample=new MemberExample();
+        memberExample.setOrderByClause("member_name ASC");
+        List<Member> members=memberMapper.selectByExample(memberExample);
+        for(Member member:members){
+            JSONObject object=new JSONObject();
+            object.put("id", member.getMemberKeyId());
+            object.put("name", member.getMemberName());
+            object.put("phone", member.getMemberPhone());
+            data.add(object);
+        }
+        result.put("code", "success");
+        result.put("msg", "列表获取成功！");
+        result.put("data", data);
+        return result;
     }
 
     @Override

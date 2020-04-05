@@ -24,4 +24,6 @@ public interface TrainingService {
     JSONObject addNewTraining(JSONObject jsonObject);
 
     JSONObject adminGetTrainingList();
+    //管理员获取学员参加过的培训记录
+    JSONObject getStudentTrainingHistory(String idCard, Integer currentPage, Integer pageSize);
 }

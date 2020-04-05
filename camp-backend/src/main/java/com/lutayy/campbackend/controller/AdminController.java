@@ -30,11 +30,17 @@ public class AdminController {
         return adminService.setNewPassword(jsonObject);
     }
 
-    //学员管理
+    //-------学员管理-----------
     @RequestMapping("/getStudentTemplate")
     @ResponseBody
     public ResponseEntity<byte[]> getTemplate(HttpServletRequest request) {
         return memberService.getStudentTemplate(request);
+    }
+
+    @RequestMapping("/addSingleStudent")
+    @ResponseBody
+    public JSONObject addSingleStudent(@RequestBody JSONObject jsonObject) {
+        return adminService.addSingleStudent(jsonObject);
     }
 
     @RequestMapping("/importStudentByFile")
@@ -61,7 +67,19 @@ public class AdminController {
         return adminService.deleteOneStudentFromMember(jsonObject);
     }
 
-    //会员管理
+    @RequestMapping("/modifyRely")
+    @ResponseBody
+    public JSONObject modifyRely(@RequestBody JSONObject jsonObject) {
+        return adminService.modifyRely(jsonObject);
+    }
+
+    @RequestMapping("/modifyStudentInfo")
+    @ResponseBody
+    public JSONObject modifyStudentInfo(@RequestBody JSONObject jsonObject) {
+        return adminService.modifyStudentInfo(jsonObject);
+    }
+
+    //-----------会员管理-------------
     @RequestMapping("/getMemberTemplate")
     @ResponseBody
     public ResponseEntity<byte[]> getMemberTemplate(HttpServletRequest request) {
@@ -76,6 +94,12 @@ public class AdminController {
                                 @RequestParam("currentPage") Integer currentPage,
                                 @RequestParam("pageSize") Integer pageSize) {
         return adminService.getMemberList(type, deadline, name, currentPage, pageSize);
+    }
+
+    @RequestMapping("/getMemSelectList")
+    @ResponseBody
+    public Object getMemSelectList() {
+        return adminService.getMemSelectList();
     }
 
     @RequestMapping("/getOneMemberStudentList")
