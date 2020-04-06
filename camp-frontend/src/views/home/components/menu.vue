@@ -10,7 +10,7 @@
         >
             <el-menu-item class="one" index="/index">首页</el-menu-item>
             <el-menu-item class="one" index="/introduction">协会介绍</el-menu-item>
-            <el-menu-item class="one" index="/courses">协会介绍</el-menu-item>
+            <el-menu-item class="one" index="/courses">培训</el-menu-item>
             <el-menu-item index="/news">新闻</el-menu-item>
             <el-menu-item index="/activities">活动</el-menu-item>
             <el-menu-item index="/notice">协会公告</el-menu-item>

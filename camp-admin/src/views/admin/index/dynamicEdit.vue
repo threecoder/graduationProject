@@ -22,7 +22,7 @@
                 <editor
                     v-model="form.content"
                     :imgSize="imgSize"
-                    :content="form.content"
+                    :content="initContent"
                     @contentChange="saveContent"
                 />
             </div>
@@ -56,6 +56,7 @@ export default {
             },
             //编辑功能相关变量
             dynamicId: null,
+            initContent: null,
             imgInfo: [], //编辑后图片顺序
             imgIds: {
                 "http://www.baidu.com/img/baidu_resultlogo@2.png": "self"
@@ -67,7 +68,7 @@ export default {
             this.dynamicId = this.$route.query.dynamicId;
             this.getDynamicDetail();
         }
-        this.form.content =
+        this.initContent =
             "<img src='http://www.baidu.com/img/baidu_resultlogo@2.png'>";
     },
     methods: {
@@ -150,6 +151,7 @@ export default {
 
         async submit() {
             let form = this.form;
+            console.log(this.form);
             if (!form.title || !form.desc || !form.content) {
                 this.$message.error("必须填写所有内容");
                 return false;
@@ -188,7 +190,8 @@ export default {
         async getDynamicDetail() {
             try {
                 let res = await indexApi.getDynamicDetail(this.dynamicId);
-                this.form = res.data.content;
+                this.form = res.data.info;
+                this.initContent = res.data.info.content;
                 let reg1 = /<img[\s\S]*?>/g;
                 let imgArr = this.form.content.match(reg1);
                 let obj = {};

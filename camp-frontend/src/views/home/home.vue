@@ -1,7 +1,7 @@
 <template>
     <div class="all-container">
         <my-header />
-        <horizontalMenu />
+        <horizontal-menu />
         <div class="content-container">
             <div class="view-container">
                 <router-view :key="$route.path" />

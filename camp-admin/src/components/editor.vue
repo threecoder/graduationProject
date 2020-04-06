@@ -20,7 +20,11 @@ import Quill from "quill";
 export default {
     props: {
         imgSize: Number,
-        content: String
+        content: String,
+        imgFlag: {
+            type: Boolean,
+            default: true
+        }
     },
     data() {
         return {
@@ -49,7 +53,15 @@ export default {
             }
         };
     },
+    watch: {
+        content(val) {
+            this.quill.root.innerHTML = this.content;
+        }
+    },
     mounted() {
+        if (this.imgFlag == false) {
+            this.editorOption.modules.toolbar.pop();
+        }
         this.init();
     },
     methods: {

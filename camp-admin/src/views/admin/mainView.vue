@@ -156,7 +156,7 @@ export default {
                     title: "前台网站管理",
                     children: [
                         { index: "/dynamic", title: "协会新闻和动态" },
-                        { index: "/introduction", title: "协会资料" }
+                        { index: "/introduction", title: "协会介绍" }
                     ]
                 },
                 {

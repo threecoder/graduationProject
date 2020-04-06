@@ -166,6 +166,11 @@ export default new Router({
                     path: '/dynamicEdit',
                     name: 'dynamicEdit',
                     component: resolve => require([ '../views/admin/index/dynamicEdit.vue' ], resolve)
+                }, 
+                {
+                    path: '/introduction',
+                    name: 'introduction',
+                    component: resolve => require([ '../views/admin/index/introduction.vue' ], resolve)
                 }
             ]
         },

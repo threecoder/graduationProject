@@ -1,11 +1,12 @@
 <template>
     <div>
         <el-row>
-            <el-col :span="22">
+            <el-col :span="20">
                 <h3>新闻与动态管理</h3>
             </el-col>
-            <el-col :span="2">
-                <el-button type="primary" @click="publish">发布</el-button>
+            <el-col :span="4">
+                <el-button size="medium" type="primary" @click="publish">发布</el-button>
+                <el-button size="medium" type="primary" @click="dialog.flag = true">轮播</el-button>
             </el-col>
         </el-row>
         <div class="divider"></div>
@@ -41,22 +42,22 @@
             />
         </div>
 
-        <!-- 新建或者修改新闻动态 -->
-        <!-- <el-dialog :title="dialog.title" :visible.sync="dialog.flag" v-if="dialog.flag">
-            <add-dynamic :dynamicId="dialog.dynamicId" />
-        </el-dialog>-->
+        <!-- 设置轮播情况 -->
+        <el-dialog :title="dialog.title" :visible.sync="dialog.flag" v-if="dialog.flag">
+            <carousel @cancel="dialog.flag=false" />
+        </el-dialog>
     </div>
 </template>
 <script>
 import mTable from "../../../components/mTable.vue";
 import page from "../../../components/page.vue";
-// import addDynamic from "./components/addDynamic.vue";
+import carousel from "./components/carousel.vue";
 import indexApi from "../../../api/admin/index";
 export default {
     components: {
         mTable,
-        page
-        // addDynamic
+        page,
+        carousel
     },
     data() {
         return {
@@ -88,13 +89,12 @@ export default {
                 loading: false
             },
             dialog: {
-                title: null,
-                dynamicId: null,
+                title: "设置轮播图",
                 flag: false
             }
         };
     },
-    mounted(){
+    mounted() {
         this.getList();
     },
     methods: {
@@ -114,15 +114,9 @@ export default {
             this.table.loading = false;
         },
         publish() {
-            // this.dialog.title = "发布新动态";
-            // this.dialog.dynamicId = null;
-            // this.dialog.flag = true;
             this.$router.push(`/dynamicEdit`);
         },
         modify(row) {
-            // this.dialog.title = "修改动态";
-            // this.dialog.dynamicId = row.id;
-            // this.dialog.flag = true;
             this.$router.push(`/dynamicEdit?dynamicId=${row.id}`);
         },
         deleteDynamic(row) {

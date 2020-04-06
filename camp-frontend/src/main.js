@@ -16,6 +16,10 @@ Vue.prototype.confirm = element.MessageBox.confirm;
 
 Vue.use(element);
 Vue.component('v-distpicker', Distpicker)
+
+import "./assets/css/quill.core.css";
+import "./assets/css/quill.snow.css";
+
 // 配置路由拦截
 router.beforeEach((to, from, next) => {
     let token = document.cookie.indexOf("token");
