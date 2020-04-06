@@ -14,7 +14,7 @@ public class MessageToStudent implements Serializable {
 
     private Boolean status;
 
-    private Date sendDate;
+    private Date sendTime;
 
     private static final long serialVersionUID = 1L;
 
@@ -58,11 +58,11 @@ public class MessageToStudent implements Serializable {
         this.status = status;
     }
 
-    public Date getSendDate() {
-        return sendDate;
+    public Date getSendTime() {
+        return sendTime;
     }
 
-    public void setSendDate(Date sendDate) {
-        this.sendDate = sendDate;
+    public void setSendTime(Date sendTime) {
+        this.sendTime = sendTime;
     }
 }

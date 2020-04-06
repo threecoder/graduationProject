@@ -10,4 +10,7 @@ public interface LoginService {
     JSONObject login(JSONObject jsonObject, HttpServletResponse response);
 
     JSONObject logout(HttpServletResponse response);
+
+    JSONObject adminLogin(JSONObject jsonObject, HttpServletResponse response);
+
 }

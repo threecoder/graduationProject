@@ -6,6 +6,7 @@
     <result column="training_id" jdbcType="INTEGER" property="trainingId" />
     <result column="student_id" jdbcType="INTEGER" property="studentId" />
     <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime" />
+    <result column="finish_time" jdbcType="TIMESTAMP" property="finishTime" />
     <result column="is_done" jdbcType="BIT" property="isDone" />
     <result column="is_invalid" jdbcType="BIT" property="isInvalid" />
   </resultMap>
@@ -68,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    apply_id, training_id, student_id, begin_time, is_done, is_invalid
+    apply_id, training_id, student_id, begin_time, finish_time, is_done, is_invalid
   </sql>
   <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.TrainingReStudentExample" resultMap="BaseResultMap">
     select
@@ -82,6 +83,9 @@
     </if>
     <if test="orderByClause != null">
       order by ${orderByClause}
+    </if>
+    <if test="offset != null and limit != null">
+      limit ${offset},${limit}
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -102,11 +106,11 @@
   </delete>
   <insert id="insert" parameterType="com.lutayy.campbackend.pojo.TrainingReStudent">
     insert into training_re_student (apply_id, training_id, student_id, 
-      begin_time, is_done, is_invalid
-      )
+      begin_time, finish_time, is_done, 
+      is_invalid)
     values (#{applyId,jdbcType=VARCHAR}, #{trainingId,jdbcType=INTEGER}, #{studentId,jdbcType=INTEGER}, 
-      #{beginTime,jdbcType=TIMESTAMP}, #{isDone,jdbcType=BIT}, #{isInvalid,jdbcType=BIT}
-      )
+      #{beginTime,jdbcType=TIMESTAMP}, #{finishTime,jdbcType=TIMESTAMP}, #{isDone,jdbcType=BIT}, 
+      #{isInvalid,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.TrainingReStudent">
     insert into training_re_student
@@ -122,6 +126,9 @@
       </if>
       <if test="beginTime != null">
         begin_time,
+      </if>
+      <if test="finishTime != null">
+        finish_time,
       </if>
       <if test="isDone != null">
         is_done,
@@ -142,6 +149,9 @@
       </if>
       <if test="beginTime != null">
         #{beginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="finishTime != null">
+        #{finishTime,jdbcType=TIMESTAMP},
       </if>
       <if test="isDone != null">
         #{isDone,jdbcType=BIT},
@@ -172,6 +182,9 @@
       <if test="record.beginTime != null">
         begin_time = #{record.beginTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.finishTime != null">
+        finish_time = #{record.finishTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="record.isDone != null">
         is_done = #{record.isDone,jdbcType=BIT},
       </if>
@@ -189,6 +202,7 @@
       training_id = #{record.trainingId,jdbcType=INTEGER},
       student_id = #{record.studentId,jdbcType=INTEGER},
       begin_time = #{record.beginTime,jdbcType=TIMESTAMP},
+      finish_time = #{record.finishTime,jdbcType=TIMESTAMP},
       is_done = #{record.isDone,jdbcType=BIT},
       is_invalid = #{record.isInvalid,jdbcType=BIT}
     <if test="_parameter != null">
@@ -207,6 +221,9 @@
       <if test="beginTime != null">
         begin_time = #{beginTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="finishTime != null">
+        finish_time = #{finishTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="isDone != null">
         is_done = #{isDone,jdbcType=BIT},
       </if>
@@ -221,6 +238,7 @@
     set training_id = #{trainingId,jdbcType=INTEGER},
       student_id = #{studentId,jdbcType=INTEGER},
       begin_time = #{beginTime,jdbcType=TIMESTAMP},
+      finish_time = #{finishTime,jdbcType=TIMESTAMP},
       is_done = #{isDone,jdbcType=BIT},
       is_invalid = #{isInvalid,jdbcType=BIT}
     where apply_id = #{applyId,jdbcType=VARCHAR}

@@ -6,9 +6,9 @@ import java.util.Date;
 public class MessageText implements Serializable {
     private Integer messageId;
 
-    private Date sendDate;
-
     private String message;
+
+    private Date sendTime;
 
     private static final long serialVersionUID = 1L;
 
@@ -20,19 +20,19 @@ public class MessageText implements Serializable {
         this.messageId = messageId;
     }
 
-    public Date getSendDate() {
-        return sendDate;
-    }
-
-    public void setSendDate(Date sendDate) {
-        this.sendDate = sendDate;
-    }
-
     public String getMessage() {
         return message;
     }
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public Date getSendTime() {
+        return sendTime;
+    }
+
+    public void setSendTime(Date sendTime) {
+        this.sendTime = sendTime;
     }
 }

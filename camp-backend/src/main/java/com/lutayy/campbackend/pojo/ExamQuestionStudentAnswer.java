@@ -3,6 +3,8 @@ package com.lutayy.campbackend.pojo;
 import java.io.Serializable;
 
 public class ExamQuestionStudentAnswer implements Serializable {
+    private Integer id;
+
     private Integer examId;
 
     private Integer questionId;
@@ -17,7 +19,17 @@ public class ExamQuestionStudentAnswer implements Serializable {
 
     private Byte answerFour;
 
+    private Boolean correctOrNot;
+
     private static final long serialVersionUID = 1L;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getExamId() {
         return examId;
@@ -73,5 +85,13 @@ public class ExamQuestionStudentAnswer implements Serializable {
 
     public void setAnswerFour(Byte answerFour) {
         this.answerFour = answerFour;
+    }
+
+    public Boolean getCorrectOrNot() {
+        return correctOrNot;
+    }
+
+    public void setCorrectOrNot(Boolean correctOrNot) {
+        this.correctOrNot = correctOrNot;
     }
 }

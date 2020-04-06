@@ -44,7 +44,7 @@ public class ExamStudentSQLConn {
         try{
             conn= DriverManager.getConnection(URL,Name,Pwd);
             statement=conn.createStatement();
-            String sql="select e.exam_id,e.exam_name,e.training_id,e.exam_start_time,e.exam_end_time,e.exam_length_min,r.score from exam e, student s,exam_re_student r " +
+            String sql="select distinct e.exam_id,e.exam_name,e.training_id,e.exam_start_time,e.exam_end_time,e.exam_length_min,r.score from exam e, student s,exam_re_student r " +
                     "where e.exam_id = r.exam_id and s.student_id = r.student_id and r.is_invalid=0 and s.student_id ="+userKey;
             if(!condition.equals("")){
                 sql+=" and "+condition;

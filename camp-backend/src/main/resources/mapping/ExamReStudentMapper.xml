@@ -8,7 +8,7 @@
     <result column="score" jdbcType="INTEGER" property="score" />
     <result column="remaining_times" jdbcType="TINYINT" property="remainingTimes" />
     <result column="is_invalid" jdbcType="BIT" property="isInvalid" />
-    <result column="is_verify" jdbcType="BIT" property="isVerify" />
+    <result column="is_verify" jdbcType="TINYINT" property="isVerify" />
     <result column="in_line" jdbcType="BIT" property="inLine" />
     <result column="not_pass_reason" jdbcType="VARCHAR" property="notPassReason" />
     <result column="not_pass_times" jdbcType="INTEGER" property="notPassTimes" />
@@ -114,7 +114,7 @@
       in_line, not_pass_reason, not_pass_times
       )
     values (#{examId,jdbcType=INTEGER}, #{studentId,jdbcType=INTEGER}, #{score,jdbcType=INTEGER}, 
-      #{remainingTimes,jdbcType=TINYINT}, #{isInvalid,jdbcType=BIT}, #{isVerify,jdbcType=BIT}, 
+      #{remainingTimes,jdbcType=TINYINT}, #{isInvalid,jdbcType=BIT}, #{isVerify,jdbcType=TINYINT}, 
       #{inLine,jdbcType=BIT}, #{notPassReason,jdbcType=VARCHAR}, #{notPassTimes,jdbcType=INTEGER}
       )
   </insert>
@@ -169,7 +169,7 @@
         #{isInvalid,jdbcType=BIT},
       </if>
       <if test="isVerify != null">
-        #{isVerify,jdbcType=BIT},
+        #{isVerify,jdbcType=TINYINT},
       </if>
       <if test="inLine != null">
         #{inLine,jdbcType=BIT},
@@ -210,7 +210,7 @@
         is_invalid = #{record.isInvalid,jdbcType=BIT},
       </if>
       <if test="record.isVerify != null">
-        is_verify = #{record.isVerify,jdbcType=BIT},
+        is_verify = #{record.isVerify,jdbcType=TINYINT},
       </if>
       <if test="record.inLine != null">
         in_line = #{record.inLine,jdbcType=BIT},
@@ -234,7 +234,7 @@
       score = #{record.score,jdbcType=INTEGER},
       remaining_times = #{record.remainingTimes,jdbcType=TINYINT},
       is_invalid = #{record.isInvalid,jdbcType=BIT},
-      is_verify = #{record.isVerify,jdbcType=BIT},
+      is_verify = #{record.isVerify,jdbcType=TINYINT},
       in_line = #{record.inLine,jdbcType=BIT},
       not_pass_reason = #{record.notPassReason,jdbcType=VARCHAR},
       not_pass_times = #{record.notPassTimes,jdbcType=INTEGER}
@@ -261,7 +261,7 @@
         is_invalid = #{isInvalid,jdbcType=BIT},
       </if>
       <if test="isVerify != null">
-        is_verify = #{isVerify,jdbcType=BIT},
+        is_verify = #{isVerify,jdbcType=TINYINT},
       </if>
       <if test="inLine != null">
         in_line = #{inLine,jdbcType=BIT},
@@ -282,7 +282,7 @@
       score = #{score,jdbcType=INTEGER},
       remaining_times = #{remainingTimes,jdbcType=TINYINT},
       is_invalid = #{isInvalid,jdbcType=BIT},
-      is_verify = #{isVerify,jdbcType=BIT},
+      is_verify = #{isVerify,jdbcType=TINYINT},
       in_line = #{inLine,jdbcType=BIT},
       not_pass_reason = #{notPassReason,jdbcType=VARCHAR},
       not_pass_times = #{notPassTimes,jdbcType=INTEGER}

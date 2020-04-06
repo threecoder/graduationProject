@@ -2,13 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lutayy.campbackend.dao.ExamQuestionStudentAnswerMapper">
   <resultMap id="BaseResultMap" type="com.lutayy.campbackend.pojo.ExamQuestionStudentAnswer">
-    <id column="exam_id" jdbcType="INTEGER" property="examId" />
-    <id column="question_id" jdbcType="INTEGER" property="questionId" />
-    <id column="student_id" jdbcType="INTEGER" property="studentId" />
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="exam_id" jdbcType="INTEGER" property="examId" />
+    <result column="question_id" jdbcType="INTEGER" property="questionId" />
+    <result column="student_id" jdbcType="INTEGER" property="studentId" />
     <result column="answer_one" jdbcType="TINYINT" property="answerOne" />
     <result column="answer_two" jdbcType="TINYINT" property="answerTwo" />
     <result column="answer_three" jdbcType="TINYINT" property="answerThree" />
     <result column="answer_four" jdbcType="TINYINT" property="answerFour" />
+    <result column="correct_or_not" jdbcType="BIT" property="correctOrNot" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,7 +71,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    exam_id, question_id, student_id, answer_one, answer_two, answer_three, answer_four
+    id, exam_id, question_id, student_id, answer_one, answer_two, answer_three, answer_four, 
+    correct_or_not
   </sql>
   <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.ExamQuestionStudentAnswerExample" resultMap="BaseResultMap">
     select
@@ -85,19 +88,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from exam_question_student_answer
-    where exam_id = #{examId,jdbcType=INTEGER}
-      and question_id = #{questionId,jdbcType=INTEGER}
-      and student_id = #{studentId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="map">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from exam_question_student_answer
-    where exam_id = #{examId,jdbcType=INTEGER}
-      and question_id = #{questionId,jdbcType=INTEGER}
-      and student_id = #{studentId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.lutayy.campbackend.pojo.ExamQuestionStudentAnswerExample">
     delete from exam_question_student_answer
@@ -106,14 +105,20 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.lutayy.campbackend.pojo.ExamQuestionStudentAnswer">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into exam_question_student_answer (exam_id, question_id, student_id, 
       answer_one, answer_two, answer_three, 
-      answer_four)
+      answer_four, correct_or_not)
     values (#{examId,jdbcType=INTEGER}, #{questionId,jdbcType=INTEGER}, #{studentId,jdbcType=INTEGER}, 
       #{answerOne,jdbcType=TINYINT}, #{answerTwo,jdbcType=TINYINT}, #{answerThree,jdbcType=TINYINT}, 
-      #{answerFour,jdbcType=TINYINT})
+      #{answerFour,jdbcType=TINYINT}, #{correctOrNot,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.ExamQuestionStudentAnswer">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into exam_question_student_answer
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="examId != null">
@@ -136,6 +141,9 @@
       </if>
       <if test="answerFour != null">
         answer_four,
+      </if>
+      <if test="correctOrNot != null">
+        correct_or_not,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -160,6 +168,9 @@
       <if test="answerFour != null">
         #{answerFour,jdbcType=TINYINT},
       </if>
+      <if test="correctOrNot != null">
+        #{correctOrNot,jdbcType=BIT},
+      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.lutayy.campbackend.pojo.ExamQuestionStudentAnswerExample" resultType="java.lang.Long">
@@ -171,6 +182,9 @@
   <update id="updateByExampleSelective" parameterType="map">
     update exam_question_student_answer
     <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
       <if test="record.examId != null">
         exam_id = #{record.examId,jdbcType=INTEGER},
       </if>
@@ -192,6 +206,9 @@
       <if test="record.answerFour != null">
         answer_four = #{record.answerFour,jdbcType=TINYINT},
       </if>
+      <if test="record.correctOrNot != null">
+        correct_or_not = #{record.correctOrNot,jdbcType=BIT},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -199,13 +216,15 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update exam_question_student_answer
-    set exam_id = #{record.examId,jdbcType=INTEGER},
+    set id = #{record.id,jdbcType=INTEGER},
+      exam_id = #{record.examId,jdbcType=INTEGER},
       question_id = #{record.questionId,jdbcType=INTEGER},
       student_id = #{record.studentId,jdbcType=INTEGER},
       answer_one = #{record.answerOne,jdbcType=TINYINT},
       answer_two = #{record.answerTwo,jdbcType=TINYINT},
       answer_three = #{record.answerThree,jdbcType=TINYINT},
-      answer_four = #{record.answerFour,jdbcType=TINYINT}
+      answer_four = #{record.answerFour,jdbcType=TINYINT},
+      correct_or_not = #{record.correctOrNot,jdbcType=BIT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -213,6 +232,15 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.lutayy.campbackend.pojo.ExamQuestionStudentAnswer">
     update exam_question_student_answer
     <set>
+      <if test="examId != null">
+        exam_id = #{examId,jdbcType=INTEGER},
+      </if>
+      <if test="questionId != null">
+        question_id = #{questionId,jdbcType=INTEGER},
+      </if>
+      <if test="studentId != null">
+        student_id = #{studentId,jdbcType=INTEGER},
+      </if>
       <if test="answerOne != null">
         answer_one = #{answerOne,jdbcType=TINYINT},
       </if>
@@ -225,19 +253,22 @@
       <if test="answerFour != null">
         answer_four = #{answerFour,jdbcType=TINYINT},
       </if>
+      <if test="correctOrNot != null">
+        correct_or_not = #{correctOrNot,jdbcType=BIT},
+      </if>
     </set>
-    where exam_id = #{examId,jdbcType=INTEGER}
-      and question_id = #{questionId,jdbcType=INTEGER}
-      and student_id = #{studentId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.lutayy.campbackend.pojo.ExamQuestionStudentAnswer">
     update exam_question_student_answer
-    set answer_one = #{answerOne,jdbcType=TINYINT},
+    set exam_id = #{examId,jdbcType=INTEGER},
+      question_id = #{questionId,jdbcType=INTEGER},
+      student_id = #{studentId,jdbcType=INTEGER},
+      answer_one = #{answerOne,jdbcType=TINYINT},
       answer_two = #{answerTwo,jdbcType=TINYINT},
       answer_three = #{answerThree,jdbcType=TINYINT},
-      answer_four = #{answerFour,jdbcType=TINYINT}
-    where exam_id = #{examId,jdbcType=INTEGER}
-      and question_id = #{questionId,jdbcType=INTEGER}
-      and student_id = #{studentId,jdbcType=INTEGER}
+      answer_four = #{answerFour,jdbcType=TINYINT},
+      correct_or_not = #{correctOrNot,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

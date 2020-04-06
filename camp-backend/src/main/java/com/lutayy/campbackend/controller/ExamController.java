@@ -41,7 +41,7 @@ public class ExamController {
         return examService.getExamInfo(studentId,examId);
     }
 
-    @RequestMapping("/student/getExamQuestions")
+    @RequestMapping(value = {"/student/getExamQuestions","/admin/getExamDetail"})
     @ResponseBody
     public Object getExamQuestions(@RequestParam("examId") Integer examId){
         return examService.getExamQuestions(examId);
@@ -52,6 +52,12 @@ public class ExamController {
     public Object getExamDetail(@RequestParam("id") Integer studentId,
                                 @RequestParam("examId") Integer examId){
         return examService.getExamDetail(studentId,examId);
+    }
+
+    @RequestMapping("/student/rejoinExam")
+    @ResponseBody
+    public JSONObject rejoinExam(@RequestBody JSONObject jsonObject){
+        return examService.rejoinExam(jsonObject);
     }
 
     @RequestMapping("/student/submitExam")
@@ -91,9 +97,15 @@ public class ExamController {
         return examService.randomFillExam(jsonObject);
     }
 
+    @RequestMapping("/admin/saveQuestionForExam")
+    @ResponseBody
+    public JSONObject saveQuestionForExam(@RequestBody JSONObject jsonObject){
+        return examService.saveQuestionForExam(jsonObject);
+    }
+
     @RequestMapping("/admin/publishExam")
     @ResponseBody
-    public JSONObject publishExam(JSONObject jsonObject){
+    public JSONObject publishExam(@RequestBody JSONObject jsonObject){
         return examService.publishExam(jsonObject);
     }
 
@@ -103,9 +115,33 @@ public class ExamController {
         return examService.closeExam(jsonObject);
     }
 
+    @RequestMapping("/admin/getExamInfo")
+    @ResponseBody
+    public Object adminGetExamInfo(@RequestParam("examId") Integer examId){
+        return examService.adminGetExamInfo(examId);
+    }
+
+    @RequestMapping("/admin/getExamQuestionList")
+    @ResponseBody
+    public Object getExamQuestionList(@RequestParam("examId") Integer examId){
+        return examService.getExamQuestionList(examId);
+    }
+
     @RequestMapping("/admin/modifyExamInfo")
     @ResponseBody
     public JSONObject modifyExamInfo(@RequestBody JSONObject jsonObject){
         return examService.modifyExamInfo(jsonObject);
+    }
+
+    @RequestMapping("/admin/getFinishedStudentList")
+    @ResponseBody
+    public Object getFinishedStudentList(@RequestParam("examId") Integer examId){
+        return examService.getFinishedStudentList(examId);
+    }
+
+    @RequestMapping("/admin/getGradeList")
+    @ResponseBody
+    public Object getGradeList(@RequestParam("examId") Integer examId){
+        return examService.getGradeList(examId);
     }
 }

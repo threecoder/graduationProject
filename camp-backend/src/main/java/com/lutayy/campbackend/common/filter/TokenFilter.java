@@ -37,11 +37,11 @@ public class TokenFilter implements Filter {
         String url =request.getRequestURI();
         String contentType=request.getContentType();
 
-        if (url.contains("/admin")||url.contains("/register")||url.contains("/login")||url.contains("/index")||url.contains(".")||url.equals("/")||contentType.contains("multipart/form-data")){
+        if (url.contains("/register")||url.contains("/login")||url.contains("/index")||url.contains(".")||url.equals("/")||contentType.contains("multipart/form-data")){
             chain.doFilter(request, response);
             return;
         }
-        System.out.println("student: --- "+url+"未被过滤 ---");
+        System.out.println("--- "+url+"未被过滤 ---");
         Cookie[] cookies = request.getCookies();
         String token = null;
 
@@ -85,6 +85,16 @@ public class TokenFilter implements Filter {
             }
             if(url.contains("/member")){
                 if(tokenRequest.getRole()==null||!tokenRequest.getRole().equals("member") ){
+                    resMessage.put("code","error");
+                    resMessage.put("msg","未登录");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write(resMessage.toJSONString());
+                    response.setContentType("application/json;charset=UTF-8");
+                    return;
+                }
+            }
+            if(url.contains("/admin")){
+                if(tokenRequest.getRole()==null||!tokenRequest.getRole().equals("admin") ){
                     resMessage.put("code","error");
                     resMessage.put("msg","未登录");
                     response.setCharacterEncoding("UTF-8");

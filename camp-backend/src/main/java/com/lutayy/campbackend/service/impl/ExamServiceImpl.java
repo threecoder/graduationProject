@@ -34,6 +34,8 @@ public class ExamServiceImpl implements ExamService {
     ExamReQuestionMapper examReQuestionMapper;
     @Autowired
     ExamQuestionStudentAnswerMapper examQuestionStudentAnswerMapper;
+    @Autowired
+    GetObjectHelper getObjectHelper;
 
 
     @Override
@@ -64,7 +66,8 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public JSONObject getTodoExamList(Integer studentId) {
         JSONObject result = new JSONObject();
-        if (studentId == -1) {
+        Student student = studentMapper.selectByPrimaryKey(studentId);
+        if (student == null) {
             result.put("code", "fail");
             result.put("data", null);
             result.put("msg", "用户不存在！");
@@ -301,10 +304,14 @@ public class ExamServiceImpl implements ExamService {
             }
             object.put("rightAnswer", rightAnswer);
             JSONArray studentAnswer = new JSONArray();
-            ExamQuestionStudentAnswer examQuestionStudentAnswer = examQuestionStudentAnswerMapper.selectByPrimaryKey(examId, question.getQuestionId(), studentId);
-            if (examQuestionStudentAnswer == null) {
+            ExamQuestionStudentAnswerExample eqsaE = new ExamQuestionStudentAnswerExample();
+            eqsaE.createCriteria().andExamIdEqualTo(examId).andQuestionIdEqualTo(question.getQuestionId()).andStudentIdEqualTo(studentId);
+            List<ExamQuestionStudentAnswer> examQuestionStudentAnswers = examQuestionStudentAnswerMapper.selectByExample(eqsaE);
+            ExamQuestionStudentAnswer examQuestionStudentAnswer;
+            if (examQuestionStudentAnswers.size() == 0) {
                 object.put("studentAnswer", null);
             } else {
+                examQuestionStudentAnswer = examQuestionStudentAnswers.get(0);
                 studentAnswer.add(examQuestionStudentAnswer.getAnswerOne());
                 if (question.getType() == 1) {
                     if (examQuestionStudentAnswer.getAnswerTwo() != null) {
@@ -394,8 +401,10 @@ public class ExamServiceImpl implements ExamService {
                 }
                 if (compareTwoArray(rightAnswer, answerList)) {
                     score += examReQuestions.get(i).getScore();
+                    examQuestionStudentAnswer.setCorrectOrNot(true);
                     System.out.println("第" + (i + 1) + "题正确");
                 } else {
+                    examQuestionStudentAnswer.setCorrectOrNot(false);
                     System.out.println("第" + (i + 1) + "题选了" + answer.get(i) + "错误,正确答案是" + rightAnswer);
                 }
                 //保存做题记录
@@ -412,15 +421,19 @@ public class ExamServiceImpl implements ExamService {
             } else {
                 if (answer.getByte(i) == rightAnswer.get(0)) {
                     score += examReQuestions.get(i).getScore();
+                    examQuestionStudentAnswer.setCorrectOrNot(true);
                     System.out.println("第" + (i + 1) + "题正确");
                 } else {
+                    examQuestionStudentAnswer.setCorrectOrNot(false);
                     System.out.println("第" + (i + 1) + "题选了" + answer.get(i) + "错误,正确答案是" + rightAnswer.get(0));
                 }
                 examQuestionStudentAnswer.setAnswerOne(answer.getByte(i));
             }
             //保存做题记录
-            if (examQuestionStudentAnswerMapper.selectByPrimaryKey(examId, question.getQuestionId(), studentId) != null) {
-                examQuestionStudentAnswerMapper.updateByPrimaryKeySelective(examQuestionStudentAnswer);
+            ExamQuestionStudentAnswerExample eqsaE = new ExamQuestionStudentAnswerExample();
+            eqsaE.createCriteria().andExamIdEqualTo(examId).andQuestionIdEqualTo(question.getQuestionId()).andStudentIdEqualTo(studentId);
+            if (examQuestionStudentAnswerMapper.selectByExample(eqsaE).size() > 0) {
+                examQuestionStudentAnswerMapper.updateByExampleSelective(examQuestionStudentAnswer, eqsaE);
             } else {
                 examQuestionStudentAnswerMapper.insertSelective(examQuestionStudentAnswer);
             }
@@ -457,6 +470,44 @@ public class ExamServiceImpl implements ExamService {
         Collections.sort(A);
         Collections.sort(B);
         return A.equals(B);
+    }
+
+    @Override
+    public JSONObject rejoinExam(JSONObject jsonObject) {
+        Integer examId = jsonObject.getInteger("examId");
+        Integer studentId = jsonObject.getInteger("id");
+        JSONObject result = new JSONObject();
+        result.put("code", "fail");
+        Exam exam = examMapper.selectByPrimaryKey(examId);
+        if (exam == null) {
+            result.put("msg", "系统中找不到该考试！");
+            return result;
+        }
+        ExamReStudentExample examReStudentExample = new ExamReStudentExample();
+        examReStudentExample.createCriteria().andStudentIdEqualTo(studentId).andExamIdEqualTo(examId).andIsInvalidEqualTo(false);
+        List<ExamReStudent> examReStudents = examReStudentMapper.selectByExample(examReStudentExample);
+        if (examReStudents.size() == 0) {
+            result.put("msg", "学生无报名该考试！");
+            return result;
+        }
+        ExamReStudent examReStudent = examReStudents.get(0);
+        if (examReStudent.getRemainingTimes() < 1) {
+            result.put("msg", "剩余考试次数为0");
+            return result;
+        }
+        if (examReStudent.getInLine()) {
+            result.put("msg", "当前考试正在审核队列中，请耐心等待审核");
+            return result;
+        }
+        if (examReStudent.getIsVerify().equals(2)) {
+            result.put("msg", "当前考试已审核通过，无须重考");
+            return result;
+        }
+        examReStudent.setRemainingTimes((byte) (examReStudent.getRemainingTimes() - 1));
+        examReStudentMapper.updateByPrimaryKeySelective(examReStudent);
+        result.put("code", "success");
+        result.put("msg", "重新报名考试成功");
+        return result;
     }
 
     /**
@@ -611,10 +662,10 @@ public class ExamServiceImpl implements ExamService {
 
         Integer currentPage = jsonObject.getInteger("currentPage");
         Integer pageSize = jsonObject.getInteger("pageSize");
-        if (pageSize == null) {
+        if (pageSize == null || pageSize < 1) {
             pageSize = 10;
         }
-        if (currentPage == null) {
+        if (currentPage == null || currentPage < 1) {
             currentPage = 1;
         }
         String keyword = jsonObject.getString("keyword");
@@ -679,7 +730,7 @@ public class ExamServiceImpl implements ExamService {
         return result;
     }
 
-    @Override
+    @Override  //随机出题
     public JSONObject randomFillExam(JSONObject jsonObject) {
         JSONObject result = new JSONObject();
         Integer examId = jsonObject.getInteger("examId");
@@ -697,7 +748,7 @@ public class ExamServiceImpl implements ExamService {
         ExamReQuestionExample examReQuestionExample = new ExamReQuestionExample();
         ExamReQuestionExample.Criteria criteria0 = examReQuestionExample.createCriteria();
         criteria0.andExamIdEqualTo(examId);
-        if (examReQuestionMapper.selectByExample(examReQuestionExample).size() != 0) {
+        if (examReQuestionMapper.countByExample(examReQuestionExample) > 0) {
             result.put("code", "fail");
             result.put("msg", "该考试已有试卷，请清空后再尝试");
             return result;
@@ -745,6 +796,49 @@ public class ExamServiceImpl implements ExamService {
         return result;
     }
 
+    @Override  //自行出题
+    public JSONObject saveQuestionForExam(JSONObject jsonObject) {
+        JSONObject result = new JSONObject();
+        result.put("code", "fail");
+
+        Integer examId = jsonObject.getInteger("examId");
+        JSONArray queList = jsonObject.getJSONArray("queList");
+        Exam exam = examMapper.selectByPrimaryKey(examId);
+        if (exam == null) {
+            result.put("msg", "系统中无该考试");
+            return result;
+        }
+        if (exam.getHaveQuestions()) {
+            result.put("msg", "该试卷已有题目，如需改动请清空重新添加");
+            return result;
+        }
+        int examNum = exam.getExamNum();
+        if (queList.size() < examNum) {
+            result.put("msg", "题目数量不足");
+            return result;
+        }
+        Question question;
+        for (int i = 1; i <= examNum; i++) {
+            int questionId = queList.getInteger(i - 1);
+            question = questionMapper.selectByPrimaryKey(questionId);
+            if (question == null)
+                continue;
+            ExamReQuestion examReQuestion = new ExamReQuestion();
+            examReQuestion.setExamId(examId);
+            examReQuestion.setQuestionId(questionId);
+            examReQuestion.setQuestionIndex(i);
+            examReQuestion.setScore(100 / examNum);
+            if (i == examNum)
+                examReQuestion.setScore(100 - (100 / examNum) * (examNum - 1));
+            examReQuestionMapper.insert(examReQuestion);
+        }
+        exam.setHaveQuestions(true);
+        examMapper.updateByPrimaryKeySelective(exam);
+        result.put("code", "success");
+        result.put("msg", "试题添加成功！");
+        return result;
+    }
+
     @Override
     public JSONObject publishExam(JSONObject jsonObject) {
         JSONObject result = new JSONObject();
@@ -789,6 +883,58 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
+    public JSONObject adminGetExamInfo(Integer examId) {
+        JSONObject result = new JSONObject();
+        result.put("code", "fail");
+        Exam exam = examMapper.selectByPrimaryKey(examId);
+        if (exam == null) {
+            result.put("data", null);
+            result.put("msg", "无法查询到该考试信息!");
+            return result;
+        }
+
+        JSONObject data = new JSONObject();
+        Training training = trainingMapper.selectByPrimaryKey(exam.getTrainingId());
+        data.put("name", exam.getExamName());
+        data.put("num", exam.getExamNum());
+        data.put("pass", exam.getExamPass());//及格分数
+        data.put("len", exam.getExamLengthMin());
+        data.put("startTime", exam.getExamStartTime());
+        data.put("endTime", exam.getExamEndTime());
+        data.put("training", training == null ? "" : training.getTrainingName());
+        data.put("hasQue", exam.getHaveQuestions());
+        result.put("code", "success");
+        result.put("data", data);
+        result.put("msg", "查询成功!");
+        return result;
+    }
+
+    @Override
+    public JSONObject getExamQuestionList(Integer examId) {
+        JSONObject result = new JSONObject();
+        JSONObject data = new JSONObject();
+        Exam exam = examMapper.selectByPrimaryKey(examId);
+        if (exam == null) {
+            result.put("code", "fail");
+            result.put("data", data);
+            result.put("msg", "无法查询到该考试信息!");
+            return result;
+        }
+        JSONArray list = new JSONArray();
+        ExamReQuestionExample examReQuestionExample = new ExamReQuestionExample();
+        examReQuestionExample.createCriteria().andExamIdEqualTo(examId);
+        List<ExamReQuestion> examReQuestions = examReQuestionMapper.selectByExample(examReQuestionExample);
+        for (ExamReQuestion examReQuestion : examReQuestions) {
+            list.add(examReQuestion.getQuestionId());
+        }
+        data.put("list", list);
+        result.put("data", data);
+        result.put("code", "success");
+        result.put("msg", "试卷试题获取成功");
+        return result;
+    }
+
+    @Override
     public JSONObject modifyExamInfo(JSONObject jsonObject) {
         JSONObject result = new JSONObject();
         Integer examId = jsonObject.getInteger("id");
@@ -823,6 +969,76 @@ public class ExamServiceImpl implements ExamService {
             result.put("code", "fail");
             result.put("msg", "系统繁忙，请稍后尝试");
         }
+        return result;
+    }
+
+    //管理员获取已经作答的学生情况
+    @Override
+    public JSONObject getFinishedStudentList(Integer examId) {
+        JSONObject result = new JSONObject();
+        JSONArray list = new JSONArray();
+        Exam exam = examMapper.selectByPrimaryKey(examId);
+        if (exam == null) {
+            result.put("code", "fail");
+            result.put("msg", "系统中已无该场考试！");
+            result.put("data", list);
+            return result;
+        }
+        ExamReStudentExample examReStudentExample = new ExamReStudentExample();
+        examReStudentExample.createCriteria().andExamIdEqualTo(examId);
+        examReStudentExample.setOrderByClause("is_invalid ASC");
+        List<ExamReStudent> examReStudents = examReStudentMapper.selectByExample(examReStudentExample);
+        for (ExamReStudent examReStudent : examReStudents) {
+            Student student = studentMapper.selectByPrimaryKey(examReStudent.getStudentId());
+            JSONObject object = new JSONObject();
+            object.put("idNum", student.getStudentIdcard());
+            object.put("name", student.getStudentName());
+            object.put("grade", examReStudent.getScore());
+            object.put("times", examReStudent.getRemainingTimes());
+            object.put("member", student.getCompany());
+            if (examReStudent.getIsInvalid())
+                object.put("isInvalid", "该场考试已作废");
+            else
+                object.put("isInvalid", "该场考试有效");
+            list.add(object);
+        }
+        result.put("code", "success");
+        result.put("msg", "查询列表成功");
+        result.put("data", list);
+        return result;
+    }
+
+    //管理员获取待审核成绩列表
+    @Override
+    public JSONObject getGradeList(Integer examId) {
+        JSONObject result=new JSONObject();
+        JSONArray list=new JSONArray();
+        Exam exam = examMapper.selectByPrimaryKey(examId);
+        if (exam == null) {
+            result.put("code", "fail");
+            result.put("msg", "系统中已无该场考试！");
+            result.put("data", list);
+            return result;
+        }
+        int passScore=exam.getExamPass();
+        ExamReStudentExample examReStudentExample = new ExamReStudentExample();
+        examReStudentExample.createCriteria().andExamIdEqualTo(examId).andIsInvalidEqualTo(false).
+                andIsVerifyEqualTo((byte)0).andInLineEqualTo(false).andScoreGreaterThanOrEqualTo(passScore);
+        List<ExamReStudent> examReStudents = examReStudentMapper.selectByExample(examReStudentExample);
+        for(ExamReStudent examReStudent:examReStudents){
+            JSONObject object=new JSONObject();
+            object.put("id", examReStudent.getReportId());
+            Student student=studentMapper.selectByPrimaryKey(examReStudent.getStudentId());
+            object.put("name", student.getStudentName());
+            object.put("idNum", student.getStudentIdcard());
+            object.put("member", student.getCompany());
+            object.put("times", 3-examReStudent.getRemainingTimes());
+            object.put("grade", examReStudent.getScore());
+            list.add(object);
+        }
+        result.put("code", "success");
+        result.put("msg", "获取待审核成绩列表成功！");
+        result.put("data", list);
         return result;
     }
 }

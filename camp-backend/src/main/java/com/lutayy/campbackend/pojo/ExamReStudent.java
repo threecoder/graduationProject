@@ -15,7 +15,7 @@ public class ExamReStudent implements Serializable {
 
     private Boolean isInvalid;
 
-    private Boolean isVerify;
+    private Byte isVerify;
 
     private Boolean inLine;
 
@@ -73,11 +73,11 @@ public class ExamReStudent implements Serializable {
         this.isInvalid = isInvalid;
     }
 
-    public Boolean getIsVerify() {
+    public Byte getIsVerify() {
         return isVerify;
     }
 
-    public void setIsVerify(Boolean isVerify) {
+    public void setIsVerify(Byte isVerify) {
         this.isVerify = isVerify;
     }
 
