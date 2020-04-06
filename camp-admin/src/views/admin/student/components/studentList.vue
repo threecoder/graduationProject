@@ -31,14 +31,24 @@
                 :loading="table.loading"
             >
                 <el-table-column slot="oper" align="center" slot-scope="{ params }" v-bind="params">
-                    <div v-if="type==0" slot-scope=" {row}">
-                        <el-button type="primary" size="small" @click="modifyInfo(row)">修改信息</el-button>
-                        <el-button type="primary" size="small" @click="deleteOneStudent(row)">解除挂靠</el-button>
-                        <el-button type="primary" size="small" @click="resetPass(row)">重置密码</el-button>
-                    </div>
-                    <div v-if="type==1" slot-scope="{row}">
-                        <el-button type="primary" size="small" @click="trainingHistory(row)">培训记录</el-button>
-                        <el-button type="primary" size="small" @click="certificate(row)">持有证书</el-button>
+                    <div slot-scope="{row}">
+                        <div v-if="type==0">
+                            <el-button type="primary" size="small" @click="modifyInfo(row)">修改信息</el-button>
+                            <el-button
+                                type="primary"
+                                size="small"
+                                @click="deleteOneStudent(row)"
+                            >解除挂靠</el-button>
+                            <el-button type="primary" size="small" @click="resetPass(row)">重置密码</el-button>
+                        </div>
+                        <div v-if="type==1">
+                            <el-button
+                                type="primary"
+                                size="small"
+                                @click="trainingHistory(row)"
+                            >培训记录</el-button>
+                            <el-button type="primary" size="small" @click="certificate(row)">持有证书</el-button>
+                        </div>
                     </div>
                 </el-table-column>
             </m-table>
@@ -142,7 +152,7 @@ export default {
         async search() {
             try {
                 let que = "";
-                let res = await adminStudentApi.getStudentList(que);
+                let res = await adminStudentApi.getStudentList(this.form);
                 this.table.tableData = res.data.list;
                 this.form.total = res.data.total;
             } catch (error) {

@@ -155,6 +155,17 @@ export default new Router({
                     path: '/paramsSetting',
                     name: 'paramsSetting',
                     component: resolve => require([ '../views/admin/system/paramsSetting.vue' ], resolve)
+                },
+                //前台管理
+                {
+                    path: '/dynamic',
+                    name: 'dynamic',
+                    component: resolve => require([ '../views/admin/index/dynamic.vue' ], resolve)
+                },
+                {
+                    path: '/dynamicEdit',
+                    name: 'dynamicEdit',
+                    component: resolve => require([ '../views/admin/index/dynamicEdit.vue' ], resolve)
                 }
             ]
         },

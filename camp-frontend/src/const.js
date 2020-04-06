@@ -20,4 +20,4 @@ export const canGoPath = [
 ]
 
 //图片占位符
-export const imgStr = "@#$#@";
+export const imgStr = "@图#片$占#位@";

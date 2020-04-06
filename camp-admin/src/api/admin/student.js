@@ -2,7 +2,7 @@ import { request } from "../request";
 import { apiPrefix } from '../../const';
 
 //获取学员列表
-const getStudentList = par => request(`${apiPrefix}/getStudentList`, 'get', { par });
+const getStudentList = par => request(`${apiPrefix}/getStudentList`, 'get', par);
 
 //获取公司列表
 const getMemSelectList = () => request(`${apiPrefix}/getMemSelectList`, "get");

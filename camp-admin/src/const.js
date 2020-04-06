@@ -25,3 +25,6 @@ export const systemParams = [
     { key: "certificateOrderTime", label: "证书订单超时时间(分钟)", type: "number" },
     { key: "memberOrderTime", label: "会费订单超时时间(分钟)", type: "number" }
 ]
+
+//图片占位符
+export const imgStr = "@图#片$占#位@";
