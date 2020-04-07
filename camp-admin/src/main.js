@@ -5,7 +5,7 @@ import Axios from 'axios'
 import store from './store'
 import element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-import { getCanGoPath } from '@/assets/js/util.js';
+import { getCanGoPath } from './assets/js/util';
 import Distpicker from 'v-distpicker'
 
 // import 'vue-fabric/dist/vue-fabric.min.css';
@@ -40,7 +40,7 @@ Axios.interceptors.response.use(
             if (response.data.code == 'success') {
                 return response.data;
             } else if (response.data.code == 'error') {
-                router.push({ path: '/login' });
+                router.push({ path: '/adminLogin' });
                 throw new Error("请先登录您的账号");
             } else if (response.data.code == 'fail') {
                 throw new Error(response.data.msg);

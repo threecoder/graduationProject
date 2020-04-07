@@ -86,7 +86,9 @@ export default {
                 let res = await adminExamApi.randomFillExam(this.examId);
                 this.$message.success("随机出题成功");
                 this.$emit("refresh");
-            } catch (error) {}
+            } catch (error) {
+                this.$message.error(error.message);
+            }
         },
         async publish() {
             try {
@@ -95,7 +97,9 @@ export default {
                     "发布考试成功，考生可以在规定时间内参与考试"
                 );
                 this.$emit("refresh");
-            } catch (error) {}
+            } catch (error) {
+                this.$message.error(error.message);
+            }
         }
     }
 };

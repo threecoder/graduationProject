@@ -44,8 +44,8 @@ export default {
         ];
         return {
             modifyPass: {
-                oldPassWord: null,
-                newPassWord: null,
+                oldPassword: null,
+                newPassword: null,
                 newPassword2: null
             },
             rules: {
@@ -61,7 +61,6 @@ export default {
                 if (valid) {
                     try {
                         let res = await accountApi.resetPassword(
-                            this.type,
                             this.modifyPass
                         );
                         this.$message.success("修改密码成功");

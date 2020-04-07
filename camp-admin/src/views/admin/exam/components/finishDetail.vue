@@ -41,13 +41,13 @@ export default {
                     { slot: "oper", label: "操作" }
                 ],
                 data: [
-                    {
-                        idNum: "11111",
-                        name: "张",
-                        member: "所属公司",
-                        grade: 60,
-                        times: 2
-                    }
+                    // {
+                    //     idNum: "11111",
+                    //     name: "张",
+                    //     member: "所属公司",
+                    //     grade: 60,
+                    //     times: 2
+                    // }
                 ],
                 loading: false
             }
@@ -61,16 +61,28 @@ export default {
         async getFinishStudentList() {
             this.table.loading = true;
             try {
-                let res = await adminExamApi.getFinishedStudentList(this.examInfo.examId);
+                let res = await adminExamApi.getFinishedStudentList(
+                    this.examInfo.examId
+                );
                 this.table.data = res.data;
+                this.num = res.data.length;
+                let count = 0;
+                res.data.forEach(val => {
+                    console.log(val);
+                    if (val.grade >= this.examInfo.pass) {
+                        count++;
+                    }
+                });
+                this.pass = count;
             } catch (error) {
                 this.$message.error(error.message);
             }
             this.table.loading = false;
         },
         checkDetail(row) {
+            console.log(this.examInfo);
             this.$router.push({
-                path: `/studentExamDetail/${row.name}/${this.diaFini.examId}/${row.idNum}`
+                path: `/studentExamDetail/${row.name}/${this.examInfo.examId}/${row.idNum}`
             });
         }
     }

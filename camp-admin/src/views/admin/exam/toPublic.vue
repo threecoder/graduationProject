@@ -32,7 +32,7 @@
                         :idtype="1"
                         @pick="pickQuestion(item.examId)"
                         @modify="modify(item.examId)"
-                        @refresh="fresh"
+                        @refresh="getNotPostExamList"
                     />
                 </div>
                 <page
@@ -48,7 +48,7 @@
             <exam-publish
                 :id="examForm.id"
                 :type.sync="examForm.formType"
-                @close="examForm.newFlag=false;fresh()"
+                @close="examForm.newFlag=false;getNotPostExamList()"
             />
         </el-dialog>
     </div>
@@ -56,7 +56,7 @@
 <script>
 import singleExam from "../../../components/singleExam.vue";
 import page from "../../../components/page.vue";
-import examPublish from "./components/examPublish";
+import examPublish from "./components/examPublish.vue";
 import adminExamApi from "../../../api/admin/exam.js";
 export default {
     components: {
@@ -135,12 +135,9 @@ export default {
     },
 
     mounted() {
-        // this.fresh();
+        this.getNotPostExamList();
     },
     methods: {
-        fresh() {
-            this.getNotPostExamList();
-        },
         async getNotPostExamList() {
             try {
                 this.loading = true;
@@ -158,7 +155,6 @@ export default {
             this.getNotPostExamList();
         },
         pickQuestion(id) {
-            console.log(id);
             this.$router.push({ path: `/pickQuestion/${id}` });
         },
         modify(id) {

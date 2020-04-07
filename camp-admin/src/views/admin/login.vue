@@ -93,7 +93,11 @@ export default {
             };
             this.loginLoading = true;
             try {
-                let res = await request("/campback/login", "post", params);
+                let res = await request(
+                    "/campback/admin/login",
+                    "post",
+                    params
+                );
                 this.$message.success(res.msg);
                 this.$router.push({
                     path: this.redirect ? this.redirect : "/admin"

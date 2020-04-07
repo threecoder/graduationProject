@@ -101,7 +101,11 @@
     </div>
 </template>
 <script>
-import { formatDate, formatTime, formatDateAndTime } from "../../../../assets/js/util";
+import {
+    formatDate,
+    formatTime,
+    formatDateAndTime
+} from "../../../../assets/js/util";
 import adminExamApi from "../../../../api/admin/exam.js";
 export default {
     //"type，true表示新建考试，false表示修改考试信息"
@@ -204,6 +208,8 @@ export default {
                     par.openTime = formatDateAndTime(par.dateRange[0]);
                     par.closeTime = formatDateAndTime(par.dateRange[1]);
                     this.flag = true;
+                    console.log(par);
+
                     if (this.type == true) {
                         this.addNewExam(par);
                     } else {
@@ -232,9 +238,10 @@ export default {
                 }
             }
         },
-        async saveModify() {
+        async saveModify(par) {
             if (this.flag) {
                 try {
+                    par.examId = this.id;
                     let res = await adminExamApi.modifyExam(par);
                     this.$message.success("修改考试成功");
                     this.$emit("close");
@@ -259,7 +266,7 @@ export default {
                 this.ruleForm = res.data;
                 let arr = [];
                 arr[0] = new Date(res.data.startTime);
-                arr[1] = new Date(res.data.endTIme);
+                arr[1] = new Date(res.data.endTime);
                 this.ruleForm.dateRange = arr;
             } catch (error) {
                 this.$message.error(error.message);

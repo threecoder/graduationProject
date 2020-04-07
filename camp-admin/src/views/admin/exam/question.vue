@@ -16,6 +16,7 @@
                     :uploadUrl="uploadAttr.uploadUrl"
                     :formData="uploadAttr.data"
                     :size="'medium'"
+                    @uploadSuccess="success"
                 />
             </div>
         </div>
@@ -30,7 +31,7 @@
                     <el-select clearable v-model="form.type">
                         <el-option value="0" label="单选题"></el-option>
                         <el-option value="1" label="多选题"></el-option>
-                        <!-- <el-option value="2" label="判断题"></el-option> -->
+                        <el-option value="2" label="判断题"></el-option>
                     </el-select>
                 </el-form-item>
                 <!-- <el-form-item label="所属培训" label-position="top">
@@ -80,10 +81,12 @@
         <div class="dialog-container">
             <el-dialog title="修改试题" :visible.sync="flag">
                 <h3>题目内容：{{dialog.state}}</h3>
+                <el-input v-model="dialog.state" type="textarea"></el-input>
                 <div class="question-type">
                     <el-select v-model="dialog.type">
-                        <el-option value="0" label="单选题"></el-option>
-                        <el-option value="1" label="多选题"></el-option>
+                        <el-option value="单选题" label="单选题"></el-option>
+                        <el-option value="多选题" label="多选题"></el-option>
+                        <el-option value="判断题" label="判断题"></el-option>
                     </el-select>
                 </div>
                 <div class="option">
@@ -255,11 +258,38 @@ export default {
             this.flag = true;
             this.dialog = { ...row };
         },
+        beforeModify() {
+            let data = { ...this.dialog };
+            let ans = data.answer,
+                tem = [];
+            for (let i = 0; i < ans.length; i++) {
+                switch (ans[i].toUpperCase()) {
+                    case "A":
+                        tem.push(1);
+                        break;
+                    case "B":
+                        tem.push(2);
+                        break;
+                    case "C":
+                        tem.push(3);
+                        break;
+                    case "D":
+                        tem.push(4);
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+            data.answer = tem;
+            return data;
+        },
         async modefyQuestion() {
             try {
-                let res = await adminExamApi.modefyQuestionInfo(this.dialog);
+                let data = this.beforeModify();
+                let res = await adminExamApi.modefyQuestionInfo(data);
                 this.$message.success("修改试题成功");
-                this.getQuestionList();
+                this.search();
                 this.flag = false;
             } catch (error) {
                 this.$message.error(error.message);
@@ -272,6 +302,9 @@ export default {
             } catch (error) {
                 this.$message.error(error.message);
             }
+        },
+        async success(res) {
+            console.log(res);
         }
     }
 };

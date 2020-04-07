@@ -2,8 +2,9 @@
     <div class="single-choice box-card">
         <p>
             <span class="blue">{{item.index}}.</span>
-            <span v-if="item.type==1" class="blue">[单选题]</span>
-            <span v-else class="blue">[多选题]</span>
+            <span v-if="item.type==0" class="blue">[单选题]</span>
+            <span v-else-if="item.type==1" class="blue">[多选题]</span>
+            <span v-else-if="item.type==2" class="blue">[判断题]</span>
             {{item.title}}
             <span class="grey">({{item.score}}分)</span>
             <span class="fr" :class="{'redWords':!flag,'greenWords':flag}">{{flag==true?"正确":"错误"}}</span>

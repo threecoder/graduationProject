@@ -79,6 +79,7 @@
 import navmenu from "../../components/navmenu.vue";
 import modifyPass from "./components/modifyPassword.vue";
 import msgApi from "../../api/admin/message";
+import accoutApi from "../../api/admin/account";
 import { getLocalStorage } from "../../assets/js/util";
 import event from "../../assets/js/eventBus";
 export default {
@@ -227,9 +228,14 @@ export default {
                 this.$message.error(error.message);
             }
         },
-        logout() {
-            window.localStorage.removeItem("token");
-            this.$router.push("/adminLogin");
+        async logout() {
+            try {
+                await accoutApi.logout();
+                this.$message.success("注销成功");
+                this.$router.push("/adminLogin");
+            } catch (error) {
+                this.$message.error(error.message);
+            }
         }
     }
 };

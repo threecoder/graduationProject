@@ -22,7 +22,7 @@ const randomFillExam = examId => request(apiPrefix + `/randomFillExam`, 'post', 
 const getNotPostExam = currentPage => request(apiPrefix + `/getNotPostExam`, 'get', { currentPage, pageSize: 6 });
 
 //获取已经添加的考试信息(根据id)
-const getExamInfo = id => request(apiPrefix + `/getExamInfo`, 'get', { id });
+const getExamInfo = examId => request(apiPrefix + `/getExamInfo`, 'get', { examId });
 
 //修改已经添加的考试信息
 const modifyExam = data => request(apiPrefix + "/modifyExamInfo", 'post', data);
@@ -31,7 +31,7 @@ const modifyExam = data => request(apiPrefix + "/modifyExamInfo", 'post', data);
 const getExamQuestionList = id => request(apiPrefix + `/getExamQuestionList`, 'get', { id });
 
 //根据题目id获取题目信息
-const getSingleQuestion = id => request(apiPrefix + `/getQuestionInfo`, 'get', { id });
+const getSingleQuestion = examId => request(apiPrefix + `/getQuestionInfo`, 'get', { examId });
 
 //保存给某个试卷挑选的题目
 const saveQuestionForExam = par => request(apiPrefix + "/saveQuestionForExam", 'post', par);
@@ -72,7 +72,7 @@ const submitGradeList = data => request(`${apiPrefix}/submitGradeList`, 'post', 
 const getWaitingGradeList = par => request(`${apiPrefix}/getWaitingGradeList`, 'get', par);
 
 //通过某条记录
-const approvalSingleRecord = id => request(`${apiPrefix}/approvalSingleRecord`, 'post', { id });
+const approvalSingleRecord = recordId => request(`${apiPrefix}/approvalSingleRecord`, 'post', { recordId });
 
 //通过一批记录
 const approvalManyRecords = ids => request(`${apiPrefix}/approvalManyRecords`, 'post', { ids });

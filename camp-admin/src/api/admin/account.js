@@ -8,7 +8,7 @@ const login = data => request(`${apiPrefix}/login`, 'post', data);
 const logout = data => request(`${apiPrefix}/logout`, 'post', data);
 
 //重设密码
-const resetPassword = data => request(`${apiPrefix}/resetPassword`, 'post', data);
+const resetPassword = data => request(`${apiPrefix}/setNewPassword`, 'post', data);
 
 export default {
     login,
