@@ -28,7 +28,7 @@ public interface ExamService {
     //管理员获取已发布考试列表
     JSONObject getPublishedList(Integer currentPage, Integer pageSize);
 
-    JSONObject getQuestionList(JSONObject jsonObject);
+    JSONObject getQuestionList(Integer currentPage, Integer pageSize, String keyword, Integer type);
 
     JSONObject getNotPostExam(Integer pageSize, Integer currentPage);
 
@@ -49,4 +49,6 @@ public interface ExamService {
     JSONObject getFinishedStudentList(Integer examId);
     //管理员获取待审核成绩列表
     JSONObject getGradeList(Integer examId);
+    //管理员提交审核成绩请求
+    JSONObject submitGradeList(JSONObject jsonObject);
 }

@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class TrainingReStudent implements Serializable {
+    private Integer reId;
+
     private String applyId;
 
     private Integer trainingId;
@@ -19,6 +21,14 @@ public class TrainingReStudent implements Serializable {
     private Boolean isInvalid;
 
     private static final long serialVersionUID = 1L;
+
+    public Integer getReId() {
+        return reId;
+    }
+
+    public void setReId(Integer reId) {
+        this.reId = reId;
+    }
 
     public String getApplyId() {
         return applyId;

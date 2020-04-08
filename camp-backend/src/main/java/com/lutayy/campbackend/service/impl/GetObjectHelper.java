@@ -29,6 +29,18 @@ public class GetObjectHelper {
             return null;
         }
     }
+    /** 由会员名获得会员对象 **/
+    public Member getMemberFromMemberName(String memberName){
+        MemberExample memberExample=new MemberExample();
+        MemberExample.Criteria criteria=memberExample.createCriteria();
+        criteria.andMemberNameEqualTo(memberName);
+        List<Member> members=memberMapper.selectByExample(memberExample);
+        if(members.size()>0){
+            return members.get(0);
+        }else {
+            return null;
+        }
+    }
 
     /** 由身份证获得学员对象 **/
     public Student getStudentFromIdCard(String idcard){

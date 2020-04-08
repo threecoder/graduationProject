@@ -30,7 +30,7 @@ public class StudentController {
     @RequestMapping("/setNewPassword")
     @ResponseBody
     public JSONObject setNewPassword(@RequestBody JSONObject jsonObject){
-        return null;
+        return studentService.setNewPassword(jsonObject);
     }
 
 }

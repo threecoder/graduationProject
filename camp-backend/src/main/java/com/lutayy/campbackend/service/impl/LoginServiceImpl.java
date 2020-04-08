@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -105,6 +106,7 @@ public class LoginServiceImpl implements LoginService {
             data.put("name", student.getStudentName());
             data.put("type", 0);
         }
+        data.put("expire", new Date().getTime() + 30 * 60 * 1000);
         result.put("data", data);
         result.put("code", "success");
         result.put("msg", "登陆成功！");
@@ -132,6 +134,7 @@ public class LoginServiceImpl implements LoginService {
 
         String password = jsonObject.getString("password");
         String adminAccount = jsonObject.getString("username");
+        System.out.println(password);
         AdminExample adminExample = new AdminExample();
         adminExample.createCriteria().andAdminAccountEqualTo(adminAccount);
         List<Admin> admins = adminMapper.selectByExample(adminExample);
@@ -158,6 +161,7 @@ public class LoginServiceImpl implements LoginService {
         response.addCookie(cookie);
         data.put("name", admin.getAdminAccount());
         data.put("type", 2);
+        data.put("expire", new Date().getTime() + 30 * 60 * 1000);
         result.put("data", data);
         result.put("code", "success");
         result.put("msg", "登陆成功！");

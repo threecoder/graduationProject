@@ -30,6 +30,12 @@ public class AdminController {
         return adminService.setNewPassword(jsonObject);
     }
 
+    @RequestMapping("/addNewAdmin")
+    @ResponseBody
+    public JSONObject addNewAdmin(@RequestBody JSONObject jsonObject) {
+        return adminService.addNewAdmin(jsonObject);
+    }
+
     //-------学员管理-----------
     @RequestMapping("/getStudentTemplate")
     @ResponseBody
@@ -73,6 +79,12 @@ public class AdminController {
         return adminService.modifyRely(jsonObject);
     }
 
+    @RequestMapping("/resetPassword")
+    @ResponseBody
+    public JSONObject resetPassword(@RequestBody JSONObject jsonObject) {
+        return adminService.resetPassword(jsonObject);
+    }
+
     @RequestMapping("/modifyStudentInfo")
     @ResponseBody
     public JSONObject modifyStudentInfo(@RequestBody JSONObject jsonObject) {
@@ -84,6 +96,12 @@ public class AdminController {
     @ResponseBody
     public ResponseEntity<byte[]> getMemberTemplate(HttpServletRequest request) {
         return adminService.getMemberTemplate(request);
+    }
+
+    @RequestMapping("/importMemberByFile")
+    @ResponseBody
+    public JSONObject importMemberByFile(@RequestParam("file") MultipartFile file) {
+        return adminService.importMemberByFile(file);
     }
 
     @RequestMapping("/getMemberList")

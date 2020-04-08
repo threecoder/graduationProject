@@ -11,6 +11,7 @@ import com.lutayy.campbackend.pojo.*;
 import com.lutayy.campbackend.service.SQLConn.SystemParamManager;
 import com.lutayy.campbackend.service.SQLConn.TrainingStudentSQLConn;
 import com.lutayy.campbackend.service.TrainingService;
+import org.apache.poi.ss.formula.functions.T;
 import org.omg.PortableInterceptor.INACTIVE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -689,7 +690,53 @@ public class TrainingServiceImpl implements TrainingService {
     //管理员获取学员参加过的培训记录
     @Override
     public JSONObject getStudentTrainingHistory(String idCard, Integer currentPage, Integer pageSize) {
-        return null;
+        JSONObject result=new JSONObject();
+        JSONObject data=new JSONObject();
+        Student student=getObjectHelper.getStudentFromIdCard(idCard);
+        if(student==null){
+            result.put("code", "fail");
+            result.put("msg", "系统中没有该名学员");
+            result.put("data", data);
+            return result;
+        }
+        if (pageSize == null || pageSize < 1) {
+            pageSize = 10;
+        }
+        if (currentPage == null || currentPage < 1) {
+            currentPage = 1;
+        }
+        TrainingReStudentExample trainingReStudentExample=new TrainingReStudentExample();
+        trainingReStudentExample.createCriteria().andStudentIdEqualTo(student.getStudentId());
+        long total=trainingReStudentMapper.countByExample(trainingReStudentExample);
+        trainingReStudentExample.setOffset((currentPage-1)*pageSize);
+        trainingReStudentExample.setLimit(pageSize);
+        trainingReStudentExample.setOrderByClause("is_invalid ASC");
+        List<TrainingReStudent> trainingReStudents=trainingReStudentMapper.selectByExample(trainingReStudentExample);
+        data.put("total", total);
+        JSONArray list=new JSONArray();
+        for(TrainingReStudent trainingReStudent:trainingReStudents){
+            JSONObject object=new JSONObject();
+            object.put("id", trainingReStudent.getTrainingId());
+            Training training=trainingMapper.selectByPrimaryKey(trainingReStudent.getTrainingId());
+            object.put("name", training.getTrainingName());
+            object.put("startTime", trainingReStudent.getBeginTime());
+            object.put("endTime", trainingReStudent.getFinishTime());
+            object.put("address", training.getTrainingAddress());
+            if(trainingReStudent.getIsInvalid()){
+                object.put("status", "培训失效(或考试不通过次数已达上限)");
+            }else {
+                if(trainingReStudent.getIsDone())
+                    object.put("status", "已完成培训");
+                else
+                    object.put("status", "正在培训中");
+            }
+            list.add(object);
+        }
+        data.put("list", list);
+        result.put("data", data);
+        result.put("code", "success");
+        result.put("msg", "获取学员"+student.getStudentName()+"培训记录成功");
+        return result;
     }
 }
 

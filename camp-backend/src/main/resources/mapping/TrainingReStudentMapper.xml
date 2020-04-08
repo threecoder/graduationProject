@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lutayy.campbackend.dao.TrainingReStudentMapper">
   <resultMap id="BaseResultMap" type="com.lutayy.campbackend.pojo.TrainingReStudent">
-    <id column="apply_id" jdbcType="VARCHAR" property="applyId" />
+    <id column="re_id" jdbcType="INTEGER" property="reId" />
+    <result column="apply_id" jdbcType="VARCHAR" property="applyId" />
     <result column="training_id" jdbcType="INTEGER" property="trainingId" />
     <result column="student_id" jdbcType="INTEGER" property="studentId" />
     <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime" />
@@ -69,7 +70,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    apply_id, training_id, student_id, begin_time, finish_time, is_done, is_invalid
+    re_id, apply_id, training_id, student_id, begin_time, finish_time, is_done, is_invalid
   </sql>
   <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.TrainingReStudentExample" resultMap="BaseResultMap">
     select
@@ -88,15 +89,15 @@
       limit ${offset},${limit}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from training_re_student
-    where apply_id = #{applyId,jdbcType=VARCHAR}
+    where re_id = #{reId,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from training_re_student
-    where apply_id = #{applyId,jdbcType=VARCHAR}
+    where re_id = #{reId,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.lutayy.campbackend.pojo.TrainingReStudentExample">
     delete from training_re_student
@@ -105,6 +106,9 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.lutayy.campbackend.pojo.TrainingReStudent">
+    <selectKey keyProperty="reId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into training_re_student (apply_id, training_id, student_id, 
       begin_time, finish_time, is_done, 
       is_invalid)
@@ -113,6 +117,9 @@
       #{isInvalid,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.TrainingReStudent">
+    <selectKey keyProperty="reId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into training_re_student
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="applyId != null">
@@ -170,6 +177,9 @@
   <update id="updateByExampleSelective" parameterType="map">
     update training_re_student
     <set>
+      <if test="record.reId != null">
+        re_id = #{record.reId,jdbcType=INTEGER},
+      </if>
       <if test="record.applyId != null">
         apply_id = #{record.applyId,jdbcType=VARCHAR},
       </if>
@@ -198,7 +208,8 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update training_re_student
-    set apply_id = #{record.applyId,jdbcType=VARCHAR},
+    set re_id = #{record.reId,jdbcType=INTEGER},
+      apply_id = #{record.applyId,jdbcType=VARCHAR},
       training_id = #{record.trainingId,jdbcType=INTEGER},
       student_id = #{record.studentId,jdbcType=INTEGER},
       begin_time = #{record.beginTime,jdbcType=TIMESTAMP},
@@ -212,6 +223,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.lutayy.campbackend.pojo.TrainingReStudent">
     update training_re_student
     <set>
+      <if test="applyId != null">
+        apply_id = #{applyId,jdbcType=VARCHAR},
+      </if>
       <if test="trainingId != null">
         training_id = #{trainingId,jdbcType=INTEGER},
       </if>
@@ -231,16 +245,17 @@
         is_invalid = #{isInvalid,jdbcType=BIT},
       </if>
     </set>
-    where apply_id = #{applyId,jdbcType=VARCHAR}
+    where re_id = #{reId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.lutayy.campbackend.pojo.TrainingReStudent">
     update training_re_student
-    set training_id = #{trainingId,jdbcType=INTEGER},
+    set apply_id = #{applyId,jdbcType=VARCHAR},
+      training_id = #{trainingId,jdbcType=INTEGER},
       student_id = #{studentId,jdbcType=INTEGER},
       begin_time = #{beginTime,jdbcType=TIMESTAMP},
       finish_time = #{finishTime,jdbcType=TIMESTAMP},
       is_done = #{isDone,jdbcType=BIT},
       is_invalid = #{isInvalid,jdbcType=BIT}
-    where apply_id = #{applyId,jdbcType=VARCHAR}
+    where re_id = #{reId,jdbcType=INTEGER}
   </update>
 </mapper>
