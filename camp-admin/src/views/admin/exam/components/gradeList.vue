@@ -34,7 +34,7 @@
         <div class="tac mt30">
             <el-row>
                 <el-col :span="6">
-                    <el-select placeholder="选择审核员" :value="form.checker">
+                    <el-select placeholder="选择审核员" v-model="form.checker">
                         <el-option
                             v-for="(item,i) in checkers"
                             :key="i"
@@ -164,7 +164,10 @@ export default {
                 return false;
             }
             try {
-                let res = await adminExamApi.submitGradeList(this.form);
+                let data = {};
+                data.checker = this.form.checker;
+                data.ids = this.form.selected.map(val => val.id);
+                let res = await adminExamApi.submitGradeList(data);
                 this.$message.success("提交审核成功");
             } catch (error) {
                 this.$message.error(error.message);
