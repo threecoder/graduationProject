@@ -125,6 +125,66 @@ public class TrainingReStudentExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
+        public Criteria andReIdIsNull() {
+            addCriterion("re_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReIdIsNotNull() {
+            addCriterion("re_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReIdEqualTo(Integer value) {
+            addCriterion("re_id =", value, "reId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReIdNotEqualTo(Integer value) {
+            addCriterion("re_id <>", value, "reId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReIdGreaterThan(Integer value) {
+            addCriterion("re_id >", value, "reId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("re_id >=", value, "reId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReIdLessThan(Integer value) {
+            addCriterion("re_id <", value, "reId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReIdLessThanOrEqualTo(Integer value) {
+            addCriterion("re_id <=", value, "reId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReIdIn(List<Integer> values) {
+            addCriterion("re_id in", values, "reId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReIdNotIn(List<Integer> values) {
+            addCriterion("re_id not in", values, "reId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReIdBetween(Integer value1, Integer value2) {
+            addCriterion("re_id between", value1, value2, "reId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("re_id not between", value1, value2, "reId");
+            return (Criteria) this;
+        }
+
         public Criteria andApplyIdIsNull() {
             addCriterion("apply_id is null");
             return (Criteria) this;

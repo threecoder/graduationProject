@@ -309,7 +309,7 @@ public class ExamServiceImpl implements ExamService {
             List<ExamQuestionStudentAnswer> examQuestionStudentAnswers = examQuestionStudentAnswerMapper.selectByExample(eqsaE);
             ExamQuestionStudentAnswer examQuestionStudentAnswer;
             if (examQuestionStudentAnswers.size() == 0) {
-                object.put("studentAnswer", null);
+                object.put("studentAnswer", studentAnswer);
             } else {
                 examQuestionStudentAnswer = examQuestionStudentAnswers.get(0);
                 studentAnswer.add(examQuestionStudentAnswer.getAnswerOne());
@@ -328,11 +328,10 @@ public class ExamServiceImpl implements ExamService {
             }
             questionList.add(object);
         }
-        data.put("questionList", questionList);
+        data.put("list", questionList);
         result.put("data", data);
         result.put("code", "success");
         result.put("msg", "查询成功!");
-
         return result;
     }
 
@@ -590,6 +589,7 @@ public class ExamServiceImpl implements ExamService {
             }
             //if() status = 5;
             object.put("status", status);
+            object.put("pass", exam.getExamPass());
             list.add(object);
         }
         data.put("list", list);
@@ -656,22 +656,18 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public JSONObject getQuestionList(JSONObject jsonObject) {
+    public JSONObject getQuestionList(Integer currentPage, Integer pageSize, String keyword, Integer type) {
         JSONObject result = new JSONObject();
         JSONObject data = new JSONObject();
 
-        Integer currentPage = jsonObject.getInteger("currentPage");
-        Integer pageSize = jsonObject.getInteger("pageSize");
         if (pageSize == null || pageSize < 1) {
             pageSize = 10;
         }
         if (currentPage == null || currentPage < 1) {
             currentPage = 1;
         }
-        String keyword = jsonObject.getString("keyword");
-        int type = -1;
-        if (jsonObject.getInteger("type") != null) {
-            type = jsonObject.getInteger("type");
+        if (type == null) {
+            type = -1;
         }
 
         QuestionExample questionExample = new QuestionExample();
@@ -937,7 +933,7 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public JSONObject modifyExamInfo(JSONObject jsonObject) {
         JSONObject result = new JSONObject();
-        Integer examId = jsonObject.getInteger("id");
+        Integer examId = jsonObject.getInteger("examId");
 //        Integer trainingId=jsonObject.getInteger("training");
         String examName = jsonObject.getString("name");
         Short examNum = jsonObject.getShort("num");
@@ -946,9 +942,10 @@ public class ExamServiceImpl implements ExamService {
         Date examStartTime = jsonObject.getDate("openTime");
         Date examEndTime = jsonObject.getDate("closeTime");
         Exam exam = examMapper.selectByPrimaryKey(examId);
+        System.out.println(examId);
         if (exam == null) {
             result.put("code", "fail");
-            result.put("msg", "用户不存在");
+            result.put("msg", "该考试不存在");
             return result;
         }
         if (!exam.getExamNum().equals(examNum) && exam.getHaveQuestions()) {
@@ -1040,5 +1037,11 @@ public class ExamServiceImpl implements ExamService {
         result.put("msg", "获取待审核成绩列表成功！");
         result.put("data", list);
         return result;
+    }
+
+    ////管理员提交审核成绩请求
+    @Override
+    public JSONObject submitGradeList(JSONObject jsonObject) {
+        return null;
     }
 }

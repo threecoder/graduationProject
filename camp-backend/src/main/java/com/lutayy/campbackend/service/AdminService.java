@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 public interface AdminService {
 
     JSONObject setNewPassword(JSONObject jsonObject);
+
+    JSONObject addNewAdmin(JSONObject jsonObject);
     //管理员添加单个学员
     JSONObject addSingleStudent(JSONObject jsonObject);
 
@@ -20,10 +22,14 @@ public interface AdminService {
     JSONObject modifyRely(JSONObject jsonObject);
     //管理员修改学员资料
     JSONObject modifyStudentInfo(JSONObject jsonObject);
+    //管理员重置学员密码（123456）
+    JSONObject resetPassword(JSONObject jsonObject);
 
     JSONObject deleteOneStudentFromMember(JSONObject jsonObject);
 
     ResponseEntity<byte[]> getMemberTemplate(HttpServletRequest request);
+
+    JSONObject importMemberByFile(MultipartFile file);
 
     JSONObject getMemberList(Integer type, Integer deadline, String name,
                              Integer currentPage, Integer pageSize);

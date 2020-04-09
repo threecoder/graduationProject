@@ -8,6 +8,7 @@ import com.lutayy.campbackend.dao.TrainingMapper;
 import com.lutayy.campbackend.pojo.Question;
 import com.lutayy.campbackend.pojo.Student;
 import com.lutayy.campbackend.service.QuestionService;
+import jodd.util.Tuple2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,7 @@ public class QuestionServiceImpl implements QuestionService {
 
         int questionId = jsonObject.getInteger("questionId");
         String state = jsonObject.getString("state");
+        String type = jsonObject.getString("type");
         JSONArray answer = jsonObject.getJSONArray("answer");
         String choiceA = jsonObject.getString("choiceA");
         String choiceB = jsonObject.getString("choiceB");
@@ -50,6 +52,12 @@ public class QuestionServiceImpl implements QuestionService {
             result.put("msg", "正确答案不能为空！");
             return result;
         }
+        if (type.equals("单选题"))
+            question.setType(0);
+        else if (type.equals("多选题"))
+            question.setType(1);
+        else
+            question.setType(2);
         question.setQuestionState(state);
         question.setChoiceA(choiceA);
         question.setChoiceB(choiceB);
@@ -175,18 +183,23 @@ public class QuestionServiceImpl implements QuestionService {
             else if (value.equals("多选")) question.setType(1);
             else question.setType(2);
         }
-        value = row.get("A");
-        if (value != null && !value.equals(""))
-            question.setChoiceA(value);
-        value = row.get("B");
-        if (value != null && !value.equals(""))
-            question.setChoiceB(value);
-        value = row.get("C");
-        if (value != null && !value.equals(""))
-            question.setChoiceC(value);
-        value = row.get("D");
-        if (value != null && !value.equals(""))
-            question.setChoiceD(value);
+        if(question.getType().equals(2)){
+            question.setChoiceA("对");
+            question.setChoiceB("错");
+        }else {
+            value = row.get("A");
+            if (value != null && !value.equals(""))
+                question.setChoiceA(value);
+            value = row.get("B");
+            if (value != null && !value.equals(""))
+                question.setChoiceB(value);
+            value = row.get("C");
+            if (value != null && !value.equals(""))
+                question.setChoiceC(value);
+            value = row.get("D");
+            if (value != null && !value.equals(""))
+                question.setChoiceD(value);
+        }
         StringBuilder rightChoice = new StringBuilder();
         rightChoice.append(row.get("正确选项1") == null ? "" : row.get("正确选项1"));
         rightChoice.append(row.get("正确选项2") == null ? "" : row.get("正确选项2"));
@@ -201,6 +214,19 @@ public class QuestionServiceImpl implements QuestionService {
         if (rightChoice.toString().toUpperCase().contains("D"))
             question.setRightChoiceFour((byte) 4);
         return question;
+    }
+
+    private boolean checkRow(Map<String, String> row){
+        String value;
+        value=row.get("题干");
+        if(value==null||value.equals(""))
+            return false;
+        value = row.get("类型(单选/多选/判断)");
+        if (value == null || value.equals(""))
+            return false;
+        if (!value.equals("单选") && !value.equals("多选") && !value.equals("判断"))
+            return false;
+        return true;
     }
 
     @Override

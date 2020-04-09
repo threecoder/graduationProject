@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.lutayy.campbackend.common.util.ExcelUtil;
 import com.lutayy.campbackend.common.util.JwtUtil;
+import com.lutayy.campbackend.common.util.UUIDUtil;
 import com.lutayy.campbackend.dao.*;
 import com.lutayy.campbackend.pojo.*;
 import com.lutayy.campbackend.pojo.request.TokenRequest;
@@ -74,6 +75,11 @@ public class AdminServiceImpl implements AdminService {
             }
         }
         return result;
+    }
+
+    @Override
+    public JSONObject addNewAdmin(JSONObject jsonObject) {
+        return null;
     }
 
     //学员管理
@@ -147,7 +153,7 @@ public class AdminServiceImpl implements AdminService {
                 totalCount = totalCount + list.size();
                 for (Map<String, String> row : list) {
                     // TODO 批量添加
-                    Student student = excelRowToTeacher(row);
+                    Student student = excelRowToStudent(row);
                     Student studentCheck = getObjectHelper.getStudentFromIdCard(student.getStudentIdcard());
                     //系统已有该身份证的账号
                     if (studentCheck != null) {
@@ -207,7 +213,7 @@ public class AdminServiceImpl implements AdminService {
         }
     }
 
-    private Student excelRowToTeacher(Map<String, String> row) {
+    private Student excelRowToStudent(Map<String, String> row) {
         Student student = new Student();
         String value;
         value = row.get("姓名");
@@ -391,6 +397,25 @@ public class AdminServiceImpl implements AdminService {
         return result;
     }
 
+    @Override
+    public JSONObject resetPassword(JSONObject jsonObject) {
+        JSONObject result=new JSONObject();
+        result.put("code", "fail");
+        Student student=getObjectHelper.getStudentFromIdCard(jsonObject.getString("idNum"));
+        if(student==null){
+            result.put("msg", "系统中无该学员");
+            return result;
+        }
+        student.setStudentPassword("123456");
+        if(studentMapper.updateByPrimaryKey(student)>0){
+            result.put("code", "success");
+            result.put("msg", "密码初始化成功！");
+        }else {
+            result.put("msg", "系统繁忙，请重试");
+        }
+        return result;
+    }
+
     //会员管理
     @Override
     public ResponseEntity<byte[]> getMemberTemplate(HttpServletRequest request) {
@@ -419,6 +444,88 @@ public class AdminServiceImpl implements AdminService {
             e.printStackTrace();
         }
         return response;
+    }
+
+    @Override
+    public JSONObject importMemberByFile(MultipartFile file) {
+        JSONObject result = new JSONObject();
+        result.put("code", "fail");
+        if (file == null || file.isEmpty()) {
+            result.put("msg", "文件不能为空");
+            return result;
+        }
+        String fileName = file.getOriginalFilename().toLowerCase();
+        if (!fileName.endsWith("xls") && !fileName.endsWith("xlsx")) {
+            result.put("msg", "文件格式错误");
+            return result;
+        }
+        InputStream in;
+        try {
+            in = file.getInputStream();
+            Map<String, List<Map<String, String>>> map = ExcelUtil.readXls(in);
+            if (map.isEmpty()) {
+                result.put("msg", "上传文件数据为空");
+                return result;
+            }
+            Set<String> excelSheets = map.keySet();
+            int totalCount = 0;
+            String existTagTip = "";
+            int existTotalCount = 0;
+            for (String excelSheet : excelSheets) {
+                List<Map<String, String>> list = map.get(excelSheet);
+                totalCount = totalCount + list.size();
+                for (Map<String, String> row : list) {
+                    // TODO 批量添加
+                    Member member = excelRowToMember(row);
+                    Member memberCheck = getObjectHelper.getMemberFromMemberName(member.getMemberName());
+                    //系统已有该身份证的账号
+                    if (memberCheck != null) {
+                        existTotalCount++;
+                        existTagTip += member.getMemberName() + "；";
+                        continue;
+                    }
+                    member.setMemberId(UUIDUtil.getMemberUUID());
+                    member.setEnterDate(new Date());
+                    memberMapper.insertSelective(member);
+                }
+            }
+            String msg = "尝试导入学员" + totalCount + "个，" + (totalCount - existTotalCount) + "个导入并创建账号成功。 ";
+            if (existTotalCount > 0) {
+                msg += ("其中" + existTotalCount + "个在系统中已有账号，分别是：" + existTagTip);
+            }
+            result.put("code", "success");
+            result.put("msg", msg);
+            return result;
+        } catch (Exception e) {
+            result.put("msg", "导入异常，请检查格式");
+            return result;
+        }
+    }
+    private Member excelRowToMember(Map<String, String> row) {
+        Member member = new Member();
+        String value;
+        value = row.get("会员名称");
+        if (value != null && !value.equals(""))
+            member.setMemberName(value);
+        value = row.get("联系手机");
+        if (value != null && !value.equals(""))
+            member.setMemberPhone(value);
+        value = row.get("电子邮箱");
+        if (value != null && !value.equals(""))
+            member.setMemberEmail(value);
+        value = row.get("省");
+        if (value != null && !value.equals(""))
+            member.setMemberProvince(value);
+        value = row.get("市");
+        if (value != null && !value.equals(""))
+            member.setMemberCity(value);
+        value = row.get("区/镇");
+        if (value != null && !value.equals(""))
+            member.setMemberArea(value);
+        value = row.get("详细地址");
+        if (value != null && !value.equals(""))
+            member.setMemberAddress(value);
+        return member;
     }
 
     @Override

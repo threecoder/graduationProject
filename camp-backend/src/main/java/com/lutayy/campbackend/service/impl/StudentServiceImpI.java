@@ -133,6 +133,31 @@ public class StudentServiceImpI implements StudentService {
 
     @Override
     public JSONObject setNewPassword(JSONObject jsonObject) {
-        return null;
+        JSONObject result = new JSONObject();
+        result.put("code", "fail");
+        String oldPassword = jsonObject.getString("oldPassword");
+        String newPassword = jsonObject.getString("newPassword");
+        if (oldPassword.equals(newPassword)) {
+            result.put("msg", "旧密码与新密码不能相同！");
+            return result;
+        }
+        Integer studentId = jsonObject.getInteger("id");
+        Student student = studentMapper.selectByPrimaryKey(studentId);
+        if (student == null) {
+            result.put("msg", "系统中无该用户！");
+            return result;
+        }
+        if (!student.getStudentPassword().equals(oldPassword)) {
+            result.put("msg", "旧密码错误！");
+        } else {
+            student.setStudentPassword(newPassword);
+            if (studentMapper.updateByPrimaryKeySelective(student) > 0) {
+                result.put("code", "success");
+                result.put("msg", "密码更新成功！");
+            } else {
+                result.put("msg", "密码更新失败！请重试");
+            }
+        }
+        return result;
     }
 }

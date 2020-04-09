@@ -41,13 +41,13 @@ public class ExamController {
         return examService.getExamInfo(studentId,examId);
     }
 
-    @RequestMapping(value = {"/student/getExamQuestions","/admin/getExamDetail"})
+    @RequestMapping("/student/getExamQuestions")
     @ResponseBody
     public Object getExamQuestions(@RequestParam("examId") Integer examId){
         return examService.getExamQuestions(examId);
     }
 
-    @RequestMapping("/student/getExamDetail")
+    @RequestMapping(value = {"/student/getExamDetail","/admin/getExamDetail"})
     @ResponseBody
     public Object getExamDetail(@RequestParam("id") Integer studentId,
                                 @RequestParam("examId") Integer examId){
@@ -81,8 +81,11 @@ public class ExamController {
 
     @RequestMapping("/admin/getQuestionList")
     @ResponseBody
-    public JSONObject getQuestionList(@RequestBody JSONObject jsonObject){
-        return examService.getQuestionList(jsonObject);
+    public Object getQuestionList(@RequestParam("currentPage") Integer currentPage,
+                                      @RequestParam(value = "pageSize", required = false) Integer pageSize,
+                                      @RequestParam(value = "keyword", required = false) String keyword,
+                                      @RequestParam(value = "type", required = false) Integer type) {
+        return examService.getQuestionList(currentPage, pageSize, keyword, type);
     }
 
     @RequestMapping("/admin/getNotPostExam")
@@ -93,7 +96,7 @@ public class ExamController {
 
     @RequestMapping("/admin/randomFillExam")
     @ResponseBody
-    public JSONObject randomFillExam(JSONObject jsonObject){
+    public JSONObject randomFillExam(@RequestBody JSONObject jsonObject){
         return examService.randomFillExam(jsonObject);
     }
 
@@ -144,4 +147,12 @@ public class ExamController {
     public Object getGradeList(@RequestParam("examId") Integer examId){
         return examService.getGradeList(examId);
     }
+
+
+    @RequestMapping("/admin/submitGradeList")
+    @ResponseBody
+    public JSONObject submitGradeList(@RequestBody JSONObject jsonObject){
+        return examService.submitGradeList(jsonObject);
+    }
+
 }
