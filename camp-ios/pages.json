@@ -1,0 +1,56 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/dynamic/dynamic",
+			"style": {}
+		},
+		{
+			"path": "pages/notice/notice/notice",
+			"style": {}
+		}, {
+			"path": "pages/training/training",
+			"style": {}
+		},
+		{
+			"path": "pages/personal/personal"
+		},
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationStyle": "custom",
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8",
+		"backgroundColorTop": "#DD524D"
+	},
+	"tabBar": {
+		"color": "#7A7E83",
+		"selectedColor": "#049EFF",
+		"borderStyle": "black",
+		"backgroundColor": "#ffffff",
+		"list": [
+			{
+				"pagePath": "pages/dynamic/dynamic",
+				"text": "动态"
+			},
+			{
+				"pagePath": "pages/notice/notice/notice",
+				"text": "公告"
+			},
+			{
+				"pagePath": "pages/training/training",
+				"text": "训练"
+			},
+			{
+				"pagePath": "pages/personal/personal",
+				"text": "我的"
+			}
+		]
+	}
+}
