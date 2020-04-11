@@ -35,7 +35,7 @@ router.beforeEach((to, from, next) => {
     } else {
         next();
     }
-})
+});
 
 //http response 拦截器
 Axios.interceptors.response.use(

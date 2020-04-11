@@ -1,13 +1,107 @@
 <template>
-	<view>动态</view>
+	<view class="container">
+		<view>
+			<seg :isFixed="isFixed" :current="contentIndex" :segItem="segItem" @clickItem="onClickItem"></seg>
+			<view class="content">
+				<view class="caroulse">
+					<swiper class="swiper" indicator-dots autoplay circular :interval="2000" :duration="500">
+						<swiper-item><image src="../../assets/images/index1.jpg" mode="aspectFill"></image></swiper-item>
+						<swiper-item><image src="../../assets/images/index2.jpg" mode="aspectFill"></image></swiper-item>
+						<swiper-item><image src="../../assets/images/index3.jpg" mode="aspectFill"></image></swiper-item>
+					</swiper>
+				</view>
+				<view v-show="contentIndex === 0">
+					<single />
+					<single />
+					<single />
+					<single />
+					<single />
+					<single />
+					<single />
+					<single />
+					<single />
+					<single />
+					<single />
+					<single />
+				</view>
+				<view v-show="contentIndex === 1">选项卡2的内容</view>
+				<view v-show="contentIndex === 2">选项卡3的内容</view>
+			</view>
+		</view>
+	</view>
 </template>
 
 <script>
+import uniNavBar from '../../components/uni-nav-bar/uni-nav-bar.vue';
+import seg from '../../components/seg/seg.vue';
+import single from './components/singleDynamic.vue';
+import indexApi from '../../api/index/dynamic.js';
+import { getNetwork } from '../../network.js';
 export default {
+	components: {
+		uniNavBar,
+		seg,
+		single
+	},
 	data() {
-		return {};
+		return {
+			res: null,
+			contentIndex: 0,
+			segItem: ['新闻', '动态'],
+			isFixed: false
+		};
+	},
+	mounted() {
+		getNetwork();
+		this.getDynamicList();
+	},
+	onPullDownRefresh(){
+		console.log("下拉刷新");
+		uni.stopPullDownRefresh();
+	},
+	onPageScroll(scroll) {
+        console.log(scroll.scrollTop);
+        this.isFixed = scroll.scrollTop > 0 ? true : false;
+    },
+
+	methods: {
+		async getDynamicList() {
+			try {
+			} catch (e) {
+				uni.showToast({
+					title: e.message,
+					position: 'top'
+				});
+				//TODO handle the exception
+			}
+		},
+		onClickItem(index) {
+			this.contentIndex = index;
+		}
 	}
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss" scoped>
+.container {
+	background-color: #eee;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	.content {
+		background-color: #fff;
+		.caroulse {
+			height: 300rpx;
+			.swiper {
+				height: 300rpx;
+			}
+			image {
+				width: 100%;
+				height: 100%;
+			}
+		}
+	}
+}
+</style>

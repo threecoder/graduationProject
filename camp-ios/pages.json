@@ -2,40 +2,68 @@
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
 			"path": "pages/dynamic/dynamic",
-			"style": {}
+			"style": {
+				"navigationBarTextStyle": "#fff",
+				"navigationBarTitleText": "协会动态",
+				"navigationBarBackgroundColor": "rgb(64,158,255)",
+				"backgroundColor": "#F8F8F8",
+				"enablePullDownRefresh": "true"
+
+			}
 		},
 		{
 			"path": "pages/notice/notice/notice",
-			"style": {}
+			"style": {
+				"navigationBarTextStyle": "#fff",
+				"navigationBarTitleText": "协会公告",
+				"navigationBarBackgroundColor": "rgb(64,158,255)",
+				"backgroundColor": "#F8F8F8",
+				"enablePullDownRefresh": "true"
+			}
 		}, {
 			"path": "pages/training/training",
-			"style": {}
+			"style": {
+				"navigationBarTextStyle": "#fff",
+				"navigationBarTitleText": "协会培训",
+				"navigationBarBackgroundColor": "rgb(64,158,255)",
+				"backgroundColor": "#F8F8F8",
+				"enablePullDownRefresh": "true"
+			}
 		},
 		{
-			"path": "pages/personal/personal"
+			"path": "pages/personal/personal",
+			"style": {
+				"navigationStyle":"custom"
+			}
+
+		},
+		{
+			"path": "pages/try/try"
 		},
 		{
 			"path": "pages/index/index",
 			"style": {
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path": "pages/info/info",
+			"style": {}
 		}
 	],
 	"globalStyle": {
-		"navigationStyle": "custom",
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8",
-		"backgroundColorTop": "#DD524D"
+		"backgroundColorTop": "#ffffff"
 	},
 	"tabBar": {
 		"color": "#7A7E83",
 		"selectedColor": "#049EFF",
 		"borderStyle": "black",
 		"backgroundColor": "#ffffff",
-		"list": [
-			{
+		"list": [{
 				"pagePath": "pages/dynamic/dynamic",
 				"text": "动态"
 			},
