@@ -79,7 +79,78 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public JSONObject addNewAdmin(JSONObject jsonObject) {
-        return null;
+        JSONObject result=new JSONObject();
+        result.put("code", "fail");
+
+        String account=jsonObject.getString("account");
+        String name=jsonObject.getString("name");
+        AdminExample adminExample=new AdminExample();
+        adminExample.createCriteria().andAdminAccountEqualTo(account);
+        if(adminMapper.countByExample(adminExample)>0){
+            result.put("msg", "该账号已存在");
+            return result;
+        }
+        Admin admin=new Admin();
+        admin.setAdminAccount(account);
+        admin.setAdminName(name);
+        if(adminMapper.insertSelective(admin)>0){
+            result.put("code", "success");
+            result.put("msg", "新增管理员账号成功！");
+        }else {
+            result.put("msg", "系统繁忙，请重试");
+        }
+        return result;
+    }
+
+    @Override
+    public JSONObject lockOrUnlockAccount(JSONObject jsonObject, boolean lock) {
+        JSONObject result = new JSONObject();
+        result.put("code", "fail");
+        String account = jsonObject.getString("account");
+        Admin admin = getObjectHelper.getAdminFromAccount(account);
+        if (admin == null) {
+            result.put("msg", "对应的账号不存在，请检查输入是否正确");
+            return result;
+        }
+        admin.setIsLocked(lock);
+        if (adminMapper.updateByPrimaryKeySelective(admin) > 0) {
+            result.put("code", "success");
+            if (lock)
+                result.put("msg", "冻结账号" + account + "成功");
+            else
+                result.put("msg", "解冻账号" + account + "成功");
+        } else {
+            result.put("msg", "系统繁忙，请重试！");
+        }
+        return result;
+    }
+
+    @Override
+    public JSONObject getAdminList(String name, String account, Integer currentPage, Integer pageSize) {
+        JSONObject result=new JSONObject();
+        JSONObject data=new JSONObject();
+        JSONArray list=new JSONArray();
+        AdminExample adminExample=new AdminExample();
+        AdminExample.Criteria criteria=adminExample.createCriteria();
+        if (account!=null)
+            criteria.andAdminAccountEqualTo(account);
+        if(name!=null)
+            criteria.andAdminNameLike("%"+name+"%");
+        long total=adminMapper.countByExample(adminExample);
+        List<Admin> admins=adminMapper.selectByExample(adminExample);
+        data.put("total", total);
+        for(Admin admin:admins){
+            JSONObject object=new JSONObject();
+            object.put("account", admin.getAdminAccount());
+            object.put("name", admin.getAdminName());
+            object.put("lock", admin.getIsLocked()?"是":"否");
+            list.add(object);
+        }
+        data.put("data", list);
+        result.put("data", data);
+        result.put("code", "success");
+        result.put("msg", "列表获取成功！");
+        return result;
     }
 
     //学员管理

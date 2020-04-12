@@ -142,16 +142,16 @@ DROP TABLE IF EXISTS `admin`;
 CREATE TABLE `admin` (
   `admin_id` int(11) NOT NULL AUTO_INCREMENT,
   `admin_account` varchar(20) DEFAULT NULL COMMENT '管理员账号',
-  `admin_password` varchar(20) DEFAULT NULL,
+  `admin_password` varchar(20) DEFAULT '123456',
   `permission_value` tinyint(1) DEFAULT '0' COMMENT '0位普通管理员，1为审核管理员',
   `is_locked` tinyint(1) DEFAULT '0' COMMENT '状态：0正常，1锁定',
   `admin_name` varchar(10) DEFAULT NULL COMMENT '管理员名',
   PRIMARY KEY (`admin_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 /*Data for the table `admin` */
 
-insert  into `admin`(`admin_id`,`admin_account`,`admin_password`,`permission_value`,`is_locked`,`admin_name`) values (1,'admin','admin',1,0,NULL);
+insert  into `admin`(`admin_id`,`admin_account`,`admin_password`,`permission_value`,`is_locked`,`admin_name`) values (1,'admin','admin',1,0,NULL),(2,'admin22','123456',0,0,'李逵');
 
 /*Table structure for table `admin_log` */
 
@@ -180,16 +180,17 @@ CREATE TABLE `admin_re_authority` (
   `admin_id` int(11) DEFAULT NULL,
   `authority_id` int(11) DEFAULT NULL,
   `authority_name` varchar(50) DEFAULT NULL,
+  `has_or_not` tinyint(1) DEFAULT '0' COMMENT '是否有权限 1:有',
   PRIMARY KEY (`id`),
-  KEY `admin_id` (`admin_id`),
+  UNIQUE KEY `admin_id` (`admin_id`,`authority_id`),
   KEY `authority_id` (`authority_id`),
   CONSTRAINT `admin_re_authority_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`admin_id`),
   CONSTRAINT `admin_re_authority_ibfk_2` FOREIGN KEY (`authority_id`) REFERENCES `authority` (`authority_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
 /*Data for the table `admin_re_authority` */
 
-insert  into `admin_re_authority`(`id`,`admin_id`,`authority_id`,`authority_name`) values (1,1,1,NULL),(2,1,2,NULL),(3,1,3,NULL),(4,1,4,NULL),(5,1,5,NULL),(6,1,6,NULL),(7,1,7,NULL),(8,1,8,NULL),(9,1,9,NULL),(10,1,10,NULL),(11,1,11,NULL),(12,1,12,NULL);
+insert  into `admin_re_authority`(`id`,`admin_id`,`authority_id`,`authority_name`,`has_or_not`) values (1,1,1,NULL,1),(2,1,2,NULL,1),(3,1,3,NULL,1),(4,1,4,NULL,1),(5,1,5,NULL,0),(6,1,6,NULL,0),(7,1,7,NULL,0),(8,1,8,NULL,0),(9,1,9,NULL,0),(10,1,10,NULL,0),(11,1,11,NULL,0),(12,1,12,NULL,0),(13,2,1,'member',0),(14,2,2,'student',0),(15,2,3,'training',0),(16,2,4,'exam',1),(17,2,5,'grade',1),(18,2,6,'certificate',1),(19,2,7,'activity',0),(20,2,8,'vote',0),(21,2,9,'index',0),(22,2,10,'system',0),(23,2,11,'order',0),(24,2,12,'coupon',0);
 
 /*Table structure for table `association` */
 

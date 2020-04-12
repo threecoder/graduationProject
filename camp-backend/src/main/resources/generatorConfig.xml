@@ -56,8 +56,9 @@
 
 
 
-        <table tableName="training_re_student">
-            <generatedKey  column="re_id"  sqlStatement="Mysql"  identity="TRUE"/>
+
+        <table tableName="admin_re_authority">
+            <generatedKey  column="id"  sqlStatement="Mysql"  identity="TRUE"/>
         </table>
 
 

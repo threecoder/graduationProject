@@ -36,6 +36,27 @@ public class AdminController {
         return adminService.addNewAdmin(jsonObject);
     }
 
+    @RequestMapping("/lockAccount")
+    @ResponseBody
+    public JSONObject lockAccount(@RequestBody JSONObject jsonObject) {
+        return adminService.lockOrUnlockAccount(jsonObject, true);
+    }
+
+    @RequestMapping("/unLockAccount")
+    @ResponseBody
+    public JSONObject unLockAccount(@RequestBody JSONObject jsonObject) {
+        return adminService.lockOrUnlockAccount(jsonObject, false);
+    }
+
+    @RequestMapping("/getAdminList")
+    @ResponseBody
+    public Object getAdminList(@RequestParam(value = "name", required = false) String name,
+                               @RequestParam(value = "account", required = false) String account,
+                               @RequestParam("pageSize") Integer pageSize,
+                               @RequestParam("currentPage") Integer currentPage) {
+        return adminService.getAdminList(name, account, currentPage, pageSize);
+    }
+
     //-------学员管理-----------
     @RequestMapping("/getStudentTemplate")
     @ResponseBody

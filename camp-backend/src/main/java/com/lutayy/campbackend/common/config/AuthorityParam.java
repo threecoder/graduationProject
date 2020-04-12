@@ -5,18 +5,32 @@ import java.util.List;
 
 public class AuthorityParam {
 
-    private final List<String> authorityList
-            = Arrays.asList("member", "student", "training",
+    public static final int MEMBER = 1;
+
+    public static final int STUDENT = 2;
+
+    public static final int TRAINING = 3;
+
+    public static final int EXAM = 4;
+
+    public static final int GRADE = 5;
+
+    public static final int CERTIFICATE = 6;
+
+    public static final int ACTIVITY = 7;
+
+    public static final int VOTE = 8;
+
+    public static final int INDEX = 9;
+
+    public static final int SYSTEM = 10;
+
+    public static final int ORDER = 11;
+
+    public static final int COUPON = 12;
+
+    public static final List<String> authorityList
+            = Arrays.asList("", "member", "student", "training",
             "exam", "grade", "certificate", "activity", "vote",
             "index", "system", "order", "coupon");
-
-    public static String getAuthority(int i) {
-        if (i == 0)
-            return "";
-        else if (i > 12)
-            return "";
-        else
-            return new AuthorityParam().authorityList.get(i-1);
-    }
-
 }

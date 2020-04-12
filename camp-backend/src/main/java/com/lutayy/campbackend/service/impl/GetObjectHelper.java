@@ -1,8 +1,6 @@
 package com.lutayy.campbackend.service.impl;
 
-import com.lutayy.campbackend.dao.MemberMapper;
-import com.lutayy.campbackend.dao.MemberReStudentMapper;
-import com.lutayy.campbackend.dao.StudentMapper;
+import com.lutayy.campbackend.dao.*;
 import com.lutayy.campbackend.pojo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,11 +9,37 @@ import java.util.List;
 @Component
 public class GetObjectHelper {
     @Autowired
+    AdminMapper adminMapper;
+    @Autowired
     MemberMapper memberMapper;
     @Autowired
     StudentMapper studentMapper;
     @Autowired
     MemberReStudentMapper memberReStudentMapper;
+    @Autowired
+    AdminReAuthorityMapper adminReAuthorityMapper;
+
+    /** 由管理员account获得会员对象 **/
+    public Admin getAdminFromAccount(String account) {
+        AdminExample adminExample = new AdminExample();
+        adminExample.createCriteria().andAdminAccountEqualTo(account);
+        List<Admin> admins = adminMapper.selectByExample(adminExample);
+        if (admins.size() > 0)
+            return admins.get(0);
+        else
+            return null;
+    }
+
+    /** 获取管理员-权限的值 **/
+    public AdminReAuthority getAdminReAuthority(Integer adminId, Integer authorityId) {
+        AdminReAuthorityExample adminReAuthorityExample = new AdminReAuthorityExample();
+        adminReAuthorityExample.createCriteria().andAdminIdEqualTo(adminId).andAuthorityIdEqualTo(authorityId);
+        List<AdminReAuthority> adminReAuthorities = adminReAuthorityMapper.selectByExample(adminReAuthorityExample);
+        if (adminReAuthorities.size() > 0)
+            return adminReAuthorities.get(0);
+        else
+            return null;
+    }
 
     /** 由会员UUID获得会员对象 **/
     public Member getMemberFromUUID(String memberId){
@@ -29,6 +53,7 @@ public class GetObjectHelper {
             return null;
         }
     }
+
     /** 由会员名获得会员对象 **/
     public Member getMemberFromMemberName(String memberName){
         MemberExample memberExample=new MemberExample();
@@ -80,4 +105,5 @@ public class GetObjectHelper {
             return memberReStudents.get(0);
         }
     }
+
 }
