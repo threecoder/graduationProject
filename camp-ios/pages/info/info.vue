@@ -1,23 +1,38 @@
 <template>
     <view>
-        <view class="my-top"></view>
-        <uni-nav-bar
-            title="我的信息"
-            backgroundColor="rgb(64,158,255)"
-            color="#fff"
-            :fixed="true"
-            leftText="返回"
-            leftIcon="arrowleft"
-            @clickLeft="back"
-        ></uni-nav-bar>
         <view class="evan-form-show">
             <evan-form :hide-required-asterisk="hideRequiredAsterisk" ref="form" :model="info">
+                <evan-form-item label="身份证号：" prop="idNum">
+                    <input
+                        class="form-input"
+                        placeholder-class="form-input-placeholder"
+                        v-model="info.idNum"
+                        disabled
+                    />
+                </evan-form-item>
                 <evan-form-item label="姓名：" prop="name">
                     <input
                         class="form-input"
                         placeholder-class="form-input-placeholder"
                         v-model="info.name"
                         placeholder="请输入姓名"
+                    />
+                </evan-form-item>
+                <evan-form-item label="性别" prop="sex">
+                    <picker @change="sexChange" :value="info.sex" :range="array">
+                        <view
+                            class="uni-input"
+                            :class="{grey: array[info.sex]=='请选择'}"
+                        >{{array[info.sex]}}</view>
+                    </picker>
+                </evan-form-item>
+
+                <evan-form-item label="手机号：" prop="phone">
+                    <input
+                        class="form-input"
+                        placeholder-class="form-input-placeholder"
+                        v-model="info.phone"
+                        placeholder="请输入手机号"
                     />
                 </evan-form-item>
                 <evan-form-item label="邮箱：" prop="email">
@@ -28,59 +43,63 @@
                         placeholder="请输入邮箱"
                     />
                 </evan-form-item>
-                <evan-form-item label="简介：" prop="desc">
-                    <textarea
-                        class="form-input textarea"
-                        placeholder-class="form-input-placeholder"
-                        v-model="info.desc"
-                        placeholder="请输入简介(10-30个字)"
-                    />
-                </evan-form-item>
-                <evan-form-item label="手机号：" prop="phone">
+                <evan-form-item label="职务：" prop="position">
                     <input
                         class="form-input"
                         placeholder-class="form-input-placeholder"
-                        v-model="info.phone"
-                        placeholder="请输入手机号"
+                        v-model="info.position"
+                        placeholder="请输入职务"
                     />
                 </evan-form-item>
-                <evan-form-item label="自定义label颜色：" :label-style="{color:'blue'}"></evan-form-item>
-                <evan-form-item
-                    label="自定义宽度默认为auto："
-                    :label-style="{width:'3.5rem','line-height':'0.5rem'}"
-                ></evan-form-item>
-                <evan-form-item label="不显示底部border：" :border="false"></evan-form-item>
-                <evan-form-item prop="sex">
-                    <template slot="formItem">
-                        <view class="customize-form-item">
-                            <view class="customize-form-item__label">完全自定义内容（性别）：</view>
-                            <radio-group @change="sexChange">
-                                <label
-                                    class="customize-form-item__radio"
-                                    v-for="item in sexes"
-                                    :key="item.value"
-                                >
-                                    <view>
-                                        <radio
-                                            :value="item.value"
-                                            :checked="item.value === info.sex"
-                                        />
-                                    </view>
-                                    <view class="customize-form-item__radio__text">{{item.name}}</view>
-                                </label>
-                            </radio-group>
-                        </view>
-                    </template>
+                <evan-form-item label="省份：" prop="province">
+                    <!-- <input
+                        class="form-input"
+                        placeholder-class="form-input-placeholder"
+                        v-model="info.province"
+                        placeholder="请输入省份"
+                    />-->
+                    <picker @change="provinceChange" :value="info.province" :range="array">
+                        <view
+                            class="uni-input"
+                            :class="{grey: array[info.province]=='请选择'}"
+                        >{{array[info.province]}}</view>
+                    </picker>
+                </evan-form-item>
+                <evan-form-item label="城市：" prop="city">
+                    <!-- <input
+                        class="form-input"
+                        placeholder-class="form-input-placeholder"
+                        v-model="info.city"
+                        placeholder="请输入职务"
+                    />-->
+                    <picker @change="cityChange" :value="info.city" :range="array">
+                        <view
+                            class="uni-input"
+                            :class="{grey: array[info.city]=='请选择'}"
+                        >{{array[info.city]}}</view>
+                    </picker>
+                </evan-form-item>
+                <evan-form-item label="区域：" prop="area">
+                    <picker @change="areaChange" :value="info.area" :range="array">
+                        <view
+                            class="uni-input"
+                            :class="{grey: array[info.area]=='请选择'}"
+                        >{{array[info.area]}}</view>
+                    </picker>
+                </evan-form-item>
+                <evan-form-item label="详细地址：" prop="zone">
+                    <input
+                        class="form-input"
+                        placeholder-class="form-input-placeholder"
+                        v-model="info.zone"
+                        placeholder="请输入详细地址"
+                    />
                 </evan-form-item>
             </evan-form>
             <button @click="save" class="evan-form-show__button">保存</button>
             <button @click="utilsSave" class="evan-form-show__button">直接调用utils验证</button>
             <button @click="validateSingle" class="evan-form-show__button">只验证邮箱</button>
             <button @click="validateMultiple" class="evan-form-show__button">只验证邮箱和手机号</button>
-            <button
-                @click="hideReqired"
-                class="evan-form-show__button"
-            >{{hideRequiredAsterisk?'显示':'隐藏'}}*号</button>
         </view>
     </view>
 </template>
@@ -89,6 +108,7 @@
 import EvanForm from "../../components/evan-form/evan-form.vue";
 import EvanFormItem from "../../components/evan-form/evan-form-item.vue";
 import utils from "../../components/evan-form/utils.js";
+import infoApi from "../../api/modules/info.js";
 export default {
     components: {
         EvanForm,
@@ -109,13 +129,22 @@ export default {
             ],
             // 表单的内容必须初始化
             info: {
+                idNum: "111111",
                 name: "",
                 email: "",
-                desc: "",
+                position: "",
+                province: 0,
+                city: 0,
+                area: 0,
+                zone: "",
                 phone: "",
-                sex: ""
+                sex: 0
             },
             rules: {
+                idNum: {
+                    required: true,
+                    message: "请输入身份证号"
+                },
                 name: {
                     required: true,
                     message: "请输入姓名"
@@ -128,17 +157,6 @@ export default {
                     {
                         type: "email",
                         message: "邮箱格式不正确"
-                    }
-                ],
-                desc: [
-                    {
-                        required: true,
-                        message: "请输入简介"
-                    },
-                    {
-                        min: 10,
-                        max: 30,
-                        message: "简介必须在10到30个字之间"
                     }
                 ],
                 phone: [
@@ -161,27 +179,69 @@ export default {
                     // 	validator: this.isMobile
                     // }
                 ],
+                position: {
+                    required: true,
+                    message: "请输入职位"
+                },
+                province: {
+                    required: true,
+                    message: "请选择省份"
+                },
+                city: {
+                    required: true,
+                    message: "请选择城市"
+                },
+                area: {
+                    required: true,
+                    message: "请选择区域"
+                },
+                zone: [
+                    {
+                        required: true,
+                        message: "请输入详细地址"
+                    }
+                ],
                 sex: {
                     required: true,
                     message: "请选择性别"
                 }
-            }
+            },
+            array: ["请选择", "中国", "美国", "巴西", "日本"]
         };
     },
     mounted() {
         // 这里必须放在mounted中，不然h5，支付宝小程序等会找不到this.$refs.form
         this.$refs.form.setRules(this.rules);
+        this.getUserInfo();
     },
     methods: {
-		back() {
-			uni.navigateBack();
-		},
+        async getUserInfo() {
+            console.log("获取接口");
+            try {
+                let res = await infoApi.getStudentInfo();
+                this.info = res.data;
+                console.log(res);
+            } catch (error) {
+                uni.showToast({
+                    title: error.message,
+                    position: "center"
+                });
+            }
+        },
         save() {
-            this.$refs.form.validate(res => {
+            this.$refs.form.validate(async res => {
                 if (res) {
-                    uni.showToast({
-                        title: "验证通过"
-                    });
+                    try {
+                        let data = { ...this.form };
+                        let res = await infoApi.setStudentInfo(data);
+                        uni.showToast({
+                            title: "保存成功"
+                        });
+                    } catch (error) {
+                        uni.showToast({
+                            title: error.message
+                        });
+                    }
                 }
             });
         },
@@ -212,9 +272,7 @@ export default {
                 }
             });
         },
-        hideReqired() {
-            this.hideRequiredAsterisk = !this.hideRequiredAsterisk;
-        },
+
         isMobilePhone() {
             const reg = /^1\d{10}$/;
             if (reg.test(value)) {
@@ -231,65 +289,23 @@ export default {
         },
         sexChange(e) {
             this.info.sex = e.detail.value;
+        },
+        provinceChange(e) {
+            console.log(e.detail.value);
+            this.info.province = e.detail.value;
+        },
+        cityChange(e) {
+            this.info.city = e.detail.value;
+        },
+        areaChange(e) {
+            this.info.area = e.detail.value;
         }
     }
 };
 </script>
 
 <style lang="scss">
-.evan-form-show {
-    padding: 0 0.3rem;
-    background-color: #fff;
-    .form-input {
-        font-size: 0.14rem;
-        color: #333;
-        text-align: right;
-        width: 100%;
-        box-sizing: border-box;
-        height: 0.5rem;
-        &.textarea {
-			line-height: 0.5rem;
-            height: 2.4rem;
-        }
-    }
-    .form-input-placeholder {
-        font-size: 0.14rem;
-        color: #999;
-		line-height: 0.5rem;
-    }
-    &__button {
-        width: 100%;
-        height: 0.6rem;
-        border-radius: 0.08rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0;
-        font-size: 0.18rem;
-        color: #fff;
-        margin-top: 0.20rem;
-        background-color: #2d87d5;
-        &::before,
-        &::after {
-            border: none;
-        }
-    }
-    .customize-form-item {
-        &__label {
-            font-size: 0.14rem;
-            color: #333;
-        }
-        &__radio {
-            display: flex;
-            align-items: center;
-			height: 0.5rem;
-			line-height: 0.5rem;
-            &__text {
-                font-size: 0.14rem;
-                color: #333;
-				line-height: 0.5rem;
-            }
-        }
-    }
+.grey {
+    color: rgb(153, 153, 153);
 }
 </style>

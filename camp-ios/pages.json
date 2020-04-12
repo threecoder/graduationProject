@@ -6,7 +6,6 @@
 				"navigationBarTextStyle": "#fff",
 				"navigationBarTitleText": "协会动态",
 				"navigationBarBackgroundColor": "rgb(64,158,255)",
-				"backgroundColor": "#F8F8F8",
 				"enablePullDownRefresh": "true"
 
 			}
@@ -17,7 +16,6 @@
 				"navigationBarTextStyle": "#fff",
 				"navigationBarTitleText": "协会公告",
 				"navigationBarBackgroundColor": "rgb(64,158,255)",
-				"backgroundColor": "#F8F8F8",
 				"enablePullDownRefresh": "true"
 			}
 		}, {
@@ -26,7 +24,6 @@
 				"navigationBarTextStyle": "#fff",
 				"navigationBarTitleText": "协会培训",
 				"navigationBarBackgroundColor": "rgb(64,158,255)",
-				"backgroundColor": "#F8F8F8",
 				"enablePullDownRefresh": "true"
 			}
 		},
@@ -48,13 +45,14 @@
 		},
 		{
 			"path": "pages/info/info",
-			"style": {}
+			"style": {
+				"navigationBarTitleText": "我的信息"
+			}
 		}
 	],
 	"globalStyle": {
-		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#F8F8F8",
+		"navigationBarTextStyle": "#fff",
+		"navigationBarBackgroundColor": "rgb(64,158,255)",
 		"backgroundColor": "#F8F8F8",
 		"backgroundColorTop": "#ffffff"
 	},

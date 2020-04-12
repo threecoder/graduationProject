@@ -8,8 +8,10 @@ import {
 
 
 const SALT = "6e6s4xswqsD25WEWQ3sShLJOK";
+let cookie = null;
 
-Axios.defaults.baseURL = 'http://112.126.67.240:3000';
+// Axios.defaults.baseURL = 'http://112.126.67.240:3000';
+// Axios.defaults.baseURL = 'http://localhost:3000';
 
 /**
  * @url             请求地址
@@ -30,12 +32,17 @@ export function request(url, type, data = {}, responseType = "json") {
 			},
 			responseType //浏览器返回的数据类型
 		}).then(res => {
-			let response = res[1];
+			console.log(res);
+			let response = res[ 1 ];
 			if (response) {
-				if (response.header['Content-Type'] == 'application/json;charset=UTF-8') {
+				let cook = response.header[ 'Set-Cookie' ], start = cook.indexOf("; Path=/");
+				cookie = cook.substring(0, start);
+				console.log("徐哈", start);
+				if (response.header[ 'Content-Type' ] == 'application/json;charset=UTF-8') {
 					if (response.data.code == 'success') {
 						resolve(response.data.data);
 					} else if (response.data.code = 'error') {
+						console.log("未登录");
 						//处理未登录
 					} else if (response.data.code == 'fail') {
 						throw new Error(response.data.msg);
@@ -48,7 +55,7 @@ export function request(url, type, data = {}, responseType = "json") {
 			} else {
 				throw new Error("你当前网络有问题哦")
 			}
-		}).catch( e => {
+		}).catch(e => {
 			reject(e);
 		})
 	});
@@ -59,11 +66,14 @@ export function getHeaders() {
 	const time = new Date().getTime(); //时间戳
 	const sign = `#${time}#${randomNum}#${SALT}`;
 	const signature = md5.hex(sign).toUpperCase(); //加密后大写
-	return {
+	let headers = {
 		time,
 		signature,
-		randomNum
+		randomNum,
+		"Cookie": cookie
 	};
+	console.log("当前请求的cookie", headers);
+	return headers;
 }
 
 export function getRandomNum() {
@@ -71,7 +81,7 @@ export function getRandomNum() {
 	let randomNum = '';
 	for (let i = 0; i < 16; i++) {
 		let index = Number.parseInt(Math.random() * 61);
-		randomNum += myStr[index];
+		randomNum += myStr[ index ];
 	}
 	return randomNum;
 }
