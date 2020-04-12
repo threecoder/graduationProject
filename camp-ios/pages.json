@@ -35,9 +35,6 @@
 
 		},
 		{
-			"path": "pages/try/try"
-		},
-		{
 			"path": "pages/index/index",
 			"style": {
 				"navigationStyle": "custom"
@@ -49,7 +46,13 @@
 				"navigationBarTitleText": "我的信息"
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/dynamicDetail/dynamicDetail",
+            "style" : {
+				"navigationBarTitleText": "详情"
+			}
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "#fff",
 		"navigationBarBackgroundColor": "rgb(64,158,255)",

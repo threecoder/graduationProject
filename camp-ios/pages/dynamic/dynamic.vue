@@ -10,22 +10,8 @@
 						<swiper-item><image src="../../assets/images/index3.jpg" mode="aspectFill"></image></swiper-item>
 					</swiper>
 				</view>
-				<view v-show="contentIndex === 0">
-					<single />
-					<single />
-					<single />
-					<single />
-					<single />
-					<single />
-					<single />
-					<single />
-					<single />
-					<single />
-					<single />
-					<single />
-				</view>
-				<view v-show="contentIndex === 1">选项卡2的内容</view>
-				<view v-show="contentIndex === 2">选项卡3的内容</view>
+				<view v-show="contentIndex === 0"><single v-for="(item, i) in newsList" :key="i" :item="item" /></view>
+				<view v-show="contentIndex === 1"><single v-for="(item, i) in dynamicList" :key="i" :item="item" /></view>
 			</view>
 		</view>
 	</view>
@@ -48,25 +34,44 @@ export default {
 			res: null,
 			contentIndex: 0,
 			segItem: ['新闻', '动态'],
-			isFixed: false
+			isFixed: false,
+			newsList: [
+				{
+					id: '111',
+					title: '新闻：去年今日韦德生涯最后一舞，香蕉船兄弟场边庆祝韦德三双',
+					date: '2020-02-02 14:00',
+					url: '11',
+					type: "news"
+				}
+			],
+			dynamicList: [
+				{
+					title: '动态：去年今日韦德生涯最后一舞，香蕉船兄弟场边庆祝韦德三双',
+					date: '2020-02-02 14:00',
+					url: '11',
+					id: '222',
+					type: "dynamic"
+				}
+			]
 		};
 	},
 	mounted() {
 		getNetwork();
 		this.getDynamicList();
 	},
-	onPullDownRefresh(){
-		console.log("下拉刷新");
+	onPullDownRefresh() {
+		console.log('下拉刷新');
 		uni.stopPullDownRefresh();
 	},
 	onPageScroll(scroll) {
-        console.log(scroll.scrollTop);
-        this.isFixed = scroll.scrollTop > 0 ? true : false;
-    },
+		console.log(scroll.scrollTop);
+		this.isFixed = scroll.scrollTop > 0 ? true : false;
+	},
 
 	methods: {
 		async getDynamicList() {
 			try {
+				//加上类型
 			} catch (e) {
 				uni.showToast({
 					title: e.message,

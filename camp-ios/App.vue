@@ -100,16 +100,16 @@ html {
     }
     &__button {
         width: 100%;
-        height: 0.6rem;
+        height: 0.4rem;
         border-radius: 0.08rem;
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 0;
-        font-size: 0.18rem;
+        font-size: 0.16rem;
         color: #fff;
         margin-top: 0.2rem;
-        background-color: #2d87d5;
+        background-color: rgb(64, 158, 255);
         &::before,
         &::after {
             border: none;

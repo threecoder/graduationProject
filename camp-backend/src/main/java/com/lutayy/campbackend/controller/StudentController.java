@@ -17,7 +17,7 @@ public class StudentController {
 
     @RequestMapping("/getUserInfo")
     @ResponseBody
-    public Object getUserInfo(@RequestParam("id") Integer studentId){
+    public Object getUserInfo(@RequestParam(value = "id",required = false) Integer studentId){
         return studentService.getUserInfo(studentId);
     }
 
