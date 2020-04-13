@@ -51,4 +51,8 @@ public interface ExamService {
     JSONObject getGradeList(Integer examId);
     //管理员提交审核成绩请求
     JSONObject submitGradeList(JSONObject jsonObject);
+    //管理员获取本账号待审核成绩记录
+    JSONObject getWaitingGradeList(Integer adminId, Integer pageSize, Integer currentPage, String trainingName, String idNum, String studentName);
+    //管理员批量通过成绩记录
+    JSONObject approvalManyRecords(JSONObject jsonObject);
 }

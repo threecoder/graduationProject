@@ -30,9 +30,4 @@ public class TestController {
         Student student=(Student)redisUtil.get("studentId_38");
         return JSONObject.toJSON(student).toString();
     }
-
-    public static void main(String[] args){
-        TestController testController=new TestController();
-        testController.getall();
-    }
 }

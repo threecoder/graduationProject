@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lutayy.campbackend.dao.ExamReportOpLogMapper">
+  <resultMap id="BaseResultMap" type="com.lutayy.campbackend.pojo.ExamReportOpLog">
+    <id column="log_id" jdbcType="INTEGER" property="logId" />
+    <result column="report_id" jdbcType="INTEGER" property="reportId" />
+    <result column="exam_id" jdbcType="INTEGER" property="examId" />
+    <result column="admin_id" jdbcType="INTEGER" property="adminId" />
+    <result column="op_description" jdbcType="VARCHAR" property="opDescription" />
+    <result column="op_time" jdbcType="TIMESTAMP" property="opTime" />
+    <result column="is_success" jdbcType="BIT" property="isSuccess" />
+    <result column="admin_name" jdbcType="VARCHAR" property="adminName" />
+    <result column="student_name" jdbcType="VARCHAR" property="studentName" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    log_id, report_id, exam_id, admin_id, op_description, op_time, is_success, admin_name, 
+    student_name
+  </sql>
+  <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.ExamReportOpLogExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from exam_report_op_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from exam_report_op_log
+    where log_id = #{logId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from exam_report_op_log
+    where log_id = #{logId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.lutayy.campbackend.pojo.ExamReportOpLogExample">
+    delete from exam_report_op_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lutayy.campbackend.pojo.ExamReportOpLog">
+    <selectKey keyProperty="logId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into exam_report_op_log (report_id, exam_id, admin_id, 
+      op_description, op_time, is_success, 
+      admin_name, student_name)
+    values (#{reportId,jdbcType=INTEGER}, #{examId,jdbcType=INTEGER}, #{adminId,jdbcType=INTEGER}, 
+      #{opDescription,jdbcType=VARCHAR}, #{opTime,jdbcType=TIMESTAMP}, #{isSuccess,jdbcType=BIT}, 
+      #{adminName,jdbcType=VARCHAR}, #{studentName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.ExamReportOpLog">
+    <selectKey keyProperty="logId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into exam_report_op_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="reportId != null">
+        report_id,
+      </if>
+      <if test="examId != null">
+        exam_id,
+      </if>
+      <if test="adminId != null">
+        admin_id,
+      </if>
+      <if test="opDescription != null">
+        op_description,
+      </if>
+      <if test="opTime != null">
+        op_time,
+      </if>
+      <if test="isSuccess != null">
+        is_success,
+      </if>
+      <if test="adminName != null">
+        admin_name,
+      </if>
+      <if test="studentName != null">
+        student_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="reportId != null">
+        #{reportId,jdbcType=INTEGER},
+      </if>
+      <if test="examId != null">
+        #{examId,jdbcType=INTEGER},
+      </if>
+      <if test="adminId != null">
+        #{adminId,jdbcType=INTEGER},
+      </if>
+      <if test="opDescription != null">
+        #{opDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="opTime != null">
+        #{opTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isSuccess != null">
+        #{isSuccess,jdbcType=BIT},
+      </if>
+      <if test="adminName != null">
+        #{adminName,jdbcType=VARCHAR},
+      </if>
+      <if test="studentName != null">
+        #{studentName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lutayy.campbackend.pojo.ExamReportOpLogExample" resultType="java.lang.Long">
+    select count(*) from exam_report_op_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update exam_report_op_log
+    <set>
+      <if test="record.logId != null">
+        log_id = #{record.logId,jdbcType=INTEGER},
+      </if>
+      <if test="record.reportId != null">
+        report_id = #{record.reportId,jdbcType=INTEGER},
+      </if>
+      <if test="record.examId != null">
+        exam_id = #{record.examId,jdbcType=INTEGER},
+      </if>
+      <if test="record.adminId != null">
+        admin_id = #{record.adminId,jdbcType=INTEGER},
+      </if>
+      <if test="record.opDescription != null">
+        op_description = #{record.opDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="record.opTime != null">
+        op_time = #{record.opTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isSuccess != null">
+        is_success = #{record.isSuccess,jdbcType=BIT},
+      </if>
+      <if test="record.adminName != null">
+        admin_name = #{record.adminName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.studentName != null">
+        student_name = #{record.studentName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update exam_report_op_log
+    set log_id = #{record.logId,jdbcType=INTEGER},
+      report_id = #{record.reportId,jdbcType=INTEGER},
+      exam_id = #{record.examId,jdbcType=INTEGER},
+      admin_id = #{record.adminId,jdbcType=INTEGER},
+      op_description = #{record.opDescription,jdbcType=VARCHAR},
+      op_time = #{record.opTime,jdbcType=TIMESTAMP},
+      is_success = #{record.isSuccess,jdbcType=BIT},
+      admin_name = #{record.adminName,jdbcType=VARCHAR},
+      student_name = #{record.studentName,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lutayy.campbackend.pojo.ExamReportOpLog">
+    update exam_report_op_log
+    <set>
+      <if test="reportId != null">
+        report_id = #{reportId,jdbcType=INTEGER},
+      </if>
+      <if test="examId != null">
+        exam_id = #{examId,jdbcType=INTEGER},
+      </if>
+      <if test="adminId != null">
+        admin_id = #{adminId,jdbcType=INTEGER},
+      </if>
+      <if test="opDescription != null">
+        op_description = #{opDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="opTime != null">
+        op_time = #{opTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isSuccess != null">
+        is_success = #{isSuccess,jdbcType=BIT},
+      </if>
+      <if test="adminName != null">
+        admin_name = #{adminName,jdbcType=VARCHAR},
+      </if>
+      <if test="studentName != null">
+        student_name = #{studentName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where log_id = #{logId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lutayy.campbackend.pojo.ExamReportOpLog">
+    update exam_report_op_log
+    set report_id = #{reportId,jdbcType=INTEGER},
+      exam_id = #{examId,jdbcType=INTEGER},
+      admin_id = #{adminId,jdbcType=INTEGER},
+      op_description = #{opDescription,jdbcType=VARCHAR},
+      op_time = #{opTime,jdbcType=TIMESTAMP},
+      is_success = #{isSuccess,jdbcType=BIT},
+      admin_name = #{adminName,jdbcType=VARCHAR},
+      student_name = #{studentName,jdbcType=VARCHAR}
+    where log_id = #{logId,jdbcType=INTEGER}
+  </update>
+</mapper>
