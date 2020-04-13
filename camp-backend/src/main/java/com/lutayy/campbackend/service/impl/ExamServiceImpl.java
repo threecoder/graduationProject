@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.lutayy.campbackend.common.util.ExcelUtil;
+import com.lutayy.campbackend.common.util.RedisUtil;
 import com.lutayy.campbackend.dao.*;
 import com.lutayy.campbackend.pojo.*;
 import com.lutayy.campbackend.service.ExamService;
@@ -12,6 +13,7 @@ import org.omg.PortableInterceptor.INACTIVE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.lang.reflect.Array;
 import java.util.*;
 
@@ -35,7 +37,12 @@ public class ExamServiceImpl implements ExamService {
     @Autowired
     ExamQuestionStudentAnswerMapper examQuestionStudentAnswerMapper;
     @Autowired
+    ExamReportOpLogMapper examReportOpLogMapper;
+    @Autowired
     GetObjectHelper getObjectHelper;
+
+    @Resource
+    private RedisUtil redisUtil;
 
 
     @Override
@@ -1042,6 +1049,110 @@ public class ExamServiceImpl implements ExamService {
     ////管理员提交审核成绩请求
     @Override
     public JSONObject submitGradeList(JSONObject jsonObject) {
+        JSONObject result=new JSONObject();
+        result.put("code", "fail");
+
+        String account = jsonObject.getString("checker");
+        Admin admin = getObjectHelper.getAdminFromAccount(account);
+        if (admin == null) {
+            result.put("msg", "对应的账号不存在，请检查输入是否正确");
+            return result;
+        }
+        int adminId = admin.getAdminId();
+        JSONArray reportIds=jsonObject.getJSONArray("ids");
+        for(int i=0;i<reportIds.size();i++){
+            int reportId=reportIds.getIntValue(i);
+            ExamReStudent report=examReStudentMapper.selectByPrimaryKey(reportId);
+            if(report==null || report.getIsInvalid() || report.getInLine() || report.getIsVerify().equals(2)){
+                continue;
+            }
+            Student student=studentMapper.selectByPrimaryKey(report.getStudentId());
+            Exam exam=examMapper.selectByPrimaryKey(report.getExamId());
+            Training training=trainingMapper.selectByPrimaryKey(exam.getTrainingId());
+            ExamReportOpLog reportOpLog=new ExamReportOpLog();
+            reportOpLog.setAdminId(adminId);
+            reportOpLog.setExamId(report.getExamId());
+            reportOpLog.setReportId(reportId);
+            reportOpLog.setOpDescription("将成绩单"+reportId+"放入管理员ID:"+adminId+"的审核队列中");
+            reportOpLog.setOpTime(new Date());
+            reportOpLog.setAdminName(admin.getAdminName());
+            reportOpLog.setStudentName(student.getStudentName());
+
+            //存放要审核的成绩单
+            JSONObject reportObject=new JSONObject();
+            reportObject.put("idNum", student.getStudentIdcard());
+            reportObject.put("name", student.getStudentName());
+            reportObject.put("member", student.getCompany());
+            reportObject.put("grade", report.getScore());
+            reportObject.put("times", 3-report.getRemainingTimes());
+            reportObject.put("id",reportId);
+            reportObject.put("trainingName", training.getTrainingName());
+            reportObject.put("examId", report.getExamId());
+
+            if(redisUtil.hset("admin"+adminId+"_OpList", Integer.toString(reportId), reportObject)){
+
+                report.setInLine(true);
+                examReStudentMapper.updateByPrimaryKeySelective(report);
+                reportOpLog.setIsSuccess(true);
+            }else {
+                reportOpLog.setIsSuccess(false);
+            }
+            examReportOpLogMapper.insert(reportOpLog);
+        }
+        result.put("code", "success");
+        result.put("msg", "提交审核申请成功！");
+        return result;
+    }
+
+    ////管理员获取本账号待审核成绩记录
+    @Override
+    public JSONObject getWaitingGradeList(Integer adminId, Integer pageSize, Integer currentPage,
+                                          String trainingName, String idNum, String studentName) {
+        JSONObject result=new JSONObject();
+        JSONObject data=new JSONObject();
+        JSONArray list=new JSONArray();
+
+        Map<Object, Object> dataMap=redisUtil.hmget("admin"+adminId+"_OpList");
+        Set<Map.Entry<Object, Object>> dataSet=dataMap.entrySet();
+        List<JSONObject> dataList=new ArrayList<>();
+        for(Map.Entry<Object,Object> entry:dataMap.entrySet()){
+            JSONObject object=(JSONObject)entry.getValue();
+            if(trainingName!=null && !trainingName.equals(object.getString("trainingName")))
+                continue;
+            if(idNum!=null && !idNum.equals(object.getString("idNum")))
+                continue;
+            if(studentName!=null && !studentName.equals(object.getString("name")))
+                continue;
+            dataList.add(object);
+        }
+        data.put("total", dataList.size());
+        int begin=pageSize*(currentPage-1);
+        int end=pageSize*currentPage;
+        for(int i=0;i<dataList.size();i++){
+            if(i>=begin && i<end){
+                list.add(dataList.get(i));
+            }
+        }
+        data.put("data", list);
+        result.put("data", data);
+        result.put("code", "success");
+        result.put("msg", "获取待审核成绩单成功！");
+        return result;
+    }
+
+    //管理员批量通过成绩记录
+    @Override
+    public JSONObject approvalManyRecords(JSONObject jsonObject) {
+        JSONObject result=new JSONObject();
+        result.put("code", "fail");
+
+        JSONArray reportIds=jsonObject.getJSONArray("ids");
+        for(int i=0;i<reportIds.size();i++){
+            ExamReStudent report=examReStudentMapper.selectByPrimaryKey(reportIds.getIntValue(i));
+            if(report==null)
+                continue;
+
+        }
         return null;
     }
 }

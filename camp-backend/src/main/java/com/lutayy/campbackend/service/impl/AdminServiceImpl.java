@@ -2,6 +2,7 @@ package com.lutayy.campbackend.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.lutayy.campbackend.common.config.AuthorityParam;
 import com.lutayy.campbackend.common.util.ExcelUtil;
 import com.lutayy.campbackend.common.util.JwtUtil;
 import com.lutayy.campbackend.common.util.UUIDUtil;
@@ -41,6 +42,8 @@ public class AdminServiceImpl implements AdminService {
     VoteMapper voteMapper;
     @Autowired
     VoteOptionMapper voteOptionMapper;
+    @Autowired
+    AdminReAuthorityMapper adminReAuthorityMapper;
     @Autowired
     GetObjectHelper getObjectHelper;
 
@@ -150,6 +153,31 @@ public class AdminServiceImpl implements AdminService {
         result.put("data", data);
         result.put("code", "success");
         result.put("msg", "列表获取成功！");
+        return result;
+    }
+
+    //管理员获取成绩审核员名单
+    @Override
+    public JSONObject getCheckerList() {
+        JSONObject result=new JSONObject();
+
+        AdminReAuthorityExample adminReAuthorityExample=new AdminReAuthorityExample();
+        adminReAuthorityExample.createCriteria().andAuthorityIdEqualTo(AuthorityParam.GRADE);
+        List<AdminReAuthority> adminReAuthorities=adminReAuthorityMapper.selectByExample(adminReAuthorityExample);
+        JSONArray data=new JSONArray();
+        for(AdminReAuthority adminReAuthority:adminReAuthorities){
+            Admin admin=adminMapper.selectByPrimaryKey(adminReAuthority.getAdminId());
+            if(admin==null){
+                continue;
+            }
+            JSONObject object=new JSONObject();
+            object.put("id", adminReAuthority.getAdminId());
+            object.put("name", admin.getAdminName());
+            data.add(object);
+        }
+        result.put("code", "success");
+        result.put("msg", "审核管理员名单获取成功！");
+        result.put("data", data);
         return result;
     }
 

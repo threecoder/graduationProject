@@ -57,6 +57,11 @@ public class AdminController {
         return adminService.getAdminList(name, account, currentPage, pageSize);
     }
 
+    @RequestMapping("/getCheckerList")
+    @ResponseBody
+    public Object getCheckerList() {
+        return adminService.getCheckerList();
+    }
     //-------学员管理-----------
     @RequestMapping("/getStudentTemplate")
     @ResponseBody
