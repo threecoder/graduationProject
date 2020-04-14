@@ -44,19 +44,19 @@ export default {
                 },
                 {
                     title: "我的证书",
-                    name: "info"
+                    name: "certificate"
                 },
                 {
                     title: "我的培训",
-                    name: "info"
+                    name: "training"
                 },
                 {
                     title: "我的考试",
-                    name: "info"
+                    name: "exam"
                 },
                 {
                     title: "我的活动",
-                    name: "info"
+                    name: "activity"
                 },
                 {
                     title: "我的投票",
@@ -64,7 +64,7 @@ export default {
                 },
                 {
                     title: "我的订单",
-                    name: "info"
+                    name: "order"
                 }
             ],
             name: "张三",
@@ -74,9 +74,6 @@ export default {
     methods: {
         to(item) {
             this.$Router.push({ name: item.name });
-            // uni.navigateTo({
-            //     url: "/pages/info/info?id=111"
-            // });
         }
     }
 };

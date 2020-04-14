@@ -1,9 +1,11 @@
 //功能页面
 const funPath = [
+    //我的信息
     {
-        path: "/pages/info/info",
+        path: "/pages/personal/info/info",
         name: "info"
     },
+    //我的投票
     {
         path: "/pages/personal/vote/vote",
         name: "vote"
@@ -15,6 +17,11 @@ const funPath = [
     {
         path: "/pages/personal/vote/voteDetail",
         name: "voteDetail"
+    },
+    //我的活动
+    {
+        path: '/pages/personal/activity/activity',
+        name: "activity"
     }
 ]
 

@@ -1,0 +1,17 @@
+{
+  "name": "camp-ios",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async-validator": "^3.2.4",
+    "js-md5": "^0.7.3",
+    "uni-simple-router": "^1.5.3"
+  }
+}

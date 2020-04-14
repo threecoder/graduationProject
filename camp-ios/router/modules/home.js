@@ -15,9 +15,9 @@ const home = [
 		name: 'notice'
 	}, {
 		path: '/pages/training/training',
-		name: 'training'
+		name: 'campTraining'
 	}, {
-		path: "/pages/dynamicDetail/dynamicDetail",
+		path: "/pages/dynamic/dynamicDetail",
 		name: 'dynamicDetail'
 	} ]
 export default home;

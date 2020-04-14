@@ -1,5 +1,5 @@
 //封装请求的方法
-import Axios from 'axios'
+// import Axios from 'axios'
 import md5 from 'js-md5';
 // import fileDownload from 'js-file-download';
 import {

@@ -8,7 +8,7 @@
             </div>
             <div class="divider"></div>
             <div class="activity-detail">
-                <p v-for="(item,i) in drawerInfo.introduction" :key="i">{{item}}</p>
+                <p v-for="(item,i) in drawerInfo.introduce" :key="i">{{item}}</p>
                 <p>如有疑问，请联系：{{drawerInfo.contacts}}</p>
                 <p>联系方式：{{drawerInfo.phone}}</p>
             </div>

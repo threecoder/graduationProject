@@ -16,13 +16,7 @@ const getsignedActivities = idType => {
         return request(`${memberPrefix}/getSignedActivities`, 'get');
     }
 }
-const getSeatNum = (idType, activityId) => {
-    if (idType == 0) {
-        return request(`${studentPrefix}/getSeatNum`, 'get', { activityId });
-    } else {
-        return request(`${memberPrefix}/getSeatNum`, 'get', { activityId });
-    }
-}
+const getSeatNum = activityId => request(`${studentPrefix}/getSeatNum`, 'get', { activityId });
 
 //会员获取学生列表
 const getList = () => request(memberPrefix + "/getStudentList", 'get');

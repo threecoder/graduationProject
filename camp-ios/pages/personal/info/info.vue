@@ -103,12 +103,12 @@
 </template>
 
 <script>
-import EvanForm from "../../components/evan-form/evan-form.vue";
-import EvanFormItem from "../../components/evan-form/evan-form-item.vue";
-import utils from "../../components/evan-form/utils.js";
-import infoApi from "../../api/modules/info.js";
-import cityApi from "../../assets/js/city.js";
-import { toast } from "../../assets/js/commom.js";
+import EvanForm from "../../../components/evan-form/evan-form.vue";
+import EvanFormItem from "../../../components/evan-form/evan-form-item.vue";
+import utils from "../../../components/evan-form/utils.js";
+import infoApi from "../../../api/modules/info.js";
+import cityApi from "../../../assets/js/city.js";
+import { toast } from "../../../assets/js/commom.js";
 export default {
     components: {
         EvanForm,
