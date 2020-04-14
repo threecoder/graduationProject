@@ -60,7 +60,7 @@ export default {
                 },
                 {
                     title: "我的投票",
-                    name: "info"
+                    name: "vote"
                 },
                 {
                     title: "我的订单",
@@ -73,7 +73,7 @@ export default {
     },
     methods: {
         to(item) {
-            this.$Router.push({name: 'info'})
+            this.$Router.push({ name: item.name });
             // uni.navigateTo({
             //     url: "/pages/info/info?id=111"
             // });
@@ -83,9 +83,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.my-top {
-    background-color: rgb(64, 158, 255);
-}
 
 .person-info {
     height: 0.8rem;
@@ -102,7 +99,7 @@ export default {
     }
     .name {
         display: block;
-        font-size: 0.20rem;
+        font-size: 0.2rem;
         color: #fff;
         margin-left: 0.3rem;
         float: left;

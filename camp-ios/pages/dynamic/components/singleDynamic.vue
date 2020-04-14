@@ -18,10 +18,7 @@
 <script>
 export default {
 	props: {
-		item: {
-			required: true,
-			type: Object
-		}
+		item: Object
 	},
 	methods: {
 		toDetail() {

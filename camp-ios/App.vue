@@ -43,7 +43,7 @@ export default {
     margin: 0;
 }
 html {
-    font-size: 100px!important;
+    font-size: 100px !important;
 }
 .my-top {
     position: fixed;
@@ -52,15 +52,11 @@ html {
     width: 100%;
     height: 0.2rem;
     z-index: 998;
-	background-color: rgb(64, 158, 255);
+    background-color: rgb(64, 158, 255);
 }
-.container {
-	background-color: #eee;
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
+.all-container {
+    background-color: #eee;
+    height: 100vh;
 }
 .evan-form-show {
     padding: 0 0.3rem;
@@ -99,7 +95,7 @@ html {
         line-height: 0.5rem;
     }
     &__button {
-        width: 100%;
+        width: 100% !important;
         height: 0.4rem;
         border-radius: 0.08rem;
         display: flex;
@@ -132,5 +128,30 @@ html {
             }
         }
     }
+}
+.button-big {
+    width: 80%;
+    height: 0.4rem;
+    border-radius: 0.08rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    font-size: 0.16rem;
+    color: #fff;
+    margin: 0.2rem auto;
+    background-color: rgb(64, 158, 255);
+    &::before,
+    &::after {
+        border: none;
+    }
+}
+.button-small {
+    margin: 0;
+    font-size: 0.14rem;
+    background-color: rgb(64, 158, 255);
+    color: #fff;
+    padding: 0rem 0.14rem;
+    margin-left: 0.1rem;
 }
 </style>

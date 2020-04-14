@@ -7,18 +7,18 @@
 				"navigationBarTitleText": "协会动态",
 				"navigationBarBackgroundColor": "rgb(64,158,255)",
 				"enablePullDownRefresh": "true"
-
 			}
 		},
 		{
-			"path": "pages/notice/notice/notice",
+			"path": "pages/notice/notice",
 			"style": {
 				"navigationBarTextStyle": "#fff",
 				"navigationBarTitleText": "协会公告",
 				"navigationBarBackgroundColor": "rgb(64,158,255)",
 				"enablePullDownRefresh": "true"
 			}
-		}, {
+		},
+		{
 			"path": "pages/training/training",
 			"style": {
 				"navigationBarTextStyle": "#fff",
@@ -45,13 +45,31 @@
 			"style": {
 				"navigationBarTitleText": "我的信息"
 			}
-		}
-	    ,{
+		},
+		{
             "path" : "pages/dynamicDetail/dynamicDetail",
             "style" : {
 				"navigationBarTitleText": "详情"
 			}
-        }
+		},
+		{
+			"path": "pages/personal/vote/vote",
+			"style": {
+				"navigationBarTitleText": "我的投票"
+			}
+		},
+		{
+			"path": "pages/personal/vote/toVote",
+			"style": {
+				"navigationBarTitleText": "投票"
+			}
+		},
+		{
+			"path": "pages/personal/vote/voteDetail",
+			"style": {
+				"navigationBarTitleText": "投票详情"
+			}
+		}
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "#fff",
@@ -69,7 +87,7 @@
 				"text": "动态"
 			},
 			{
-				"pagePath": "pages/notice/notice/notice",
+				"pagePath": "pages/notice/notice",
 				"text": "公告"
 			},
 			{

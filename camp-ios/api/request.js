@@ -72,7 +72,7 @@ export function getHeaders() {
 		randomNum,
 		"Cookie": cookie
 	};
-	console.log("当前请求的cookie", headers);
+	console.log("当前请求的头部", headers);
 	return headers;
 }
 
