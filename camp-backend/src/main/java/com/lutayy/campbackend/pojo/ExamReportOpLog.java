@@ -22,6 +22,8 @@ public class ExamReportOpLog implements Serializable {
 
     private String studentName;
 
+    private Boolean isPass;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getLogId() {
@@ -94,5 +96,13 @@ public class ExamReportOpLog implements Serializable {
 
     public void setStudentName(String studentName) {
         this.studentName = studentName;
+    }
+
+    public Boolean getIsPass() {
+        return isPass;
+    }
+
+    public void setIsPass(Boolean isPass) {
+        this.isPass = isPass;
     }
 }

@@ -4,11 +4,14 @@ package com.lutayy.campbackend.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.lutayy.campbackend.service.ExamService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class ExamController {
@@ -170,5 +173,34 @@ public class ExamController {
     @ResponseBody
     public JSONObject approvalManyRecords(@RequestBody JSONObject jsonObject) {
         return examService.approvalManyRecords(jsonObject);
+    }
+
+    @RequestMapping("/admin/refuseSingleRecord")
+    @ResponseBody
+    public JSONObject refuseSingleRecord(@RequestBody JSONObject jsonObject) {
+        return examService.refuseSingleRecord(jsonObject);
+    }
+
+    @RequestMapping("/admin/refuseManyRecords")
+    @ResponseBody
+    public JSONObject refuseManyRecords(@RequestBody JSONObject jsonObject) {
+        return examService.refuseManyRecords(jsonObject);
+    }
+
+    @RequestMapping("/admin/getCheckRecordList")
+    @ResponseBody
+    public Object getCheckRecordList(@RequestParam("examId") Integer examId,
+                                     @RequestParam("pageSize") Integer pageSize,
+                                     @RequestParam("currentPage") Integer currentPage,
+                                     @RequestParam(value = "checker",required = false) String checker,
+                                     @RequestParam(value = "studentName",required = false) String studentName,
+                                     @RequestParam(value = "isPass",required = false) Integer isPass) {
+        return examService.getCheckRecordList(examId, pageSize, currentPage, checker, studentName, isPass);
+    }
+
+    @RequestMapping("/admin/getGradeTemplate")
+    @ResponseBody
+    public ResponseEntity<byte[]> getGradeTemplate(HttpServletRequest request) {
+        return examService.getGradeTemplate(request);
     }
 }

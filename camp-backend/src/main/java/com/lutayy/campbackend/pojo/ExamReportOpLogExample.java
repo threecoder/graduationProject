@@ -11,6 +11,26 @@ public class ExamReportOpLogExample {
 
     protected List<Criteria> oredCriteria;
 
+    //加入 offset 起始位置 和 limit 查询页数 用来分页
+    protected Integer offset;
+    protected Integer limit;
+
+    public Integer getOffset() {
+        return offset;
+    }
+
+    public void setOffset(Integer offset) {
+        this.offset = offset;
+    }
+
+    public int getLimit() {
+        return limit;
+    }
+
+    public void setLimit(Integer limit) {
+        this.limit = limit;
+    }
+
     public ExamReportOpLogExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
@@ -672,6 +692,66 @@ public class ExamReportOpLogExample {
 
         public Criteria andStudentNameNotBetween(String value1, String value2) {
             addCriterion("student_name not between", value1, value2, "studentName");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPassIsNull() {
+            addCriterion("is_pass is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPassIsNotNull() {
+            addCriterion("is_pass is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPassEqualTo(Boolean value) {
+            addCriterion("is_pass =", value, "isPass");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPassNotEqualTo(Boolean value) {
+            addCriterion("is_pass <>", value, "isPass");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPassGreaterThan(Boolean value) {
+            addCriterion("is_pass >", value, "isPass");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPassGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_pass >=", value, "isPass");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPassLessThan(Boolean value) {
+            addCriterion("is_pass <", value, "isPass");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPassLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_pass <=", value, "isPass");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPassIn(List<Boolean> values) {
+            addCriterion("is_pass in", values, "isPass");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPassNotIn(List<Boolean> values) {
+            addCriterion("is_pass not in", values, "isPass");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPassBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_pass between", value1, value2, "isPass");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPassNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_pass not between", value1, value2, "isPass");
             return (Criteria) this;
         }
     }

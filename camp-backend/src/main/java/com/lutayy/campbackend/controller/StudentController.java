@@ -18,6 +18,7 @@ public class StudentController {
     @RequestMapping("/getUserInfo")
     @ResponseBody
     public Object getUserInfo(@RequestParam(value = "id",required = false) Integer studentId){
+        System.out.println(1111);
         return studentService.getUserInfo(studentId);
     }
 
