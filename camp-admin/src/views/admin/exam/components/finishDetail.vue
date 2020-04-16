@@ -38,6 +38,7 @@ export default {
                     { prop: "member", label: "所属会员" },
                     { prop: "times", label: "作答次数" },
                     { prop: "grade", label: "分数" },
+                    { prop: "isInvalid", label: "是否有效"},
                     { slot: "oper", label: "操作" }
                 ],
                 data: [

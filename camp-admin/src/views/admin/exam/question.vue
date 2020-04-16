@@ -41,7 +41,7 @@
                         </template>
                     </el-select>
                 </el-form-item>-->
-                <el-button size="medium" type="primary" @click="search">搜索</el-button>
+                <el-button size="medium" type="primary" @click="search" :loading="table.loading">搜索</el-button>
             </el-form>
         </div>
 
@@ -185,7 +185,7 @@ export default {
                 tableAttr: {
                     stripe: true
                 },
-                tableLoading: false
+                loading: false
             },
             buttonLoading: false,
             flag: false,
@@ -211,6 +211,7 @@ export default {
     },
     methods: {
         async search() {
+            this.table.loading = true;
             try {
                 let res = await adminExamApi.getQuestionList(this.form);
                 this.table.tableData = res.data.list;
@@ -241,6 +242,7 @@ export default {
             } catch (error) {
                 this.$message.error(error.message);
             }
+            this.table.loading = false;
         },
         async getTraining() {
             try {
@@ -304,7 +306,7 @@ export default {
             }
         },
         async success(res) {
-            console.log(res);
+            this.$message.info(res.msg);
         }
     }
 };

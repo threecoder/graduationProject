@@ -50,16 +50,12 @@ export default {
         async getVoteDetail() {
             this.loading = true;
             try {
-                let res = await voteApi.getVoteDetail(this.voteId);
+                let res = await voteApi.getVoteStatistic(this.voteId);
                 this.voteInfo = res.data;
             } catch (error) {
                 this.$message.error(error.message);
             }
             this.loading = false;
-        },
-        format(value) {
-            console.log(value);
-            return value;
         }
     }
 };

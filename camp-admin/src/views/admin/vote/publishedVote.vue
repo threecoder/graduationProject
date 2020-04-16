@@ -7,8 +7,8 @@
                 <el-form-item label="投票名称">
                     <el-input v-model="form.name" placeholder="输入投票名称"></el-input>
                 </el-form-item>
-                <el-form-item label="类型">
-                    <el-select v-model="form.name" placeholder="选择投票类型">
+                <el-form-item label="权限">
+                    <el-select v-model="form.type" placeholder="选择投票类型">
                         <el-option :value="0" label="仅限会员投票"></el-option>
                         <el-option :value="1" label="仅限学员投票"></el-option>
                         <el-option :value="2" label="学员会员均可"></el-option>
@@ -23,7 +23,6 @@
             <m-table :tableConfig="table.config" :data="table.data" :loading="table.loading">
                 <el-table-column slot="oper" slot-scope="{params}" v-bind="params" align="center">
                     <div slot-scope="{row}">
-                        <!-- <el-button type="primary" size="small" @click="detail(row)">详情</el-button> -->
                         <el-button type="primary" size="small" @click="statistic(row)">统计</el-button>
                         <el-button type="primary" size="small" @click="deleteVote(row)">删除</el-button>
                     </div>
@@ -38,11 +37,8 @@
                 @curChange="curChange"
             />
         </div>
-        <el-dialog title="投票详情" v-if="detailDialog.flag" :visible.sync="detailDialog.flag">
-            <vote-detail :voteId="detailDialog.voteId" />
-        </el-dialog>
         <el-dialog title="投票统计" v-if="statisticDialog.flag" :visible.sync="statisticDialog.flag">
-            <vote-statistic :voteId="detailDialog.voteId" />
+            <vote-statistic :voteId="statisticDialog.voteId" />
         </el-dialog>
     </div>
 </template>
@@ -50,13 +46,11 @@
 import voteApi from "../../../api/admin/vote";
 import mTable from "../../../components/mTable.vue";
 import page from "../../../components/page.vue";
-import voteDetail from "./components/voteDetail.vue";
 import voteStatistic from "./components/voteStatistic.vue";
 export default {
     components: {
         page,
         mTable,
-        voteDetail,
         voteStatistic
     },
     data() {
@@ -73,6 +67,7 @@ export default {
                 config: [
                     { prop: "id", label: "投票ID" },
                     { prop: "name", label: "投票名字" },
+                    { prop: "limit", label: "投票权限" },
                     { prop: "type", label: "投票类型" },
                     { prop: "sum", label: "选项总数" },
                     { prop: "num", label: "最大可选数" },
@@ -93,15 +88,14 @@ export default {
                     }
                 ]
             },
-            detailDialog: {
-                flag: false,
-                voteId: null
-            },
             statisticDialog: {
                 flag: false,
                 voteId: null
             }
         };
+    },
+    mounted() {
+        this.getVoteList();
     },
     methods: {
         curChange(newVal) {
@@ -112,7 +106,7 @@ export default {
             this.table.loading = true;
             try {
                 let res = await voteApi.getVoteList(this.form);
-                this.table.data = res.data.data;
+                this.table.data = res.data.list;
                 this.form.total = res.data.total;
             } catch (error) {
                 this.$message.error(error.message);
@@ -132,14 +126,11 @@ export default {
                 try {
                     let res = await voteApi.deleteVote(row.id);
                     this.$message.success("删除投票成功");
+                    this.getVoteList();
                 } catch (error) {
                     this.$message.error(error.message);
                 }
             });
-        },
-        detail(row) {
-            this.detailDialog.voteId = row.id;
-            this.detailDialog.flag = true;
         }
     }
 };

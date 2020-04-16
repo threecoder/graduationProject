@@ -11,7 +11,7 @@ const getMemSelectList = () => request(`${apiPrefix}/getMemSelectList`, "get");
 const modifyRely = data => request(`${apiPrefix}/modifyRely`, 'post', data);
 
 //重置学员密码
-const resetPassword = id => request(`${apiPrefix}/resetPassword`, 'post', { id });
+const resetPassword = idNum => request(`${apiPrefix}/resetPassword`, 'post', { idNum });
 
 //修改学员资料
 const modifyInfo = data => request(`${apiPrefix}/modifyStudentInfo`, 'post', data);

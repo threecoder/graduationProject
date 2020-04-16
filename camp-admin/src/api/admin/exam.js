@@ -28,7 +28,7 @@ const getExamInfo = examId => request(apiPrefix + `/getExamInfo`, 'get', { examI
 const modifyExam = data => request(apiPrefix + "/modifyExamInfo", 'post', data);
 
 //根据试卷id获取试卷题目id列表
-const getExamQuestionList = id => request(apiPrefix + `/getExamQuestionList`, 'get', { id });
+const getExamQuestionList = examId => request(apiPrefix + `/getExamQuestionList`, 'get', { examId });
 
 //根据题目id获取题目信息
 const getSingleQuestion = examId => request(apiPrefix + `/getQuestionInfo`, 'get', { examId });
@@ -50,6 +50,9 @@ const closeExam = examId => request(apiPrefix + `/closeExam`, 'post', { examId }
 
 //获取已作答学生信息
 const getFinishedStudentList = examId => request(apiPrefix + `/getFinishedStudentList`, "get", { examId });
+
+//修改考试成绩
+const modifyGrade = data => request(apiPrefix + '/modifyGrade', 'post', data);
 
 //下载成绩单模板
 const getGradeTemplate = () => request(apiPrefix + "/getGradeTemplate", "get", {}, 'blob');
@@ -113,5 +116,6 @@ export default {
     approvalManyRecords,
     refuseSingleRecord,
     refuseManyRecords,
-    getCheckRecordList
+    getCheckRecordList,
+    modifyGrade
 }

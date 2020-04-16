@@ -34,7 +34,7 @@
     </div>
 </template>
 <script>
-import adminStudentApi from "../../../../api/admin/student";
+import studentApi from "../../../../api/admin/student";
 import { download } from "../../../../api/request";
 import upload from "../../../../components/upload.vue";
 export default {
@@ -65,16 +65,15 @@ export default {
     methods: {
         async getListTemplate() {
             try {
-                let res = await adminStudentApi.getStudentTemplate();
+                let res = await studentApi.getStudentTemplate();
                 download(res);
             } catch (error) {
                 this.$message.error(error.message);
             }
         },
         async addSingleONe() {
-            let addSingle = adminStudentApi.addSingleStudent;
             try {
-                let res = await addsingle(this.newOne);
+                let res = await studentApi.addSingleStudent(this.newOne);
                 this.$message.success("添加新的学员成功");
                 this.close();
             } catch (error) {

@@ -38,7 +38,7 @@ export default {
     props: {
         examId: {
             require: true,
-            type: String
+            type: String | Number
         }
     },
     components: {
@@ -97,6 +97,10 @@ export default {
             } catch (error) {
                 this.$message.error(error.message);
             }
+        },
+        curChange(val) {
+            this.form.currentPage = val;
+            this.getRecordList();
         }
     }
 };

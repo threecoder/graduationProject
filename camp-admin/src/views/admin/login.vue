@@ -32,8 +32,8 @@
     </div>
 </template>
 <script>
-import { Encrypt, request } from "@/api/request.js";
-import { setLocalStorage } from "@/assets/js/util.js";
+import { Encrypt, request } from "../../api/request";
+import accoutApi from "../../api/admin/account";
 export default {
     data() {
         let valid = (rule, value, callback) => {
@@ -87,22 +87,18 @@ export default {
                 this.$message.error("账号或者密码不能为空");
                 return false;
             }
-            let params = {
+            let data = {
                 username: this.userForm.username,
                 password: Encrypt(this.userForm.password)
             };
             this.loginLoading = true;
             try {
-                let res = await request(
-                    "/campback/admin/login",
-                    "post",
-                    params
-                );
+                let res = await accoutApi.login(data);
+                this.$store.commit("setUser", res.data);
                 this.$message.success(res.msg);
                 this.$router.push({
                     path: this.redirect ? this.redirect : "/admin"
                 });
-                setLocalStorage("user", res.data);
             } catch (error) {
                 this.$message.error(error.message);
             }

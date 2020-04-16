@@ -44,8 +44,8 @@ export default {
         ];
         return {
             modifyPass: {
-                oldPassWord: null,
-                newPassWord: null,
+                oldPassword: null,
+                newPassword: null,
                 newPassword2: null
             },
             rules: {
@@ -55,13 +55,18 @@ export default {
             }
         };
     },
+    computed: {
+        idType() {
+            return this.$store.getters.idType;
+        }
+    },
     methods: {
         modifyPassword() {
             this.$refs.modifyPassForm.validate(async valid => {
                 if (valid) {
                     try {
                         let res = await infoApi.setPassword(
-                            this.type,
+                            this.idType,
                             this.modifyPass
                         );
                         this.$message.success("修改密码成功");

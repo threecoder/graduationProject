@@ -2,7 +2,7 @@
     <div>
         <el-row>
             <el-col :span="22">
-                <h3>发布考试</h3>
+                <h3>未发布考试</h3>
             </el-col>
             <el-col :span="2">
                 <div class="switcher">
@@ -16,7 +16,6 @@
         <div class="divider"></div>
 
         <div class="panel-contaner">
-            <span class="panel-title">已有考试</span>
             <div class="all-exam-container" :loading="loading">
                 <div class="single-exam-container" v-for="(item,i) in examList" :key="i">
                     <single-exam

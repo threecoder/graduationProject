@@ -28,6 +28,7 @@ export default {
     },
     data() {
         return {
+            auList: [],
             valueObj: {},
             value: [],
             data: [],
@@ -51,9 +52,13 @@ export default {
         async getAuList() {
             try {
                 let res = await systemApi.getAuthority(this.account);
-                for (let key in res.data) {
-                    this.valueObj[key] = res.data[key];
-                }
+                this.valueObj = res.data;
+                this.data.forEach((val, i) => {
+                    if (this.valueObj[val.key]) {
+                        this.value.push(val.key);
+                    }
+                });
+                console.log(this.value);
             } catch (error) {
                 this.$message.error(error.message);
             }
@@ -62,9 +67,13 @@ export default {
             this.$emit("cancel");
         },
         async modify() {
-            this.value.forEach(val => {
-                this.valueObj[val] = true;
-            });
+            for (const key in this.valueObj) {
+                if (this.value.indexOf(key) !== -1) {
+                    this.valueObj[key] = true;
+                } else {
+                    this.valueObj[key] = false;
+                }
+            }
             try {
                 let data = {
                     account: this.account,

@@ -11,11 +11,11 @@
         <div class="divider"></div>
         <div class="form-container">
             <el-form :model="form" inline>
-                <el-form-item label="名字">
-                    <el-input v-model="form.name" placeholder="管理员名字" clearable></el-input>
-                </el-form-item>
                 <el-form-item label="账号">
                     <el-input v-model="form.account" placeholder="管理员账号" clearable></el-input>
+                </el-form-item>
+                <el-form-item label="名字">
+                    <el-input v-model="form.name" placeholder="管理员名字" clearable></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" size="medium" @click="getAdminList">查询</el-button>
@@ -54,7 +54,7 @@
 
         <!-- 添加管理员弹框 -->
         <el-dialog title="添加管理员" :visible.sync="addDiaFlag" v-if="addDiaFlag">
-            <new-admin @cancel="addDiaFlag=false" />
+            <new-admin @cancel="addDiaFlag=false;getAdminList()" />
         </el-dialog>
 
         <!-- 管理员权限弹框 -->
@@ -107,6 +107,9 @@ export default {
                 account: null
             }
         };
+    },
+    mounted() {
+        this.getAdminList();
     },
     methods: {
         async getAdminList() {

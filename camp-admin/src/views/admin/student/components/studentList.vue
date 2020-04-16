@@ -20,7 +20,7 @@
                         <el-option value="1" label="有"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-button type="primary" @click="search">搜索</el-button>
+                <el-button :loading="table.loading" type="primary" @click="search">搜索</el-button>
             </el-form>
         </div>
 
@@ -38,7 +38,7 @@
                                 type="primary"
                                 size="small"
                                 @click="deleteOneStudent(row)"
-                            >解除挂靠</el-button>
+                            >挂靠</el-button>
                             <el-button type="primary" size="small" @click="resetPass(row)">重置密码</el-button>
                         </div>
                         <div v-if="type==1">
@@ -65,7 +65,7 @@
 import mTable from "../../../../components/mTable.vue";
 import page from "../../../../components/page.vue";
 import adminStudentApi from "../../../../api/admin/student";
-
+import event from "../../../../assets/js/eventBus";
 export default {
     props: {
         type: {
@@ -130,6 +130,7 @@ export default {
     mounted() {
         this.init();
         this.search();
+        event.$on("refreshStudent", this.search);
     },
     methods: {
         init() {
@@ -150,14 +151,15 @@ export default {
             }
         },
         async search() {
+            this.table.loading = true;
             try {
-                let que = "";
                 let res = await adminStudentApi.getStudentList(this.form);
                 this.table.tableData = res.data.list;
                 this.form.total = res.data.total;
             } catch (error) {
                 this.$message.error(error.message);
             }
+            this.table.loading = false;
         },
         curChange(val) {
             this.form.currentPage = val;

@@ -23,12 +23,12 @@
                 </el-table-column>
             </m-table>
 
-            <page
+            <!-- <page
                 :pageSize="form.pageSize"
                 :total="form.total"
                 :currentPage="form.currentPage"
                 @curChange="handleCurrentChange"
-            />
+            />-->
         </div>
 
         <div class="tac mt30">
@@ -60,7 +60,7 @@ import adminExamApi from "../../../../api/admin/exam";
 export default {
     props: {
         examId: {
-            type: String,
+            type: String | Number,
             default: ""
         }
     },
@@ -70,24 +70,7 @@ export default {
     },
     data() {
         return {
-            tableData: [
-                {
-                    idNum: "111",
-                    name: "张三",
-                    member: "BB股份有限公司",
-                    grade: 100,
-                    times: 3,
-                    id: "123"
-                },
-                {
-                    idNum: "111",
-                    name: "张三",
-                    member: "BB股份有限公司",
-                    grade: 201,
-                    times: 3,
-                    id: "11"
-                }
-            ],
+            tableData: [],
             // 试卷编号、学生编号、学员姓名、学员挂靠的会员名称，分数
             tableConfig: [
                 { slot: "select", "reserve-selection": true },
@@ -123,7 +106,9 @@ export default {
         async getGradeList() {
             this.loading = true;
             try {
-                let res = adminExamApi.getGradeList(this.examId);
+                let res = await adminExamApi.getGradeList(this.examId);
+                this.tableData = res.data;
+                console.log(res);
             } catch (error) {
                 this.$message.error(error.message);
             }
@@ -144,7 +129,12 @@ export default {
                 type: "info"
             }).then(async ({ value }) => {
                 try {
-                    let res = await adminExamApi.modifyGrade();
+                    let data = {
+                        examId: this.examId,
+                        idNum: row.idNum,
+                        grade: value
+                    };
+                    let res = await adminExamApi.modifyGrade(data);
                     this.$message.success("修改成绩成功");
                 } catch (error) {
                     this.$message.error(error.message);
@@ -179,29 +169,6 @@ export default {
         },
         handleCurrentChange(val) {
             this.form.currentPage = val;
-            // if (val == 1) {
-            //     this.tableData = [
-            //         {
-            //             idNum: "111",
-            //             name: "张三",
-            //             member: "BB股份有限公司",
-            //             grade: 201,
-            //             times: 3,
-            //             id: "11"
-            //         }
-            //     ];
-            // } else {
-            //     this.tableData = [
-            //         {
-            //             idNum: "123",
-            //             name: "张三",
-            //             member: "BB股份有限公司",
-            //             grade: 201,
-            //             times: 3,
-            //             id: "12"
-            //         }
-            //     ];
-            // }
             this.getGradeList();
         }
     }

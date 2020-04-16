@@ -19,7 +19,7 @@
             <new-student
                 :type="0"
                 :uploadUrl="`/campback/admin/importStudentByFile`"
-                @close="closeMember"
+                @close="closeNew"
             />
         </el-dialog>
 
@@ -39,7 +39,12 @@
                         :key="i"
                     ></el-option>
                 </el-select>
-                <el-button style="margin-left:10px;" type="primary" @click="modifyStuRely">确 定</el-button>
+                <el-button
+                    style="margin-left:10px;"
+                    type="primary"
+                    @click="modifyStuRely"
+                    :loading="relyLoading"
+                >确 定</el-button>
                 <el-button type="primary" @click="comFlag=false">取 消</el-button>
             </div>
         </el-dialog>
@@ -50,6 +55,7 @@ import stuList from "./components/studentList.vue";
 import newStudent from "./components/newStudent.vue";
 import info from "../components/info.vue";
 import adminStudentApi from "../../../api/admin/student";
+import event from "../.././../assets/js/eventBus";
 export default {
     components: {
         stuList,
@@ -66,7 +72,8 @@ export default {
             comPar: {
                 memberId: null,
                 idNum: null
-            }
+            },
+            relyLoading: false
         };
     },
     mounted() {
@@ -74,8 +81,9 @@ export default {
     },
     methods: {
         //学员弹窗相关
-        closeMember() {
+        closeNew() {
             this.newFlag = false;
+            event.$emit("refreshStudent");
         },
         async getCompanyList() {
             try {
@@ -90,16 +98,20 @@ export default {
             this.comFlag = true;
         },
         async modifyStuRely() {
-            if (!this.comPar.memberId) {
+            if (this.comPar.memberId === null) {
                 this.$message.error("请选择要挂靠的公司");
                 return false;
             }
+            this.relyLoading = true;
             try {
                 let res = await adminStudentApi.modifyRely(this.comPar);
                 this.$message.success("修改挂靠成功");
+                // this.getCompanyList
+                event.$emit("refreshStudent");
             } catch (error) {
                 this.$message.error(error.message);
             }
+            this.relyLoading = false;
         },
         modifyInfo(row) {
             this.temRow = row;
@@ -112,11 +124,10 @@ export default {
                 type: "warning"
             })
                 .then(async () => {
-                    let par = {
-                        idNum: row.idNum
-                    };
                     try {
-                        let res = await adminStudentApi.resetPassword(par);
+                        let res = await adminStudentApi.resetPassword(
+                            row.idNum
+                        );
                         this.$message.success("重置密码成功");
                     } catch (error) {
                         this.$message.error(error.message);

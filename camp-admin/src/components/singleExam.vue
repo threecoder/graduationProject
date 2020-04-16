@@ -36,7 +36,13 @@
                         type="primary"
                         @click="fillExam"
                     >随机出题</el-button>
-                    <el-button size="small" class="items" v-if="status==1" type="primary">查看试题</el-button>
+                    <el-button
+                        size="small"
+                        class="items"
+                        v-if="status==1"
+                        type="primary"
+                        @click="pick"
+                    >查看试题</el-button>
                     <el-button
                         size="small"
                         class="items"

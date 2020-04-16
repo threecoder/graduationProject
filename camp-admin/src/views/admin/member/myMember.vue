@@ -41,7 +41,7 @@
                         <el-button type="primary" size="small" @click="checkInfo(row)">修改信息</el-button>
                         <el-button type="primary" size="small" @click="checkStudent(row)">查看成员</el-button>
                         <el-button
-                            v-if="row.vip==1"
+                            v-if="row.vip=='是'"
                             type="primary"
                             size="small"
                             @click="remind(row)"
@@ -143,11 +143,11 @@ export default {
                     }
                 ],
                 tableConfig: [
-                    { prop: "id", label: "会员ID", width: "150px" },
+                    { prop: "id", label: "会员ID" },
                     { prop: "name", label: "公司名称", width: "150px" },
                     { prop: "phone", label: "联系电话", width: "150px" },
                     { prop: "email", label: "邮箱", width: "150px" },
-                    { prop: "enterData", label: "加入时间" },
+                    { prop: "enterDate", label: "加入时间", width: "150px" },
                     { prop: "vip", label: "是否会员" },
                     { prop: "vipBegin", label: "会员开始时间", width: "150px" },
                     { prop: "vipEnd", label: "会员结束时间", width: "150px" },
@@ -212,7 +212,7 @@ export default {
                 let res = await adminMemberApi.getMemberList(this.form);
                 console.log(res);
                 this.memberTable.tableData = res.data.list;
-                let t = memberTable.tableData;
+                let t = this.memberTable.tableData;
                 t.forEach((val, i) => {
                     t[i].vip = t[i].vip == 0 ? "否" : "是";
                     t[i].deadline = t[i].deadline == 0 ? "否" : "是";

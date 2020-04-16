@@ -198,6 +198,7 @@ export default {
         }
     },
     mounted() {
+        this.getInfo();
         this.search();
     },
     methods: {
@@ -294,11 +295,12 @@ export default {
                 this.$message.error("选择题目数量还未达到设定数量");
                 return false;
             }
-            let par = {};
-            par.id = this.examId;
-            par.queList = this.questionIdList;
+            let data = {
+                examId: this.examId,
+                queList: this.questionIdList
+            };
             try {
-                let res = await adminExamApi.saveQuestionForExam(par);
+                let res = await adminExamApi.saveQuestionForExam(data);
                 this.$message.success("保存题目成功");
                 this.$router.push({ path: "/toPublic" });
             } catch (error) {

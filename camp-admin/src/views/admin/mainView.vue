@@ -177,12 +177,15 @@ export default {
                     title: "订单管理"
                 }
             ],
-            name: getLocalStorage("user").name,
             unReadNum: 0,
             defaulUrl: null,
             dialogFlag: false
-            // name: 'sasds'
         };
+    },
+    computed: {
+        name() {
+            return this.$store.getters.user.name;
+        }
     },
     watch: {
         "$route.path"(newVal) {
@@ -231,6 +234,7 @@ export default {
         async logout() {
             try {
                 await accoutApi.logout();
+                this.$store.commit("removeUser");
                 this.$message.success("注销成功");
                 this.$router.push("/adminLogin");
             } catch (error) {

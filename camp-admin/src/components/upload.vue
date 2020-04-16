@@ -111,7 +111,6 @@ export default {
         },
         handleSuccess(response) {
             this.$emit("uploadSuccess", response);
-            this.$message.success("文件上传成功");
             if (this.path) {
                 this.$router.push({ path: this.path });
             }
