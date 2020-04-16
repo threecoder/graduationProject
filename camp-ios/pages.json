@@ -76,6 +76,20 @@
 				"navigationBarTitleText": "我的活动",
 				"enablePullDownRefresh": true
 			}
+		},
+		{
+			"path": "pages/personal/training/training",
+			"style": {
+				"navigationBarTitleText":"我的培训",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path":"pages/personal/exam/exam",
+			"style": {
+				"navigationBarTitleText": "我的考试",
+				"enablePullDownRefresh":true
+			}
 		}
     ],
 	"globalStyle": {

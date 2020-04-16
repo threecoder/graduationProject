@@ -1,15 +1,13 @@
 import { request } from '../request';
 import { studentPrefix, memberPrefix } from '../../const';
-const getJoinableTraining = idType => {
-    let str = idType == 0 ? studentPrefix + '/getJoinableTraining' : memberPrefix + '/getJoinableTraining';
-    return request(str, 'get');
-}
-const studentJoinTraining = activityId => request(studentPrefix + '/joinActivity', 'post', { activityId });
+//获取可以报名的培训
+const getJoinableTraining = () => request(`${studentPrefix}/getJoinableTraining`);
 
-const getsignedTraining = idType => {
-    let str = idType == 0 ? studentPrefix + '/getSignedTraining' : memberPrefix + '/getSignedTraining';
-    return request(str, 'get');
-}
+const studentJoinTraining = trainingId => request(`${studentPrefix}/joinTraining`, 'post', { trainingId });
+
+//获取已经报名的培训
+const getsignedTraining = () => request(`${studentPrefix}/getSignedTraining`, 'get');
+
 const getSeatNum = activityId => request(studentPrefix + '/getSeatNum', 'post', { activityId });
 
 //会员批量报名

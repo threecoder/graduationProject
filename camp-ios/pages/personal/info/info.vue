@@ -97,7 +97,7 @@
             <button @click="save" class="evan-form-show__button">保存</button>
             <!-- <button @click="utilsSave" class="evan-form-show__button">直接调用utils验证</button>
             <button @click="validateSingle" class="evan-form-show__button">只验证邮箱</button>
-            <button @click="validateMultiple" class="evan-form-show__button">只验证邮箱和手机号</button> -->
+            <button @click="validateMultiple" class="evan-form-show__button">只验证邮箱和手机号</button>-->
         </view>
     </view>
 </template>
@@ -226,12 +226,13 @@ export default {
                 this.areaList.push(
                     ...cityApi.getAreaList(data.province, data.city)
                 );
-                // this.info = res.data;
                 data.province = this.provinceList.indexOf(data.province);
                 data.city = this.cityList.indexOf(data.city);
                 data.area = this.areaList.indexOf(data.area);
+                data.sex = 1;
                 this.info = { ...data };
             } catch (error) {
+                console.log(error);
                 toast(error.message);
             }
         },

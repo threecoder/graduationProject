@@ -1,21 +1,11 @@
 import { request } from '../request.js'
 import { studentPrefix, memberPrefix } from '../../const';
-const getJoinableActivities = idType => {
-    if (idType == 0) {
-        return request(`${studentPrefix}/getJoinableActivities`, 'get');
-    } else {
-        return request(`${memberPrefix}/getJoinableActivities`, 'get');
-    }
-}
+const getJoinableActivities = () => request(`${studentPrefix}/getJoinableActivities`, 'get');
+
 const studentJoinActivties = activityId => request(`${studentPrefix}/joinActivity`, 'post', { activityId });
 
-const getsignedActivities = idType => {
-    if (idType == 0) {
-        return request(`${studentPrefix}/getSignedActivities`, 'get');
-    } else {
-        return request(`${memberPrefix}/getSignedActivities`, 'get');
-    }
-}
+const getsignedActivities = () => request(`${studentPrefix}/getSignedActivities`, 'get');
+
 const getSeatNum = activityId => request(`${studentPrefix}/getSeatNum`, 'get', { activityId });
 
 //会员获取学生列表

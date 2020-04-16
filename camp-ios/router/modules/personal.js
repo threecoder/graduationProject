@@ -22,6 +22,16 @@ const funPath = [
     {
         path: '/pages/personal/activity/activity',
         name: "activity"
+    },
+    //我的培训
+    {
+        path: '/pages/personal/training/training',
+        name: 'training'
+    },
+    //我的考试
+    {
+        path: '/pages/personal/exam/exam',
+        name: 'exam'
     }
 ]
 

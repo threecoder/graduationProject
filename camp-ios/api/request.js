@@ -37,10 +37,9 @@ export function request(url, type, data = {}, responseType = "json") {
 			if (response) {
 				let cook = response.header[ 'Set-Cookie' ], start = cook.indexOf("; Path=/");
 				cookie = cook.substring(0, start);
-				console.log("徐哈", start);
 				if (response.header[ 'Content-Type' ] == 'application/json;charset=UTF-8') {
 					if (response.data.code == 'success') {
-						resolve(response.data.data);
+						resolve(response.data);
 					} else if (response.data.code = 'error') {
 						console.log("未登录");
 						//处理未登录

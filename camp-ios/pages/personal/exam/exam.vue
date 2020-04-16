@@ -7,10 +7,10 @@
                 :segItem="segItem"
                 @clickItem="onClickItem"
             ></seg>
-            <view class="content">
+            <view class="content" :class="{'mt':isFixed}">
                 <view v-show="contentIndex === 0">
                     <single
-                        v-for="(item, i) in joinableList"
+                        v-for="(item, i) in todoList"
                         :key="i"
                         :item="item"
                         status="vote"
@@ -20,7 +20,7 @@
                 </view>
                 <view v-show="contentIndex === 1">
                     <single
-                        v-for="(item, i) in signedList"
+                        v-for="(item, i) in doneList"
                         :key="i"
                         :item="item"
                         @refresh="refresh"
@@ -35,9 +35,9 @@
         </view>
 
         <uni-popup ref="popup" type="top">
-            <view class="introduce">
-                <view class="title">活动介绍</view>
-                <view class="introduce-item" v-for="(item,i) in introduce" :key="i">{{item}}</view>
+            <view class="introduction">
+                <view class="title">培训介绍</view>
+                <view class="introduction-item" v-for="(item,i) in introduction" :key="i">{{item}}</view>
             </view>
         </uni-popup>
     </view>
@@ -45,9 +45,9 @@
 
 <script>
 import seg from "../../../components/seg/seg.vue";
-import single from "./components/singleActivity.vue";
+import single from "./components/singleExam.vue";
 import uniPopup from "../../../components/uni-popup/uni-popup.vue";
-import activityApi from "../../../api/modules/activity.js";
+import examApi from "../../../api/modules/exam.js";
 import { toast } from "../../../assets/js/commom.js";
 export default {
     components: {
@@ -59,9 +59,9 @@ export default {
         return {
             res: null,
             contentIndex: 0,
-            segItem: ["可报名活动", "已报名活动"],
+            segItem: ["可参加考试", "已完成考试"],
             isFixed: false,
-            joinableList: [
+            todoList: [
                 {
                     id: "111",
                     name: "质量检测",
@@ -71,14 +71,14 @@ export default {
                     contacts: "糖好酸",
                     address:
                         "广东省广州市番禺区小谷围街道华南理工大学广东省广州市番禺区小谷围街道华南理工大学",
-                    introduce: [
+                    introduction: [
                         "广东省广州市番禺区小谷围街道华南理工大学广东省广州市番禺区小谷围街道华南理工大学广东省广州市番禺区小谷围街道华南理工大学广东省广州市番禺区小谷围街道华南理工大学广东省广州市番禺区小谷围街道华南理工大学广东省广州市番禺区小谷围街道华南理工大学",
                         "222"
                     ],
                     status: "可报名"
                 }
             ],
-            signedList: [
+            doneList: [
                 {
                     id: "111",
                     name: "质量检测",
@@ -87,7 +87,7 @@ export default {
                     fee: 2222,
                     contacts: "糖好酸",
                     address: "广东省广州市番禺区小谷围街道华南理工大学",
-                    introduce: ["111", "222"],
+                    introduction: ["111", "222"],
                     status: "已支付"
                 }
             ],
@@ -96,7 +96,7 @@ export default {
                 pageSize: 10
             },
             hasMore: true,
-            introduce: []
+            introduction: []
         };
     },
     watch: {
@@ -126,14 +126,14 @@ export default {
     methods: {
         async getSignedList(type = "add") {
             try {
-                let res = await activityApi.getsignedActivities();
+                let res = await examApi.getDoneExam(this.par);
                 if (type == "add") {
-                    this.signedList.push(...res.data.list);
+                    this.doneList.push(...res.data.list);
                     if (res.data.list.length == 0) {
                         this.hasMore = false;
                     }
                 } else {
-                    this.signedList = res.data;
+                    this.doneList = res.data;
                 }
             } catch (e) {
                 toast(e.message);
@@ -141,14 +141,14 @@ export default {
         },
         async getJoinableList(type = "add") {
             try {
-                let res = await activityApi.getJoinableActivities(this.par);
+                let res = await examApi.getTodoExam(this.par);
                 if (type == "add") {
-                    this.joinableList.push(...res.data.list);
+                    this.todoList.push(...res.data.list);
                     if (res.data.list.length == 0) {
                         this.hasMore = false;
                     }
                 } else {
-                    this.joinableList = res.data ? res.data : [];
+                    this.todoList = res.data ? res.data : [];
                 }
             } catch (e) {
                 toast(e.message);
@@ -167,7 +167,7 @@ export default {
             }
         },
         activityDetail(item) {
-            this.introduce = item.introduce;
+            this.introduction = item.introduction;
             this.$refs.popup.open();
         },
         loadMore() {
@@ -192,6 +192,9 @@ export default {
     left: 0;
     right: 0;
     bottom: 0;
+    .mt {
+        margin-top: 0.5rem;
+    }
     .content {
         background-color: #fff;
         .caroulse {
@@ -235,7 +238,7 @@ export default {
             position: absolute;
         }
     }
-    .introduce {
+    .introduction {
         width: 80%;
         margin: 0 auto;
         box-sizing: border-box;
@@ -248,7 +251,7 @@ export default {
             font-weight: 800;
             color: rgb(96, 98, 102);
         }
-        .introduce-item {
+        .introduction-item {
             font-size: 0.16rem;
             text-indent: 2em;
             padding-top: 0.1rem;
