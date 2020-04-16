@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -66,4 +67,6 @@ public interface ExamService {
     JSONObject getCheckRecordList(Integer examId, Integer pageSize, Integer currentPage, String checker, String studentName, Integer isPass);
 
     ResponseEntity<byte[]> getGradeTemplate(HttpServletRequest request);
+
+    JSONObject uploadGradeOfExam(MultipartFile file);
 }

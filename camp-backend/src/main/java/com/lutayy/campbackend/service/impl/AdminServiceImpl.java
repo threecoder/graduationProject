@@ -135,9 +135,9 @@ public class AdminServiceImpl implements AdminService {
         JSONArray list=new JSONArray();
         AdminExample adminExample=new AdminExample();
         AdminExample.Criteria criteria=adminExample.createCriteria();
-        if (account!=null)
+        if (account!=null && !account.equals(""))
             criteria.andAdminAccountEqualTo(account);
-        if(name!=null)
+        if(name!=null && !name.equals(""))
             criteria.andAdminNameLike("%"+name+"%");
         long total=adminMapper.countByExample(adminExample);
         List<Admin> admins=adminMapper.selectByExample(adminExample);
@@ -335,10 +335,10 @@ public class AdminServiceImpl implements AdminService {
         if (pageSize == null || pageSize < 1) pageSize = 10;
         StudentExample studentExample = new StudentExample();
         StudentExample.Criteria criteria = studentExample.createCriteria();
-        if (name != null) criteria.andStudentNameLike("%" + name + "%");
-        if (idNum != null) criteria.andStudentIdcardEqualTo(idNum);
-        if (phone != null) criteria.andStudentPhoneEqualTo(phone);
-        if (company != null) criteria.andCompanyEqualTo("%" + company + "%");
+        if (name != null && !name.equals("")) criteria.andStudentNameLike("%" + name + "%");
+        if (idNum != null && !idNum.equals("")) criteria.andStudentIdcardEqualTo(idNum);
+        if (phone != null && !phone.equals("")) criteria.andStudentPhoneEqualTo(phone);
+        if (company != null && !company.equals("")) criteria.andCompanyEqualTo("%" + company + "%");
         if (hasOrg != null) criteria.andHasOrgEqualTo(hasOrg.equals(1));
         studentExample.setOffset((currentPage - 1) * pageSize);
         studentExample.setLimit(pageSize);
@@ -655,7 +655,7 @@ public class AdminServiceImpl implements AdminService {
 
         MemberExample memberExample = new MemberExample();
         MemberExample.Criteria criteria = memberExample.createCriteria();
-        if (memberName != null) {
+        if (memberName != null && !memberName.equals("")) {
             criteria.andMemberNameLike("%" + memberName + "%");
         }
         if (isVip != -1) {

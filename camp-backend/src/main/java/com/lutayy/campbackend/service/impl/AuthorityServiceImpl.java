@@ -31,7 +31,12 @@ public class AuthorityServiceImpl implements AuthorityService {
             result.put("msg", "对应的账号不存在，请检查输入是否正确");
             return result;
         }
+
         int adminId = admin.getAdminId();
+        if(jsonObject.getInteger("id").equals(adminId)){
+            result.put("msg", "不能修改自身权限！");
+            return result;
+        }
 
         JSONObject authority = jsonObject.getJSONObject("authority");
         boolean memberAu = authority.getBooleanValue("member");

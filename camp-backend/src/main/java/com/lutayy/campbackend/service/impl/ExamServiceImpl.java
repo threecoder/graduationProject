@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -686,7 +687,7 @@ public class ExamServiceImpl implements ExamService {
 
         QuestionExample questionExample = new QuestionExample();
         QuestionExample.Criteria criteria = questionExample.createCriteria();
-        if (keyword != null) {
+        if (keyword != null || !keyword.equals("")) {
             criteria.andQuestionStateLike("%" + keyword + "%");
         }
         if (type != -1) {
@@ -1242,9 +1243,9 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public JSONObject refuseManyRecords(JSONObject jsonObject) {
         JSONObject result = new JSONObject();
-        Admin admin=adminMapper.selectByPrimaryKey(jsonObject.getInteger("id"));
-        JSONArray reportIds=jsonObject.getJSONArray("ids");
-        String tip=jsonObject.getString("tip");
+        Admin admin = adminMapper.selectByPrimaryKey(jsonObject.getInteger("id"));
+        JSONArray reportIds = jsonObject.getJSONArray("ids");
+        String tip = jsonObject.getString("tip");
 
         boolean flag = false;
         String noticeMsg = "，其中成绩单:";
@@ -1269,7 +1270,7 @@ public class ExamServiceImpl implements ExamService {
             report.setInLine(false);
             report.setIsVerify((byte) 1);
             report.setNotPassReason(tip);
-            report.setNotPassTimes(report.getNotPassTimes()+1);
+            report.setNotPassTimes(report.getNotPassTimes() + 1);
             if (examReStudentMapper.updateByPrimaryKeySelective(report) <= 0) {
                 reportOpLog.setIsSuccess(false);
             } else {
@@ -1306,26 +1307,26 @@ public class ExamServiceImpl implements ExamService {
         if (checker != null) criteria.andAdminNameLike("%" + checker + "%");
         if (studentName != null) criteria.andStudentNameLike("%" + studentName + "%");
         if (isPass != null) criteria.andIsPassEqualTo(isPass.equals(1));
-        long total=examReportOpLogMapper.countByExample(logExample);
+        long total = examReportOpLogMapper.countByExample(logExample);
         data.put("total", total);
-        logExample.setOffset(pageSize*(currentPage-1));
+        logExample.setOffset(pageSize * (currentPage - 1));
         logExample.setLimit(pageSize);
-        List<ExamReportOpLog> examReportOpLogs=examReportOpLogMapper.selectByExample(logExample);
-        JSONArray list=new JSONArray();
-        for(ExamReportOpLog log:examReportOpLogs){
-            JSONObject object=new JSONObject();
+        List<ExamReportOpLog> examReportOpLogs = examReportOpLogMapper.selectByExample(logExample);
+        JSONArray list = new JSONArray();
+        for (ExamReportOpLog log : examReportOpLogs) {
+            JSONObject object = new JSONObject();
             object.put("name", log.getStudentName());
-            ExamReStudent report=examReStudentMapper.selectByPrimaryKey(log.getReportId());
-            Student student=studentMapper.selectByPrimaryKey(report.getStudentId());
+            ExamReStudent report = examReStudentMapper.selectByPrimaryKey(log.getReportId());
+            Student student = studentMapper.selectByPrimaryKey(report.getStudentId());
             object.put("idNum", student.getStudentIdcard());
             object.put("member", student.getCompany());
             object.put("grade", report.getScore());
             object.put("checker", log.getAdminName());
-            if(log.getIsPass()==null){
+            if (log.getIsPass() == null) {
                 object.put("pass", "加入队列");
-            }else if(log.getIsPass()){
+            } else if (log.getIsPass()) {
                 object.put("pass", "通过");
-            }else {
+            } else {
                 object.put("pass", "不通过");
             }
             object.put("tip", report.getNotPassReason());
@@ -1366,5 +1367,115 @@ public class ExamServiceImpl implements ExamService {
             e.printStackTrace();
         }
         return response;
+    }
+
+    @Override
+    public JSONObject uploadGradeOfExam(MultipartFile file) {
+        JSONObject result = new JSONObject();
+        result.put("code", "fail");
+        if (file == null || file.isEmpty()) {
+            result.put("msg", "文件不能为空");
+            return result;
+        }
+        String fileName = file.getOriginalFilename().toLowerCase();
+        if (!fileName.endsWith("xls") && !fileName.endsWith("xlsx")) {
+            result.put("msg", "文件格式错误");
+            return result;
+        }
+        InputStream in;
+        try {
+            in = file.getInputStream();
+            Map<String, List<Map<String, String>>> map = ExcelUtil.readXls(in);
+            if (map.isEmpty()) {
+                result.put("msg", "上传文件数据为空");
+                return result;
+            }
+            Set<String> excelSheets = map.keySet();
+            int rowIndex = 1;
+            int totalCount = 0;
+            int wrongExamCount = 0;//考试信息错误
+            String wrongExamTip = "";
+            int wrongStudentCount = 0;//学员信息错误
+            String wrongStudentTip = "";
+            int nonExamReStudentCount = 0;//学生没有报名该场考试
+            String nonReTip = "";
+            int outOfExamTimesCount = 0;//考试次数超限
+            String outTip = "";
+            int errorCount = 0;
+            String errorTip = "";
+            for (String excelSheet : excelSheets) {
+                List<Map<String, String>> list = map.get(excelSheet);
+                totalCount = totalCount + list.size();
+                for (Map<String, String> row : list) {
+                    rowIndex++;
+                    // TODO 检查排除异常的行
+                    Integer examId;
+                    String examName;
+                    String studentName;
+                    String studentIdCard;
+                    Integer examScore;
+                    try {
+                        examId = Integer.valueOf(row.get("试卷编号"));
+                        examName = row.get("考试名称");
+                        studentName = row.get("学员姓名");
+                        studentIdCard = row.get("学员身份证");
+                        examScore = Integer.valueOf(row.get("考试分数"));
+                    } catch (Exception e) {
+                        errorCount++;
+                        errorTip += (rowIndex + ",");
+                        continue;
+                    }
+                    Exam exam = examMapper.selectByPrimaryKey(examId);
+                    if (exam == null || !exam.getExamNum().equals(examName)) {
+                        wrongExamCount++;
+                        wrongExamTip += (rowIndex + ",");
+                        continue;
+                    }
+                    Student student = getObjectHelper.getStudentFromIdCard(studentIdCard);
+                    if (student == null || !student.getStudentName().equals(studentName)) {
+                        wrongStudentCount++;
+                        wrongStudentTip += (rowIndex + ",");
+                        continue;
+                    }
+                    ExamReStudent report = getObjectHelper.getReportByExamIdAndStudentId(examId, student.getStudentId());
+                    if (report == null || report.getIsInvalid()) {
+                        nonExamReStudentCount++;
+                        nonReTip += (rowIndex + ",");
+                        continue;
+                    }
+                    if (report.getScore() >= exam.getExamPass() || report.getRemainingTimes() < 1) {
+                        outOfExamTimesCount++;
+                        outTip += (rowIndex + ",");
+                        continue;
+                    }
+                    // TODO 批量添加
+                    report.setScore(examScore);
+                    report.setRemainingTimes((byte) (report.getRemainingTimes() - 1));
+                    examReStudentMapper.updateByPrimaryKeySelective(report);
+                }
+            }
+            String msg = "尝试导入学员" + totalCount + "个，" + (totalCount - wrongExamCount - wrongStudentCount - nonExamReStudentCount - outOfExamTimesCount - errorCount) + "个导入并创建账号成功。 ";
+            if (wrongExamCount > 0) {
+                msg += ("有" + wrongExamCount + "行考试信息错误-行数是:" + wrongExamTip);
+            }
+            if (wrongStudentCount > 0) {
+                msg += ("有" + wrongStudentCount + "行学员信息错误-行数是:" + wrongStudentTip);
+            }
+            if (nonExamReStudentCount > 0) {
+                msg += ("有" + nonExamReStudentCount + "行学生无报名该考试-行数是:" + nonReTip);
+            }
+            if (outOfExamTimesCount > 0) {
+                msg += ("有" + outOfExamTimesCount + "行无法再进行考试(已及格/次数超限)-行数是:" + outTip);
+            }
+            if (errorCount > 0) {
+                msg += ("有" + errorCount + "行数据类型错误该-行数是:" + errorTip);
+            }
+            result.put("code", "success");
+            result.put("msg", msg);
+            return result;
+        } catch (Exception e) {
+            result.put("msg", "导入异常，请检查格式");
+            return result;
+        }
     }
 }

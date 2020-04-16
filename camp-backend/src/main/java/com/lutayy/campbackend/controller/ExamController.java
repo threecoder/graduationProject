@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -202,5 +203,11 @@ public class ExamController {
     @ResponseBody
     public ResponseEntity<byte[]> getGradeTemplate(HttpServletRequest request) {
         return examService.getGradeTemplate(request);
+    }
+
+    @RequestMapping("/uploadGradeOfExam")
+    @ResponseBody
+    public JSONObject uploadGradeOfExam(@RequestParam("file") MultipartFile file) {
+        return examService.uploadGradeOfExam(file);
     }
 }

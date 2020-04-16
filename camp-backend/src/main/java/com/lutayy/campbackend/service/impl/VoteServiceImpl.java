@@ -163,10 +163,10 @@ public class VoteServiceImpl implements VoteService {
         JSONObject result = new JSONObject();
         VoteExample voteExample = new VoteExample();
         VoteExample.Criteria criteria = voteExample.createCriteria();
-        if (name != null) {
+        if (name != null || !name.equals("")) {
             criteria.andVoteContentLike("%" + name + "%");
         }
-        if (type != null) {
+        if (type != null || !type.equals("")) {
             criteria.andVoteTypeEqualTo(type.byteValue());
         }
         long sum = voteMapper.countByExample(voteExample);
@@ -183,6 +183,12 @@ public class VoteServiceImpl implements VoteService {
             object.put("type", vote.getOptionalNum() !=null && vote.getOptionalNum() > 1 ? "多选" : "单选");
             object.put("sum", vote.getOptionalSum());
             object.put("num", vote.getOptionalNum());
+            if(vote.getVoteType().equals(2))
+                object.put("limit", "学员/会员");
+            else if(vote.getVoteType().equals(1))
+                object.put("limit", "学员");
+            else
+                object.put("limit", "会员");
             list.add(object);
         }
         data.put("list", list);
@@ -201,7 +207,7 @@ public class VoteServiceImpl implements VoteService {
         VoteExample.Criteria criteria1 = voteExample.createCriteria();
         criteria.andVoteTypeEqualTo((byte)2);
         criteria1.andVoteTypeEqualTo((byte)0);
-        if (name != null) {
+        if (name != null || !name.equals("")) {
             criteria.andVoteContentLike("%" + name + "%");
             criteria1.andVoteContentLike("%" + name + "%");
         }
@@ -324,7 +330,7 @@ public class VoteServiceImpl implements VoteService {
             JSONObject object=new JSONObject();
             object.put("id", vote.getVoteId());
             object.put("name", vote.getVoteContent());
-            object.put("type", vote.getVoteType());
+            object.put("type", vote.getOptionalNum() !=null && vote.getOptionalNum() > 1 ? "多选" : "单选");
             object.put("time", vote.getEndTime());
             list.add(object);
         }
@@ -344,7 +350,7 @@ public class VoteServiceImpl implements VoteService {
         VoteExample.Criteria criteria1 = voteExample.createCriteria();
         criteria.andVoteTypeEqualTo((byte)2);
         criteria1.andVoteTypeEqualTo((byte)1);
-        if (name != null) {
+        if (name != null  || !name.equals("")) {
             criteria.andVoteContentLike("%" + name + "%");
             criteria1.andVoteContentLike("%" + name + "%");
         }
@@ -436,7 +442,7 @@ public class VoteServiceImpl implements VoteService {
             JSONObject object=new JSONObject();
             object.put("id", vote.getVoteId());
             object.put("name", vote.getVoteContent());
-            object.put("type", vote.getVoteType());
+            object.put("type", vote.getOptionalNum() !=null && vote.getOptionalNum() > 1 ? "多选" : "单选");
             object.put("time", vote.getEndTime());
             list.add(object);
         }

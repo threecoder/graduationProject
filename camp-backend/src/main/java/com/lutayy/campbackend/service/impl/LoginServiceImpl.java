@@ -139,12 +139,16 @@ public class LoginServiceImpl implements LoginService {
         adminExample.createCriteria().andAdminAccountEqualTo(adminAccount);
         List<Admin> admins = adminMapper.selectByExample(adminExample);
         result.put("code", "fail");
+        result.put("data", null);
         if (admins.size() == 0) {
             result.put("msg", "账号不存在！");
-            result.put("data", null);
             return result;
         }
         Admin admin = admins.get(0);
+        if(admin.getIsLocked()){
+            result.put("msg", "账号已被冻结！");
+            return result;
+        }
         if (!password.equals(Md5.digest(admin.getAdminPassword()))) {
             result.put("msg", "密码错误！");
             result.put("data", null);

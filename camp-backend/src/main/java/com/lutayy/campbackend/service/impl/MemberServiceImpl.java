@@ -117,7 +117,32 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public JSONObject setNewPassword(JSONObject jsonObject) {
-        return null;
+        JSONObject result = new JSONObject();
+        result.put("code", "fail");
+        String oldPassword = jsonObject.getString("oldPassword");
+        String newPassword = jsonObject.getString("newPassword");
+        if (oldPassword.equals(newPassword)) {
+            result.put("msg", "旧密码与新密码不能相同！");
+            return result;
+        }
+        Integer memberId = jsonObject.getInteger("id");
+        Member member = memberMapper.selectByPrimaryKey(memberId);
+        if (member == null) {
+            result.put("msg", "系统中无该用户！");
+            return result;
+        }
+        if (!member.getMemberPassword().equals(oldPassword)) {
+            result.put("msg", "旧密码错误！");
+        } else {
+            member.setMemberPassword(newPassword);
+            if (memberMapper.updateByPrimaryKeySelective(member) > 0) {
+                result.put("code", "success");
+                result.put("msg", "密码更新成功！");
+            } else {
+                result.put("msg", "密码更新失败！请重试");
+            }
+        }
+        return result;
     }
 
     @Override
