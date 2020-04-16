@@ -4,6 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonAlias;
+import org.springframework.http.ResponseEntity;
+
+import javax.servlet.http.HttpServletRequest;
 
 public interface ExamService {
 
@@ -51,4 +54,16 @@ public interface ExamService {
     JSONObject getGradeList(Integer examId);
     //管理员提交审核成绩请求
     JSONObject submitGradeList(JSONObject jsonObject);
+    //管理员获取本账号待审核成绩记录
+    JSONObject getWaitingGradeList(Integer adminId, Integer pageSize, Integer currentPage, String trainingName, String idNum, String studentName);
+    //管理员批量通过成绩记录
+    JSONObject approvalManyRecords(JSONObject jsonObject);
+    //拒绝单条成绩记录
+    JSONObject refuseSingleRecord(JSONObject jsonObject);
+    //拒绝多条成绩记录
+    JSONObject refuseManyRecords(JSONObject jsonObject);
+    //获取某次考试的审核记录
+    JSONObject getCheckRecordList(Integer examId, Integer pageSize, Integer currentPage, String checker, String studentName, Integer isPass);
+
+    ResponseEntity<byte[]> getGradeTemplate(HttpServletRequest request);
 }

@@ -501,37 +501,33 @@ CREATE TABLE `exam_re_student` (
 
 /*Data for the table `exam_re_student` */
 
-insert  into `exam_re_student`(`report_id`,`exam_id`,`student_id`,`score`,`remaining_times`,`is_invalid`,`is_verify`,`in_line`,`not_pass_reason`,`not_pass_times`) values (22,8,1,60,2,0,0,0,NULL,NULL),(23,9,1,30,1,0,0,0,NULL,NULL);
+insert  into `exam_re_student`(`report_id`,`exam_id`,`student_id`,`score`,`remaining_times`,`is_invalid`,`is_verify`,`in_line`,`not_pass_reason`,`not_pass_times`) values (22,8,1,60,2,0,2,0,NULL,NULL),(23,9,1,30,1,0,2,0,NULL,NULL);
 
 /*Table structure for table `exam_report_op_log` */
 
 DROP TABLE IF EXISTS `exam_report_op_log`;
 
 CREATE TABLE `exam_report_op_log` (
-  `log_id` int(11) DEFAULT NULL COMMENT '日志编号',
+  `log_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '日志编号',
   `report_id` int(11) DEFAULT NULL COMMENT '成绩单编号',
-  `admin_id` varchar(20) DEFAULT NULL COMMENT '操作管理员id',
+  `exam_id` int(11) DEFAULT NULL COMMENT '考试id',
+  `admin_id` int(11) DEFAULT NULL COMMENT '操作管理员id',
   `op_description` varchar(50) DEFAULT NULL COMMENT '操作描述',
   `op_time` datetime DEFAULT NULL COMMENT '操作时间',
-  `is_success` tinyint(1) DEFAULT '1' COMMENT '1:操作成功 0操作失败'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `is_success` tinyint(1) DEFAULT '1' COMMENT '1:操作成功 0操作失败',
+  `admin_name` varchar(20) DEFAULT NULL,
+  `student_name` varchar(20) DEFAULT NULL,
+  `is_pass` tinyint(1) DEFAULT '0' COMMENT '0:未通过  1:通过',
+  PRIMARY KEY (`log_id`),
+  KEY `report_id` (`report_id`),
+  KEY `exam_report_op_log_ibfk_2` (`exam_id`),
+  CONSTRAINT `exam_report_op_log_ibfk_1` FOREIGN KEY (`report_id`) REFERENCES `exam_re_student` (`report_id`),
+  CONSTRAINT `exam_report_op_log_ibfk_2` FOREIGN KEY (`exam_id`) REFERENCES `exam` (`exam_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 /*Data for the table `exam_report_op_log` */
 
-/*Table structure for table `exam_report_verify_queue` */
-
-DROP TABLE IF EXISTS `exam_report_verify_queue`;
-
-CREATE TABLE `exam_report_verify_queue` (
-  `report_id` int(11) DEFAULT NULL,
-  `admin_id` int(11) DEFAULT NULL,
-  KEY `report_id` (`report_id`),
-  KEY `admin_id` (`admin_id`),
-  CONSTRAINT `exam_report_verify_queue_ibfk_1` FOREIGN KEY (`report_id`) REFERENCES `exam_re_student` (`report_id`),
-  CONSTRAINT `exam_report_verify_queue_ibfk_2` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`admin_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `exam_report_verify_queue` */
+insert  into `exam_report_op_log`(`log_id`,`report_id`,`exam_id`,`admin_id`,`op_description`,`op_time`,`is_success`,`admin_name`,`student_name`,`is_pass`) values (9,22,8,1,'将成绩单22放入管理员ID:1的审核队列中','2020-04-13 22:18:43',1,NULL,'张三',NULL),(10,23,9,1,'将成绩单23放入管理员ID:1的审核队列中','2020-04-13 22:18:44',1,NULL,'张三',NULL),(11,22,8,1,'通过成绩单22，并移出队列','2020-04-14 15:40:29',1,NULL,'张三',NULL),(12,23,9,1,'通过成绩单23，并移出队列','2020-04-14 15:40:33',1,NULL,'张三',NULL);
 
 /*Table structure for table `member` */
 
@@ -557,7 +553,7 @@ CREATE TABLE `member` (
   PRIMARY KEY (`member_key_id`),
   UNIQUE KEY `member_id` (`member_id`),
   UNIQUE KEY `Phone` (`member_phone`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 /*Data for the table `member` */
 

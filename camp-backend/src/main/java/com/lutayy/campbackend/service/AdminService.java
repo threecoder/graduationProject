@@ -1,5 +1,6 @@
 package com.lutayy.campbackend.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +17,8 @@ public interface AdminService {
     JSONObject lockOrUnlockAccount(JSONObject jsonObject, boolean lock);
 
     JSONObject getAdminList(String name, String account, Integer currentPage, Integer pageSize);
+    //管理员获取成绩审核员名单
+    JSONObject getCheckerList();
 
     //管理员添加单个学员
     JSONObject addSingleStudent(JSONObject jsonObject);
