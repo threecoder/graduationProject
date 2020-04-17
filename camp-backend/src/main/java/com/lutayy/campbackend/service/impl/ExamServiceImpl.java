@@ -119,12 +119,6 @@ public class ExamServiceImpl implements ExamService {
 
         /** 获取报名的培训中已发布的考试 **/
         JSONArray exams = ExamStudentSQLConn.getExamByCondition(studentId, "r.remaining_times=3");
-        if (exams.size() == 0) {
-            result.put("code", "fail");
-            result.put("data", null);
-            result.put("msg", "查询无结果");
-            return result;
-        }
         for (int i = 0; i < exams.size(); i++) {
             exams.getJSONObject(i).put("grade", null);
         }
@@ -687,7 +681,7 @@ public class ExamServiceImpl implements ExamService {
 
         QuestionExample questionExample = new QuestionExample();
         QuestionExample.Criteria criteria = questionExample.createCriteria();
-        if (keyword != null || !keyword.equals("")) {
+        if (keyword != null && !keyword.equals("")) {
             criteria.andQuestionStateLike("%" + keyword + "%");
         }
         if (type != -1) {
@@ -1054,7 +1048,7 @@ public class ExamServiceImpl implements ExamService {
         return result;
     }
 
-    ////管理员提交审核成绩请求
+    //管理员提交审核成绩请求
     @Override
     public JSONObject submitGradeList(JSONObject jsonObject) {
         JSONObject result = new JSONObject();
@@ -1426,7 +1420,7 @@ public class ExamServiceImpl implements ExamService {
                         continue;
                     }
                     Exam exam = examMapper.selectByPrimaryKey(examId);
-                    if (exam == null || !exam.getExamNum().equals(examName)) {
+                    if (exam == null || !exam.getExamName().equals(examName)) {
                         wrongExamCount++;
                         wrongExamTip += (rowIndex + ",");
                         continue;
@@ -1438,7 +1432,9 @@ public class ExamServiceImpl implements ExamService {
                         continue;
                     }
                     ExamReStudent report = getObjectHelper.getReportByExamIdAndStudentId(examId, student.getStudentId());
-                    if (report == null || report.getIsInvalid()) {
+                    TrainingReStudent trainingReStudent=getObjectHelper.getTrainingReStudentByIds(exam.getTrainingId(), student.getStudentId());
+
+                    if ((report == null || report.getIsInvalid()) && (trainingReStudent == null || trainingReStudent.getIsInvalid())) {
                         nonExamReStudentCount++;
                         nonReTip += (rowIndex + ",");
                         continue;
@@ -1449,26 +1445,35 @@ public class ExamServiceImpl implements ExamService {
                         continue;
                     }
                     // TODO 批量添加
-                    report.setScore(examScore);
-                    report.setRemainingTimes((byte) (report.getRemainingTimes() - 1));
-                    examReStudentMapper.updateByPrimaryKeySelective(report);
+                    if(report!=null) {
+                        report.setScore(examScore);
+                        report.setRemainingTimes((byte) (report.getRemainingTimes() - 1));
+                        examReStudentMapper.updateByPrimaryKeySelective(report);
+                    }else if(trainingReStudent!=null){
+                        ExamReStudent newReport=new ExamReStudent();
+                        newReport.setScore(examScore);
+                        newReport.setRemainingTimes((byte)2);
+                        newReport.setExamId(examId);
+                        newReport.setStudentId(student.getStudentId());
+                        examReStudentMapper.insertSelective(newReport);
+                    }
                 }
             }
-            String msg = "尝试导入学员" + totalCount + "个，" + (totalCount - wrongExamCount - wrongStudentCount - nonExamReStudentCount - outOfExamTimesCount - errorCount) + "个导入并创建账号成功。 ";
+            String msg = "尝试导入" + totalCount + "个成绩单，" + (totalCount - wrongExamCount - wrongStudentCount - nonExamReStudentCount - outOfExamTimesCount - errorCount) + "个导入并更新成功。 ";
+            if (errorCount > 0) {
+                msg += ("  有" + errorCount + "行存在数据类型错误-行号是:" + errorTip);
+            }
             if (wrongExamCount > 0) {
-                msg += ("有" + wrongExamCount + "行考试信息错误-行数是:" + wrongExamTip);
+                msg += ("  有" + wrongExamCount + "行考试信息错误-行号是:" + wrongExamTip);
             }
             if (wrongStudentCount > 0) {
-                msg += ("有" + wrongStudentCount + "行学员信息错误-行数是:" + wrongStudentTip);
+                msg += ("  有" + wrongStudentCount + "行学员信息错误-行号是:" + wrongStudentTip);
             }
             if (nonExamReStudentCount > 0) {
-                msg += ("有" + nonExamReStudentCount + "行学生无报名该考试-行数是:" + nonReTip);
+                msg += ("  有" + nonExamReStudentCount + "行学生无报名该考试-行号是:" + nonReTip);
             }
             if (outOfExamTimesCount > 0) {
-                msg += ("有" + outOfExamTimesCount + "行无法再进行考试(已及格/次数超限)-行数是:" + outTip);
-            }
-            if (errorCount > 0) {
-                msg += ("有" + errorCount + "行数据类型错误该-行数是:" + errorTip);
+                msg += ("  有" + outOfExamTimesCount + "行无法再进行考试(已及格/次数超限)-行号是:" + outTip);
             }
             result.put("code", "success");
             result.put("msg", msg);
@@ -1477,5 +1482,34 @@ public class ExamServiceImpl implements ExamService {
             result.put("msg", "导入异常，请检查格式");
             return result;
         }
+    }
+
+    //管理员修改考试成绩
+    @Override
+    public JSONObject modifyGrade(JSONObject jsonObject) {
+        JSONObject result = new JSONObject();
+        result.put("code", "fail");
+
+        Integer examId = jsonObject.getInteger("examId");
+        String idNum = jsonObject.getString("idNum");
+        Integer score = jsonObject.getInteger("grade");
+        Student student = getObjectHelper.getStudentFromIdCard(idNum);
+        if (student == null) {
+            result.put("msg", "系统中找不到该学员");
+            return result;
+        }
+        ExamReStudent report = getObjectHelper.getReportByExamIdAndStudentId(examId, student.getStudentId());
+        if (report == null) {
+            result.put("msg", "学员没有报名该场考试");
+            return result;
+        }
+        report.setScore(score);
+        if (examReStudentMapper.updateByPrimaryKeySelective(report) > 0) {
+            result.put("msg", "修改成功！");
+            result.put("code", "success");
+        } else {
+            result.put("msg", "系统繁忙，请重试");
+        }
+        return result;
     }
 }

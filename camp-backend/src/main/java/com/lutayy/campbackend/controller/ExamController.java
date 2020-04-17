@@ -205,9 +205,15 @@ public class ExamController {
         return examService.getGradeTemplate(request);
     }
 
-    @RequestMapping("/uploadGradeOfExam")
+    @RequestMapping("/admin/uploadGradeOfExam")
     @ResponseBody
     public JSONObject uploadGradeOfExam(@RequestParam("file") MultipartFile file) {
         return examService.uploadGradeOfExam(file);
+    }
+
+    @RequestMapping("/admin/modifyGrade")
+    @ResponseBody
+    public JSONObject modifyGrade(@RequestBody JSONObject jsonObject) {
+        return examService.modifyGrade(jsonObject);
     }
 }

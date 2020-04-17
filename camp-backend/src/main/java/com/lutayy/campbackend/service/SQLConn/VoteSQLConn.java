@@ -35,7 +35,7 @@ public class VoteSQLConn {
             } else {
                 sql = "select count(distinct v.vote_id) c from vote v inner join vote_option_student os on v.vote_id=os.vote_id where os.student_id="+id;;
             }
-            if (name != null || !name.equals("")) {
+            if (name != null && !name.equals("")) {
                 sql += (" and v.vote_content like '%" + name + "%' ");
             }
             if (isFinish != null) {
@@ -70,7 +70,7 @@ public class VoteSQLConn {
             } else {
                 sql = "select distinct v.* from vote v inner join vote_option_student os on v.vote_id=os.vote_id where os.student_id="+id;;
             }
-            if (name != null || !name.equals("")) {
+            if (name != null && !name.equals("")) {
                 sql += (" and v.vote_content like '%" + name + "%' ");
             }
             if (isFinish != null) {

@@ -11,14 +11,8 @@ public class Md5 {
         return md5word.toUpperCase();
     }
     public static void main(String[] args){
-        String a="admin";
-        StringBuilder stringBuilder=new StringBuilder();
-        stringBuilder.append("");
-        System.out.println(new Date().getTime());
-        System.out.println(new Date().getTime());
-        System.out.println(new Date().getTime());
-        System.out.println(new Date().getTime());
-        System.out.println(new Date().getTime());
-        System.out.println(new Date().getTime());
+        String str="CAAAABPSADADASDSAHYER";
+        Date time=new Date();
+        System.out.println(str.matches(".*[^ABCD]+.*"));
     }
 }

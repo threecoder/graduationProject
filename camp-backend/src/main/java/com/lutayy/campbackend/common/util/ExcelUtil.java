@@ -95,11 +95,13 @@ public class ExcelUtil {
                             keys[i] = stringCellValue.trim();
                         }
                     }
-
                     for (int i = 1; i < totalRowCount; i++) {
                         Map<String, String> rowMap = new HashMap<String, String>(
                                 totalColCount);
                         Row row = sheet.getRow(i);
+                        if (row == null || row.getCell(1) == null || row.getCell(1).getStringCellValue().equals("")) {
+                            continue;
+                        }
                         for (int j = 0; j < totalColCount; j++) {
                             String stringCellValue = "";
                             Cell cell = row.getCell(j);

@@ -134,7 +134,6 @@ public class LoginServiceImpl implements LoginService {
 
         String password = jsonObject.getString("password");
         String adminAccount = jsonObject.getString("username");
-        System.out.println(password);
         AdminExample adminExample = new AdminExample();
         adminExample.createCriteria().andAdminAccountEqualTo(adminAccount);
         List<Admin> admins = adminMapper.selectByExample(adminExample);

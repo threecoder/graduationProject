@@ -20,6 +20,8 @@ public class GetObjectHelper {
     AdminReAuthorityMapper adminReAuthorityMapper;
     @Autowired
     ExamReStudentMapper examReStudentMapper;
+    @Autowired
+    TrainingReStudentMapper trainingReStudentMapper;
 
     /** 由管理员account获得会员对象 **/
     public Admin getAdminFromAccount(String account) {
@@ -120,4 +122,15 @@ public class GetObjectHelper {
         }
     }
 
+    /** 获取培训Re学员 **/
+    public TrainingReStudent getTrainingReStudentByIds(Integer trainingId, Integer studentId) {
+        TrainingReStudentExample trainingReStudentExample = new TrainingReStudentExample();
+        trainingReStudentExample.createCriteria().andStudentIdEqualTo(studentId).andTrainingIdEqualTo(trainingId);
+        List<TrainingReStudent> trainingReStudents = trainingReStudentMapper.selectByExample(trainingReStudentExample);
+        if (trainingReStudents.size() == 0) {
+            return null;
+        } else {
+            return trainingReStudents.get(0);
+        }
+    }
 }

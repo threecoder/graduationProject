@@ -344,7 +344,7 @@ public class MemberServiceImpl implements MemberService {
                 break;
             }
         }
-        if (token == null || token.equals("")) {
+        if (token == null && token.equals("")) {
             result.put("msg", "请重新登陆！");
             return result;
         }

@@ -163,10 +163,10 @@ public class VoteServiceImpl implements VoteService {
         JSONObject result = new JSONObject();
         VoteExample voteExample = new VoteExample();
         VoteExample.Criteria criteria = voteExample.createCriteria();
-        if (name != null || !name.equals("")) {
+        if (name != null && !name.equals("")) {
             criteria.andVoteContentLike("%" + name + "%");
         }
-        if (type != null || !type.equals("")) {
+        if (type != null && !type.equals("")) {
             criteria.andVoteTypeEqualTo(type.byteValue());
         }
         long sum = voteMapper.countByExample(voteExample);
@@ -207,7 +207,7 @@ public class VoteServiceImpl implements VoteService {
         VoteExample.Criteria criteria1 = voteExample.createCriteria();
         criteria.andVoteTypeEqualTo((byte)2);
         criteria1.andVoteTypeEqualTo((byte)0);
-        if (name != null || !name.equals("")) {
+        if (name != null && !name.equals("")) {
             criteria.andVoteContentLike("%" + name + "%");
             criteria1.andVoteContentLike("%" + name + "%");
         }
@@ -350,7 +350,7 @@ public class VoteServiceImpl implements VoteService {
         VoteExample.Criteria criteria1 = voteExample.createCriteria();
         criteria.andVoteTypeEqualTo((byte)2);
         criteria1.andVoteTypeEqualTo((byte)1);
-        if (name != null  || !name.equals("")) {
+        if (name != null && !name.equals("")) {
             criteria.andVoteContentLike("%" + name + "%");
             criteria1.andVoteContentLike("%" + name + "%");
         }
