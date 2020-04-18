@@ -3,9 +3,12 @@ package com.lutayy.campbackend.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.lutayy.campbackend.common.config.AuthorityParam;
 import com.lutayy.campbackend.dao.AdminReAuthorityMapper;
+import com.lutayy.campbackend.dao.SystemParameterMapper;
 import com.lutayy.campbackend.pojo.Admin;
 import com.lutayy.campbackend.pojo.AdminReAuthority;
+import com.lutayy.campbackend.pojo.SystemParameter;
 import com.lutayy.campbackend.service.AuthorityService;
+import com.lutayy.campbackend.service.SQLConn.SystemParamManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +22,10 @@ public class AuthorityServiceImpl implements AuthorityService {
     GetObjectHelper getObjectHelper;
     @Autowired
     AdminReAuthorityMapper adminReAuthorityMapper;
+    @Autowired
+    SystemParameterMapper systemParameterMapper;
 
+    //管理员修改某个账号权限
     @Override
     public JSONObject modifyAuthority(JSONObject jsonObject) {
         JSONObject result = new JSONObject();
@@ -72,6 +78,7 @@ public class AuthorityServiceImpl implements AuthorityService {
         return result;
     }
 
+    //管理员获取某个账号的权限列表
     @Override
     public JSONObject getAuthority(String account) {
         JSONObject result=new JSONObject();
@@ -99,6 +106,69 @@ public class AuthorityServiceImpl implements AuthorityService {
         result.put("data", data);
         result.put("code", "success");
         result.put("msg", "权限查询成功！");
+        return result;
+    }
+
+    //管理员获取系统参数
+    @Override
+    public JSONObject getSystemParams() {
+        JSONObject result=new JSONObject();
+        result.put("code", "success");
+        result.put("msg", "获取成功！");
+        JSONObject data=new JSONObject();
+        data.put("studentTrainig", SystemParamManager.getValueByKey("stu_tran_permission").equals("1")?"是":"否");
+        data.put("trainingOrderTime", SystemParamManager.getValueByKey("training_order_length"));
+        data.put("activityOrderTime", SystemParamManager.getValueByKey("activity_order_length"));
+        data.put("certificateOrderTime", SystemParamManager.getValueByKey("certificate_order_length"));
+        data.put("memberOrderTime", SystemParamManager.getValueByKey("member_order_length"));
+        result.put("data", data);
+        return result;
+    }
+
+    //管理员修改系统参数
+    @Override
+    public JSONObject modifySystemParams(JSONObject jsonObject) {
+        JSONObject result=new JSONObject();
+        String studentTrainig;
+        Integer trainingOrderTime, activityOrderTime, certificateOrderTime, memberOrderTime;
+        try{
+            studentTrainig=jsonObject.getString("studentTrainig");
+            if(!studentTrainig.equals("是")&&!studentTrainig.equals("否")){
+                throw new Exception();
+            }
+            trainingOrderTime=Integer.valueOf(jsonObject.getString("trainingOrderTime"));
+            activityOrderTime=Integer.valueOf(jsonObject.getString("activityOrderTime"));
+            certificateOrderTime=Integer.valueOf(jsonObject.getString("certificateOrderTime"));
+            memberOrderTime=Integer.valueOf(jsonObject.getString("memberOrderTime"));
+        }catch (Exception e){
+            e.printStackTrace();
+            result.put("code", "error");
+            result.put("msg", "属性数据类型有误，请检查");
+            return result;
+        }
+
+        SystemParameter stuTranPermission=SystemParamManager.getSystemParameterByParaKey("stu_tran_permission");
+        stuTranPermission.setParaValue(studentTrainig.equals("是")?"1":"0");
+        systemParameterMapper.updateByPrimaryKeySelective(stuTranPermission);
+
+        SystemParameter activityOrderLength=SystemParamManager.getSystemParameterByParaKey("activity_order_length");
+        activityOrderLength.setParaValue(activityOrderTime.toString());
+        systemParameterMapper.updateByPrimaryKeySelective(activityOrderLength);
+
+        SystemParameter trainingOrderLength=SystemParamManager.getSystemParameterByParaKey("training_order_length");
+        trainingOrderLength.setParaValue(trainingOrderTime.toString());
+        systemParameterMapper.updateByPrimaryKeySelective(trainingOrderLength);
+
+        SystemParameter certificateOrderLength=SystemParamManager.getSystemParameterByParaKey("certificate_order_length");
+        certificateOrderLength.setParaValue(certificateOrderTime.toString());
+        systemParameterMapper.updateByPrimaryKeySelective(certificateOrderLength);
+
+        SystemParameter memberOrderLength=SystemParamManager.getSystemParameterByParaKey("member_order_length");
+        memberOrderLength.setParaValue(memberOrderTime.toString());
+        systemParameterMapper.updateByPrimaryKeySelective(memberOrderLength);
+
+        result.put("code", "success");
+        result.put("msg", "修改成功！");
         return result;
     }
 }

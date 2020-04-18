@@ -57,8 +57,8 @@
 
 
 
-        <table tableName="exam_report_op_log">
-            <generatedKey  column="log_id"  sqlStatement="Mysql"  identity="TRUE"/>
+        <table tableName="association_text">
+            <generatedKey  column="id"  sqlStatement="Mysql"  identity="TRUE"/>
         </table>
 
 

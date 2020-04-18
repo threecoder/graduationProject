@@ -416,13 +416,15 @@ public class ExamServiceImpl implements ExamService {
                     System.out.println("第" + (i + 1) + "题选了" + answer.get(i) + "错误,正确答案是" + rightAnswer);
                 }
                 //保存做题记录
-                examQuestionStudentAnswer.setAnswerOne(((JSONArray) answer.get(i)).getByte(0));
-                if (((JSONArray) answer.get(i)).size() > 1) {
-                    examQuestionStudentAnswer.setAnswerTwo(((JSONArray) answer.get(i)).getByte(1));
-                    if (((JSONArray) answer.get(i)).size() > 2) {
-                        examQuestionStudentAnswer.setAnswerThree(((JSONArray) answer.get(i)).getByte(2));
-                        if (((JSONArray) answer.get(i)).size() > 3) {
-                            examQuestionStudentAnswer.setAnswerFour(((JSONArray) answer.get(i)).getByte(3));
+                if(((JSONArray) answer.get(i)).size() > 0) {
+                    examQuestionStudentAnswer.setAnswerOne(((JSONArray) answer.get(i)).getByte(0));
+                    if (((JSONArray) answer.get(i)).size() > 1) {
+                        examQuestionStudentAnswer.setAnswerTwo(((JSONArray) answer.get(i)).getByte(1));
+                        if (((JSONArray) answer.get(i)).size() > 2) {
+                            examQuestionStudentAnswer.setAnswerThree(((JSONArray) answer.get(i)).getByte(2));
+                            if (((JSONArray) answer.get(i)).size() > 3) {
+                                examQuestionStudentAnswer.setAnswerFour(((JSONArray) answer.get(i)).getByte(3));
+                            }
                         }
                     }
                 }
@@ -1106,7 +1108,7 @@ public class ExamServiceImpl implements ExamService {
         return result;
     }
 
-    ////管理员获取本账号待审核成绩记录
+    //管理员获取本账号待审核成绩记录
     @Override
     public JSONObject getWaitingGradeList(Integer adminId, Integer pageSize, Integer currentPage,
                                           String trainingName, String idNum, String studentName) {
@@ -1432,27 +1434,27 @@ public class ExamServiceImpl implements ExamService {
                         continue;
                     }
                     ExamReStudent report = getObjectHelper.getReportByExamIdAndStudentId(examId, student.getStudentId());
-                    TrainingReStudent trainingReStudent=getObjectHelper.getTrainingReStudentByIds(exam.getTrainingId(), student.getStudentId());
+                    TrainingReStudent trainingReStudent = getObjectHelper.getTrainingReStudentByIds(exam.getTrainingId(), student.getStudentId());
 
                     if ((report == null || report.getIsInvalid()) && (trainingReStudent == null || trainingReStudent.getIsInvalid())) {
                         nonExamReStudentCount++;
                         nonReTip += (rowIndex + ",");
                         continue;
                     }
-                    if (report.getScore() >= exam.getExamPass() || report.getRemainingTimes() < 1) {
+                    if (report != null && (report.getScore() >= exam.getExamPass() || report.getRemainingTimes() < 1)) {
                         outOfExamTimesCount++;
                         outTip += (rowIndex + ",");
                         continue;
                     }
                     // TODO 批量添加
-                    if(report!=null) {
+                    if (report != null) {
                         report.setScore(examScore);
                         report.setRemainingTimes((byte) (report.getRemainingTimes() - 1));
                         examReStudentMapper.updateByPrimaryKeySelective(report);
-                    }else if(trainingReStudent!=null){
-                        ExamReStudent newReport=new ExamReStudent();
+                    } else if (trainingReStudent != null) {
+                        ExamReStudent newReport = new ExamReStudent();
                         newReport.setScore(examScore);
-                        newReport.setRemainingTimes((byte)2);
+                        newReport.setRemainingTimes((byte) 2);
                         newReport.setExamId(examId);
                         newReport.setStudentId(student.getStudentId());
                         examReStudentMapper.insertSelective(newReport);
@@ -1477,11 +1479,11 @@ public class ExamServiceImpl implements ExamService {
             }
             result.put("code", "success");
             result.put("msg", msg);
-            return result;
         } catch (Exception e) {
+            e.printStackTrace();
             result.put("msg", "导入异常，请检查格式");
-            return result;
         }
+        return result;
     }
 
     //管理员修改考试成绩

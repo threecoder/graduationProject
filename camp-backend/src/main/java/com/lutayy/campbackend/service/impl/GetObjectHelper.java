@@ -1,13 +1,21 @@
 package com.lutayy.campbackend.service.impl;
 
+import com.lutayy.campbackend.common.util.JwtUtil;
 import com.lutayy.campbackend.dao.*;
 import com.lutayy.campbackend.pojo.*;
+import com.lutayy.campbackend.pojo.request.TokenRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 @Component
 public class GetObjectHelper {
+
+    @Value("${SECRET_KEY}")
+    private String SECRET_KEY;
     @Autowired
     AdminMapper adminMapper;
     @Autowired
@@ -132,5 +140,31 @@ public class GetObjectHelper {
         } else {
             return trainingReStudents.get(0);
         }
+    }
+
+    /** 从请求中获取用户id **/
+    public Integer getIdByRequestAndRole(String role, HttpServletRequest request){
+        Cookie[] cookies = request.getCookies();
+        String token = null;
+        if(cookies==null){
+            return null;
+        }
+        for (int i = 0; i < cookies.length; i++) {
+            if (cookies[i].getName().equals("token")) {
+                token = cookies[i].getValue();
+                break;
+            }
+        }
+        if (token == null || token.equals("")){
+            return null;
+        }
+        TokenRequest tokenRequest = JwtUtil.unsign(token, TokenRequest.class, SECRET_KEY);
+        if(tokenRequest==null){
+            return null;
+        }
+        if (tokenRequest.getRole() == null || !tokenRequest.getRole().equals(role)){
+            return null;
+        }
+        return tokenRequest.getId();
     }
 }

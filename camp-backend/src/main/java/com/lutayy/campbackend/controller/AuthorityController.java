@@ -27,5 +27,15 @@ public class AuthorityController {
         return authorityService.getAuthority(account);
     }
 
+    @RequestMapping("/admin/getSystemParams")
+    @ResponseBody
+    public Object getSystemParams() {
+        return authorityService.getSystemParams();
+    }
 
+    @RequestMapping("/admin/modifySystemParams")
+    @ResponseBody
+    public JSONObject modifySystemParams(@RequestBody JSONObject jsonObject) {
+        return authorityService.modifySystemParams(jsonObject);
+    }
 }

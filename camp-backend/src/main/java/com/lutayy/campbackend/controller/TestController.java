@@ -10,6 +10,7 @@ import com.lutayy.campbackend.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
@@ -24,10 +25,9 @@ public class TestController {
     @Resource
     private RedisUtil redisUtil;
 
-    @RequestMapping("/test")
+    @RequestMapping("/getId")
     @ResponseBody
-    public String getall(){
-        Student student=(Student)redisUtil.get("studentId_38");
-        return JSONObject.toJSON(student).toString();
+    public void getall(@RequestParam("id") Integer id){
+        System.out.println(id);
     }
 }

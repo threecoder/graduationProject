@@ -124,6 +124,7 @@ public class TokenFilter implements Filter {
             ParameterRequestWrapper requestWrapper;
             String method = request.getMethod().toLowerCase();
             if (method.equals("post")) {
+                map.put("id", new String[]{id.toString()});
                 requestWrapper = new ParameterRequestWrapper(request, map);
                 String body = new String(requestWrapper.getBody());
                 JSONObject jsonObject = JSON.parseObject(body);

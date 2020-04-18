@@ -192,16 +192,22 @@ CREATE TABLE `admin_re_authority` (
 
 insert  into `admin_re_authority`(`id`,`admin_id`,`authority_id`,`authority_name`,`has_or_not`) values (1,1,1,NULL,1),(2,1,2,NULL,1),(3,1,3,NULL,1),(4,1,4,NULL,1),(5,1,5,NULL,0),(6,1,6,NULL,0),(7,1,7,NULL,0),(8,1,8,NULL,0),(9,1,9,NULL,0),(10,1,10,NULL,0),(11,1,11,NULL,0),(12,1,12,NULL,0),(13,2,1,'member',0),(14,2,2,'student',0),(15,2,3,'training',0),(16,2,4,'exam',1),(17,2,5,'grade',1),(18,2,6,'certificate',1),(19,2,7,'activity',0),(20,2,8,'vote',0),(21,2,9,'index',0),(22,2,10,'system',0),(23,2,11,'order',0),(24,2,12,'coupon',0);
 
-/*Table structure for table `association` */
+/*Table structure for table `association_text` */
 
-DROP TABLE IF EXISTS `association`;
+DROP TABLE IF EXISTS `association_text`;
 
-CREATE TABLE `association` (
-  `association_name` varchar(30) DEFAULT NULL COMMENT '协会名称',
-  `association_introduce` varchar(1000) DEFAULT NULL COMMENT '协会介绍'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `association_text` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `item_name` varchar(50) DEFAULT NULL COMMENT '条目名称(协会名称/协会章程/协会架构/协会简介)',
+  `item_context` varchar(1000) DEFAULT NULL COMMENT '具体内容',
+  `is_invalid` tinyint(1) DEFAULT '0',
+  `description` varchar(100) DEFAULT NULL COMMENT '参数描述',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
-/*Data for the table `association` */
+/*Data for the table `association_text` */
+
+insert  into `association_text`(`id`,`item_name`,`item_context`,`is_invalid`,`description`) values (1,'association_name',NULL,0,'协会名称'),(2,'framework','<p>架构架构</p>',0,'协会框架'),(3,'constitution','<p>章程</p>',0,'协会章程'),(4,'brief','<p>简介</p>',0,'协会简介');
 
 /*Table structure for table `authority` */
 
@@ -431,7 +437,7 @@ CREATE TABLE `exam` (
 
 /*Data for the table `exam` */
 
-insert  into `exam`(`exam_id`,`exam_name`,`training_id`,`exam_num`,`exam_pass`,`exam_length_min`,`exam_start_time`,`exam_end_time`,`is_posted`,`have_questions`,`create_time`) values (8,'网络工程考试1',4,20,60,120,'2019-10-01 00:00:00','2019-10-31 00:00:00',1,1,NULL),(9,'网络工程考试2',4,10,40,40,'2019-10-01 00:00:00','2019-11-05 00:00:00',1,1,NULL),(10,'我',1,10,55,34,'1970-01-01 08:00:00','1970-01-01 08:00:00',0,0,NULL),(11,'444',2,34,34,55,NULL,NULL,0,1,NULL),(12,'测试考试',3,10,60,5,'2020-04-18 00:00:00','2020-05-13 00:00:00',0,1,NULL);
+insert  into `exam`(`exam_id`,`exam_name`,`training_id`,`exam_num`,`exam_pass`,`exam_length_min`,`exam_start_time`,`exam_end_time`,`is_posted`,`have_questions`,`create_time`) values (8,'网络工程考试1',4,20,60,120,'2019-10-01 00:00:00','2019-10-31 00:00:00',1,1,NULL),(9,'网络工程考试2',4,10,40,40,'2019-10-01 00:00:00','2019-11-05 00:00:00',1,1,NULL),(10,'我',1,10,55,34,'1970-01-01 08:00:00','1970-01-01 08:00:00',0,0,NULL),(11,'444',2,34,34,55,NULL,NULL,0,1,NULL),(12,'测试考试',3,10,60,5,'2020-04-18 00:00:00','2020-05-13 00:00:00',1,1,NULL);
 
 /*Table structure for table `exam_question_student_answer` */
 
@@ -452,11 +458,11 @@ CREATE TABLE `exam_question_student_answer` (
   KEY `student_id` (`student_id`),
   CONSTRAINT `exam_question_student_answer_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`),
   CONSTRAINT `exam_question_student_answer_ibfk_3` FOREIGN KEY (`exam_id`, `question_id`) REFERENCES `exam_re_question` (`exam_id`, `question_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
 /*Data for the table `exam_question_student_answer` */
 
-insert  into `exam_question_student_answer`(`id`,`exam_id`,`question_id`,`student_id`,`answer_one`,`answer_two`,`answer_three`,`answer_four`,`correct_or_not`) values (1,9,3,1,4,3,NULL,NULL,NULL),(2,9,8,1,1,NULL,NULL,NULL,NULL),(3,9,9,1,1,NULL,NULL,NULL,NULL),(4,9,10,1,1,NULL,NULL,NULL,NULL),(5,9,15,1,4,NULL,NULL,NULL,NULL),(6,9,20,1,1,NULL,NULL,NULL,NULL),(7,9,29,1,1,NULL,NULL,NULL,NULL),(8,9,33,1,1,NULL,NULL,NULL,NULL),(9,9,35,1,1,NULL,NULL,NULL,NULL),(10,9,40,1,1,NULL,NULL,NULL,NULL);
+insert  into `exam_question_student_answer`(`id`,`exam_id`,`question_id`,`student_id`,`answer_one`,`answer_two`,`answer_three`,`answer_four`,`correct_or_not`) values (1,9,3,1,4,3,NULL,NULL,NULL),(2,9,8,1,1,NULL,NULL,NULL,NULL),(3,9,9,1,1,NULL,NULL,NULL,NULL),(4,9,10,1,1,NULL,NULL,NULL,NULL),(5,9,15,1,4,NULL,NULL,NULL,NULL),(6,9,20,1,1,NULL,NULL,NULL,NULL),(7,9,29,1,1,NULL,NULL,NULL,NULL),(8,9,33,1,1,NULL,NULL,NULL,NULL),(9,9,35,1,1,NULL,NULL,NULL,NULL),(10,9,40,1,1,NULL,NULL,NULL,NULL),(11,12,35,1,1,NULL,NULL,NULL,1),(12,12,25,1,2,NULL,NULL,NULL,0),(13,12,24,1,3,NULL,NULL,NULL,0),(14,12,56,1,4,NULL,NULL,NULL,0),(15,12,20,1,1,NULL,NULL,NULL,1),(16,12,17,1,3,NULL,NULL,NULL,1),(17,12,39,1,2,NULL,NULL,NULL,0),(18,12,37,1,3,NULL,NULL,NULL,0),(19,12,16,1,3,NULL,NULL,NULL,0),(20,12,1,1,3,NULL,NULL,NULL,0);
 
 /*Table structure for table `exam_re_question` */
 
@@ -497,11 +503,11 @@ CREATE TABLE `exam_re_student` (
   KEY `exam_id` (`exam_id`),
   CONSTRAINT `exam_re_student_ibfk_1` FOREIGN KEY (`exam_id`) REFERENCES `exam` (`exam_id`),
   CONSTRAINT `exam_re_student_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
 
 /*Data for the table `exam_re_student` */
 
-insert  into `exam_re_student`(`report_id`,`exam_id`,`student_id`,`score`,`remaining_times`,`is_invalid`,`is_verify`,`in_line`,`not_pass_reason`,`not_pass_times`) values (22,8,1,60,2,0,2,0,NULL,NULL),(23,9,1,30,1,0,2,0,NULL,NULL);
+insert  into `exam_re_student`(`report_id`,`exam_id`,`student_id`,`score`,`remaining_times`,`is_invalid`,`is_verify`,`in_line`,`not_pass_reason`,`not_pass_times`) values (22,8,1,60,2,0,2,0,NULL,NULL),(23,9,1,30,1,0,2,0,NULL,NULL),(24,8,38,2,2,0,0,0,NULL,NULL),(25,12,1,30,-1,0,0,0,NULL,NULL);
 
 /*Table structure for table `exam_report_op_log` */
 
@@ -678,16 +684,37 @@ CREATE TABLE `news` (
   `news_id` int(11) NOT NULL AUTO_INCREMENT,
   `admin_id` int(11) DEFAULT NULL COMMENT '发布的管理员',
   `title` varchar(50) DEFAULT NULL COMMENT '标题',
-  `description` text COMMENT '简介',
-  `content` text COMMENT '内容',
+  `description` varchar(500) DEFAULT NULL COMMENT '简介',
+  `content` varchar(20000) DEFAULT NULL COMMENT '内容',
+  `img_placeholder` varchar(50) DEFAULT NULL COMMENT '图片占位符',
   `post_time` datetime DEFAULT NULL COMMENT '发布时间',
   `type` varchar(10) DEFAULT NULL COMMENT '新闻类别',
+  `is_invalid` tinyint(1) DEFAULT '0' COMMENT '0:有效  1:无效',
   PRIMARY KEY (`news_id`),
   KEY `admin_id` (`admin_id`),
   CONSTRAINT `news_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`admin_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
 
 /*Data for the table `news` */
+
+insert  into `news`(`news_id`,`admin_id`,`title`,`description`,`content`,`img_placeholder`,`post_time`,`type`,`is_invalid`) values (27,1,'这是一条新闻','这是简介','<p>这是@图#片$占#位@@图#片$占#位@@图#片$占#位@@图#片$占#位@</p><p>新闻@图#片$占#位@内容@图#片$占#位@</p>','@图#片$占#位@','2020-04-18 20:43:26','动态',0);
+
+/*Table structure for table `news_img` */
+
+DROP TABLE IF EXISTS `news_img`;
+
+CREATE TABLE `news_img` (
+  `img_id` int(11) NOT NULL AUTO_INCREMENT,
+  `img_path` varchar(2000) DEFAULT NULL COMMENT '存放的路径',
+  `news_id` int(11) DEFAULT NULL COMMENT '所属的新闻',
+  `img_news_index` int(11) DEFAULT NULL COMMENT '是新闻中的第几张图片',
+  `is_invalid` tinyint(1) DEFAULT '0' COMMENT '0:有效  1:无效',
+  PRIMARY KEY (`img_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
+
+/*Data for the table `news_img` */
+
+insert  into `news_img`(`img_id`,`img_path`,`news_id`,`img_news_index`,`is_invalid`) values (25,'/image/dynamic/1/1-1587213805718.jpg',27,1,1),(26,'/image/dynamic/1/2-1587213805721.jpg',27,2,1),(27,'/image/dynamic/1/3-1587213805721.jpg',27,3,1),(28,'/image/dynamic/1/2-1587226574631.jpg',27,2,1),(29,'/image/dynamic/1/1-1587228110132.jpg',27,1,0),(30,'/image/dynamic/1/3-1587228341430.jpg',27,6,0),(31,'/image/dynamic/1/2-1587228517842.jpg',27,5,0),(32,'/image/dynamic/1/2-1587228844280.jpg',27,2,0),(33,'/image/dynamic/1/3-1587229521048.jpg',27,3,0),(34,'/image/dynamic/1/4-1587229642017.jpg',27,4,1),(35,'/image/dynamic/1/4-1587229982286.jpg',27,4,0);
 
 /*Table structure for table `payment` */
 
@@ -778,11 +805,11 @@ CREATE TABLE `system_parameter` (
   `modify_time` datetime DEFAULT NULL COMMENT '最后一次修改时间',
   PRIMARY KEY (`para_id`),
   UNIQUE KEY `key` (`para_key`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 /*Data for the table `system_parameter` */
 
-insert  into `system_parameter`(`para_id`,`para_key`,`para_value`,`value_type`,`flag`,`description`,`modify_time`) values (1,'stu_tran_permission','1','Interge',1,'学员培训权限 0:关闭 1:开放',NULL),(2,'activity_order_length','60','Interge',1,'活动报名订单有效时长 单位:min',NULL),(3,NULL,NULL,NULL,1,NULL,NULL);
+insert  into `system_parameter`(`para_id`,`para_key`,`para_value`,`value_type`,`flag`,`description`,`modify_time`) values (1,'stu_tran_permission','1','Integer',1,'学员培训权限 0:关闭 1:开放',NULL),(2,'activity_order_length','60','Integer',1,'活动报名订单有效时长 单位:min',NULL),(3,'training_order_length','60','Integer',1,'培训报名订单有效时长 单位:min',NULL),(4,'certificate_order_length','60','Integer',1,'证书修改订单有效时长 单位:min',NULL),(5,'member_order_length','60','Integer',1,'会员续费订单有效时长 单位:min',NULL);
 
 /*Table structure for table `training` */
 

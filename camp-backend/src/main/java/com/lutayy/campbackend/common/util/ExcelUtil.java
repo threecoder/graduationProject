@@ -99,7 +99,7 @@ public class ExcelUtil {
                         Map<String, String> rowMap = new HashMap<String, String>(
                                 totalColCount);
                         Row row = sheet.getRow(i);
-                        if (row == null || row.getCell(1) == null || row.getCell(1).getStringCellValue().equals("")) {
+                        if (row == null || row.getCell(0) == null) {
                             continue;
                         }
                         for (int j = 0; j < totalColCount; j++) {
