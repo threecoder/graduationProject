@@ -39,7 +39,7 @@
                             v-for="(item,i) in checkers"
                             :key="i"
                             :label="item.name"
-                            :value="item.value"
+                            :value="item.id"
                         ></el-option>
                     </el-select>
                 </el-col>
@@ -155,7 +155,7 @@ export default {
             }
             try {
                 let data = {};
-                data.checker = this.form.checker;
+                data.checker = String(this.form.checker);
                 data.ids = this.form.selected.map(val => val.id);
                 let res = await adminExamApi.submitGradeList(data);
                 this.$message.success("提交审核成功");

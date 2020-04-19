@@ -79,13 +79,13 @@ export default {
                     }
                 ],
                 data: [
-                    {
-                        id: "111",
-                        name: "模拟投票",
-                        type: "学员投票",
-                        sum: 10,
-                        num: 2
-                    }
+                    // {
+                    //     id: "111",
+                    //     name: "模拟投票",
+                    //     type: "学员投票",
+                    //     sum: 10,
+                    //     num: 2
+                    // }
                 ]
             },
             statisticDialog: {

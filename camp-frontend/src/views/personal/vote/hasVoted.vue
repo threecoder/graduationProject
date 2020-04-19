@@ -69,12 +69,12 @@ export default {
                     { slot: "oper", label: "操作" }
                 ],
                 data: [
-                    {
-                        id: "1",
-                        name: "模拟投票",
-                        type: "多选",
-                        time: "2016-10-12 16:00:00"
-                    }
+                    // {
+                    //     id: "1",
+                    //     name: "模拟投票",
+                    //     type: "多选",
+                    //     time: "2016-10-12 16:00:00"
+                    // }
                 ],
                 loading: false
             },

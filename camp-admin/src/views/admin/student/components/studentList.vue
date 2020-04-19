@@ -12,7 +12,15 @@
                     <el-input placeholder="学员号码" v-model="form.phone" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="公司" label-position="top">
-                    <el-select v-model="form.company" clearable></el-select>
+                    <el-select v-model="form.company" clearable>
+                        <el-option :value="0" label="无挂靠"></el-option>
+                        <el-option
+                            v-for="(item,i) in companyList"
+                            :value="item.id"
+                            :label="item.name"
+                            :key="i"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="挂靠组织" label-position="top">
                     <el-select v-model="form.hasOrg" clearable>
@@ -34,11 +42,7 @@
                     <div slot-scope="{row}">
                         <div v-if="type==0">
                             <el-button type="primary" size="small" @click="modifyInfo(row)">修改信息</el-button>
-                            <el-button
-                                type="primary"
-                                size="small"
-                                @click="deleteOneStudent(row)"
-                            >挂靠</el-button>
+                            <el-button type="primary" size="small" @click="deleteOneStudent(row)">挂靠</el-button>
                             <el-button type="primary" size="small" @click="resetPass(row)">重置密码</el-button>
                         </div>
                         <div v-if="type==1">
@@ -124,12 +128,14 @@ export default {
                     }
                 ],
                 loading: false
-            }
+            },
+            companyList: []
         };
     },
     mounted() {
         this.init();
         this.search();
+        this.getCompanyList();
         event.$on("refreshStudent", this.search);
     },
     methods: {
@@ -160,6 +166,14 @@ export default {
                 this.$message.error(error.message);
             }
             this.table.loading = false;
+        },
+        async getCompanyList() {
+            try {
+                let res = await adminStudentApi.getMemSelectList();
+                this.companyList = res.data;
+            } catch (error) {
+                this.$message.error(error.message);
+            }
         },
         curChange(val) {
             this.form.currentPage = val;

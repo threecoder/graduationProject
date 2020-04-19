@@ -3,10 +3,24 @@
         <h3>编辑动态</h3>
         <div class="divider"></div>
         <div class="all-container" v-loading="loading">
-            <div class="title-container">
-                <label>标题</label>
-                <el-input v-model="form.title" placeholder="请输入标题"></el-input>
-            </div>
+            <el-row :gutter="40">
+                <el-col :span="12">
+                    <div class="title-container">
+                        <label>标题</label>
+                        <el-input v-model="form.title" placeholder="请输入标题"></el-input>
+                    </div>
+                </el-col>
+                <el-col :span="12">
+                    <div class="title-container">
+                        <label>类型</label>
+                        <el-select v-model="form.type" placeholder="请选择类型">
+                            <el-option label="新闻" value="news"></el-option>
+                            <el-option label="动态" value="dynamic"></el-option>
+                        </el-select>
+                    </div>
+                </el-col>
+            </el-row>
+
             <div class="desc-container">
                 <label>简要内容</label>
                 <el-input
@@ -52,7 +66,8 @@ export default {
             form: {
                 title: null,
                 content: null,
-                desc: null
+                desc: null,
+                type: null
             },
             //编辑功能相关变量
             dynamicId: null,
@@ -68,8 +83,8 @@ export default {
             this.dynamicId = this.$route.query.dynamicId;
             this.getDynamicDetail();
         }
-        this.initContent =
-            "<img src='http://www.baidu.com/img/baidu_resultlogo@2.png'>";
+        // this.initContent =
+        //     "<img src='http://www.baidu.com/img/baidu_resultlogo@2.png'>";
     },
     methods: {
         //新增和编辑功能通用方法
@@ -152,7 +167,7 @@ export default {
         async submit() {
             let form = this.form;
             console.log(this.form);
-            if (!form.title || !form.desc || !form.content) {
+            if (!form.title || !form.desc || !form.content || !form.type) {
                 this.$message.error("必须填写所有内容");
                 return false;
             }
@@ -164,6 +179,7 @@ export default {
                 data.append("title", this.form.title);
                 data.append("desc", this.form.desc);
                 data.append("content", this.form.content);
+                data.append("type", this.form.type);
                 this.imgList.forEach(val => {
                     data.append("imgList", val, val.name);
                 });
