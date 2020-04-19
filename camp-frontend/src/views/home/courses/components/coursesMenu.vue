@@ -25,7 +25,7 @@
 export default {
     data() {
         return {
-            deActive: "往期培训",
+            deActive: "now",
             itemList: [
                 {
                     title: "往期培训",

@@ -6,9 +6,9 @@
             </div>
             <span class="title">{{item.title}}</span>
             <div class="info-container">
-                <p class="greyWords">
-                    {{item.level}}
-                    <span class="num">{{item.viewers}}</span>
+                <p class="tip">
+                    难度:{{item.level}}
+                    <span class="num">参与者:{{item.viewers}}</span>
                 </p>
                 <p class="greyWords">{{item.abstract}}</p>
             </div>
@@ -57,9 +57,13 @@ export default {
         }
         .info-container {
             margin-top: 30px;
+            p.tip {
+                margin: 10px 0;
+                color: rgb(96, 98, 102);
+            }
             .greyWords {
                 color: rgb(181, 181, 181);
-                font-size: 12px;
+                font-size: 13px;
             }
             .num {
                 margin-left: 20px;

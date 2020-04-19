@@ -5,8 +5,8 @@
                 <li v-for="(item,i) in list" :key="i">
                     <span class="title" @click="detail(item.id)">{{item.title}}</span>
                     <div class="content">
-                        <!-- <img :src="item.src" alt="新闻图片" :width="item.src?'130px':'0px'" /> -->
-                        <img src="../../../assets/images/index1.jpg" alt="新闻图片" width="130px" />
+                        <img :src="item.url" alt="新闻图片"  />
+                        <!-- <img src="../../../assets/images/index1.jpg" alt="新闻图片" width="130px" /> -->
                         <p>{{item.desc}}</p>
                     </div>
                     <p class="date">{{item.date}}</p>
@@ -41,22 +41,22 @@ export default {
                 total: 100
             },
             list: [
-                {
-                    id: 111,
-                    title: "科威特新增25例新冠肺炎确诊病例",
-                    desc:
-                        "原标题：钟南山：疫情防控关键是保持距离、戴口罩 新京报快讯（记者 徐美慧）4月2日，新冠疫情防控经验国际分享会暨健康中国国际公共卫生管理培训项目启动会以线上直播的方...",
-                    date: "2020-04-02 21:05",
-                    src: "../../../assets/images/index1.jpg"
-                },
-                {
-                    title: "科威特新增25例新冠肺炎确诊病例",
-                    date: "2020-04-02 21:05"
-                },
-                {
-                    title: "科威特新增25例新冠肺炎确诊病例",
-                    date: "2020-04-02 21:05"
-                }
+                // {
+                //     id: 111,
+                //     title: "科威特新增25例新冠肺炎确诊病例",
+                //     desc:
+                //         "原标题：钟南山：疫情防控关键是保持距离、戴口罩 新京报快讯（记者 徐美慧）4月2日，新冠疫情防控经验国际分享会暨健康中国国际公共卫生管理培训项目启动会以线上直播的方...",
+                //     date: "2020-04-02 21:05",
+                //     src: "../../../assets/images/index1.jpg"
+                // },
+                // {
+                //     title: "科威特新增25例新冠肺炎确诊病例",
+                //     date: "2020-04-02 21:05"
+                // },
+                // {
+                //     title: "科威特新增25例新冠肺炎确诊病例",
+                //     date: "2020-04-02 21:05"
+                // }
             ],
             loading: false
         };
@@ -87,7 +87,7 @@ export default {
             this.loading = true;
             try {
                 let res = null;
-                if (this.type == "news") {
+                if (this.path == "/news") {
                     res = await newsApi.getNewsList(this.form);
                 } else {
                     res = await dynamicApi.getDynamicList(this.form);

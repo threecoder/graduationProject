@@ -129,10 +129,11 @@ export default {
                 try {
                     let res = await indexApi.deleteDynamic(row.id);
                     this.$message.success("删除该记录成功");
+                    this.getList();
                 } catch (error) {
                     this.$message.error(error.message);
                 }
-                this.table.loading = true;
+                // this.table.loading = false;
             });
         }
     }

@@ -5,10 +5,10 @@
         <div class="form-container">
             <el-form inline :model="form">
                 <el-form-item label="投票名称">
-                    <el-input v-model="form.name" placeholder="输入投票名称"></el-input>
+                    <el-input v-model="form.name" placeholder="输入投票名称" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="权限">
-                    <el-select v-model="form.type" placeholder="选择投票类型">
+                    <el-select v-model="form.type" placeholder="选择投票类型" clearable>
                         <el-option :value="0" label="仅限会员投票"></el-option>
                         <el-option :value="1" label="仅限学员投票"></el-option>
                         <el-option :value="2" label="学员会员均可"></el-option>

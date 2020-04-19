@@ -46,7 +46,7 @@ export default {
     },
     data() {
         return {
-            type: "previous",
+            type: "now",
             pagination: {
                 total: 0,
                 pageSize: 10,
@@ -114,7 +114,7 @@ export default {
                         "HTML+CSS基础教程8小时带领大家步步深入学习标签用法和意义"
                 }
             ],
-            loading: true
+            loading: false
         };
     },
     watch: {
