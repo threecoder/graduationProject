@@ -57,9 +57,10 @@
 
 
 
-        <table tableName="association_text">
-            <generatedKey  column="id"  sqlStatement="Mysql"  identity="TRUE"/>
+        <table tableName="activity_seat">
+            <generatedKey  column="seat_id"  sqlStatement="Mysql"  identity="TRUE"/>
         </table>
+
 
 
 

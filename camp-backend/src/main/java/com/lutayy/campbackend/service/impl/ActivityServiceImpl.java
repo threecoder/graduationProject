@@ -37,6 +37,8 @@ public class ActivityServiceImpl implements ActivityService {
     @Autowired
     MemberReStudentMapper memberReStudentMapper;
     @Autowired
+    ActivitySeatMapper activitySeatMapper;
+    @Autowired
     GetObjectHelper getObjectHelper;
 
 
@@ -569,7 +571,56 @@ public class ActivityServiceImpl implements ActivityService {
     //管理员设置座位信息
     @Override
     public JSONObject setSEATInfo(JSONObject jsonObject) {
-        return null;
+        JSONObject result=new JSONObject();
+        result.put("code", "fail");
+
+        Integer activityId=jsonObject.getInteger("activityId");
+        Activity activity=activityMapper.selectByPrimaryKey(activityId);
+        if(activity==null){
+            result.put("msg", "设置失败！系统中找不到该活动");
+            return result;
+        }
+        JSONArray allSeatInfo=jsonObject.getJSONArray("data");
+        int rowNum, colNum=0;
+        rowNum=allSeatInfo.size(); //行数
+        if(rowNum>0) {
+            colNum = allSeatInfo.getJSONArray(0).size(); //列数
+        }
+        activity.setAreaLength(rowNum);
+        activity.setAreaWidth(colNum);
+        activityMapper.updateByPrimaryKeySelective(activity);
+        int fakeCol;
+        for(int i=0;i<rowNum;i++){
+            fakeCol=0;
+            JSONArray rowSeats=allSeatInfo.getJSONArray(i);
+            for(int j=0;j<rowSeats.size();j++){
+                JSONObject seat=rowSeats.getJSONObject(j);
+                Boolean lock=seat.getBoolean("lock");
+                Integer studentId=seat.getInteger("num");
+                ActivitySeat activitySeat=new ActivitySeat();
+                activitySeat.setActivityId(activityId);
+                activitySeat.setIsLock(lock);
+                if(!lock && studentId!=null){
+                    fakeCol++;
+                    activitySeat.setIsOccupied(true);
+                    activitySeat.setStudentnum(studentId);
+                    activitySeat.setFakeY(i+1);
+                    activitySeat.setFakeX(fakeCol);
+                }
+                activitySeat.setRealY(i+1);
+                activitySeat.setRealX(j+1);
+                activitySeatMapper.insertSelective(activitySeat);
+                ActivityStudent activityStudent=getObjectHelper.getActivityReStudentByIds(activityId, studentId);
+                if(activityStudent!=null){
+                    activityStudent.setSeatId(activitySeat.getSeatId());
+                    activityStudent.setSeatNumber(activitySeat.getFakeY()+"行"+activitySeat.getFakeX()+"座");
+                    activityStudentMapper.updateByPrimaryKeySelective(activityStudent);
+                }
+            }
+        }
+        result.put("code", "success");
+        result.put("msg", "活动座位信息设置成功！");
+        return result;
     }
 
     //管理员获取活动座位表
