@@ -18,8 +18,13 @@ public class TrainingController {
 
     @RequestMapping("/index/getCourses")
     @ResponseBody
-    public JSONObject getCourses(@RequestBody JSONObject jsonObject) {
-        return trainingService.getCourses(jsonObject);
+    public Object getCourses(@RequestParam(value = "keyWord",required = false) String keyWord,
+                             @RequestParam(value = "startDate",required = false) String startDateStr,
+                             @RequestParam(value = "endDate",required = false) String endDateStr,
+                             @RequestParam("pageSize") Integer pageSize,
+                             @RequestParam("currentPage") Integer currentPage,
+                             @RequestParam("type") String type) {
+        return trainingService.getCourses(keyWord, startDateStr, endDateStr, pageSize, currentPage, type);
     }
 
     @RequestMapping("/student/joinTraining")

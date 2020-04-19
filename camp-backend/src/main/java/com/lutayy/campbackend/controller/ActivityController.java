@@ -70,5 +70,16 @@ public class ActivityController {
         return activityService.adminGetActivityList();
     }
 
+    @RequestMapping("/admin/setSEATInfo")
+    @ResponseBody
+    public JSONObject setSEATInfo(@RequestBody JSONObject jsonObject){
+        return activityService.setSEATInfo(jsonObject);
+    }
+
+    @RequestMapping("/admin/getActivitySEAT")
+    @ResponseBody
+    public Object getActivitySEAT(@RequestParam("activityId") Integer activityId){
+        return activityService.getActivitySEAT(activityId);
+    }
 
 }

@@ -89,7 +89,7 @@ public class NewsServiceImpl implements NewsService {
     //新增一条动态
     @Override
     public JSONObject addDynamic(HttpServletRequest request, String title, String desc, String content,
-                                 String placeholder, MultipartFile[] imgList) {
+                                 String placeholder, String type, MultipartFile[] imgList) {
         JSONObject result = new JSONObject();
         result.put("code", "fail");
         News news = new News();
@@ -104,11 +104,18 @@ public class NewsServiceImpl implements NewsService {
         news.setImgPlaceholder(placeholder);
         news.setPostTime(new Date());
         news.setTitle(title);
-        news.setType("动态");
+        news.setType(type);
         newsMapper.insertSelective(news);
         Integer newsId = news.getNewsId();
         String mainPath = "./src/main/resources/static";
-        String dirPath = "/image/dynamic/" + adminId + "/";
+        String dirPath;
+        if(type.equals("news")){
+            dirPath = "/image/news/" + adminId + "/";
+        }else if(type.equals("dynamic")){
+            dirPath = "/image/dynamic/" + adminId + "/";
+        }else {
+            dirPath = "/image/notice/" + adminId + "/";
+        }
         for (int i = 0; i < imgList.length; i++) {
             String fileName = imgList[i].getOriginalFilename();
             String imgPath = dirPath + fileName + ".jpg";
@@ -387,6 +394,85 @@ public class NewsServiceImpl implements NewsService {
         redisUtil.hdel("carousel_img_list", Integer.toString(newsId));
         result.put("code", "success");
         result.put("msg", "移除成功！");
+        return result;
+    }
+
+    //获取协会公告/新闻/动态
+    @Override
+    public JSONObject indexGetNewsList(Integer pageSize, Integer currentPage, String type) {
+        JSONObject result=new JSONObject();
+        JSONObject data=new JSONObject();
+
+        NewsExample newsExample=new NewsExample();
+        newsExample.createCriteria().andTypeEqualTo(type);
+        long total=newsMapper.countByExample(newsExample);
+        newsExample.setOrderByClause("post_time DESC");
+        newsExample.setOffset(pageSize*(currentPage-1));
+        newsExample.setLimit(pageSize);
+        List<News> newsList=newsMapper.selectByExample(newsExample);
+        JSONArray list=new JSONArray();
+        for(News news:newsList){
+            NewsImgExample newsImgExample = new NewsImgExample();
+            newsImgExample.createCriteria().andNewsIdEqualTo(news.getNewsId()).andImgNewsIndexEqualTo(1).andIsInvalidEqualTo(false);
+            List<NewsImg> newsImgs = newsImgMapper.selectByExample(newsImgExample);
+            JSONObject object=new JSONObject();
+            object.put("title", news.getTitle());
+            object.put("desc", news.getDescription());
+            object.put("date", news.getPostTime());
+            if (newsImgs.size() > 0) {
+                object.put("url", IMG_HOST + newsImgs.get(0).getImgPath());
+            }
+            object.put("id", news.getNewsId());
+            list.add(object);
+        }
+        data.put("list", list);
+        data.put("total", total);
+        result.put("data", data);
+        result.put("code", "success");
+        result.put("msg", "获取成功！");
+        return result;
+    }
+
+    //获取协会公告/新闻/动态详情
+    @Override
+    public JSONObject indexGetNewsDetail(Integer newsId, String type) {
+        JSONObject result = new JSONObject();
+        JSONObject data = new JSONObject();
+        result.put("code", "fail");
+        result.put("data", data);
+
+        News news = newsMapper.selectByPrimaryKey(newsId);
+        if (news == null) {
+            result.put("msg", "系统中找不到该动态！");
+            return result;
+        }
+        JSONObject info = new JSONObject();
+        JSONArray ids = new JSONArray();
+        info.put("title", news.getTitle());
+        info.put("desc", news.getDescription());
+        NewsImgExample newsImgExample = new NewsImgExample();
+        newsImgExample.createCriteria().andNewsIdEqualTo(newsId).andIsInvalidEqualTo(false);
+        newsImgExample.setOrderByClause("img_news_index ASC");
+        List<NewsImg> newsImgs = newsImgMapper.selectByExample(newsImgExample);
+
+        List<String> contentArray = StrUtil.cutStringByPlaceHolder(news.getContent(), news.getImgPlaceholder());
+
+        StringBuilder content = new StringBuilder();
+        for (int i = 0; i < contentArray.size() - 1; i++) {
+            content.append(contentArray.get(i));
+            if (newsImgs.get(i) != null) {
+                content.append("<img src=\"" + IMG_HOST + newsImgs.get(i).getImgPath() + "\">");
+                ids.add(newsImgs.get(i).getImgId());
+            }
+        }
+        content.append(contentArray.get(contentArray.size() - 1));
+
+        info.put("content", content.toString());
+        data.put("info", info);
+        data.put("ids", ids);
+        result.put("data", data);
+        result.put("code", "success");
+        result.put("msg", "内容获取成功！");
         return result;
     }
 }

@@ -566,4 +566,15 @@ public class ActivityServiceImpl implements ActivityService {
         return result;
     }
 
+    //管理员设置座位信息
+    @Override
+    public JSONObject setSEATInfo(JSONObject jsonObject) {
+        return null;
+    }
+
+    //管理员获取活动座位表
+    @Override
+    public JSONObject getActivitySEAT(Integer activityId) {
+        return null;
+    }
 }

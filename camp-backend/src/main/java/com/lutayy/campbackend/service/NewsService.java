@@ -13,7 +13,7 @@ public interface NewsService {
     JSONObject getAssociationItem(String item);
 
     //新增一条动态
-    JSONObject addDynamic(HttpServletRequest request, String title, String desc, String content, String placeholder, MultipartFile[] imgList);
+    JSONObject addDynamic(HttpServletRequest request, String title, String desc, String content, String placeholder, String type, MultipartFile[] imgList);
     //删除一条动态
     JSONObject deleteDynamic(JSONObject jsonObject);
     //获取动态列表
@@ -28,4 +28,8 @@ public interface NewsService {
     JSONObject getCarouselList();
     //管理员删除一条轮播图
     JSONObject removeCarousel(JSONObject jsonObject);
+    //获取协会公告/新闻/动态列表
+    JSONObject indexGetNewsList(Integer pageSize, Integer currentPage, String type);
+    //获取协会公告/新闻/动态详情
+    JSONObject indexGetNewsDetail(Integer newsId, String type);
 }

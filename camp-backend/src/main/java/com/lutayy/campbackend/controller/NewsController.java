@@ -35,17 +35,17 @@ public class NewsController {
     public JSONObject modifyBrief(@RequestBody JSONObject jsonObject) {
         return newsService.modifyAssociationItem(jsonObject, "brief");
     }
-    @RequestMapping("/admin/getFrameWork")
+    @RequestMapping(value = {"/admin/getFrameWork", "/index/getFramework"})
     @ResponseBody
     public Object getFrameWork() {
         return newsService.getAssociationItem("framework");
     }
-    @RequestMapping("/admin/getConsitiution")
+    @RequestMapping(value = {"/admin/getConsitiution", "/index/getConstitution"})
     @ResponseBody
     public Object getConsitiution() {
         return newsService.getAssociationItem("constitution");
     }
-    @RequestMapping("/admin/getBrief")
+    @RequestMapping(value = {"/admin/getBrief", "/index/getBrief"})
     @ResponseBody
     public Object getBrief() {
         return newsService.getAssociationItem("brief");
@@ -59,8 +59,9 @@ public class NewsController {
                                  @RequestParam("desc") String desc,
                                  @RequestParam("content") String content,
                                  @RequestParam("placeholder") String placeholder,
+                                 @RequestParam("type") String type,
                                  @RequestParam("imgList") MultipartFile[] imgList) {
-        return newsService.addDynamic(request, title, desc, content, placeholder, imgList);
+        return newsService.addDynamic(request, title, desc, content, placeholder, type, imgList);
     }
 
     @RequestMapping("/admin/deleteDynamic")
@@ -118,5 +119,40 @@ public class NewsController {
     @ResponseBody
     public JSONObject removeCarousel(@RequestBody JSONObject jsonObject) {
         return newsService.removeCarousel(jsonObject);
+    }
+
+    @RequestMapping("/index/getDynamicList")
+    @ResponseBody
+    public Object indexGetDynamicList(@RequestParam("pageSize") Integer pageSize,
+                                        @RequestParam("currentPage") Integer currentPage) {
+        return newsService.indexGetNewsList(pageSize, currentPage, "dynamic");
+    }
+    @RequestMapping("/index/getNewsList")
+    @ResponseBody
+    public Object indexGetNewsList(@RequestParam("pageSize") Integer pageSize,
+                                      @RequestParam("currentPage") Integer currentPage) {
+        return newsService.indexGetNewsList(pageSize, currentPage, "news");
+    }
+    @RequestMapping("/index/getNoticeList")
+    @ResponseBody
+    public Object indexGetNoticeList(@RequestParam("pageSize") Integer pageSize,
+                                      @RequestParam("currentPage") Integer currentPage) {
+        return newsService.indexGetNewsList(pageSize, currentPage, "notice");
+    }
+
+    @RequestMapping("/index/getDynamicDetail")
+    @ResponseBody
+    public Object indexGetDynamicDetail(@RequestParam("id") Integer newsId) {
+        return newsService.indexGetNewsDetail(newsId, "dynamic");
+    }
+    @RequestMapping("/index/getNewsDetail")
+    @ResponseBody
+    public Object indexGetNewsDetail(@RequestParam("id") Integer newsId) {
+        return newsService.indexGetNewsDetail(newsId, "news");
+    }
+    @RequestMapping("/index/getNoticeDetail")
+    @ResponseBody
+    public Object indexGetNoticeDetail(@RequestParam("id") Integer newsId) {
+        return newsService.indexGetNewsDetail(newsId, "notice");
     }
 }

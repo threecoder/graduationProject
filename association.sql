@@ -96,6 +96,7 @@ insert  into `activity_order_student`(`order_key_id`,`student_id`,`is_paid`) val
 DROP TABLE IF EXISTS `activity_seat`;
 
 CREATE TABLE `activity_seat` (
+  `seat_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '座位主键',
   `activity_id` int(11) DEFAULT NULL COMMENT '活动id',
   `real_x` int(11) DEFAULT NULL COMMENT '横坐标',
   `real_y` int(11) DEFAULT NULL COMMENT '纵坐标',
@@ -103,8 +104,7 @@ CREATE TABLE `activity_seat` (
   `is_occupied` tinyint(1) DEFAULT '1' COMMENT '0:空座 1:已有人',
   `fake_x` int(11) DEFAULT NULL COMMENT '展示给用户的X座',
   `fake_y` int(11) DEFAULT NULL COMMENT '展示给用户的Y行',
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '座位主键',
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`seat_id`),
   KEY `activity_id` (`activity_id`),
   CONSTRAINT `activity_seat_ibfk_1` FOREIGN KEY (`activity_id`) REFERENCES `activity` (`activity_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -128,7 +128,7 @@ CREATE TABLE `activity_student` (
   KEY `seat_id` (`seat_id`),
   CONSTRAINT `activity_student_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`),
   CONSTRAINT `activity_student_ibfk_2` FOREIGN KEY (`activity_id`) REFERENCES `activity` (`activity_id`),
-  CONSTRAINT `activity_student_ibfk_3` FOREIGN KEY (`seat_id`) REFERENCES `activity_seat` (`id`)
+  CONSTRAINT `activity_student_ibfk_3` FOREIGN KEY (`seat_id`) REFERENCES `activity_seat` (`seat_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `activity_student` */
@@ -697,7 +697,7 @@ CREATE TABLE `news` (
 
 /*Data for the table `news` */
 
-insert  into `news`(`news_id`,`admin_id`,`title`,`description`,`content`,`img_placeholder`,`post_time`,`type`,`is_invalid`) values (27,1,'这是一条新闻','这是简介','<p>这是@图#片$占#位@@图#片$占#位@@图#片$占#位@@图#片$占#位@</p><p>新闻@图#片$占#位@内容@图#片$占#位@</p>','@图#片$占#位@','2020-04-18 20:43:26','动态',0);
+insert  into `news`(`news_id`,`admin_id`,`title`,`description`,`content`,`img_placeholder`,`post_time`,`type`,`is_invalid`) values (27,1,'这是一条新闻','这是简介','<p>这是@图#片$占#位@@图#片$占#位@@图#片$占#位@@图#片$占#位@</p><p>新闻@图#片$占#位@内容@图#片$占#位@</p>','@图#片$占#位@','2020-04-18 20:43:26','dynamic',0);
 
 /*Table structure for table `news_img` */
 

@@ -22,4 +22,8 @@ public interface ActivityService {
     JSONObject adminGetActivityList();
 
     JSONObject memberGetSignedActivities(Integer memberId);
+    //管理员设置座位信息
+    JSONObject setSEATInfo(JSONObject jsonObject);
+    //管理员获取活动座位表
+    JSONObject getActivitySEAT(Integer activityId);
 }

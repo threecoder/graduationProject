@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public interface TrainingService {
 
-    JSONObject getCourses(JSONObject jsonObject);
+    JSONObject getCourses(String keyWord, String startDateStr, String endDateStr, Integer pageSize, Integer currentPage, String type);
 
     JSONObject getJoinableTraining(Integer memberId);
 

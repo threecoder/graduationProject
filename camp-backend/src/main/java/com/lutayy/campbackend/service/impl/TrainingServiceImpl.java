@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -65,12 +66,11 @@ public class TrainingServiceImpl implements TrainingService {
 
 
     @Override
-    public JSONObject getCourses(JSONObject jsonObject) {
-        String keyword = jsonObject.getString("keyWord");
-        Date startDate = jsonObject.getDate("startDate");
-        Date endDate = jsonObject.getDate("endDate");
-        Integer pageSize = jsonObject.getInteger("pageSize");
-        Integer currentPage = jsonObject.getInteger("currentPage");
+    public JSONObject getCourses(String keyWord, String startDateStr, String endDateStr, Integer pageSize, Integer currentPage, String type) {
+        JSONObject result = new JSONObject();
+        JSONObject data = new JSONObject();
+        result.put("data", data);
+        result.put("code", "fail");
         if (pageSize == null || pageSize < 1) {
             pageSize = 10;
         }
@@ -79,15 +79,44 @@ public class TrainingServiceImpl implements TrainingService {
         }
         TrainingExample trainingExample = new TrainingExample();
         TrainingExample.Criteria criteria = trainingExample.createCriteria();
-        criteria.andTrainingNameLike("%" + keyword + "%");
-        if (startDate != null) {
+        if((startDateStr==null || startDateStr.equals("")) && (endDateStr==null || endDateStr.equals(""))) {
+            if (type.equals("previous")) {
+                criteria.andTrainingEndTimeLessThan(new Date());
+            } else if (type.equals("now")) {
+                criteria.andTrainingStartTimeLessThanOrEqualTo(new Date());
+                criteria.andTrainingEndTimeGreaterThanOrEqualTo(new Date());
+            } else {
+                criteria.andTrainingStartTimeGreaterThanOrEqualTo(new Date());
+            }
+        }
+
+        if(keyWord!=null && !keyWord.equals("")) {
+            criteria.andTrainingNameLike("%" + keyWord + "%");
+        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        if (startDateStr != null && !startDateStr.equals("")) {
+            Date startDate;
+            try {
+                startDate = simpleDateFormat.parse(startDateStr);
+            }catch (Exception e){
+                result.put("msg", "日期格式错误");
+                return result;
+            }
             criteria.andTrainingStartTimeGreaterThanOrEqualTo(startDate);
         }
-        if (endDate != null) {
-            Calendar c = Calendar.getInstance();
-            c.setTime(endDate);
-            c.add(Calendar.DAY_OF_MONTH, +1);
-            criteria.andTrainingEndTimeLessThanOrEqualTo(c.getTime());
+        if (endDateStr != null && !endDateStr.equals("")) {
+//            Calendar c = Calendar.getInstance();
+//            c.setTime(endDate);
+//            c.add(Calendar.DAY_OF_MONTH, +1);
+//            criteria.andTrainingEndTimeLessThanOrEqualTo(c.getTime());
+            Date endDate;
+            try {
+                endDate = simpleDateFormat.parse(endDateStr);
+            }catch (Exception e){
+                result.put("msg", "日期格式错误");
+                return result;
+            }
+            criteria.andTrainingEndTimeLessThan(endDate);
         }
         trainingExample.setOrderByClause("post_time DESC");
         List<Training> trainings = trainingMapper.selectByExample(trainingExample);
@@ -119,8 +148,7 @@ public class TrainingServiceImpl implements TrainingService {
                 break;
             }
         }
-        JSONObject result = new JSONObject();
-        JSONObject data = new JSONObject();
+
         data.put("list", list);
         data.put("allNum", size);
         data.put("pageSize", sum);
