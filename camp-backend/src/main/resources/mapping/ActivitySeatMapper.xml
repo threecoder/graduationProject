@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lutayy.campbackend.dao.ActivitySeatMapper">
+  <resultMap id="BaseResultMap" type="com.lutayy.campbackend.pojo.ActivitySeat">
+    <id column="seat_id" jdbcType="INTEGER" property="seatId" />
+    <result column="activity_id" jdbcType="INTEGER" property="activityId" />
+    <result column="real_x" jdbcType="INTEGER" property="realX" />
+    <result column="real_y" jdbcType="INTEGER" property="realY" />
+    <result column="is_lock" jdbcType="BIT" property="isLock" />
+    <result column="is_occupied" jdbcType="BIT" property="isOccupied" />
+    <result column="fake_x" jdbcType="INTEGER" property="fakeX" />
+    <result column="fake_y" jdbcType="INTEGER" property="fakeY" />
+    <result column="studentNum" jdbcType="INTEGER" property="studentnum" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    seat_id, activity_id, real_x, real_y, is_lock, is_occupied, fake_x, fake_y, studentNum
+  </sql>
+  <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.ActivitySeatExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from activity_seat
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from activity_seat
+    where seat_id = #{seatId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from activity_seat
+    where seat_id = #{seatId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.lutayy.campbackend.pojo.ActivitySeatExample">
+    delete from activity_seat
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lutayy.campbackend.pojo.ActivitySeat">
+    <selectKey keyProperty="seatId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into activity_seat (activity_id, real_x, real_y, 
+      is_lock, is_occupied, fake_x, 
+      fake_y, studentNum)
+    values (#{activityId,jdbcType=INTEGER}, #{realX,jdbcType=INTEGER}, #{realY,jdbcType=INTEGER}, 
+      #{isLock,jdbcType=BIT}, #{isOccupied,jdbcType=BIT}, #{fakeX,jdbcType=INTEGER}, 
+      #{fakeY,jdbcType=INTEGER}, #{studentnum,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.ActivitySeat">
+    <selectKey keyProperty="seatId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into activity_seat
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="activityId != null">
+        activity_id,
+      </if>
+      <if test="realX != null">
+        real_x,
+      </if>
+      <if test="realY != null">
+        real_y,
+      </if>
+      <if test="isLock != null">
+        is_lock,
+      </if>
+      <if test="isOccupied != null">
+        is_occupied,
+      </if>
+      <if test="fakeX != null">
+        fake_x,
+      </if>
+      <if test="fakeY != null">
+        fake_y,
+      </if>
+      <if test="studentnum != null">
+        studentNum,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="activityId != null">
+        #{activityId,jdbcType=INTEGER},
+      </if>
+      <if test="realX != null">
+        #{realX,jdbcType=INTEGER},
+      </if>
+      <if test="realY != null">
+        #{realY,jdbcType=INTEGER},
+      </if>
+      <if test="isLock != null">
+        #{isLock,jdbcType=BIT},
+      </if>
+      <if test="isOccupied != null">
+        #{isOccupied,jdbcType=BIT},
+      </if>
+      <if test="fakeX != null">
+        #{fakeX,jdbcType=INTEGER},
+      </if>
+      <if test="fakeY != null">
+        #{fakeY,jdbcType=INTEGER},
+      </if>
+      <if test="studentnum != null">
+        #{studentnum,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lutayy.campbackend.pojo.ActivitySeatExample" resultType="java.lang.Long">
+    select count(*) from activity_seat
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update activity_seat
+    <set>
+      <if test="record.seatId != null">
+        seat_id = #{record.seatId,jdbcType=INTEGER},
+      </if>
+      <if test="record.activityId != null">
+        activity_id = #{record.activityId,jdbcType=INTEGER},
+      </if>
+      <if test="record.realX != null">
+        real_x = #{record.realX,jdbcType=INTEGER},
+      </if>
+      <if test="record.realY != null">
+        real_y = #{record.realY,jdbcType=INTEGER},
+      </if>
+      <if test="record.isLock != null">
+        is_lock = #{record.isLock,jdbcType=BIT},
+      </if>
+      <if test="record.isOccupied != null">
+        is_occupied = #{record.isOccupied,jdbcType=BIT},
+      </if>
+      <if test="record.fakeX != null">
+        fake_x = #{record.fakeX,jdbcType=INTEGER},
+      </if>
+      <if test="record.fakeY != null">
+        fake_y = #{record.fakeY,jdbcType=INTEGER},
+      </if>
+      <if test="record.studentnum != null">
+        studentNum = #{record.studentnum,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update activity_seat
+    set seat_id = #{record.seatId,jdbcType=INTEGER},
+      activity_id = #{record.activityId,jdbcType=INTEGER},
+      real_x = #{record.realX,jdbcType=INTEGER},
+      real_y = #{record.realY,jdbcType=INTEGER},
+      is_lock = #{record.isLock,jdbcType=BIT},
+      is_occupied = #{record.isOccupied,jdbcType=BIT},
+      fake_x = #{record.fakeX,jdbcType=INTEGER},
+      fake_y = #{record.fakeY,jdbcType=INTEGER},
+      studentNum = #{record.studentnum,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lutayy.campbackend.pojo.ActivitySeat">
+    update activity_seat
+    <set>
+      <if test="activityId != null">
+        activity_id = #{activityId,jdbcType=INTEGER},
+      </if>
+      <if test="realX != null">
+        real_x = #{realX,jdbcType=INTEGER},
+      </if>
+      <if test="realY != null">
+        real_y = #{realY,jdbcType=INTEGER},
+      </if>
+      <if test="isLock != null">
+        is_lock = #{isLock,jdbcType=BIT},
+      </if>
+      <if test="isOccupied != null">
+        is_occupied = #{isOccupied,jdbcType=BIT},
+      </if>
+      <if test="fakeX != null">
+        fake_x = #{fakeX,jdbcType=INTEGER},
+      </if>
+      <if test="fakeY != null">
+        fake_y = #{fakeY,jdbcType=INTEGER},
+      </if>
+      <if test="studentnum != null">
+        studentNum = #{studentnum,jdbcType=INTEGER},
+      </if>
+    </set>
+    where seat_id = #{seatId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lutayy.campbackend.pojo.ActivitySeat">
+    update activity_seat
+    set activity_id = #{activityId,jdbcType=INTEGER},
+      real_x = #{realX,jdbcType=INTEGER},
+      real_y = #{realY,jdbcType=INTEGER},
+      is_lock = #{isLock,jdbcType=BIT},
+      is_occupied = #{isOccupied,jdbcType=BIT},
+      fake_x = #{fakeX,jdbcType=INTEGER},
+      fake_y = #{fakeY,jdbcType=INTEGER},
+      studentNum = #{studentnum,jdbcType=INTEGER}
+    where seat_id = #{seatId,jdbcType=INTEGER}
+  </update>
+</mapper>

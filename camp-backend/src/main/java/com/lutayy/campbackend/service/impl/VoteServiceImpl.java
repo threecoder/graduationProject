@@ -183,9 +183,9 @@ public class VoteServiceImpl implements VoteService {
             object.put("type", vote.getOptionalNum() !=null && vote.getOptionalNum() > 1 ? "多选" : "单选");
             object.put("sum", vote.getOptionalSum());
             object.put("num", vote.getOptionalNum());
-            if(vote.getVoteType().equals(2))
+            if(vote.getVoteType().equals((byte)2))
                 object.put("limit", "学员/会员");
-            else if(vote.getVoteType().equals(1))
+            else if(vote.getVoteType().equals((byte)1))
                 object.put("limit", "学员");
             else
                 object.put("limit", "会员");

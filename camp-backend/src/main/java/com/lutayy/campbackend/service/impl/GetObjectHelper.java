@@ -4,6 +4,7 @@ import com.lutayy.campbackend.common.util.JwtUtil;
 import com.lutayy.campbackend.dao.*;
 import com.lutayy.campbackend.pojo.*;
 import com.lutayy.campbackend.pojo.request.TokenRequest;
+import com.lutayy.campbackend.service.ActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -30,6 +31,8 @@ public class GetObjectHelper {
     ExamReStudentMapper examReStudentMapper;
     @Autowired
     TrainingReStudentMapper trainingReStudentMapper;
+    @Autowired
+    ActivityStudentMapper activityStudentMapper;
 
     /** 由管理员account获得会员对象 **/
     public Admin getAdminFromAccount(String account) {
@@ -139,6 +142,18 @@ public class GetObjectHelper {
             return null;
         } else {
             return trainingReStudents.get(0);
+        }
+    }
+
+    /** 获取活动Re学员 **/
+    public ActivityStudent getActivityReStudentByIds(Integer activityId, Integer studentId) {
+        ActivityStudentExample activityStudentExample = new ActivityStudentExample();
+        activityStudentExample.createCriteria().andActivityIdEqualTo(activityId).andStudentIdEqualTo(studentId);
+        List<ActivityStudent> activityStudents = activityStudentMapper.selectByExample(activityStudentExample);
+        if (activityStudents.size() == 0) {
+            return null;
+        } else {
+            return activityStudents.get(0);
         }
     }
 
