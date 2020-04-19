@@ -33,6 +33,8 @@ public class GetObjectHelper {
     TrainingReStudentMapper trainingReStudentMapper;
     @Autowired
     ActivityStudentMapper activityStudentMapper;
+    @Autowired
+    ActivitySeatMapper activitySeatMapper;
 
     /** 由管理员account获得会员对象 **/
     public Admin getAdminFromAccount(String account) {
@@ -157,6 +159,18 @@ public class GetObjectHelper {
         }
     }
 
+    /** 由活动id和真实坐标获得座位对象 **/
+    public ActivitySeat getSeatByActivityIdAndXY(Integer activityId, Integer row, Integer col) {
+        ActivitySeatExample activitySeatExample = new ActivitySeatExample();
+        activitySeatExample.createCriteria().andActivityIdEqualTo(activityId).andRealYEqualTo(row).andRealXEqualTo(col);
+        List<ActivitySeat> activitySeats = activitySeatMapper.selectByExample(activitySeatExample);
+        if (activitySeats.size() == 0) {
+            return null;
+        } else {
+            return activitySeats.get(0);
+        }
+    }
+
     /** 从请求中获取用户id **/
     public Integer getIdByRequestAndRole(String role, HttpServletRequest request){
         Cookie[] cookies = request.getCookies();
@@ -182,4 +196,5 @@ public class GetObjectHelper {
         }
         return tokenRequest.getId();
     }
+
 }

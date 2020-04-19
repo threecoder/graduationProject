@@ -509,7 +509,7 @@ public class ExamServiceImpl implements ExamService {
             result.put("msg", "当前考试正在审核队列中，请耐心等待审核");
             return result;
         }
-        if (examReStudent.getIsVerify().equals(2)) {
+        if (examReStudent.getIsVerify().equals((byte)2)) {
             result.put("msg", "当前考试已审核通过，无须重考");
             return result;
         }

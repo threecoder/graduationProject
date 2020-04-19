@@ -34,14 +34,14 @@ CREATE TABLE `activity` (
   `contact_name` varchar(10) DEFAULT NULL COMMENT '联系人',
   `contact_phone` varchar(20) DEFAULT NULL COMMENT '联系人电话',
   `max_num` int(11) DEFAULT NULL COMMENT '活动可容纳最大人数',
-  `area_width` int(11) DEFAULT NULL COMMENT '场地矩形行座位数',
-  `area_length` int(11) DEFAULT NULL COMMENT '场地矩形列座位数',
+  `area_width` int(11) DEFAULT NULL COMMENT '场地矩形每行座位数（列数）',
+  `area_length` int(11) DEFAULT NULL COMMENT '场地矩形每列座位数（行数）',
   PRIMARY KEY (`activity_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 /*Data for the table `activity` */
 
-insert  into `activity`(`activity_id`,`activity_fee`,`activity_name`,`activity_introduction`,`activity_date`,`activity_length_min`,`activity_address`,`open_time`,`close_time`,`post_time`,`contact_name`,`contact_phone`,`max_num`,`area_width`,`area_length`) values (1,'188.88','垃圾分类讲解','  今年夏天，垃圾分类无疑是最火的话题。|作为全国46个垃圾分类试点城市之一，|长沙市围绕垃圾分类开展了形式多样、内容丰富的宣传活动，趣味游戏、知识宣讲、在线答题、儿童手抄报……一场全民参与、声势浩大的“全民生活垃圾分类之旅”让环保理念深植人心。','2019-10-01 20:00:00',60,'广东省广州市华南理工大学大学城校区','2019-09-25 20:00:00','2019-10-09 02:32:42','2019-10-05 02:41:10','王先生','13333333333',50,NULL,NULL),(2,'299.99','英语角','  我们的英语俱乐部旨在为大家创造一个英语的交流环境，让所有想学英语，想说好英语的人们，在这样一个极具特色的氛围中学好英语，|在外语老师的引导下，大家会积极交流，大胆开口说，培养纯正的外语语感，让你更加自信说英语，并结交更多的外国友人，|避免找个好工作， 而因为英语困惑自己~~~~','2019-09-30 15:00:00',120,'广东省广州市华南理工大学大学城校区','2019-09-25 13:00:00','2019-10-19 00:32:46','2019-10-04 02:41:14','李先生','13555555555',59,NULL,NULL),(3,'199.99','“拥抱春天，播种绿色”植树节活动','  植树节是按照法律规定宣传保护树木，并组织动员群众积极参加以植树造林为活动内容的节日。按时间长短可分为植树日、植树周和植树月，共称为国际植树节。提倡通过这种活动，激发人们爱林造林的热情、意识到环保的重要性。',NULL,NULL,'广东省广州市华南理工大学大学城校区','2019-09-24 02:28:46','2019-09-30 02:32:52','2019-10-18 02:41:16','李先生','13666666666',46,NULL,NULL),(4,'213.22','主题餐厅','  主题餐厅旨在为大家提供一起品尝美食的机会','2019-11-09 14:28:55',NULL,NULL,'2019-10-09 14:29:09','2019-11-16 14:29:12','2019-09-05 02:41:20',NULL,NULL,40,NULL,NULL);
+insert  into `activity`(`activity_id`,`activity_fee`,`activity_name`,`activity_introduction`,`activity_date`,`activity_length_min`,`activity_address`,`open_time`,`close_time`,`post_time`,`contact_name`,`contact_phone`,`max_num`,`area_width`,`area_length`) values (1,'188.88','垃圾分类讲解','  今年夏天，垃圾分类无疑是最火的话题。|作为全国46个垃圾分类试点城市之一，|长沙市围绕垃圾分类开展了形式多样、内容丰富的宣传活动，趣味游戏、知识宣讲、在线答题、儿童手抄报……一场全民参与、声势浩大的“全民生活垃圾分类之旅”让环保理念深植人心。','2019-10-01 20:00:00',60,'广东省广州市华南理工大学大学城校区','2019-09-25 20:00:00','2019-10-09 02:32:42','2019-10-05 02:41:10','王先生','13333333333',50,NULL,NULL),(2,'299.99','英语角','  我们的英语俱乐部旨在为大家创造一个英语的交流环境，让所有想学英语，想说好英语的人们，在这样一个极具特色的氛围中学好英语，|在外语老师的引导下，大家会积极交流，大胆开口说，培养纯正的外语语感，让你更加自信说英语，并结交更多的外国友人，|避免找个好工作， 而因为英语困惑自己~~~~','2019-09-30 15:00:00',120,'广东省广州市华南理工大学大学城校区','2019-09-25 13:00:00','2019-10-19 00:32:46','2019-10-04 02:41:14','李先生','13555555555',59,NULL,NULL),(3,'199.99','“拥抱春天，播种绿色”植树节活动','  植树节是按照法律规定宣传保护树木，并组织动员群众积极参加以植树造林为活动内容的节日。按时间长短可分为植树日、植树周和植树月，共称为国际植树节。提倡通过这种活动，激发人们爱林造林的热情、意识到环保的重要性。',NULL,NULL,'广东省广州市华南理工大学大学城校区','2019-09-24 02:28:46','2019-09-30 02:32:52','2019-10-18 02:41:16','李先生','13666666666',46,NULL,NULL),(4,'213.22','主题餐厅','  主题餐厅旨在为大家提供一起品尝美食的机会','2019-11-09 14:28:55',NULL,NULL,'2019-10-09 14:29:09','2019-11-16 14:29:12','2019-09-05 02:41:20',NULL,NULL,40,9,8);
 
 /*Table structure for table `activity_order` */
 
@@ -98,18 +98,22 @@ DROP TABLE IF EXISTS `activity_seat`;
 CREATE TABLE `activity_seat` (
   `seat_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '座位主键',
   `activity_id` int(11) DEFAULT NULL COMMENT '活动id',
-  `real_x` int(11) DEFAULT NULL COMMENT '横坐标',
-  `real_y` int(11) DEFAULT NULL COMMENT '纵坐标',
+  `real_x` int(11) DEFAULT NULL COMMENT '横坐标（第x座）',
+  `real_y` int(11) DEFAULT NULL COMMENT '纵坐标（第y行）',
   `is_lock` tinyint(1) DEFAULT '0' COMMENT '1:锁定座位',
-  `is_occupied` tinyint(1) DEFAULT '1' COMMENT '0:空座 1:已有人',
+  `is_occupied` tinyint(1) DEFAULT '0' COMMENT '0:空座 1:已有人',
   `fake_x` int(11) DEFAULT NULL COMMENT '展示给用户的X座',
   `fake_y` int(11) DEFAULT NULL COMMENT '展示给用户的Y行',
+  `studentNum` int(11) DEFAULT NULL COMMENT '人员编号（学生id）',
   PRIMARY KEY (`seat_id`),
+  UNIQUE KEY `seat_id` (`seat_id`,`real_x`,`real_y`),
   KEY `activity_id` (`activity_id`),
   CONSTRAINT `activity_seat_ibfk_1` FOREIGN KEY (`activity_id`) REFERENCES `activity` (`activity_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=146 DEFAULT CHARSET=utf8;
 
 /*Data for the table `activity_seat` */
+
+insert  into `activity_seat`(`seat_id`,`activity_id`,`real_x`,`real_y`,`is_lock`,`is_occupied`,`fake_x`,`fake_y`,`studentNum`) values (2,4,1,1,0,0,1,1,NULL),(3,4,2,1,0,0,2,1,NULL),(4,4,3,1,1,0,NULL,NULL,NULL),(5,4,4,1,0,0,3,1,NULL),(6,4,5,1,0,0,4,1,NULL),(7,4,6,1,0,0,5,1,NULL),(8,4,7,1,0,0,6,1,NULL),(9,4,8,1,0,0,7,1,NULL),(10,4,9,1,0,0,8,1,NULL),(11,4,1,2,0,0,1,2,NULL),(12,4,2,2,0,0,2,2,NULL),(13,4,3,2,0,0,3,2,NULL),(14,4,4,2,0,0,4,2,NULL),(15,4,5,2,0,0,5,2,NULL),(16,4,6,2,0,0,6,2,NULL),(17,4,7,2,0,0,7,2,NULL),(18,4,8,2,0,0,8,2,NULL),(19,4,9,2,0,0,9,2,NULL),(20,4,1,3,0,0,1,3,NULL),(21,4,2,3,0,0,2,3,NULL),(22,4,3,3,0,1,3,3,1),(23,4,4,3,0,0,4,3,NULL),(24,4,5,3,0,0,5,3,NULL),(25,4,6,3,0,0,6,3,NULL),(26,4,7,3,0,0,7,3,NULL),(27,4,8,3,0,0,8,3,NULL),(28,4,9,3,0,0,9,3,NULL),(29,4,1,4,0,0,1,4,NULL),(30,4,2,4,0,0,2,4,NULL),(31,4,3,4,0,0,3,4,NULL),(32,4,4,4,0,0,4,4,NULL),(33,4,5,4,0,0,5,4,NULL),(34,4,6,4,1,0,NULL,NULL,NULL),(35,4,7,4,0,0,6,4,NULL),(36,4,8,4,0,0,7,4,NULL),(37,4,9,4,0,0,8,4,NULL),(38,4,1,5,0,0,1,5,NULL),(39,4,2,5,0,0,2,5,NULL),(40,4,3,5,0,0,3,5,NULL),(41,4,4,5,1,0,NULL,NULL,NULL),(42,4,5,5,0,0,4,5,NULL),(43,4,6,5,0,0,5,5,NULL),(44,4,7,5,0,0,6,5,NULL),(45,4,8,5,0,0,7,5,NULL),(46,4,9,5,0,0,8,5,NULL),(47,4,1,6,0,0,1,6,NULL),(48,4,2,6,0,0,2,6,NULL),(49,4,3,6,0,0,3,6,NULL),(50,4,4,6,0,0,4,6,NULL),(51,4,5,6,0,0,5,6,NULL),(52,4,6,6,0,0,6,6,NULL),(53,4,7,6,0,0,7,6,NULL),(54,4,8,6,0,0,8,6,NULL),(55,4,9,6,0,0,9,6,NULL),(56,4,1,7,0,0,1,7,NULL),(57,4,2,7,0,0,2,7,NULL),(58,4,3,7,1,0,NULL,NULL,NULL),(59,4,4,7,0,0,3,7,NULL),(60,4,5,7,0,0,4,7,NULL),(61,4,6,7,0,0,5,7,NULL),(62,4,7,7,0,1,6,7,8),(63,4,8,7,0,0,7,7,NULL),(64,4,9,7,0,0,8,7,NULL),(65,4,1,8,0,0,1,8,NULL),(66,4,2,8,0,0,2,8,NULL),(67,4,3,8,0,0,3,8,NULL),(68,4,4,8,0,0,4,8,NULL),(69,4,5,8,0,0,5,8,NULL),(70,4,6,8,0,0,6,8,NULL),(71,4,7,8,0,0,7,8,NULL),(72,4,8,8,0,0,8,8,NULL),(73,4,9,8,0,0,9,8,NULL);
 
 /*Table structure for table `activity_student` */
 
@@ -133,7 +137,7 @@ CREATE TABLE `activity_student` (
 
 /*Data for the table `activity_student` */
 
-insert  into `activity_student`(`apply_number`,`activity_id`,`student_id`,`apply_time`,`seat_id`,`seat_number`) values ('34cvsf',4,1,'2019-10-09 16:33:40',NULL,'1-5'),('asdasd',1,1,'2019-10-09 14:38:36',NULL,'4-6'),('ssdas1',4,8,'2019-10-09 16:34:09',NULL,'1-12');
+insert  into `activity_student`(`apply_number`,`activity_id`,`student_id`,`apply_time`,`seat_id`,`seat_number`) values ('34cvsf',4,1,'2019-10-09 16:33:40',22,'3行3座'),('asdasd',1,1,'2019-10-09 14:38:36',NULL,'4-6'),('ssdas1',4,8,'2019-10-09 16:34:09',62,'7行6座');
 
 /*Table structure for table `admin` */
 
@@ -693,11 +697,11 @@ CREATE TABLE `news` (
   PRIMARY KEY (`news_id`),
   KEY `admin_id` (`admin_id`),
   CONSTRAINT `news_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`admin_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
 
 /*Data for the table `news` */
 
-insert  into `news`(`news_id`,`admin_id`,`title`,`description`,`content`,`img_placeholder`,`post_time`,`type`,`is_invalid`) values (27,1,'这是一条新闻','这是简介','<p>这是@图#片$占#位@@图#片$占#位@@图#片$占#位@@图#片$占#位@</p><p>新闻@图#片$占#位@内容@图#片$占#位@</p>','@图#片$占#位@','2020-04-18 20:43:26','dynamic',0);
+insert  into `news`(`news_id`,`admin_id`,`title`,`description`,`content`,`img_placeholder`,`post_time`,`type`,`is_invalid`) values (27,1,'这是一条新闻','这是简介','<p>这是@图#片$占#位@@图#片$占#位@@图#片$占#位@@图#片$占#位@</p><p>新闻@图#片$占#位@内容@图#片$占#位@</p>','@图#片$占#位@','2020-04-18 20:43:26','dynamic',0),(33,1,'新闻示例222','试试','<p>试试@图#片$占#位@存@图#片$占#位@</p>','@图#片$占#位@','2020-04-20 00:14:59','news',1),(34,1,'新闻333','都是','<p>@图#片$占#位@</p>','@图#片$占#位@','2020-04-20 00:41:13','news',1),(35,1,'新闻1123','试试','<p>@图#片$占#位@</p>','@图#片$占#位@','2020-04-20 00:42:37','news',0),(36,1,'dfd','dsdsd','<p>@图#片$占#位@</p>','@图#片$占#位@','2020-04-20 00:55:02','news',0),(37,1,'xsss','sssss','<p>@图#片$占#位@</p>','@图#片$占#位@','2020-04-20 00:58:14','news',0);
 
 /*Table structure for table `news_img` */
 
@@ -710,11 +714,11 @@ CREATE TABLE `news_img` (
   `img_news_index` int(11) DEFAULT NULL COMMENT '是新闻中的第几张图片',
   `is_invalid` tinyint(1) DEFAULT '0' COMMENT '0:有效  1:无效',
   PRIMARY KEY (`img_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;
 
 /*Data for the table `news_img` */
 
-insert  into `news_img`(`img_id`,`img_path`,`news_id`,`img_news_index`,`is_invalid`) values (25,'/image/dynamic/1/1-1587213805718.jpg',27,1,1),(26,'/image/dynamic/1/2-1587213805721.jpg',27,2,1),(27,'/image/dynamic/1/3-1587213805721.jpg',27,3,1),(28,'/image/dynamic/1/2-1587226574631.jpg',27,2,1),(29,'/image/dynamic/1/1-1587228110132.jpg',27,1,0),(30,'/image/dynamic/1/3-1587228341430.jpg',27,6,0),(31,'/image/dynamic/1/2-1587228517842.jpg',27,5,0),(32,'/image/dynamic/1/2-1587228844280.jpg',27,2,0),(33,'/image/dynamic/1/3-1587229521048.jpg',27,3,0),(34,'/image/dynamic/1/4-1587229642017.jpg',27,4,1),(35,'/image/dynamic/1/4-1587229982286.jpg',27,4,0);
+insert  into `news_img`(`img_id`,`img_path`,`news_id`,`img_news_index`,`is_invalid`) values (25,'/image/dynamic/1/1-1587213805718.jpg',27,1,1),(26,'/image/dynamic/1/2-1587213805721.jpg',27,2,1),(27,'/image/dynamic/1/3-1587213805721.jpg',27,3,1),(28,'/image/dynamic/1/2-1587226574631.jpg',27,2,1),(29,'/image/dynamic/1/1-1587228110132.jpg',27,1,0),(30,'/image/dynamic/1/3-1587228341430.jpg',27,6,0),(31,'/image/dynamic/1/2-1587228517842.jpg',27,5,0),(32,'/image/dynamic/1/2-1587228844280.jpg',27,2,0),(33,'/image/dynamic/1/3-1587229521048.jpg',27,3,0),(34,'/image/dynamic/1/4-1587229642017.jpg',27,4,1),(35,'/image/dynamic/1/4-1587229982286.jpg',27,4,0),(41,'/image/news/1//1-1587312898302.jpg',33,1,1),(42,'/image/news/1//2-1587312898303.jpg',33,2,1),(43,'/image/news/1//1-1587314472559.jpg',34,1,1),(44,'/image/news/1/1-1587314556857.jpg',35,1,0),(45,'/image/news/1/1-1587315301778.jpg',36,1,0),(46,'/image/news/1/1-1587315493676.jpg',37,1,0);
 
 /*Table structure for table `payment` */
 
