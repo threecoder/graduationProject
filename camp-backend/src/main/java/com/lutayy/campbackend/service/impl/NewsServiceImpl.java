@@ -114,13 +114,12 @@ public class NewsServiceImpl implements NewsService {
         }else if(type.equals("dynamic")){
             dirPath = "/image/dynamic/" + adminId + "/";
         }else {
-            dirPath = "/image/notice/" + adminId;
+            dirPath = "/image/notice/" + adminId + "/";
         }
         for (int i = 0; i < imgList.length; i++) {
             String fileName = imgList[i].getOriginalFilename();
-            String imgPath = dirPath +"/"+ fileName + ".jpg";
+            String imgPath = dirPath + fileName + ".jpg";
             File dest = new File(mainPath + dirPath);
-            System.out.println(dest.exists());
             if (!dest.exists()) {
                 dest.mkdirs();
             }
@@ -406,7 +405,7 @@ public class NewsServiceImpl implements NewsService {
         JSONObject data=new JSONObject();
 
         NewsExample newsExample=new NewsExample();
-        newsExample.createCriteria().andTypeEqualTo(type);
+        newsExample.createCriteria().andTypeEqualTo(type).andIsInvalidEqualTo(false);
         long total=newsMapper.countByExample(newsExample);
         newsExample.setOrderByClause("post_time DESC");
         newsExample.setOffset(pageSize*(currentPage-1));

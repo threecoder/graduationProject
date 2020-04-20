@@ -1,5 +1,6 @@
 package com.lutayy.campbackend.common.util;
 
+import com.alibaba.fastjson.JSONObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.*;
@@ -148,6 +149,10 @@ public class ExcelUtil {
         }
 
         return map;
+    }
+
+    public static Map<String, JSONObject[][]> transXlsToArray(InputStream inputStream){
+        return null;
     }
 }
 
