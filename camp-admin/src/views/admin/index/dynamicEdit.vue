@@ -13,7 +13,11 @@
                 <el-col :span="12">
                     <div class="title-container">
                         <label>类型</label>
-                        <el-select v-model="form.type" placeholder="请选择类型">
+                        <el-select
+                            v-model="form.type"
+                            placeholder="请选择类型"
+                            :disabled="dynamicId!==null"
+                        >
                             <el-option label="新闻" value="news"></el-option>
                             <el-option label="动态" value="dynamic"></el-option>
                         </el-select>
@@ -194,6 +198,7 @@ export default {
                     await indexApi.addDynamic(data);
                 }
                 this.$message.success("编辑动态成功");
+                this.$router.push("/dynamic");
             } catch (error) {
                 this.form.content = this.backupContent;
                 this.$message.error(error.message);
@@ -207,6 +212,7 @@ export default {
             try {
                 let res = await indexApi.getDynamicDetail(this.dynamicId);
                 this.form = res.data.info;
+                this.form.type = "news";
                 this.initContent = res.data.info.content;
                 let reg1 = /<img[\s\S]*?>/g;
                 let imgArr = this.form.content.match(reg1);

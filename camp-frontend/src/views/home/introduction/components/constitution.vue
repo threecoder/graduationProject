@@ -3,9 +3,7 @@
         <div class="header">
             <p class="el-icon-caret-right">协会章程</p>
         </div>
-        <div class="msg">
-            <p v-for="(item,i) in msgList" :key="i">{{item}}</p>
-        </div>
+        <div class="msg" v-html="msgList"></div>
     </div>
 </template>
 <script>

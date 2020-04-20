@@ -121,6 +121,7 @@ export default {
             li {
                 border-bottom: 1px solid rgba(0, 0, 0, 0.1);
                 // height: 80px;
+                padding-left: 20px;
                 padding-bottom: 10px;
                 &:hover {
                     span.title {
@@ -144,11 +145,12 @@ export default {
                     justify-content: space-around;
                     img {
                         float: left;
-                        // width: 130px;
+                        width: 130px;
                         height: 90px;
                     }
                     p {
                         float: left;
+                        width: calc(100% - 130px);
                         margin-left: 20px;
                         // width: 540px;
                         color: rgba(96, 98, 102, 0.8);
