@@ -36,6 +36,9 @@ export default {
             initContent: null
         };
     },
+    mounted(){
+        this.getBrief();
+    },
     methods: {
         handleSelect(content) {
             if (content != "/" + this.type) {

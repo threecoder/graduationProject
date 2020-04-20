@@ -75,7 +75,12 @@ export default {
                     { prop: "type", label: "类型" },
                     { prop: "desc", label: "简述" },
                     { prop: "time", label: "发布时间" },
-                    { slot: "oper", label: "操作", fixed: "right" }
+                    {
+                        slot: "oper",
+                        label: "操作",
+                        fixed: "right",
+                        width: "170px"
+                    }
                 ],
                 data: [
                     {
@@ -107,6 +112,9 @@ export default {
             try {
                 let res = await indexApi.getNewsAndDynamicList(this.form);
                 this.table.data = res.data.list;
+                this.table.data.forEach(val => {
+                    val.type = val.type == "dynamic" ? "动态" : "新闻";
+                });
                 this.form.total = res.data.total;
             } catch (error) {
                 this.$message.error(error.message);

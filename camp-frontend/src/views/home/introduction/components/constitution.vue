@@ -48,11 +48,6 @@ export default {
     .msg {
         background-color: #fff;
         min-height: 640px;
-        p {
-            line-height: 30px;
-            color: rgb(96, 98, 102);
-            text-indent: 2rem;
-        }
     }
 }
 </style>

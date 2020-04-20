@@ -145,13 +145,11 @@ export default {
                             end = imgArr[i].lastIndexOf('"'),
                             key = imgArr[i].substring(start + 1, end);
                         let id = this.imgIds[key];
-                        this.imgInfo.push(
-                            JSON.stringify({
-                                imgId: id,
-                                order: i + 1,
-                                name: null
-                            })
-                        );
+                        this.imgInfo.push({
+                            imgId: id,
+                            order: i + 1,
+                            name: null
+                        });
                     }
                     this.form.content = this.form.content.replace(val, imgStr);
                 });
@@ -189,9 +187,8 @@ export default {
                 });
 
                 if (this.dynamicId) {
-                    this.imgInfo.forEach(val => {
-                        data.append("imgInfo", val);
-                    });
+                    console.log(JSON.stringify(this.imgInfo));
+                    data.append("imgInfo", JSON.stringify(this.imgInfo));
                     data.append("dynamicId", this.dynamicId);
                     await indexApi.modifyDynamic(data);
                 } else {

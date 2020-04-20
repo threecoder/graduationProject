@@ -84,15 +84,9 @@ export default {
         flex-direction: column;
         // justify-content: center;
         align-items: center;
-        p {
-            margin: 20px 0;
-            text-indent: 2em;
-            align-self: flex-start;
-            color: rgb(10, 10, 10);
-            line-height: 25px;
-        }
+       
         img {
-            max-width: 100%;
+            width: 100%;
         }
     }
 }
