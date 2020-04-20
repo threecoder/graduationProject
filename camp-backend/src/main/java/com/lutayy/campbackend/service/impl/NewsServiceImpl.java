@@ -245,11 +245,16 @@ public class NewsServiceImpl implements NewsService {
         List<String> contentArray = StrUtil.cutStringByPlaceHolder(news.getContent(), news.getImgPlaceholder());
 
         StringBuilder content = new StringBuilder();
+        content.append("");
         for (int i = 0; i < contentArray.size() - 1; i++) {
             content.append(contentArray.get(i));
-            if (newsImgs.get(i) != null) {
-                content.append("<img src=\"" + IMG_HOST + newsImgs.get(i).getImgPath() + "\">");
-                ids.add(newsImgs.get(i).getImgId());
+            try {
+                if (newsImgs.get(i) != null) {
+                    content.append("<img class=\"my-img\" src=\"" + IMG_HOST + newsImgs.get(i).getImgPath() + "\">");
+                    ids.add(newsImgs.get(i).getImgId());
+                }
+            }catch (Exception e){
+                break;
             }
         }
         content.append(contentArray.get(contentArray.size() - 1));
@@ -472,7 +477,7 @@ public class NewsServiceImpl implements NewsService {
         for (int i = 0; i < contentArray.size() - 1; i++) {
             content.append(contentArray.get(i));
             if (newsImgs.get(i) != null) {
-                content.append("<img src=\"" + IMG_HOST + newsImgs.get(i).getImgPath() + "\">");
+                content.append("<img class=\"my-img\" src=\"" + IMG_HOST + newsImgs.get(i).getImgPath() + "\">");
                 ids.add(newsImgs.get(i).getImgId());
             }
         }

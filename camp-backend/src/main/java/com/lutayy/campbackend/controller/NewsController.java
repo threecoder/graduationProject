@@ -95,12 +95,16 @@ public class NewsController {
                                         @RequestParam("desc") String desc,
                                         @RequestParam("content") String content,
                                         @RequestParam("type") String type,
-                                        @RequestParam("imgInfo") String[] imgInfo,
+                                        @RequestParam("imgInfo") String imgInfo,
                                         @RequestParam(value = "imgList", required = false) MultipartFile[] imgList) {
-        JSONArray imgInfos=new JSONArray();
-        for(String info:imgInfo){
+        JSONArray imgListJSON = JSONArray.parseArray(imgInfo);
+        JSONArray imgInfos = new JSONArray();
+        for (int i = 0; i < imgListJSON.size(); i++) {
+            System.out.println(111);
+            String info = imgListJSON.getString(i);
             imgInfos.add(JSONObject.parseObject(info));
         }
+        System.out.println(imgInfos);
         return newsService.modifyDynamic(request, newsId, placeholder, title, desc, type, content, imgInfos, imgList);
     }
 

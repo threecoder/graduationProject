@@ -165,6 +165,66 @@ public class MessageToAdminExample {
             return (Criteria) this;
         }
 
+        public Criteria andReceiveAdminIdIsNull() {
+            addCriterion("receive_admin_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveAdminIdIsNotNull() {
+            addCriterion("receive_admin_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveAdminIdEqualTo(Integer value) {
+            addCriterion("receive_admin_id =", value, "receiveAdminId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveAdminIdNotEqualTo(Integer value) {
+            addCriterion("receive_admin_id <>", value, "receiveAdminId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveAdminIdGreaterThan(Integer value) {
+            addCriterion("receive_admin_id >", value, "receiveAdminId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveAdminIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("receive_admin_id >=", value, "receiveAdminId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveAdminIdLessThan(Integer value) {
+            addCriterion("receive_admin_id <", value, "receiveAdminId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveAdminIdLessThanOrEqualTo(Integer value) {
+            addCriterion("receive_admin_id <=", value, "receiveAdminId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveAdminIdIn(List<Integer> values) {
+            addCriterion("receive_admin_id in", values, "receiveAdminId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveAdminIdNotIn(List<Integer> values) {
+            addCriterion("receive_admin_id not in", values, "receiveAdminId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveAdminIdBetween(Integer value1, Integer value2) {
+            addCriterion("receive_admin_id between", value1, value2, "receiveAdminId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReceiveAdminIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("receive_admin_id not between", value1, value2, "receiveAdminId");
+            return (Criteria) this;
+        }
+
         public Criteria andAdminIdIsNull() {
             addCriterion("admin_id is null");
             return (Criteria) this;
@@ -582,6 +642,66 @@ public class MessageToAdminExample {
 
         public Criteria andIsInvalidNotBetween(Boolean value1, Boolean value2) {
             addCriterion("is_invalid not between", value1, value2, "isInvalid");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIsNull() {
+            addCriterion("status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIsNotNull() {
+            addCriterion("status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusEqualTo(Boolean value) {
+            addCriterion("status =", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotEqualTo(Boolean value) {
+            addCriterion("status <>", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusGreaterThan(Boolean value) {
+            addCriterion("status >", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("status >=", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusLessThan(Boolean value) {
+            addCriterion("status <", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusLessThanOrEqualTo(Boolean value) {
+            addCriterion("status <=", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIn(List<Boolean> values) {
+            addCriterion("status in", values, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotIn(List<Boolean> values) {
+            addCriterion("status not in", values, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusBetween(Boolean value1, Boolean value2) {
+            addCriterion("status between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("status not between", value1, value2, "status");
             return (Criteria) this;
         }
     }
