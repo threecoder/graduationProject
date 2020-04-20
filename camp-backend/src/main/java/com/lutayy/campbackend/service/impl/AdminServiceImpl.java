@@ -19,8 +19,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -517,32 +519,45 @@ public class AdminServiceImpl implements AdminService {
 
     //会员管理
     @Override
-    public ResponseEntity<byte[]> getMemberTemplate(HttpServletRequest request) {
+    public void getMemberTemplate(HttpServletResponse response) {
         String fileName = "member_template.xlsx";
-//        ServletContext servletContext=request.getServletContext();
-//        String path=servletContext.getRealPath("/WEB-INF/templates/"+fileName);
         String path = "./src/main/resources/templates/member_template.xlsx";
         File file = new File(path);
-        InputStream in;
-        ResponseEntity<byte[]> response = null;
+        ServletOutputStream out=null;
+        FileInputStream fileInputStream=null;
         try {
-            in = new FileInputStream(file);
-            byte[] bytes = new byte[in.available()];
-            in.read(bytes);
-            HttpHeaders headers = new HttpHeaders();
+
             fileName = new String(fileName.getBytes("gbk"), "iso8859-1");
-            headers.add("Content-Disposition", "attachment;filename=" + fileName);
-            HttpStatus statusCode = HttpStatus.OK;
-            response = new ResponseEntity<byte[]>(bytes, headers, statusCode);
-            in.close();
+            response.setContentType("multipart/form-data");
+            response.addHeader("Content-Disposition", "attachment;filename=" + fileName);
+            JSONObject result=new JSONObject();
+            result.put("code", "success");
+            result.put("msg", "模板导出成功！");
+            fileInputStream=new FileInputStream(file);
+            out=response.getOutputStream();
+            //读取文件流
+            int len = 0;
+            byte[] buffer = new byte[1024 * 10];
+            while ((len = fileInputStream.read(buffer)) != -1){
+                out.write(buffer,0,len);
+            }
+            out.flush();
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        }finally {
+            try {
+                out.close();
+                fileInputStream.close();
+            } catch (IOException e) {
+                System.out.println("关闭流出现异常");
+                e.printStackTrace();
+            }
         }
-        return response;
+        return;
     }
 
     @Override

@@ -205,6 +205,7 @@ public class NewsServiceImpl implements NewsService {
             JSONObject object = new JSONObject();
             object.put("id", news.getNewsId());
             object.put("title", news.getTitle());
+            object.put("desc", news.getDescription());
             object.put("type", news.getType());
             object.put("time", news.getPostTime());
             list.add(object);
@@ -235,6 +236,7 @@ public class NewsServiceImpl implements NewsService {
         info.put("title", news.getTitle());
         info.put("desc", news.getDescription());
         info.put("date", news.getPostTime());
+        info.put("type", news.getType());
         NewsImgExample newsImgExample = new NewsImgExample();
         newsImgExample.createCriteria().andNewsIdEqualTo(newsId).andIsInvalidEqualTo(false);
         newsImgExample.setOrderByClause("img_news_index ASC");
@@ -251,7 +253,6 @@ public class NewsServiceImpl implements NewsService {
             }
         }
         content.append(contentArray.get(contentArray.size() - 1));
-
         info.put("content", content.toString());
         data.put("info", info);
         data.put("ids", ids);
@@ -263,7 +264,7 @@ public class NewsServiceImpl implements NewsService {
 
     //管理员修改动态
     @Override
-    public JSONObject modifyDynamic(HttpServletRequest request, Integer newsId, String placeholder, String title, String desc, String content,
+    public JSONObject modifyDynamic(HttpServletRequest request, Integer newsId, String placeholder, String title, String desc, String type, String content,
                                     JSONArray imgInfos, MultipartFile[] imgList) {
         JSONObject result = new JSONObject();
         result.put("code", "fail");
@@ -283,10 +284,18 @@ public class NewsServiceImpl implements NewsService {
         news.setTitle(title);
         news.setDescription(desc);
         news.setContent(content);
+        news.setType(type);
         newsMapper.updateByPrimaryKey(news);
         int imgListIndex = 0;
         String mainPath = "./src/main/resources/static";
-        String dirPath = "/image/dynamic/" + adminId + "/";
+        String dirPath;
+        if(type.equals("news")){
+            dirPath = "/image/news/" + adminId + "/";
+        }else if(type.equals("dynamic")){
+            dirPath = "/image/dynamic/" + adminId + "/";
+        }else {
+            dirPath = "/image/notice/" + adminId + "/";
+        }
         //将原来新闻的所有图片置为失效
         NewsImgExample newsImgExample = new NewsImgExample();
         newsImgExample.createCriteria().andIsInvalidEqualTo(false).andNewsIdEqualTo(newsId);
@@ -307,7 +316,7 @@ public class NewsServiceImpl implements NewsService {
                 newsImgMapper.updateByPrimaryKeySelective(img);
             } else {
                 String imgPath = dirPath + fileName + ".jpg";
-                File dest = new File(dirPath);
+                File dest = new File(mainPath + dirPath);
                 if (!dest.exists()) {
                     dest.mkdirs();
                 }

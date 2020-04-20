@@ -3,6 +3,7 @@ package com.lutayy.campbackend.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.lutayy.campbackend.common.util.ExcelUtil;
 import com.lutayy.campbackend.common.util.OrderIdGenerator;
 import com.lutayy.campbackend.common.util.UUIDUtil;
 import com.lutayy.campbackend.dao.*;
@@ -10,11 +11,17 @@ import com.lutayy.campbackend.pojo.*;
 import com.lutayy.campbackend.service.ActivityService;
 import com.lutayy.campbackend.service.SQLConn.ActivityStudentSQLConn;
 import com.lutayy.campbackend.service.SQLConn.SystemParamManager;
+import com.lutayy.campbackend.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.*;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -429,6 +436,7 @@ public class ActivityServiceImpl implements ActivityService {
         ActivityOrderExample.Criteria criteria = activityOrderExample.createCriteria();
         criteria.andOrderTypeEqualTo(false).andMemberKeyIdEqualTo(memberId).andPaymentStateEqualTo(false).andCloseEqualTo(false);
         activityOrderExample.setOrderByClause("order_begin_time DESC");
+        activityOrderExample.setDistinct(true); // TODO 这里去重修改了Mapper，以activity_id
         List<ActivityOrder> activityOrders = activityOrderMapper.selectByExample(activityOrderExample);
 
         List<Integer> activityIds = ActivityStudentSQLConn.getActivityIdByMemberId(memberId);
@@ -566,6 +574,78 @@ public class ActivityServiceImpl implements ActivityService {
         result.put("code", "success");
         result.put("msg", "获取已发布活动成功");
         return result;
+    }
+
+    //管理员导出报名表
+    @Override
+    public ResponseEntity<byte[]> getEntryForm(Integer activityId, Integer adminId) {
+
+        String fileName = adminId+"_activity_"+activityId+"_signed_form.xlsx";
+        String filePath = "./src/main/resources/templates/opXlsx/"+fileName;
+        ExcelUtil.createExcel(filePath);
+
+        InputStream in;
+        ResponseEntity<byte[]> response = null;
+        Activity activity=activityMapper.selectByPrimaryKey(activityId);
+        ActivityStudentExample activityStudentExample=new ActivityStudentExample();
+        activityStudentExample.createCriteria().andActivityIdEqualTo(activityId).andIsInvalidEqualTo(false);
+        List<ActivityStudent> activityStudents=activityStudentMapper.selectByExample(activityStudentExample);
+
+        List<Object> rowList = new ArrayList<>();
+        List<String> cellList = new ArrayList<>();
+        cellList.add("活动编号");
+        cellList.add("活动名称");
+        cellList.add("报名编号");
+        cellList.add("人员编号");
+        cellList.add("姓名");
+        cellList.add("座位");
+        cellList.add("报名时间");
+        rowList.add(cellList);
+        for(ActivityStudent activityStudent:activityStudents){
+            cellList = new ArrayList<>();
+            cellList.add(Integer.toString(activity.getActivityId()));
+            cellList.add(activity.getActivityName());
+            cellList.add(activityStudent.getApplyNumber());
+            cellList.add(Integer.toString(activityStudent.getStudentId()));
+            Student student=studentMapper.selectByPrimaryKey(activityStudent.getStudentId());
+            cellList.add(student==null?"":student.getStudentName());
+            cellList.add(activityStudent.getSeatNumber());
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            cellList.add(simpleDateFormat.format(activityStudent.getApplyTime()));
+            rowList.add(cellList);
+        }
+        try{
+            ExcelUtil.writeExcel(rowList, filePath);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        try {
+            File file=new File(filePath);
+            in = new FileInputStream(file);
+            byte[] bytes = new byte[in.available()];
+            in.read(bytes);
+            HttpHeaders headers = new HttpHeaders();
+            fileName = new String(fileName.getBytes("gbk"), "iso8859-1");
+            headers.add("Content-Disposition", "attachment;filename=" + fileName);
+            HttpStatus statusCode = HttpStatus.OK;
+            response = new ResponseEntity<byte[]>(bytes, headers, statusCode);
+            in.close();
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        try{
+            File file=new File(filePath);
+            if(file.exists())
+                file.delete();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return response;
     }
 
     //管理员设置座位信息

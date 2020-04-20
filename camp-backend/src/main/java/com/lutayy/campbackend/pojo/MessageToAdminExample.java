@@ -524,6 +524,66 @@ public class MessageToAdminExample {
             addCriterion("send_time not between", value1, value2, "sendTime");
             return (Criteria) this;
         }
+
+        public Criteria andIsInvalidIsNull() {
+            addCriterion("is_invalid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidIsNotNull() {
+            addCriterion("is_invalid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidEqualTo(Boolean value) {
+            addCriterion("is_invalid =", value, "isInvalid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidNotEqualTo(Boolean value) {
+            addCriterion("is_invalid <>", value, "isInvalid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidGreaterThan(Boolean value) {
+            addCriterion("is_invalid >", value, "isInvalid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_invalid >=", value, "isInvalid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidLessThan(Boolean value) {
+            addCriterion("is_invalid <", value, "isInvalid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_invalid <=", value, "isInvalid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidIn(List<Boolean> values) {
+            addCriterion("is_invalid in", values, "isInvalid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidNotIn(List<Boolean> values) {
+            addCriterion("is_invalid not in", values, "isInvalid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_invalid between", value1, value2, "isInvalid");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsInvalidNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_invalid not between", value1, value2, "isInvalid");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

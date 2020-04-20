@@ -109,7 +109,7 @@ CREATE TABLE `activity_seat` (
   UNIQUE KEY `seat_id` (`seat_id`,`real_x`,`real_y`),
   KEY `activity_id` (`activity_id`),
   CONSTRAINT `activity_seat_ibfk_1` FOREIGN KEY (`activity_id`) REFERENCES `activity` (`activity_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=146 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=utf8;
 
 /*Data for the table `activity_seat` */
 
@@ -126,6 +126,7 @@ CREATE TABLE `activity_student` (
   `apply_time` datetime DEFAULT NULL COMMENT '报名时间',
   `seat_id` int(11) DEFAULT NULL COMMENT '活动座位表外键',
   `seat_number` varchar(15) DEFAULT NULL COMMENT '座位号',
+  `is_invalid` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`apply_number`),
   KEY `student_id` (`student_id`),
   KEY `activity_id` (`activity_id`),
@@ -137,7 +138,7 @@ CREATE TABLE `activity_student` (
 
 /*Data for the table `activity_student` */
 
-insert  into `activity_student`(`apply_number`,`activity_id`,`student_id`,`apply_time`,`seat_id`,`seat_number`) values ('34cvsf',4,1,'2019-10-09 16:33:40',22,'3行3座'),('asdasd',1,1,'2019-10-09 14:38:36',NULL,'4-6'),('ssdas1',4,8,'2019-10-09 16:34:09',62,'7行6座');
+insert  into `activity_student`(`apply_number`,`activity_id`,`student_id`,`apply_time`,`seat_id`,`seat_number`,`is_invalid`) values ('34cvsf',4,1,'2019-10-09 16:33:40',22,'3行3座',0),('asdasd',1,1,'2019-10-09 14:38:36',NULL,'4-6',0),('ssdas1',4,8,'2019-10-09 16:34:09',62,'7行6座',0);
 
 /*Table structure for table `admin` */
 

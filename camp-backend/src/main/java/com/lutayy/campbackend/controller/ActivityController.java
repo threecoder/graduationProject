@@ -4,6 +4,7 @@ package com.lutayy.campbackend.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.lutayy.campbackend.service.ActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,6 +69,14 @@ public class ActivityController {
     @ResponseBody
     public Object adminGetActivityList(){
         return activityService.adminGetActivityList();
+    }
+
+
+    @RequestMapping("/admin/getEntryForm")
+    @ResponseBody
+    public ResponseEntity<byte[]> getEntryForm(@RequestParam("activityId") Integer activityId,
+                                               @RequestParam("id") Integer adminId){
+        return activityService.getEntryForm(activityId, adminId);
     }
 
     @RequestMapping("/admin/setSEATInfo")

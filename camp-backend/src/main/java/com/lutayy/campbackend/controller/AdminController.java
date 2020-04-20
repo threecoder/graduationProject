@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/admin")
@@ -120,8 +121,9 @@ public class AdminController {
     //-----------会员管理-------------
     @RequestMapping("/getMemberTemplate")
     @ResponseBody
-    public ResponseEntity<byte[]> getMemberTemplate(HttpServletRequest request) {
-        return adminService.getMemberTemplate(request);
+    public void getMemberTemplate(HttpServletResponse response) {
+        adminService.getMemberTemplate(response);
+        return;
     }
 
     @RequestMapping("/importMemberByFile")
