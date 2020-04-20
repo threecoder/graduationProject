@@ -16,6 +16,8 @@ public class MessageToMember implements Serializable {
 
     private Date sendTime;
 
+    private Boolean isInvalid;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -64,5 +66,13 @@ public class MessageToMember implements Serializable {
 
     public void setSendTime(Date sendTime) {
         this.sendTime = sendTime;
+    }
+
+    public Boolean getIsInvalid() {
+        return isInvalid;
+    }
+
+    public void setIsInvalid(Boolean isInvalid) {
+        this.isInvalid = isInvalid;
     }
 }

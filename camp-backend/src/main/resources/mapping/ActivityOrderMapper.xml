@@ -85,6 +85,8 @@
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
+--     按activity_id去重
+      group by activity_id
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>

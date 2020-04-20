@@ -94,13 +94,14 @@ public class NewsController {
                                         @RequestParam("title") String title,
                                         @RequestParam("desc") String desc,
                                         @RequestParam("content") String content,
+                                        @RequestParam("type") String type,
                                         @RequestParam("imgInfo") String[] imgInfo,
                                         @RequestParam(value = "imgList", required = false) MultipartFile[] imgList) {
         JSONArray imgInfos=new JSONArray();
         for(String info:imgInfo){
             imgInfos.add(JSONObject.parseObject(info));
         }
-        return newsService.modifyDynamic(request, newsId, placeholder, title, desc, content, imgInfos, imgList);
+        return newsService.modifyDynamic(request, newsId, placeholder, title, desc, type, content, imgInfos, imgList);
     }
 
     @RequestMapping("/admin/addCarousel")

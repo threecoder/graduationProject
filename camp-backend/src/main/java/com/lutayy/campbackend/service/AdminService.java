@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public interface AdminService {
 
@@ -39,7 +40,7 @@ public interface AdminService {
 
     JSONObject deleteOneStudentFromMember(JSONObject jsonObject);
 
-    ResponseEntity<byte[]> getMemberTemplate(HttpServletRequest request);
+    void getMemberTemplate(HttpServletResponse response);
 
     JSONObject importMemberByFile(MultipartFile file);
 

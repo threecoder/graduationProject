@@ -16,6 +16,8 @@ public class ActivityStudent implements Serializable {
 
     private String seatNumber;
 
+    private Boolean isInvalid;
+
     private static final long serialVersionUID = 1L;
 
     public String getApplyNumber() {
@@ -64,5 +66,13 @@ public class ActivityStudent implements Serializable {
 
     public void setSeatNumber(String seatNumber) {
         this.seatNumber = seatNumber;
+    }
+
+    public Boolean getIsInvalid() {
+        return isInvalid;
+    }
+
+    public void setIsInvalid(Boolean isInvalid) {
+        this.isInvalid = isInvalid;
     }
 }

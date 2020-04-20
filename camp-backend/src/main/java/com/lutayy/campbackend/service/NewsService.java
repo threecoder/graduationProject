@@ -21,7 +21,7 @@ public interface NewsService {
     //管理员获取动态详情
     JSONObject getDynamicDetail(Integer newsId);
     //管理员修改动态
-    JSONObject modifyDynamic(HttpServletRequest request, Integer newsId, String placeholder, String title, String desc, String content, JSONArray imgInfos, MultipartFile[] imgList);
+    JSONObject modifyDynamic(HttpServletRequest request, Integer newsId, String placeholder, String title, String desc, String type, String content, JSONArray imgInfos, MultipartFile[] imgList);
     //管理员将一条动态加入到轮播图队列
     JSONObject addCarousel(JSONObject jsonObject);
     //管理员/首页获取轮播图队列信息
