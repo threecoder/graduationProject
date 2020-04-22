@@ -22,21 +22,24 @@ let cookie = null;
 export function request(url, type, data = {}, responseType = "json") {
 	return new Promise((resolve, reject) => {
 		uni.request({
-			method: type, //请求类型
+			method: type.toUpperCase(), //请求类型
 			url: baseUrl + url, //接收请求的接口
-			data: type == 'get' ? {} : data, //报文主体中携带的数据
-			params: type == 'get' ? data : {}, //使用get时，携带在路径的请求参数
+			// data: type == 'get' ? {} : data, //报文主体中携带的数据
+			data, //报文主体中携带的数据
+			// params: type == 'get' ? data : {}, //使用get时，携带在路径的请求参数
 			header: {
 				...getHeaders(),
 				'Content-Type': 'application/json;charset=UTF-8'
 			},
 			responseType //浏览器返回的数据类型
 		}).then(res => {
-			console.log(res);
 			let response = res[ 1 ];
 			if (response) {
-				let cook = response.header[ 'Set-Cookie' ], start = cook.indexOf("; Path=/");
-				cookie = cook.substring(0, start);
+				let cook = response.header[ 'Set-Cookie' ];
+				if (cook) {
+					let start = cook.indexOf("; Path=/");
+					cookie = cook.substring(0, start);
+				}
 				if (response.header[ 'Content-Type' ] == 'application/json;charset=UTF-8') {
 					if (response.data.code == 'success') {
 						resolve(response.data);
@@ -71,7 +74,6 @@ export function getHeaders() {
 		randomNum,
 		"Cookie": cookie
 	};
-	console.log("当前请求的头部", headers);
 	return headers;
 }
 

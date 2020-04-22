@@ -17,10 +17,7 @@
 				</view>
 				<view v-show="contentIndex === 0"><single v-for="(item, i) in newsList" :key="i" :item="item" /></view>
 				<view v-show="contentIndex === 1"><single v-for="(item, i) in dynamicList" :key="i" :item="item" /></view>
-				<view class="more" @click="loadMore">
-					<text v-if="hasMore">加载更多</text>
-					<text v-else>没有更多了</text>
-				</view>
+				<load-more :status="hasMore" @clickLoadMore="loadMore" />
 			</view>
 		</view>
 	</view>
@@ -30,16 +27,19 @@
 import uniNavBar from '../../components/uni-nav-bar/uni-nav-bar.vue';
 import seg from '../../components/seg/seg.vue';
 import single from './components/singleDynamic.vue';
+import loadMore from '../../components/load-more/load-more.vue';
 import dynamicApi from '../../api/index/dynamic.js';
 import indexApi from '../../api/index/index.js';
 import newsApi from '../../api/index/news.js';
 import { toast } from '../../assets/js/commom.js';
 import { getNetwork } from '../../network.js';
+import { baseUrl } from '../../const';
 export default {
 	components: {
 		uniNavBar,
 		seg,
-		single
+		single,
+		loadMore
 	},
 	data() {
 		return {
@@ -78,12 +78,13 @@ export default {
 				currentPage: 1,
 				pageSize: 10
 			},
-			hasMore: true
+			hasMore: 'more'
 		};
 	},
 	watch: {
 		contentIndex(newVal) {
 			this.par.currentPage = 1;
+			this.hasMore = 'more';
 			if (newVal == 0) {
 				this.getNewsList('new');
 			} else {
@@ -93,10 +94,9 @@ export default {
 	},
 	mounted() {
 		getNetwork();
-		this.getDynamicList();
+		this.getNewsList('new');
 	},
 	async onPullDownRefresh() {
-		console.log('下拉刷新');
 		this.getSwiperList();
 		this.par.currentPage == 1;
 		if (this.contentIndex == 0) {
@@ -109,21 +109,28 @@ export default {
 	onPageScroll(scroll) {
 		this.isFixed = scroll.scrollTop > 0 ? true : false;
 	},
-	// onReachBottom() {
-	// 	console.log("到底")
-	// 	this.loadMore();
-	// },
+
 	methods: {
+		$_replaceSrc(data) {
+			data.forEach(val => {
+				val.url = val.url.replace(/http:\/\/localhost:3000/g, baseUrl);
+			});
+		},
 		async getDynamicList(type = 'add') {
 			try {
-				let res = await dynamicApi.getDynamicList(this.par);
+				let res = null;
 				if (type == 'add') {
+					this.par.currentPage++;
+					res = await dynamicApi.getDynamicList(this.par);
 					this.dynamicList.push(...res.data.list);
-					if (res.data.list.length == 0) {
-						this.hasMore = false;
-					}
 				} else {
+					this.par.currentPage = 1;
+					res = await dynamicApi.getDynamicList(this.par);
 					this.dynamicList = res.data.list;
+				}
+				this.$_replaceSrc(this.dynamicList);
+				if (res.data.list.length == 0) {
+					this.hasMore = 'noMore';
 				}
 			} catch (e) {
 				toast(e.message);
@@ -131,14 +138,21 @@ export default {
 		},
 		async getNewsList(type = 'add') {
 			try {
-				let res = await newsApi.getNewsList(this.par);
+				let res = null;
 				if (type == 'add') {
+					this.par.currentPage++;
+					res = await newsApi.getNewsList(this.par);
 					this.newsList.push(...res.data.list);
-					if (res.data.list.length == 0) {
-						this.hasMore = false;
-					}
 				} else {
+					this.par.currentPage = 1;
+					res = await newsApi.getNewsList(this.par);
 					this.newsList = res.data.list;
+				}
+				this.$_replaceSrc(this.newsList);
+				if (res.data.list.length == 0) {
+					this.hasMore = 'noMore';
+				} else {
+					this.hasMore = 'more';
 				}
 			} catch (e) {
 				toast(e.message);
@@ -158,14 +172,13 @@ export default {
 		toDetail(item) {
 			this.$Router.push({ name: 'dynamicDetail', query: { id: item.id, type: item.type } });
 		},
-		loadMore() {
-			if (this.hasMore) {
-				toast('更多');
-				if (this.contentIndex == 0) {
-					this.getNewsList('add');
-				} else {
-					this.getDynamicList('add');
-				}
+		async loadMore() {
+			this.hasMore = 'loading';
+			let type = null;
+			if (this.contentIndex == 0) {
+				await this.getNewsList('add');
+			} else {
+				await this.getDynamicList('add');
 			}
 		}
 	}
@@ -181,6 +194,7 @@ export default {
 	right: 0;
 	bottom: 0;
 	.content {
+		width: 100%;
 		background-color: #fff;
 		.caroulse {
 			height: 300rpx;
