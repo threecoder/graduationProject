@@ -31,8 +31,8 @@
     </div>
 </template>
 <script>
-import msgApi from "../../../api/admin/message";
-import event from "../../../assets/js/eventBus";
+import msgApi from "../../../../api/admin/message";
+import event from "../../../../assets/js/eventBus";
 export default {
     data() {
         return {

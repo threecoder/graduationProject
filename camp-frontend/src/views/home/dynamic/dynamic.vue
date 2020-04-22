@@ -1,11 +1,12 @@
 <template>
     <div class="new-notice-container">
         <div class="info-container">
-            <ul v-loading="loading">
+            <p v-if="list.length==0" class="tac">暂无数据</p>
+            <ul v-else v-loading="loading">
                 <li v-for="(item,i) in list" :key="i">
                     <span class="title" @click="detail(item.id)">{{item.title}}</span>
                     <div class="content">
-                        <img :src="item.url" alt="新闻图片"  />
+                        <img :src="item.url" alt="新闻图片" />
                         <!-- <img src="../../../assets/images/index1.jpg" alt="新闻图片" width="130px" /> -->
                         <p>{{item.desc}}</p>
                     </div>

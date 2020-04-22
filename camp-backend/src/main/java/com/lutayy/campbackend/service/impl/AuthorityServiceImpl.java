@@ -142,7 +142,7 @@ public class AuthorityServiceImpl implements AuthorityService {
             memberOrderTime=Integer.valueOf(jsonObject.getString("memberOrderTime"));
         }catch (Exception e){
             e.printStackTrace();
-            result.put("code", "error");
+            result.put("code", "fail");
             result.put("msg", "属性数据类型有误，请检查");
             return result;
         }

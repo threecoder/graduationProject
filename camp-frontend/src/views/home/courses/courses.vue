@@ -1,8 +1,7 @@
 <template>
     <div>
         <courses-menu @switch="changeContent" />
-        <div class="divider"></div>
-        <div v-loading="loading">
+        <div v-loading="loading" class="course-container">
             <div>
                 <el-form :model="searchParams" inline>
                     <el-form-item label="培训名称">
@@ -22,6 +21,8 @@
                     </el-form-item>
                 </el-form>
             </div>
+
+            <div class="divider"></div>
             <list v-if="list.length!=0" :list="list" />
             <h3 v-else class="tip">暂无课程</h3>
             <page
@@ -156,6 +157,11 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.course-container {
+    padding: 10px;
+    background-color: #fff;
+    overflow: hidden;
+}
 h3 {
     margin: 20px 0 30px;
 }

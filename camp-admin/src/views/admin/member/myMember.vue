@@ -279,6 +279,7 @@ export default {
         //会员弹窗相关
         closeMember() {
             this.newFlag = false;
+            this.search();
         },
         handleSuccess(response) {
             this.$alert(response.msg, "上传文件成功", {

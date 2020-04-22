@@ -61,7 +61,7 @@ export default {
                 let par = { ...this.form };
                 par.idNum = this.idNum;
                 let res = await relaApi.getStudentTrainingHistory(par);
-                this.table.data = res.data.data;
+                this.table.data = res.data.list;
                 this.form.total = res.data.total;
             } catch (e) {
                 this.$message.error(e.message);

@@ -28,3 +28,14 @@ export const systemParams = [
 
 //图片占位符
 export const imgStr = "@图#片$占#位@";
+
+//站内信的消息类型
+export const msgTypeList = [
+    { label: "活动发布", key: "newActivity" },
+    { label: "活动报名", key: "signedActivity" },
+    { label: "培训发布", key: "newTraining" },
+    { label: "培训报名", key: "signedTraining" },
+    { label: "成绩审核", key: "gradeExamine" },
+    { label: "证书审核", key: "certificateExamine" },
+    { label: "发放证书", key: "grantCertificate" }
+]

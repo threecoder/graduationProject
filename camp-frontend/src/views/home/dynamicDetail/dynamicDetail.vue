@@ -31,7 +31,7 @@ export default {
             }
         };
     },
-    mounted() {
+    beforeMount() {
         this.info = this.$route.query;
         this.getDetail();
     },
@@ -58,6 +58,9 @@ export default {
             } catch (error) {
                 this.$message.error(error.message);
             }
+        },
+        click() {
+            console.log("ccc");
         }
     }
 };
@@ -88,6 +91,7 @@ export default {
 
         ::v-deep .my-img {
             max-width: 100%;
+            object-fit: scale-down;
         }
     }
 }

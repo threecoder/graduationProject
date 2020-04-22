@@ -1,7 +1,8 @@
 <template>
     <div class="notice-container">
         <div class="info-container">
-            <ul>
+            <p v-if="list.length==0" class="tac">暂无数据</p>
+            <ul v-else>
                 <li v-for="(item,i) in list" :key="i">
                     <span class="title" @click="detail(item.id)">
                         <i class="el-icon-s-flag"></i>
