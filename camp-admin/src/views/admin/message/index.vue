@@ -1,5 +1,6 @@
 <template>
     <div class="message-all-container">
+        <div class="publish"></div>
         <div class="list-container">
             <message-list />
         </div>

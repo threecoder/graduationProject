@@ -38,7 +38,6 @@
             <div class="edit-container">
                 <label>内容</label>
                 <editor
-                    v-model="form.content"
                     :imgSize="imgSize"
                     :content="initContent"
                     @contentChange="saveContent"
@@ -87,8 +86,6 @@ export default {
             this.dynamicId = this.$route.query.dynamicId;
             this.getDynamicDetail();
         }
-        // this.initContent =
-        //     "<img src='http://www.baidu.com/img/baidu_resultlogo@2.png'>";
     },
     methods: {
         //新增和编辑功能通用方法
@@ -100,7 +97,6 @@ export default {
                 this.form.content = val;
                 this.backupContent = val;
             }
-            console.log(this.form.content);
         },
 
         $_base64ToFile(imgHtml, index) {
