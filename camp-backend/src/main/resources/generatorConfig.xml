@@ -57,12 +57,6 @@
 
 
 
-        <table tableName="message_to_student">
-            <generatedKey  column="id"  sqlStatement="Mysql"  identity="TRUE"/>
-        </table>
-        <table tableName="message_to_member">
-            <generatedKey  column="id"  sqlStatement="Mysql"  identity="TRUE"/>
-        </table>
         <table tableName="message_to_admin">
             <generatedKey  column="id"  sqlStatement="Mysql"  identity="TRUE"/>
         </table>

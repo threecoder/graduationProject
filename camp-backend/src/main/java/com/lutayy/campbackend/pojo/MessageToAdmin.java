@@ -6,6 +6,8 @@ import java.util.Date;
 public class MessageToAdmin implements Serializable {
     private Integer id;
 
+    private Integer receiveAdminId;
+
     private Integer adminId;
 
     private Integer memberId;
@@ -20,6 +22,8 @@ public class MessageToAdmin implements Serializable {
 
     private Boolean isInvalid;
 
+    private Boolean status;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -28,6 +32,14 @@ public class MessageToAdmin implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getReceiveAdminId() {
+        return receiveAdminId;
+    }
+
+    public void setReceiveAdminId(Integer receiveAdminId) {
+        this.receiveAdminId = receiveAdminId;
     }
 
     public Integer getAdminId() {
@@ -84,5 +96,13 @@ public class MessageToAdmin implements Serializable {
 
     public void setIsInvalid(Boolean isInvalid) {
         this.isInvalid = isInvalid;
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 }
