@@ -136,6 +136,7 @@ export default {
                     };
                     let res = await adminExamApi.modifyGrade(data);
                     this.$message.success("修改成绩成功");
+                    this.getGradeList();
                 } catch (error) {
                     this.$message.error(error.message);
                 }

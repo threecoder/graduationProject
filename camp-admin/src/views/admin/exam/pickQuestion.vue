@@ -33,6 +33,8 @@
                 </span>
             </div>
             <div class="divider"></div>
+
+            <!-- 挑选试题 -->
             <h5 class="panel-title">挑选试题</h5>
             <div class="question-container">
                 <div class="index-list">
@@ -55,7 +57,7 @@
                                 <!-- <el-option value="2" label="判断题"></el-option> -->
                             </el-select>
                         </el-form-item>
-                        <el-button type="primary" round @click="search">搜索</el-button>
+                        <el-button type="primary" @click="search">搜索</el-button>
                     </el-form>
                     <m-table
                         :data="table.data"
@@ -93,6 +95,7 @@
             </div>
         </div>
 
+        <!-- 试题详情弹框 -->
         <div class="dialog-container">
             <el-dialog title="试题详情" :visible.sync="flag">
                 <h3>题目内容：{{dialog.state}}</h3>
@@ -159,7 +162,7 @@ export default {
                 config: [
                     { prop: "questionId", label: "题目ID", width: "100px" },
                     { prop: "stateMin", label: "题目" },
-                    { prop: "type", label: "题目类型", width: "100px" },
+                    { prop: "type", label: "题目类型", width: "150px" },
                     {
                         slot: "oper",
                         label: "操作",
@@ -240,9 +243,9 @@ export default {
                         arr[i].type = "判断题";
                     }
                     arr[i].stateMin =
-                        val.state.length <= 30
+                        val.state.length < 100
                             ? val.state
-                            : val.state.substring(0, 27) + ".....";
+                            : val.state.substring(0, 94) + ".....";
                 });
                 this.form.total = res.data.total;
             } catch (error) {
@@ -260,6 +263,8 @@ export default {
                     let id = this.questionIdList[row - 1];
                     let res = await adminExamApi.getSingleQuestion(id);
                     this.dialog = { ...res.data };
+                    this.dialog.questionId = id;
+                    console.log(this.dialog);
                 } catch (error) {
                     this.$message.error(error.message);
                 }
@@ -276,7 +281,6 @@ export default {
                 return false;
             } else {
                 this.questionIdList.push(row.questionId);
-                console.log(this.questionIdList);
                 this.len++;
             }
         },
@@ -285,6 +289,8 @@ export default {
             if (index != -1) {
                 this.questionIdList.splice(index, 1);
                 this.len--;
+                this.$message.success("移除题目成功");
+                this.flag = false;
             }
         },
         cancel() {
@@ -313,7 +319,7 @@ export default {
 <style lang="scss" scoped>
 .examInfo-container {
     width: 100%;
-    // background-color: #fff;
+    background-color: #fff;
     height: auto;
     .info-items {
         line-height: 50px;

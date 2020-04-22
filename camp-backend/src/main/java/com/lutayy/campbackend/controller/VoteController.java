@@ -77,7 +77,7 @@ public class VoteController {
     }
 
     //学员--投票管理
-    @RequestMapping("/member/getStudentCanVoteList")
+    @RequestMapping("/student/getStudentCanVoteList")
     @ResponseBody
     public Object getStudentCanVoteList(@RequestParam(value = "name", required = false) String name,
                                         @RequestParam(value = "isFinish", required = false) Integer isFinish,

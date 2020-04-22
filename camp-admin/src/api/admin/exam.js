@@ -31,7 +31,7 @@ const modifyExam = data => request(apiPrefix + "/modifyExamInfo", 'post', data);
 const getExamQuestionList = examId => request(apiPrefix + `/getExamQuestionList`, 'get', { examId });
 
 //根据题目id获取题目信息
-const getSingleQuestion = examId => request(apiPrefix + `/getQuestionInfo`, 'get', { examId });
+const getSingleQuestion = questionId => request(apiPrefix + `/getQuestionInfo`, 'get', { questionId });
 
 //保存给某个试卷挑选的题目
 const saveQuestionForExam = par => request(apiPrefix + "/saveQuestionForExam", 'post', par);

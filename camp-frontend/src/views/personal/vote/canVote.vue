@@ -5,14 +5,14 @@
         <div class="form-item">
             <el-form :model="form" inline>
                 <el-form-item label="名称">
-                    <el-input v-model="form.name" placeholder="投票名字"></el-input>
+                    <el-input v-model="form.name" placeholder="投票名字" clearable></el-input>
                 </el-form-item>
-                <el-form-item label="投票结束">
-                    <el-select v-model="form.isFinish" placeholder="是否结束">
+                <!-- <el-form-item label="投票结束">
+                    <el-select v-model="form.isFinish" placeholder="是否结束" clearable>
                         <el-option label="是" :value="true"></el-option>
                         <el-option label="否" :value="false"></el-option>
                     </el-select>
-                </el-form-item>
+                </el-form-item>-->
                 <el-form-item>
                     <el-button type="primary" @click="getCanVoteList">搜索</el-button>
                 </el-form-item>
@@ -38,7 +38,11 @@
         </div>
 
         <el-dialog title="投票详情" :visible.sync="dialog.flag" v-if="dialog.flag" width="40%">
-            <vote :voteId="dialog.voteId" @cancel="dialog.flag = false" @vote="getCanVoteList" />
+            <vote
+                :voteId="dialog.voteId"
+                @cancel="dialog.flag = false"
+                @vote="getCanVoteList"
+            />
         </el-dialog>
     </div>
 </template>
@@ -108,7 +112,7 @@ export default {
                 } else {
                     res = await voteApi.getMemberCanVoteList(this.form);
                 }
-                this.table.data = res.data.data;
+                this.table.data = res.data.list;
                 this.form.total = res.data.total;
             } catch (error) {
                 this.$message.error(error.message);
