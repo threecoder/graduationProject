@@ -1058,8 +1058,8 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public JSONObject submitGradeList(JSONObject jsonObject) {
         JSONObject result = new JSONObject();
-        Integer opAdminId=jsonObject.getInteger("id");
-        Admin opAdmin=adminMapper.selectByPrimaryKey(opAdminId);
+        Integer opAdminId = jsonObject.getInteger("id");
+        Admin opAdmin = adminMapper.selectByPrimaryKey(opAdminId);
         result.put("code", "fail");
 
         String account = jsonObject.getString("checker");
@@ -1070,13 +1070,17 @@ public class ExamServiceImpl implements ExamService {
         }
         int adminId = admin.getAdminId();
         JSONArray reportIds = jsonObject.getJSONArray("ids");
-        int totalNum=0;
+        int totalNum = 0;
+        String sendReportStr = "";
         for (int i = 0; i < reportIds.size(); i++) {
             int reportId = reportIds.getIntValue(i);
             ExamReStudent report = examReStudentMapper.selectByPrimaryKey(reportId);
             if (report == null || report.getIsInvalid() || report.getInLine() || report.getIsVerify().equals(2)) {
                 continue;
             }
+            sendReportStr += reportId;
+            if (i != reportIds.size() - 1)
+                sendReportStr += "、";
             totalNum++;
             Student student = studentMapper.selectByPrimaryKey(report.getStudentId());
             Exam exam = examMapper.selectByPrimaryKey(report.getExamId());
@@ -1087,7 +1091,7 @@ public class ExamServiceImpl implements ExamService {
             reportOpLog.setReportId(reportId);
             reportOpLog.setOpDescription("将成绩单" + reportId + "放入管理员ID:" + adminId + "的审核队列中");
             reportOpLog.setOpTime(new Date());
-            reportOpLog.setAdminName(opAdmin==null?"":opAdmin.getAdminName());
+            reportOpLog.setAdminName(opAdmin == null ? "" : opAdmin.getAdminName());
             reportOpLog.setStudentName(student.getStudentName());
 
             //存放要审核的成绩单
@@ -1112,14 +1116,15 @@ public class ExamServiceImpl implements ExamService {
             examReportOpLogMapper.insert(reportOpLog);
         }
         // TODO 发送站内信给对应的管理员
-        MessageText messageText=new MessageText();
+        MessageText messageText = new MessageText();
         messageText.setSendTime(new Date());
-        messageText.setMessage("审核队列更新，新增"+totalNum+"条审核请求！");
+        messageText.setMessage("审核队列更新，新增" + totalNum + "条审核请求！");
+        messageText.setTitle("审核队列更新，新增" + totalNum + "条审核请求！分别是：" + sendReportStr);
         messageTextMapper.insertSelective(messageText);
-        MessageToAdmin messageToAdmin=new MessageToAdmin();
+        MessageToAdmin messageToAdmin = new MessageToAdmin();
         messageToAdmin.setReceiveAdminId(adminId);
         messageToAdmin.setAdminId(opAdminId);
-        messageToAdmin.setWhoSend((byte)0);
+        messageToAdmin.setWhoSend((byte) 0);
         messageToAdmin.setSendTime(new Date());
         messageToAdmin.setMessageId(messageText.getMessageId());
         messageToAdminMapper.insertSelective(messageToAdmin);

@@ -46,4 +46,54 @@ public class MessageController {
         return messageService.signAsRead(jsonObject, "admin");
     }
 
+    @RequestMapping("/member/getMsgDetail")
+    @ResponseBody
+    public Object memberGetMsgDetail(@RequestParam("msgID") Integer msgID) {
+        return messageService.getMsgDetail(msgID, "member");
+    }
+    @RequestMapping("/admin/getMsgDetail")
+    @ResponseBody
+    public Object adminGetMsgDetail(@RequestParam("msgID") Integer msgID) {
+        return messageService.getMsgDetail(msgID, "admin");
+    }
+    @RequestMapping("/student/getMsgDetail")
+    @ResponseBody
+    public Object studentGetMsgDetail(@RequestParam("msgID") Integer msgID) {
+        return messageService.getMsgDetail(msgID, "student");
+    }
+
+    @RequestMapping("/member/deleteMsg")
+    @ResponseBody
+    public JSONObject memberDeleteMsg(JSONObject jsonObject) {
+        return messageService.deleteMsg(jsonObject, "member");
+    }
+    @RequestMapping("/admin/deleteMsg")
+    @ResponseBody
+    public JSONObject adminDeleteMsg(JSONObject jsonObject) {
+        return messageService.deleteMsg(jsonObject, "admin");
+    }
+    @RequestMapping("/student/deleteMsg")
+    @ResponseBody
+    public JSONObject studentDeleteMsg(JSONObject jsonObject) {
+        return messageService.deleteMsg(jsonObject, "student");
+    }
+
+    @RequestMapping("/member/getMsgList")
+    @ResponseBody
+    public Object memberGetMsgList(@RequestParam("pageSize") Integer pageSize, @RequestParam("currentPage") Integer currentPage,
+                                   @RequestParam("id") Integer roleId) {
+        return messageService.getMsgList(pageSize, currentPage, roleId, "member");
+    }
+    @RequestMapping("/admin/getMsgList")
+    @ResponseBody
+    public Object adminGetMsgList(@RequestParam("pageSize") Integer pageSize, @RequestParam("currentPage") Integer currentPage,
+                                   @RequestParam("id") Integer roleId) {
+        return messageService.getMsgList(pageSize, currentPage, roleId, "admin");
+    }
+    @RequestMapping("/student/getMsgList")
+    @ResponseBody
+    public Object studentGetMsgList(@RequestParam("pageSize") Integer pageSize, @RequestParam("currentPage") Integer currentPage,
+                                   @RequestParam("id") Integer roleId) {
+        return messageService.getMsgList(pageSize, currentPage, roleId, "student");
+    }
 }

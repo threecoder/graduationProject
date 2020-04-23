@@ -46,11 +46,11 @@ public class VoteController {
     //会员--投票管理
     @RequestMapping("/member/getMemberCanVoteList")
     @ResponseBody
-    public Object getMemberCanVoteList(@RequestParam(value = "name", required = false) String name,
-                                       @RequestParam(value = "isFinish", required = false) Integer isFinish,
+    public Object getMemberCanVoteList(@RequestParam("id") Integer memberId,
+                                       @RequestParam(value = "name", required = false) String name,
                                        @RequestParam("currentPage") Integer currentPage,
                                        @RequestParam("pageSize") Integer pageSize) {
-        return voteService.getMemberCanVoteList(name, isFinish, currentPage, pageSize);
+        return voteService.getMemberCanVoteList(memberId, name, currentPage, pageSize);
     }
 
 
@@ -77,13 +77,13 @@ public class VoteController {
     }
 
     //学员--投票管理
-    @RequestMapping("/member/getStudentCanVoteList")
+    @RequestMapping("/student/getStudentCanVoteList")
     @ResponseBody
-    public Object getStudentCanVoteList(@RequestParam(value = "name", required = false) String name,
-                                        @RequestParam(value = "isFinish", required = false) Integer isFinish,
+    public Object getStudentCanVoteList(@RequestParam("id") Integer studentId,
+                                        @RequestParam(value = "name", required = false) String name,
                                         @RequestParam("currentPage") Integer currentPage,
                                         @RequestParam("pageSize") Integer pageSize) {
-        return voteService.getStudentCanVoteList(name, isFinish, currentPage, pageSize);
+        return voteService.getStudentCanVoteList(studentId, name, currentPage, pageSize);
     }
 
     @RequestMapping("/student/studentVote")
