@@ -80,7 +80,7 @@
         <!-- 题目详情弹框 -->
         <div class="dialog-container">
             <el-dialog title="修改试题" :visible.sync="flag">
-                <h3>题目内容：{{dialog.state}}</h3>
+                <h3>题目内容：</h3>
                 <el-input v-model="dialog.state" type="textarea"></el-input>
                 <div class="question-type">
                     <el-select v-model="dialog.type">
@@ -110,7 +110,7 @@
                     <el-input v-model="dialog.choiceD"></el-input>
                 </div>
 
-                <div class="button-container">
+                <div class="dialog-button-container">
                     <el-button @click="flag=false">取 消</el-button>
                     <el-button type="primary" @click="modefyQuestion">确 定</el-button>
                 </div>
@@ -306,7 +306,11 @@ export default {
             }
         },
         async success(res) {
-            this.$message.info(res.msg);
+            this.$alert(res.msg, "提示", {
+                confirmButtonText: "确定",
+                type: "info"
+            });
+            this.search();
         }
     }
 };
@@ -315,12 +319,14 @@ export default {
 <style lang="scss" scoped>
 .all-container {
     .button-container {
-        width: 400px;
         display: flex;
         justify-content: flex-start;
         align-items: flex-start;
     }
     .dialog-container {
+        h3 {
+            margin-bottom: 10px;
+        }
         .question-type {
             position: absolute;
             right: 10%;
@@ -333,7 +339,7 @@ export default {
                 display: block;
             }
         }
-        .button-container {
+        .dialog-button-container {
             margin-top: 20px;
             text-align: center;
         }

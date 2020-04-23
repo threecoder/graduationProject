@@ -180,17 +180,17 @@ export default {
                     { slot: "oper", label: "操作", width: "100px" }
                 ],
                 tableData: [
-                    {
-                        idNum: "44512122",
-                        name: "张三",
-                        phone: 15555,
-                        email: "101@qq.com",
-                        position: "经理",
-                        province: "广东",
-                        city: "广州",
-                        area: "番禺",
-                        zone: "华南理工大学"
-                    }
+                    // {
+                    //     idNum: "44512122",
+                    //     name: "张三",
+                    //     phone: 15555,
+                    //     email: "101@qq.com",
+                    //     position: "经理",
+                    //     province: "广东",
+                    //     city: "广州",
+                    //     area: "番禺",
+                    //     zone: "华南理工大学"
+                    // }
                 ],
                 flag: false
             },
@@ -279,6 +279,7 @@ export default {
         //会员弹窗相关
         closeMember() {
             this.newFlag = false;
+            this.search();
         },
         handleSuccess(response) {
             this.$alert(response.msg, "上传文件成功", {
@@ -298,8 +299,9 @@ export default {
 .button-container {
     display: flex;
     position: absolute;
+    align-items: flex-start;
     right: 5%;
-    top: 60px;
+    top: 40px;
 }
 .new-container {
     position: absolute;

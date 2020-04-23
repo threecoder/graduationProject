@@ -14,13 +14,20 @@ const getMsgDetail = msgID => request(`${apiPrefix}/getMsgDetail`, 'get', { msgI
 const signAsRead = msgID => request(`${apiPrefix}/signAsRead`, 'post', { msgID });
 
 //删除消息
-const deleteMsg = msgID => request(`${apiPrefix}/deleteMsg`, 'post', {msgID});
+const deleteMsg = msgID => request(`${apiPrefix}/deleteMsg`, 'post', { msgID });
 
+//发送消息
+const sendMsg = data => request(`${apiPrefix}/sendMsg`, 'post', data);
+
+//获取学生列表用于下拉框
+const getStudentSelect = () => request(`${apiPrefix}/getStudentSelect`, 'get');
 
 export default {
     getUnReadMsgNum,
     getMsgList,
     getMsgDetail,
     signAsRead,
-    deleteMsg
+    deleteMsg,
+    sendMsg,
+    getStudentSelect
 }

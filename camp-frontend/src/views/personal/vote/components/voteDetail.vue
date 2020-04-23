@@ -15,6 +15,11 @@
                     <span class="span-tip">选项{{i+1}}：</span>
                     <span class="span-content">{{item.text}}</span>
                 </p>
+                <p>
+                    <span class="span-tip">票数：</span>
+                    <span class="span-content">{{item.quantity}}</span>
+                </p>
+
                 <el-progress :stroke-width="20" :percentage="item.per" :text-inside="true"></el-progress>
             </div>
         </div>
@@ -67,10 +72,6 @@ export default {
                 this.$message.error(error.message);
             }
             this.loading = false;
-        },
-        format(value) {
-            console.log(value);
-            return value;
         }
     }
 };

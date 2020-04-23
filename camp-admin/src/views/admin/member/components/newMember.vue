@@ -11,7 +11,7 @@
             <el-form-item label="联系方式" :label-width="formLabelWidth">
                 <el-input v-model="newOne.phone" autocomplete="off" type="text"></el-input>
             </el-form-item>
-            <el-form-item label="地址" :label-width="formLabelWidth">
+            <!-- <el-form-item label="地址" :label-width="formLabelWidth">
                 <el-input
                     id="zone-input"
                     v-model="newOne.zone"
@@ -30,6 +30,19 @@
                         slot="prepend"
                     ></v-distpicker>
                 </el-input>
+            </el-form-item> -->
+            <el-form-item label="地址" :label-width="formLabelWidth">
+                <my-address
+                    @provinceChange="changeProvince"
+                    @cityChange="changeCity"
+                    @areaChange="changeArea"
+                    @zoneChange="changeZone"
+                    :disabled="readOnly"
+                    :province="newOne.procvince"
+                    :city="newOne.city"
+                    :area="newOne.area"
+                    :zone="newOne.zone"
+                ></my-address>
             </el-form-item>
         </el-form>
         <div class="dialog-footer">
@@ -53,15 +66,18 @@
     </div>
 </template>
 <script>
-import adminMemberApi from "@/api/admin/member.js";
-import adminStudentApi from "@/api/admin/student.js";
-import { download } from "@/api/request.js";
-import upload from "@/components/upload.vue";
+import adminMemberApi from "../../../../api/admin/member.js";
+import adminStudentApi from "../../../../api/admin/student.js";
+import { download } from "../../../../api/request.js";
+import upload from "../../../../components/upload.vue";
+import myAddress from "../../../../components/address.vue";
+
 export default {
     //uploadUrl：上传模板的地址
     props: ["temUrl", "uploadUrl"],
     components: {
-        upload
+        upload,
+        myAddress
     },
     data() {
         return {
@@ -100,14 +116,17 @@ export default {
         close() {
             this.$emit("close");
         },
-        changeProvince({ value }) {
+        changeProvince(value) {
             this.newOne.province = value;
         },
-        changeCity({ value }) {
+        changeCity(value) {
             this.newOne.city = value;
         },
-        changeArea({ value }) {
+        changeArea(value) {
             this.newOne.area = value;
+        },
+        changeZone(value) {
+            this.newOne.zone = value;
         },
         handleSuccess(response) {
             this.$alert(response.msg, "上传文件成功", {

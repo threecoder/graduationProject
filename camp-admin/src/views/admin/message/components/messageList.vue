@@ -24,9 +24,9 @@
     </div>
 </template>
 <script>
-import page from "../../../components/page.vue";
-import msgApi from "../../../api/admin/message";
-import event from "../../../assets/js/eventBus";
+import page from "../../../../components/page.vue";
+import msgApi from "../../../../api/admin/message";
+import event from "../../../../assets/js/eventBus";
 export default {
     components: {
         page

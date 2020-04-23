@@ -31,7 +31,7 @@ export default {
             }
         };
     },
-    mounted() {
+    beforeMount() {
         this.info = this.$route.query;
         this.getDetail();
     },
@@ -54,9 +54,13 @@ export default {
                     res = await dynamicApi.getDynamicDetail(this.info.id);
                 }
                 this.detail = res.data.info;
+                console.log(this.detail.content);
             } catch (error) {
                 this.$message.error(error.message);
             }
+        },
+        click() {
+            console.log("ccc");
         }
     }
 };
@@ -84,9 +88,10 @@ export default {
         flex-direction: column;
         // justify-content: center;
         align-items: center;
-       
-        img {
-            width: 100%;
+
+        ::v-deep .my-img {
+            max-width: 100%;
+            object-fit: scale-down;
         }
     }
 }

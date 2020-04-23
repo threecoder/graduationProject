@@ -61,6 +61,7 @@ export default {
         };
     },
     mounted() {
+        // this.handleData(this.list);
         this.getNoticeList();
     },
     methods: {
@@ -82,6 +83,7 @@ export default {
             this.loading = true;
             let par = { currentPage: 1, pageSize: 6 };
             try {
+                this.list = [];
                 let res = await noticeApi.getNoticeList(par);
                 this.handleData(res.data.list);
             } catch (error) {

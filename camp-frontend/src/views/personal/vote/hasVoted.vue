@@ -37,7 +37,7 @@
             />
         </div>
         <el-dialog title="投票详情" :visible.sync="dialog.flag" v-if="dialog.flag" width="40%">
-            <vote-detail :voteId="dialog.voteId" @cancel="dialog.flag = false"/>
+            <vote-detail :voteId="dialog.voteId" @cancel="dialog.flag = false" />
         </el-dialog>
     </div>
 </template>
@@ -45,6 +45,7 @@
 import page from "../../../components/page.vue";
 import mTable from "../../../components/mTable.vue";
 import voteDetail from "./components/voteDetail.vue";
+import voteApi from "../../../api/modules/vote";
 export default {
     components: {
         page,
@@ -89,6 +90,9 @@ export default {
             return this.$store.getters.idType;
         }
     },
+    mounted() {
+        this.getHasVotedList();
+    },
     methods: {
         curChange(newVal) {
             this.form.currentPage = newVal;
@@ -102,7 +106,7 @@ export default {
                 } else {
                     res = await voteApi.getMemberHasVotedList(this.form);
                 }
-                this.table.data = res.data.data;
+                this.table.data = res.data.list;
                 this.form.total = res.data.total;
             } catch (e) {
                 this.$message.error(e.message);

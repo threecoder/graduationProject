@@ -20,7 +20,7 @@ const getMemberTemplate = () => request(`${apiPrefix}/getMemberTemplate`, 'get',
 const getStudentTemplate = () => request(`${apiPrefix}/getStudentTemplate`, 'get', {}, 'blob');
 
 //提醒会员续费
-const remindRenew = memberId => request(`${apiPrefix}/remindRenew`, 'get', { memberId });
+const remindRenew = memberId => request(`${apiPrefix}/remindRenew`, 'post', { memberId });
 
 //添加单个会员
 const addSingleMember = data => request(`${apiPrefix}/addSingleMember`, 'post', data);

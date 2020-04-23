@@ -47,7 +47,7 @@ export default {
     props: {
         voteId: {
             require: true,
-            type: String
+            type: String | Number
         }
     },
     data() {
@@ -73,6 +73,9 @@ export default {
             return this.$store.getters.idType;
         }
     },
+    mounted() {
+        this.getVoteOptions();
+    },
     methods: {
         async getVoteOptions() {
             try {
@@ -95,7 +98,7 @@ export default {
             }
             let data = [];
             select.forEach(val => {
-                let index = this.voteInfo.options.indexOf(val);
+                let index = this.voteInfo.options.indexOf(val) + 1;
                 data.push({ index, text: val });
             });
             let loadData = { voteId: this.voteId, data };
@@ -107,6 +110,7 @@ export default {
                 }
                 this.$message.success("投票成功！");
                 this.$emit("vote");
+                this.$emit("cancel");
             } catch (error) {
                 this.$message.error(error.message);
             }

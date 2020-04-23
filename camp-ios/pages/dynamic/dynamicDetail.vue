@@ -13,6 +13,7 @@ import dynamicApi from "../../api/index/dynamic";
 import newsApi from "../../api/index/news";
 import noticeApi from "../../api/index/notice";
 import { toast } from "../../assets/js/commom";
+import { baseUrl } from "../../const";
 export default {
     data() {
         return {
@@ -45,7 +46,12 @@ export default {
                 } else {
                     res = await dynamicApi.getDynamicDetail(this.info.id);
                 }
-                this.detail = res.data;
+                this.detail = res.data.info;
+                this.detail.content = this.detail.content.replace(
+                    /http:\/\/localhost:3000/g,
+                    baseUrl
+                );
+                console.log(this.detail.content);
             } catch (error) {
                 toast(error.message);
             }
@@ -73,19 +79,14 @@ export default {
         }
     }
     .content {
-        display: flex;
-        flex-direction: column;
-        // justify-content: center;
-        align-items: center;
         p {
             margin: 0.2rem 0;
-            text-indent: 2em;
             align-self: flex-start;
             color: rgb(10, 10, 10);
             line-height: 0.25rem;
             font-size: 0.16rem;
         }
-        img {
+        .my-img {
             max-width: 100%;
         }
     }

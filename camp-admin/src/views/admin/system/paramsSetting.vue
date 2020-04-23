@@ -6,8 +6,8 @@
             <div class="single-param" v-for="(item,i) in params" :key="i">
                 <span>{{item.label}}</span>
                 <el-select size="medium" v-if="item.type=='bool'" v-model="valueObj[item.key]">
-                    <el-option :value="true" label="是"></el-option>
-                    <el-option :value="false" label="否"></el-option>
+                    <el-option value="是" label="是"></el-option>
+                    <el-option value="否" label="否"></el-option>
                 </el-select>
                 <el-input-number
                     v-else

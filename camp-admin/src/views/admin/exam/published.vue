@@ -83,6 +83,7 @@
                     :uploadUrl="diaGrade.uploadUrl"
                     :autoUpload="false"
                     :formData="diaGrade.data"
+                    @uploadSuccess="success"
                     size="normal"
                 />
             </div>
@@ -128,6 +129,7 @@ export default {
         return {
             table: {
                 config: [
+                    { prop: "examId", label: "考试序号" },
                     { prop: "name", label: "考试名称" },
                     { prop: "belong", label: "所属培训" },
                     { prop: "startTime", label: "开始时间" },
@@ -263,6 +265,12 @@ export default {
         checkHistory(row) {
             this.history.examId = row.examId;
             this.history.flag = true;
+        },
+        success(res) {
+            this.$alert(res.msg, "提示", {
+                confirmButtonText: "确定",
+                type: "info"
+            });
         }
     }
 };

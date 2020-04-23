@@ -1,8 +1,8 @@
 <template>
 	<view class="dynamic-container" @click="toDetail" hover-class="dynamic-container-hover">
 		<view class="img">
-			<image src="../../../assets/images/index1.jpg" mode="aspectFill"></image>
-			<!-- <image :src="item.src" mode="aspectFill"></image> -->
+			<!-- <image src="../../../assets/images/index1.jpg" mode="aspectFill"></image> -->
+			<image :src="item.url" mode="aspectFill"></image>
 		</view>
 		<view class="info">
 			<view class="title">
