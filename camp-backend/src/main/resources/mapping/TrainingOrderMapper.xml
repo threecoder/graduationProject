@@ -12,6 +12,11 @@
     <result column="order_begin_time" jdbcType="TIMESTAMP" property="orderBeginTime" />
     <result column="payment_state" jdbcType="BIT" property="paymentState" />
     <result column="close" jdbcType="BIT" property="close" />
+    <result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
+    <result column="is_delete_user" jdbcType="BIT" property="isDeleteUser" />
+    <result column="is_delete_admin" jdbcType="BIT" property="isDeleteAdmin" />
+    <result column="op_man_name" jdbcType="VARCHAR" property="opManName" />
+    <result column="business_name" jdbcType="VARCHAR" property="businessName" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -73,7 +78,8 @@
   </sql>
   <sql id="Base_Column_List">
     order_key_id, training_order_id, training_id, order_type, member_key_id, student_id, 
-    order_price, order_begin_time, payment_state, close
+    order_price, order_begin_time, payment_state, close, pay_time, is_delete_user, is_delete_admin, 
+    op_man_name, business_name
   </sql>
   <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.TrainingOrderExample" resultMap="BaseResultMap">
     select
@@ -87,6 +93,9 @@
     </if>
     <if test="orderByClause != null">
       order by ${orderByClause}
+    </if>
+    <if test="offset != null and limit != null">
+      limit ${offset},${limit}
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -111,12 +120,14 @@
     </selectKey>
     insert into training_order (training_order_id, training_id, order_type, 
       member_key_id, student_id, order_price, 
-      order_begin_time, payment_state, close
-      )
+      order_begin_time, payment_state, close, 
+      pay_time, is_delete_user, is_delete_admin, 
+      op_man_name, business_name)
     values (#{trainingOrderId,jdbcType=VARCHAR}, #{trainingId,jdbcType=INTEGER}, #{orderType,jdbcType=BIT}, 
       #{memberKeyId,jdbcType=INTEGER}, #{studentId,jdbcType=INTEGER}, #{orderPrice,jdbcType=DECIMAL}, 
-      #{orderBeginTime,jdbcType=TIMESTAMP}, #{paymentState,jdbcType=BIT}, #{close,jdbcType=BIT}
-      )
+      #{orderBeginTime,jdbcType=TIMESTAMP}, #{paymentState,jdbcType=BIT}, #{close,jdbcType=BIT}, 
+      #{payTime,jdbcType=TIMESTAMP}, #{isDeleteUser,jdbcType=BIT}, #{isDeleteAdmin,jdbcType=BIT}, 
+      #{opManName,jdbcType=VARCHAR}, #{businessName,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.TrainingOrder">
     <selectKey keyProperty="orderKeyId" order="AFTER" resultType="java.lang.Integer">
@@ -151,6 +162,21 @@
       <if test="close != null">
         close,
       </if>
+      <if test="payTime != null">
+        pay_time,
+      </if>
+      <if test="isDeleteUser != null">
+        is_delete_user,
+      </if>
+      <if test="isDeleteAdmin != null">
+        is_delete_admin,
+      </if>
+      <if test="opManName != null">
+        op_man_name,
+      </if>
+      <if test="businessName != null">
+        business_name,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="trainingOrderId != null">
@@ -179,6 +205,21 @@
       </if>
       <if test="close != null">
         #{close,jdbcType=BIT},
+      </if>
+      <if test="payTime != null">
+        #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleteUser != null">
+        #{isDeleteUser,jdbcType=BIT},
+      </if>
+      <if test="isDeleteAdmin != null">
+        #{isDeleteAdmin,jdbcType=BIT},
+      </if>
+      <if test="opManName != null">
+        #{opManName,jdbcType=VARCHAR},
+      </if>
+      <if test="businessName != null">
+        #{businessName,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -221,6 +262,21 @@
       <if test="record.close != null">
         close = #{record.close,jdbcType=BIT},
       </if>
+      <if test="record.payTime != null">
+        pay_time = #{record.payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isDeleteUser != null">
+        is_delete_user = #{record.isDeleteUser,jdbcType=BIT},
+      </if>
+      <if test="record.isDeleteAdmin != null">
+        is_delete_admin = #{record.isDeleteAdmin,jdbcType=BIT},
+      </if>
+      <if test="record.opManName != null">
+        op_man_name = #{record.opManName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.businessName != null">
+        business_name = #{record.businessName,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -237,7 +293,12 @@
       order_price = #{record.orderPrice,jdbcType=DECIMAL},
       order_begin_time = #{record.orderBeginTime,jdbcType=TIMESTAMP},
       payment_state = #{record.paymentState,jdbcType=BIT},
-      close = #{record.close,jdbcType=BIT}
+      close = #{record.close,jdbcType=BIT},
+      pay_time = #{record.payTime,jdbcType=TIMESTAMP},
+      is_delete_user = #{record.isDeleteUser,jdbcType=BIT},
+      is_delete_admin = #{record.isDeleteAdmin,jdbcType=BIT},
+      op_man_name = #{record.opManName,jdbcType=VARCHAR},
+      business_name = #{record.businessName,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -272,6 +333,21 @@
       <if test="close != null">
         close = #{close,jdbcType=BIT},
       </if>
+      <if test="payTime != null">
+        pay_time = #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleteUser != null">
+        is_delete_user = #{isDeleteUser,jdbcType=BIT},
+      </if>
+      <if test="isDeleteAdmin != null">
+        is_delete_admin = #{isDeleteAdmin,jdbcType=BIT},
+      </if>
+      <if test="opManName != null">
+        op_man_name = #{opManName,jdbcType=VARCHAR},
+      </if>
+      <if test="businessName != null">
+        business_name = #{businessName,jdbcType=VARCHAR},
+      </if>
     </set>
     where order_key_id = #{orderKeyId,jdbcType=INTEGER}
   </update>
@@ -285,7 +361,12 @@
       order_price = #{orderPrice,jdbcType=DECIMAL},
       order_begin_time = #{orderBeginTime,jdbcType=TIMESTAMP},
       payment_state = #{paymentState,jdbcType=BIT},
-      close = #{close,jdbcType=BIT}
+      close = #{close,jdbcType=BIT},
+      pay_time = #{payTime,jdbcType=TIMESTAMP},
+      is_delete_user = #{isDeleteUser,jdbcType=BIT},
+      is_delete_admin = #{isDeleteAdmin,jdbcType=BIT},
+      op_man_name = #{opManName,jdbcType=VARCHAR},
+      business_name = #{businessName,jdbcType=VARCHAR}
     where order_key_id = #{orderKeyId,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.lutayy.campbackend.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -32,17 +33,17 @@ public class MessageController {
 
     @RequestMapping("/member/signAsRead")
     @ResponseBody
-    public JSONObject memberSignAsRead(JSONObject jsonObject) {
+    public JSONObject memberSignAsRead(@RequestBody JSONObject jsonObject) {
         return messageService.signAsRead(jsonObject, "member");
     }
     @RequestMapping("/student/signAsRead")
     @ResponseBody
-    public JSONObject studentGignAsRead(JSONObject jsonObject) {
+    public JSONObject studentGignAsRead(@RequestBody JSONObject jsonObject) {
         return messageService.signAsRead(jsonObject, "student");
     }
     @RequestMapping("/admin/signAsRead")
     @ResponseBody
-    public JSONObject adminSignAsRead(JSONObject jsonObject) {
+    public JSONObject adminSignAsRead(@RequestBody JSONObject jsonObject) {
         return messageService.signAsRead(jsonObject, "admin");
     }
 
@@ -64,17 +65,17 @@ public class MessageController {
 
     @RequestMapping("/member/deleteMsg")
     @ResponseBody
-    public JSONObject memberDeleteMsg(JSONObject jsonObject) {
+    public JSONObject memberDeleteMsg(@RequestBody JSONObject jsonObject) {
         return messageService.deleteMsg(jsonObject, "member");
     }
     @RequestMapping("/admin/deleteMsg")
     @ResponseBody
-    public JSONObject adminDeleteMsg(JSONObject jsonObject) {
+    public JSONObject adminDeleteMsg(@RequestBody JSONObject jsonObject) {
         return messageService.deleteMsg(jsonObject, "admin");
     }
     @RequestMapping("/student/deleteMsg")
     @ResponseBody
-    public JSONObject studentDeleteMsg(JSONObject jsonObject) {
+    public JSONObject studentDeleteMsg(@RequestBody JSONObject jsonObject) {
         return messageService.deleteMsg(jsonObject, "student");
     }
 
@@ -95,5 +96,36 @@ public class MessageController {
     public Object studentGetMsgList(@RequestParam("pageSize") Integer pageSize, @RequestParam("currentPage") Integer currentPage,
                                    @RequestParam("id") Integer roleId) {
         return messageService.getMsgList(pageSize, currentPage, roleId, "student");
+    }
+
+    @RequestMapping("/admin/sendMsg")
+    @ResponseBody
+    public JSONObject sendMsg(@RequestBody JSONObject jsonObject) {
+        return messageService.sendMsg(jsonObject);
+    }
+
+
+    @RequestMapping("/admin/promptAllMemberEnrollTraining")
+    @ResponseBody
+    public JSONObject promptAllMemberEnrollTraining(@RequestBody JSONObject jsonObject) {
+        return messageService.promptAllMemberEnrollTraining(jsonObject);
+    }
+
+    @RequestMapping("/admin/promptAllStudentEnrollTraining")
+    @ResponseBody
+    public JSONObject promptAllStudentEnrollTraining(@RequestBody JSONObject jsonObject) {
+        return messageService.promptAllStudentEnrollTraining(jsonObject);
+    }
+
+    @RequestMapping("/admin/promptMemberEnrollTraining")
+    @ResponseBody
+    public JSONObject promptMemberEnrollTraining(@RequestBody JSONObject jsonObject) {
+        return messageService.promptMemberEnrollTraining(jsonObject);
+    }
+
+    @RequestMapping("/admin/promptStudentEnrollTraining")
+    @ResponseBody
+    public JSONObject promptStudentEnrollTraining(@RequestBody JSONObject jsonObject) {
+        return messageService.promptStudentEnrollTraining(jsonObject);
     }
 }

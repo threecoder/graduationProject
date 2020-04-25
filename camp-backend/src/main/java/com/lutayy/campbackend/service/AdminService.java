@@ -26,8 +26,11 @@ public interface AdminService {
 
     JSONObject importStudentByFile(Integer memberId, MultipartFile file);
 
-    JSONObject getStudentList(String name, String idNum, String phone, String company, Integer hasOrg,
+    JSONObject getStudentList(String name, String idNum, String phone, Integer memberId, Integer hasOrg,
                               Integer currentPage, Integer pageSize);
+
+    //管理员获取所有学员列表用于下拉框
+    JSONObject getStudentSelect();
 
     //管理员修改学员挂靠公司
     JSONObject modifyRely(JSONObject jsonObject);

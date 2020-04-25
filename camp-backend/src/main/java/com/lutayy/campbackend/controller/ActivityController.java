@@ -19,14 +19,19 @@ public class ActivityController {
 
     @RequestMapping(value={"/student/getJoinableActivities","/member/getJoinableActivities"})
     @ResponseBody
-    public Object getJoinableActivities(){
-        return activityService.getJoinableActivities();
+    public Object getJoinableActivities(@RequestParam("pageSize") Integer pageSize,
+                                        @RequestParam("currentPage") Integer currentPage,
+                                        @RequestParam("name") String name){
+        return activityService.getJoinableActivities(pageSize, currentPage, name);
     }
 
     @RequestMapping("/student/getSignedActivities")
     @ResponseBody
-    public Object getSignedActivities(@RequestParam("id") Integer studentId){
-        return activityService.getSignedActivities(studentId);
+    public Object getSignedActivities(@RequestParam("id") Integer studentId,
+                                      @RequestParam("currentPage") Integer currentPage,
+                                      @RequestParam("pageSize") Integer pageSize,
+                                      @RequestParam(value = "name",required = false) String name){
+        return activityService.getSignedActivities(studentId, currentPage, pageSize, name);
     }
 
     @RequestMapping("/student/getSeatNum")
@@ -55,8 +60,11 @@ public class ActivityController {
 
     @RequestMapping("/member/getSignedActivities")
     @ResponseBody
-    public Object memberGetSignedActivities(@RequestParam("id") Integer memberId){
-        return activityService.memberGetSignedActivities(memberId);
+    public Object memberGetSignedActivities(@RequestParam("id") Integer memberId,
+                                            @RequestParam("currentPage") Integer currentPage,
+                                            @RequestParam("pageSize") Integer pageSize,
+                                            @RequestParam(value = "name",required = false) String name){
+        return activityService.memberGetSignedActivities(memberId, currentPage, pageSize, name);
     }
 
     @RequestMapping("/admin/addNewActivity")

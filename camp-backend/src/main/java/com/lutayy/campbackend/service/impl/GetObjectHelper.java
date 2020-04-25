@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 @Component
 public class GetObjectHelper {
@@ -35,6 +37,18 @@ public class GetObjectHelper {
     ActivityStudentMapper activityStudentMapper;
     @Autowired
     ActivitySeatMapper activitySeatMapper;
+    @Autowired
+    SystemParameterMapper systemParameterMapper;
+    @Autowired
+    ActivityOrderMapper activityOrderMapper;
+    @Autowired
+    TrainingOrderMapper trainingOrderMapper;
+    @Autowired
+    CertificateChangeOrderMapper changeOrderMapper;
+    @Autowired
+    CertificateRecheckOrderMapper recheckOrderMapper;
+    @Autowired
+    MemberSubscriptionOrderMapper memberSubscriptionOrderMapper;
 
     /** 由管理员account获得会员对象 **/
     public Admin getAdminFromAccount(String account) {
@@ -197,4 +211,116 @@ public class GetObjectHelper {
         return tokenRequest.getId();
     }
 
+    //获取系统参数
+    public Integer getSystemParaByParaKey(String paraKey){
+        SystemParameterExample systemParameterExample=new SystemParameterExample();
+        systemParameterExample.createCriteria().andFlagEqualTo(true).andParaKeyEqualTo(paraKey);
+        List<SystemParameter> parameters=systemParameterMapper.selectByExample(systemParameterExample);
+        if(parameters.size()==0)
+            return null;
+        try {
+            Integer value = Integer.valueOf(parameters.get(0).getParaValue());
+            return value;
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+    //由订单号获取订单
+    public Object getOrderByOrderCode(String orderCode, String orderType){
+        if(orderType.equals("activity")){
+            ActivityOrderExample example=new ActivityOrderExample();
+            example.createCriteria().andActivityOrderIdEqualTo(orderCode);
+            List<ActivityOrder> orders=activityOrderMapper.selectByExample(example);
+            if(orders.size()==0)
+                return null;
+            return orders.get(0);
+        }
+        else if(orderType.equals("training")){
+            TrainingOrderExample example=new TrainingOrderExample();
+            example.createCriteria().andTrainingOrderIdEqualTo(orderCode);
+            List<TrainingOrder> orders=trainingOrderMapper.selectByExample(example);
+            if(orders.size()==0)
+                return null;
+            return orders.get(0);
+        }
+        else if(orderType.equals("cerChange")){
+            CertificateChangeOrderExample example=new CertificateChangeOrderExample();
+            example.createCriteria().andCertificateChangeOrderIdEqualTo(orderCode);
+            List<CertificateChangeOrder> orders=changeOrderMapper.selectByExample(example);
+            if(orders.size()==0)
+                return null;
+            return orders.get(0);
+        }
+        else if(orderType.equals("cerRecheck")){
+            CertificateRecheckOrderExample example=new CertificateRecheckOrderExample();
+            example.createCriteria().andCertificateRecheckOrderIdEqualTo(orderCode);
+            List<CertificateRecheckOrder> orders=recheckOrderMapper.selectByExample(example);
+            if(orders.size()==0)
+                return null;
+            return orders.get(0);
+        }
+        else if(orderType.equals("member")){
+            MemberSubscriptionOrderExample example=new MemberSubscriptionOrderExample();
+            example.createCriteria().andSubscriptionOrderIdEqualTo(orderCode);
+            List<MemberSubscriptionOrder> orders=memberSubscriptionOrderMapper.selectByExample(example);
+            if(orders.size()==0)
+                return null;
+            return orders.get(0);
+        }
+        else
+            return null;
+    }
+
+    //获取订单结束时间
+    public Date getOrderEndTime(String orderType, Date startTime){
+        String paraKey;
+        if(orderType.equals("activity"))
+            paraKey="activity_order_length";
+        else if(orderType.equals("training"))
+            paraKey="training_order_length";
+        else if(orderType.equals("cerChange"))
+            paraKey="certificate_order_length";
+        else if(orderType.equals("cerRecheck"))
+            paraKey="certificate_order_length";
+        else if(orderType.equals("member"))
+            paraKey="member_order_length";
+        else
+            return null;
+        Calendar cal=Calendar.getInstance();
+        cal.setTime(startTime);
+        cal.add(Calendar.MINUTE, getSystemParaByParaKey(paraKey));
+        return cal.getTime();
+    }
+
+    //检查活动订单是否过期
+    public boolean checkActivityOrderOutOfTime(ActivityOrder activityOrder){
+        Date endTime=getOrderEndTime("activity", activityOrder.getOrderBeginTime());
+        if(!activityOrder.getClose()){
+            if(!activityOrder.getPaymentState()){
+                //查看未支付的订单是否过期，失效则置close为1
+                if(endTime.compareTo(new Date())<0){
+                    activityOrder.setClose(true);
+                    activityOrderMapper.updateByPrimaryKeySelective(activityOrder);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    //检查活动订单是否过期
+    public boolean checkTrainingOrderOutOfTime(TrainingOrder trainingOrder){
+        Date endTime=getOrderEndTime("training", trainingOrder.getOrderBeginTime());
+        if(!trainingOrder.getClose()){
+            if(!trainingOrder.getPaymentState()){
+                //查看未支付的订单是否过期，失效则置close为1
+                if(endTime.compareTo(new Date())<0){
+                    trainingOrder.setClose(true);
+                    trainingOrderMapper.updateByPrimaryKeySelective(trainingOrder);
+                }
+            }
+        }
+        return false;
+    }
 }

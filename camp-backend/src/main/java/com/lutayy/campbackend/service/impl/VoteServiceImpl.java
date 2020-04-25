@@ -258,6 +258,7 @@ public class VoteServiceImpl implements VoteService {
             result.put("data", data);
             return result;
         }
+
         data.put("name", vote.getVoteContent());
         data.put("date", vote.getEndTime());
         data.put("type", vote.getOptionalNum() > 1 ? "多选" : "单选");

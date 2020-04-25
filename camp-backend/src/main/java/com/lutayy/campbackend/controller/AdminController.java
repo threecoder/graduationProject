@@ -87,11 +87,18 @@ public class AdminController {
     public Object getStudentList(@RequestParam(value = "name", required = false) String name,
                                  @RequestParam(value = "idNum", required = false) String idNum,
                                  @RequestParam(value = "phone", required = false) String phone,
-                                 @RequestParam(value = "company", required = false) String company,
+                                 @RequestParam(value = "company", required = false) Integer memberId,
                                  @RequestParam(value = "hasOrg", required = false) Integer hasOrg,
                                  @RequestParam("currentPage") int currentPage,
                                  @RequestParam("pageSize") int pageSize) {
-        return adminService.getStudentList(name, idNum, phone, company, hasOrg, currentPage, pageSize);
+        return adminService.getStudentList(name, idNum, phone, memberId, hasOrg, currentPage, pageSize);
+    }
+
+    //管理员获取所有学员列表用于下拉框
+    @RequestMapping("/getStudentSelect")
+    @ResponseBody
+    public Object getStudentSelect() {
+        return adminService.getStudentSelect();
     }
 
     @RequestMapping("/deleteOneStudentFromMember")

@@ -25,6 +25,16 @@ public class TrainingOrder implements Serializable {
 
     private Boolean close;
 
+    private Date payTime;
+
+    private Boolean isDeleteUser;
+
+    private Boolean isDeleteAdmin;
+
+    private String opManName;
+
+    private String businessName;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getOrderKeyId() {
@@ -105,5 +115,45 @@ public class TrainingOrder implements Serializable {
 
     public void setClose(Boolean close) {
         this.close = close;
+    }
+
+    public Date getPayTime() {
+        return payTime;
+    }
+
+    public void setPayTime(Date payTime) {
+        this.payTime = payTime;
+    }
+
+    public Boolean getIsDeleteUser() {
+        return isDeleteUser;
+    }
+
+    public void setIsDeleteUser(Boolean isDeleteUser) {
+        this.isDeleteUser = isDeleteUser;
+    }
+
+    public Boolean getIsDeleteAdmin() {
+        return isDeleteAdmin;
+    }
+
+    public void setIsDeleteAdmin(Boolean isDeleteAdmin) {
+        this.isDeleteAdmin = isDeleteAdmin;
+    }
+
+    public String getOpManName() {
+        return opManName;
+    }
+
+    public void setOpManName(String opManName) {
+        this.opManName = opManName;
+    }
+
+    public String getBusinessName() {
+        return businessName;
+    }
+
+    public void setBusinessName(String businessName) {
+        this.businessName = businessName;
     }
 }

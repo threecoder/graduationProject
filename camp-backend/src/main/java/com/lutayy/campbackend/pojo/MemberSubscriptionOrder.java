@@ -4,22 +4,16 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class ActivityOrder implements Serializable {
+public class MemberSubscriptionOrder implements Serializable {
     private Integer orderKeyId;
 
-    private String activityOrderId;
-
-    private Integer activityId;
-
-    private Boolean orderType;
+    private String subscriptionOrderId;
 
     private Integer memberKeyId;
 
-    private Integer studentId;
+    private Date createTime;
 
-    private BigDecimal orderPrice;
-
-    private Date orderBeginTime;
+    private BigDecimal fee;
 
     private Boolean paymentState;
 
@@ -45,28 +39,12 @@ public class ActivityOrder implements Serializable {
         this.orderKeyId = orderKeyId;
     }
 
-    public String getActivityOrderId() {
-        return activityOrderId;
+    public String getSubscriptionOrderId() {
+        return subscriptionOrderId;
     }
 
-    public void setActivityOrderId(String activityOrderId) {
-        this.activityOrderId = activityOrderId;
-    }
-
-    public Integer getActivityId() {
-        return activityId;
-    }
-
-    public void setActivityId(Integer activityId) {
-        this.activityId = activityId;
-    }
-
-    public Boolean getOrderType() {
-        return orderType;
-    }
-
-    public void setOrderType(Boolean orderType) {
-        this.orderType = orderType;
+    public void setSubscriptionOrderId(String subscriptionOrderId) {
+        this.subscriptionOrderId = subscriptionOrderId;
     }
 
     public Integer getMemberKeyId() {
@@ -77,28 +55,20 @@ public class ActivityOrder implements Serializable {
         this.memberKeyId = memberKeyId;
     }
 
-    public Integer getStudentId() {
-        return studentId;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setStudentId(Integer studentId) {
-        this.studentId = studentId;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public BigDecimal getOrderPrice() {
-        return orderPrice;
+    public BigDecimal getFee() {
+        return fee;
     }
 
-    public void setOrderPrice(BigDecimal orderPrice) {
-        this.orderPrice = orderPrice;
-    }
-
-    public Date getOrderBeginTime() {
-        return orderBeginTime;
-    }
-
-    public void setOrderBeginTime(Date orderBeginTime) {
-        this.orderBeginTime = orderBeginTime;
+    public void setFee(BigDecimal fee) {
+        this.fee = fee;
     }
 
     public Boolean getPaymentState() {

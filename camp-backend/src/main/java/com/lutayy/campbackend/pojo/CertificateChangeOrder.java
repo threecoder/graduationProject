@@ -4,18 +4,18 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class ActivityOrder implements Serializable {
+public class CertificateChangeOrder implements Serializable {
     private Integer orderKeyId;
 
-    private String activityOrderId;
+    private String certificateChangeOrderId;
 
-    private Integer activityId;
+    private Integer certificateId;
+
+    private Integer studentId;
 
     private Boolean orderType;
 
     private Integer memberKeyId;
-
-    private Integer studentId;
 
     private BigDecimal orderPrice;
 
@@ -45,20 +45,28 @@ public class ActivityOrder implements Serializable {
         this.orderKeyId = orderKeyId;
     }
 
-    public String getActivityOrderId() {
-        return activityOrderId;
+    public String getCertificateChangeOrderId() {
+        return certificateChangeOrderId;
     }
 
-    public void setActivityOrderId(String activityOrderId) {
-        this.activityOrderId = activityOrderId;
+    public void setCertificateChangeOrderId(String certificateChangeOrderId) {
+        this.certificateChangeOrderId = certificateChangeOrderId;
     }
 
-    public Integer getActivityId() {
-        return activityId;
+    public Integer getCertificateId() {
+        return certificateId;
     }
 
-    public void setActivityId(Integer activityId) {
-        this.activityId = activityId;
+    public void setCertificateId(Integer certificateId) {
+        this.certificateId = certificateId;
+    }
+
+    public Integer getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(Integer studentId) {
+        this.studentId = studentId;
     }
 
     public Boolean getOrderType() {
@@ -75,14 +83,6 @@ public class ActivityOrder implements Serializable {
 
     public void setMemberKeyId(Integer memberKeyId) {
         this.memberKeyId = memberKeyId;
-    }
-
-    public Integer getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(Integer studentId) {
-        this.studentId = studentId;
     }
 
     public BigDecimal getOrderPrice() {
