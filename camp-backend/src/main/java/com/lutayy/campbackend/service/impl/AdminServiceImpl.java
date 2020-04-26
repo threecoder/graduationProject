@@ -10,6 +10,7 @@ import com.lutayy.campbackend.dao.*;
 import com.lutayy.campbackend.pojo.*;
 import com.lutayy.campbackend.pojo.request.TokenRequest;
 import com.lutayy.campbackend.service.AdminService;
+import com.lutayy.campbackend.service.SQLConn.MemberStudentSQLConn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -330,24 +331,34 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public JSONObject getStudentList(String name, String idNum, String phone, String company, Integer hasOrg,
+    public JSONObject getStudentList(String name, String idNum, String phone, Integer memberId, Integer hasOrg,
                                      Integer currentPage, Integer pageSize) {
         JSONObject result = new JSONObject();
         if (currentPage == null || currentPage < 1) currentPage = 1;
         if (pageSize == null || pageSize < 1) pageSize = 10;
-        StudentExample studentExample = new StudentExample();
-        StudentExample.Criteria criteria = studentExample.createCriteria();
-        if (name != null && !name.equals("")) criteria.andStudentNameLike("%" + name + "%");
-        if (idNum != null && !idNum.equals("")) criteria.andStudentIdcardEqualTo(idNum);
-        if (phone != null && !phone.equals("")) criteria.andStudentPhoneEqualTo(phone);
-        if (company != null && !company.equals("")) criteria.andCompanyEqualTo("%" + company + "%");
-        if (hasOrg != null) criteria.andHasOrgEqualTo(hasOrg.equals(1));
-        studentExample.setOffset((currentPage - 1) * pageSize);
-        studentExample.setLimit(pageSize);
-        List<Student> students = studentMapper.selectByExample(studentExample);
-        long total = studentMapper.countByExample(studentExample);
+        List<Student> students;
+        long total;
+        if (hasOrg != null && hasOrg.equals(0) && memberId!=null) {
+            total=0;
+            students=new ArrayList<>();
+        }else if(hasOrg != null && hasOrg.equals(1)){
+            total=MemberStudentSQLConn.countStudentsFromMemberReStudent(memberId, phone, idNum, name);
+            students= MemberStudentSQLConn.getStudentsFromMemberReStudent(memberId, phone, idNum, name, currentPage, pageSize);
+        }else {
+            StudentExample studentExample=new StudentExample();
+            StudentExample.Criteria criteria=studentExample.createCriteria();
+            if(name!=null && !name.equals("")) criteria.andStudentNameLike("%"+name+"%");
+            if(idNum!=null && !idNum.equals("")) criteria.andStudentIdcardEqualTo(idNum);
+            if(phone!=null && !phone.equals("")) criteria.andStudentPhoneLike("%"+phone+"%");
+            if(hasOrg!=null && hasOrg.equals(0)) criteria.andCompanyIsNull();
+            total=studentMapper.countByExample(studentExample);
+            studentExample.setOffset((currentPage-1)*pageSize);
+            studentExample.setLimit(pageSize);
+            students=studentMapper.selectByExample(studentExample);
+        }
+
         result.put("code", "success");
-        if (students.size() == 0) {
+        if (total == 0) {
             result.put("msg", "无符合查询条件的学员！");
         } else {
             result.put("msg", "查询成功！");
@@ -373,6 +384,27 @@ public class AdminServiceImpl implements AdminService {
         }
         data.put("list", list);
         result.put("data", data);
+        return result;
+    }
+
+    //管理员获取所有学员列表用于下拉框
+    @Override
+    public JSONObject getStudentSelect() {
+        JSONObject result=new JSONObject();
+        JSONArray data=new JSONArray();
+        StudentExample studentExample=new StudentExample();
+        studentExample.setOrderByClause("company ASC, enter_time DESC");
+        List<Student> students=studentMapper.selectByExample(studentExample);
+        for(Student student:students){
+            JSONObject object=new JSONObject();
+            object.put("name", student.getStudentName());
+            object.put("idNum", student.getStudentIdcard());
+            object.put("belong", student.getCompany());
+            data.add(object);
+        }
+        result.put("data", data);
+        result.put("code", "success");
+        result.put("msg", "获取学员列表成功");
         return result;
     }
 

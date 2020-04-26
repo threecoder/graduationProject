@@ -4,16 +4,12 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class ActivityOrder implements Serializable {
+public class CertificateRecheckOrder implements Serializable {
     private Integer orderKeyId;
 
-    private String activityOrderId;
+    private String certificateRecheckOrderId;
 
-    private Integer activityId;
-
-    private Boolean orderType;
-
-    private Integer memberKeyId;
+    private Integer certificateId;
 
     private Integer studentId;
 
@@ -45,36 +41,20 @@ public class ActivityOrder implements Serializable {
         this.orderKeyId = orderKeyId;
     }
 
-    public String getActivityOrderId() {
-        return activityOrderId;
+    public String getCertificateRecheckOrderId() {
+        return certificateRecheckOrderId;
     }
 
-    public void setActivityOrderId(String activityOrderId) {
-        this.activityOrderId = activityOrderId;
+    public void setCertificateRecheckOrderId(String certificateRecheckOrderId) {
+        this.certificateRecheckOrderId = certificateRecheckOrderId;
     }
 
-    public Integer getActivityId() {
-        return activityId;
+    public Integer getCertificateId() {
+        return certificateId;
     }
 
-    public void setActivityId(Integer activityId) {
-        this.activityId = activityId;
-    }
-
-    public Boolean getOrderType() {
-        return orderType;
-    }
-
-    public void setOrderType(Boolean orderType) {
-        this.orderType = orderType;
-    }
-
-    public Integer getMemberKeyId() {
-        return memberKeyId;
-    }
-
-    public void setMemberKeyId(Integer memberKeyId) {
-        this.memberKeyId = memberKeyId;
+    public void setCertificateId(Integer certificateId) {
+        this.certificateId = certificateId;
     }
 
     public Integer getStudentId() {

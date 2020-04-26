@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.lutayy.campbackend.common.util.ExcelUtil;
 import com.lutayy.campbackend.common.util.OrderIdGenerator;
+import com.lutayy.campbackend.common.util.RedisUtil;
 import com.lutayy.campbackend.common.util.UUIDUtil;
 import com.lutayy.campbackend.dao.*;
 import com.lutayy.campbackend.pojo.*;
@@ -18,14 +19,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.io.*;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Service
@@ -40,6 +39,8 @@ public class ActivityServiceImpl implements ActivityService {
     @Autowired
     StudentMapper studentMapper;
     @Autowired
+    MemberMapper memberMapper;
+    @Autowired
     ActivityOrderStudentMapper activityOrderStudentMapper;
     @Autowired
     MemberReStudentMapper memberReStudentMapper;
@@ -47,6 +48,8 @@ public class ActivityServiceImpl implements ActivityService {
     ActivitySeatMapper activitySeatMapper;
     @Autowired
     GetObjectHelper getObjectHelper;
+    @Resource
+    private RedisUtil redisUtil;
 
 
     /**
@@ -63,12 +66,20 @@ public class ActivityServiceImpl implements ActivityService {
 
 
     @Override
-    public JSONObject getJoinableActivities() {
+    public JSONObject getJoinableActivities(Integer pageSize, Integer currentPage, String name) {
         JSONObject result = new JSONObject();
+        JSONObject data = new JSONObject();
+        JSONArray list = new JSONArray();
 
         ActivityExample activityExample = new ActivityExample();
         ActivityExample.Criteria criteria = activityExample.createCriteria();
         criteria.andOpenTimeLessThan(new Date()).andCloseTimeGreaterThan(new Date());
+        if (name != null && !name.equals("")) {
+            criteria.andActivityNameLike("%" + name + "%");
+        }
+        long total=activityMapper.countByExample(activityExample);
+        activityExample.setOffset((currentPage-1)*pageSize);
+        activityExample.setLimit(pageSize);
         List<Activity> activities = activityMapper.selectByExample(activityExample);
         if (activities.size() == 0) {
             result.put("code", "success");
@@ -76,7 +87,7 @@ public class ActivityServiceImpl implements ActivityService {
             result.put("data", null);
             return result;
         }
-        JSONArray data = new JSONArray();
+
         for (Activity activity : activities) {
             JSONObject object = new JSONObject();
             object.put("id", activity.getActivityId());
@@ -92,8 +103,10 @@ public class ActivityServiceImpl implements ActivityService {
             object.put("introduce", introduce);
             object.put("contacts", activity.getContactName());
             object.put("phone", activity.getContactPhone());
-            data.add(object);
+            list.add(object);
         }
+        data.put("list", list);
+        data.put("total", total);
         result.put("code", "success");
         result.put("msg", "查询成功!");
         result.put("data", data);
@@ -104,8 +117,10 @@ public class ActivityServiceImpl implements ActivityService {
      * 学员中心的活动管理
      **/
     @Override
-    public JSONObject getSignedActivities(Integer studentId) {
+    public JSONObject getSignedActivities(Integer studentId, Integer currentPage, Integer pageSize, String name) {
         JSONObject result = new JSONObject();
+        JSONObject data=new JSONObject();
+        JSONArray list=new JSONArray();
 
         ActivityStudentExample activityStudentExample = new ActivityStudentExample();
         ActivityStudentExample.Criteria criteria = activityStudentExample.createCriteria();
@@ -117,36 +132,57 @@ public class ActivityServiceImpl implements ActivityService {
         criteria1.andStudentIdEqualTo(studentId).andCloseEqualTo(false).andPaymentStateEqualTo(false).andOrderTypeEqualTo(true);
         List<ActivityOrder> activityOrders = activityOrderMapper.selectByExample(activityOrderExample);
 
+        int total=-1;
+
         if (activityStudents.size() == 0 && activityOrders.size() == 0) {
             result.put("code", "success");
             result.put("msg", "该用户暂无报名任何活动");
-            result.put("data", null);
+            data.put("total", total+1);
+            data.put("list", list);
+            result.put("data", data);
             return result;
         }
-        JSONArray data = new JSONArray();
+
+        Set<Integer> activityIdsSet=new HashSet<>();//用于将未支付的订单属于同一活动的进行去重
 
         for (ActivityOrder activityOrder : activityOrders) {
+            if(getObjectHelper.checkActivityOrderOutOfTime(activityOrder))
+                continue;
+            if(!activityIdsSet.add(activityOrder.getActivityId()))
+                continue;
             Activity activity = activityMapper.selectByPrimaryKey(activityOrder.getActivityId());
-            JSONObject object = new JSONObject();
-            object.put("id", activity.getActivityId());
-            object.put("name", activity.getActivityName());
-            object.put("date", activity.getActivityDate());
-            object.put("address", activity.getActivityAddress());
-            object.put("fee", activity.getActivityFee());
-            JSONArray introduce = new JSONArray();
-            String[] introduceStrs = activity.getActivityIntroduction().split("\\|");
-            for (String intro : introduceStrs) {
-                introduce.add(intro);
+            if(name!=null && !name.equals("")){
+                if(!activity.getActivityName().contains(name))
+                    continue;
             }
-            object.put("introduce", introduce);
-            object.put("contacts", activity.getContactName());
-            object.put("phone", activity.getContactPhone());
-            object.put("status", "未支付");
-            data.add(object);
+            total++;
+            if(total>=(currentPage-1)*pageSize && total<currentPage*pageSize) {
+                JSONObject object = new JSONObject();
+                object.put("id", activity.getActivityId());
+                object.put("name", activity.getActivityName());
+                object.put("date", activity.getActivityDate());
+                object.put("address", activity.getActivityAddress());
+                object.put("fee", activity.getActivityFee());
+                JSONArray introduce = new JSONArray();
+                String[] introduceStrs = activity.getActivityIntroduction().split("\\|");
+                for (String intro : introduceStrs) {
+                    introduce.add(intro);
+                }
+                object.put("introduce", introduce);
+                object.put("contacts", activity.getContactName());
+                object.put("phone", activity.getContactPhone());
+                object.put("status", "未支付");
+                list.add(object);
+            }
         }
 
         for (int i = 0; i < activityStudents.size(); i++) {
             Activity activity = activityMapper.selectByPrimaryKey(activityStudents.get(i).getActivityId());
+            if(name!=null && !name.equals("")){
+                if(!activity.getActivityName().contains(name))
+                    continue;
+            }
+            total++;
             JSONObject object = new JSONObject();
             object.put("id", activity.getActivityId());
             object.put("name", activity.getActivityName());
@@ -159,10 +195,13 @@ public class ActivityServiceImpl implements ActivityService {
             object.put("contacts", activity.getContactName());
             object.put("phone", activity.getContactPhone());
             object.put("status", "已支付");
-            data.add(object);
+            if(total>=(currentPage-1)*pageSize && total<currentPage*pageSize)
+                list.add(object);
         }
         result.put("code", "success");
         result.put("msg", "查询成功!");
+        data.put("list", list);
+        data.put("total", total+1);
         result.put("data", data);
         return result;
     }
@@ -203,6 +242,7 @@ public class ActivityServiceImpl implements ActivityService {
             return result;
         }
         Integer studentId = jsonObject.getInteger("id");
+        Student student=studentMapper.selectByPrimaryKey(studentId);
         MemberReStudentExample memberReStudentExample = new MemberReStudentExample();
         MemberReStudentExample.Criteria criteria2 = memberReStudentExample.createCriteria();
         criteria2.andStudentIdEqualTo(studentId);
@@ -268,6 +308,9 @@ public class ActivityServiceImpl implements ActivityService {
 //        activityStudent.setApplyTime(new Date());
 //        if(activityStudentMapper.insert(activityStudent)>0){
         String orderId = OrderIdGenerator.getUniqueId();
+        while (!redisUtil.hset("order_no_map", orderId, "activity")) {
+            orderId = OrderIdGenerator.getUniqueId();
+        }
         //订单号生成并查重（查重如非高并发系统基本上可以省略）
         //while(activityOrderMapper.selectByPrimaryKey(orderId)!=null){
         //    orderId=OrderIdGenerator.getUniqueId();
@@ -284,6 +327,8 @@ public class ActivityServiceImpl implements ActivityService {
         activityOrder.setOrderBeginTime(new Date());
         activityOrder.setPaymentState(false);
         activityOrder.setClose(false);
+        activityOrder.setOpManName(student.getStudentName());
+        activityOrder.setBusinessName(activity.getActivityName());
         if (activityOrderMapper.insert(activityOrder) > 0) {
             result.put("code", "success");
             result.put("msg", "订单生成成功!待支付");
@@ -308,6 +353,7 @@ public class ActivityServiceImpl implements ActivityService {
     public JSONObject memberJoinActivity(JSONObject jsonObject) {
         JSONObject result = new JSONObject();
         Integer memberId = jsonObject.getInteger("id");
+        Member member=memberMapper.selectByPrimaryKey(memberId);
         int activityId = jsonObject.getInteger("activityId");
         JSONArray idNums = jsonObject.getJSONArray("idNums");
         Activity activity = activityMapper.selectByPrimaryKey(activityId);
@@ -330,6 +376,9 @@ public class ActivityServiceImpl implements ActivityService {
         }
 
         String orderId = OrderIdGenerator.getUniqueId();
+        while (!redisUtil.hset("order_no_map", orderId, "activity")) {
+            orderId = OrderIdGenerator.getUniqueId();
+        }
         //订单号生成并查重（如非高并发系统基本上可以省略）
 //        while(activityOrderMapper.selectByPrimaryKey(orderId)!=null){
 //            orderId=OrderIdGenerator.getUniqueId();
@@ -346,6 +395,8 @@ public class ActivityServiceImpl implements ActivityService {
         activityOrder.setOrderBeginTime(new Date());
         activityOrder.setPaymentState(false);
         activityOrder.setClose(false);
+        activityOrder.setBusinessName(activity.getActivityName());
+        activityOrder.setOpManName(member.getMemberName());
         activityOrderMapper.insert(activityOrder);
 
         int existTotalCount = 0;
@@ -429,22 +480,29 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public JSONObject memberGetSignedActivities(Integer memberId) {
+    public JSONObject memberGetSignedActivities(Integer memberId, Integer currentPage, Integer pageSize, String name) {
         JSONObject result = new JSONObject();
+        JSONObject data=new JSONObject();
+        JSONArray list=new JSONArray();
 
         ActivityOrderExample activityOrderExample = new ActivityOrderExample();
         ActivityOrderExample.Criteria criteria = activityOrderExample.createCriteria();
         criteria.andOrderTypeEqualTo(false).andMemberKeyIdEqualTo(memberId).andPaymentStateEqualTo(false).andCloseEqualTo(false);
         activityOrderExample.setOrderByClause("order_begin_time DESC");
-        activityOrderExample.setDistinct(true); // TODO 这里去重修改了Mapper，以activity_id
+        activityOrderExample.setDistinct(true); // TODO 这里去重修改了Mapper，以activity_id (group by activity_id)
         List<ActivityOrder> activityOrders = activityOrderMapper.selectByExample(activityOrderExample);
 
         List<Integer> activityIds = ActivityStudentSQLConn.getActivityIdByMemberId(memberId);
 
+        int total=-1;
+
         if (activityIds.size() == 0 && activityOrders.size() == 0) {
-            result.put("code", "fail");
-            result.put("msg", "暂无已报名活动");
-            result.put("data", null);
+            result.put("code", "success");
+            result.put("msg", "暂未给名下学院报名活动");
+            data.put("total", total+1);
+            data.put("list", list);
+            result.put("data", data);
+            return result;
         }
         List<Activity> activities = new ArrayList<>();
         for (int i = 0; i < activityOrders.size(); i++) {
@@ -453,33 +511,51 @@ public class ActivityServiceImpl implements ActivityService {
         for (int i = activityIds.size() - 1; i >= 0; i--) {
             activities.add(activityMapper.selectByPrimaryKey(activityIds.get(i)));
         }
-        JSONArray data = new JSONArray();
-        int num = 0;
+
+        int num = -1; //用于区分未支付和报名成功的培训
+        int orderIndex=-1;
+        Set<Integer> activityIdsSet=new HashSet<>();//用于将未支付的订单属于同一活动的进行去重
         for (Activity activity : activities) {
-            JSONObject object = new JSONObject();
-            object.put("id", activity.getActivityId());
-            object.put("name", activity.getActivityName());
-            object.put("date", activity.getActivityDate());
-            object.put("address", activity.getActivityAddress());
-            object.put("fee", activity.getActivityFee());
-            JSONArray introduce = new JSONArray();
-            String[] introduceStrs = activity.getActivityIntroduction().split("\\|");
-            for (String intro : introduceStrs) {
-                introduce.add(intro);
+            num++;
+            if (num < activityOrders.size()){
+                orderIndex++;
+                if(getObjectHelper.checkActivityOrderOutOfTime(activityOrders.get(orderIndex)))
+                    continue;
+                if(!activityIdsSet.add(activity.getActivityId()))
+                    continue;
             }
-            object.put("introduce", introduce);
-            if (num < activityOrders.size()) {
-                object.put("status", "有订单未支付");
-            } else {
-                object.put("status", "已支付");
+            if(name!=null && !name.equals("")){
+                if(!activity.getActivityName().contains(name))
+                    continue;
             }
-            object.put("contacts", activity.getContactName());
-            object.put("phone", activity.getContactPhone());
-            data.add(object);
-            num += 1;
+            total++;
+            if(total>=(currentPage-1)*pageSize && total<currentPage*pageSize) {
+                JSONObject object = new JSONObject();
+                object.put("id", activity.getActivityId());
+                object.put("name", activity.getActivityName());
+                object.put("date", activity.getActivityDate());
+                object.put("address", activity.getActivityAddress());
+                object.put("fee", activity.getActivityFee());
+                JSONArray introduce = new JSONArray();
+                String[] introduceStrs = activity.getActivityIntroduction().split("\\|");
+                for (String intro : introduceStrs) {
+                    introduce.add(intro);
+                }
+                object.put("introduce", introduce);
+                if (num < activityOrders.size()) {
+                    object.put("status", "有订单未支付");
+                } else {
+                    object.put("status", "已支付");
+                }
+                object.put("contacts", activity.getContactName());
+                object.put("phone", activity.getContactPhone());
+                list.add(object);
+            }
         }
         result.put("code", "success");
         result.put("msg", "成功获取已报名的活动");
+        data.put("list", list);
+        data.put("total", total+1);
         result.put("data", data);
         return result;
     }

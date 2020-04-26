@@ -26,15 +26,18 @@ public class MemberStudentSQLConn {
             statement = conn.createStatement();
 
             String sql = "select distinct s.* from member_re_student r,student s " +
-                    "where r.student_id=s.student_id and r.member_key_id=" + memberId;
+                    "where r.student_id=s.student_id";
+            if(memberId!=null){
+                sql += "  and r.member_key_id=" + memberId;
+            }
             if (phone != null && !phone.equals("")) {
-                sql += " and s.student_phone='" + phone + "'";
+                sql += " and s.student_phone like '%" + phone + "%'";
             }
             if (idNum != null && !idNum.equals("")) {
                 sql += " and s.student_idcard='" + idNum + "'";
             }
             if (name != null && !name.equals("")) {
-                sql += " and s.student_name='" + name + "'";
+                sql += " and s.student_name like '%" + name + "%'";
             }
             sql += " limit " + (currentPage - 1) * pageSize + "," + pageSize;
             ResultSet rs = statement.executeQuery(sql);
@@ -75,13 +78,13 @@ public class MemberStudentSQLConn {
             String sql = "select count(*) c from member_re_student r inner join student s " +
                     "where r.student_id=s.student_id and r.member_key_id=" + memberId;
             if (phone != null && !phone.equals("")) {
-                sql += " and s.student_phone='" + phone + "'";
+                sql += " and s.student_phone like '%" + phone + "%'";
             }
             if (idNum != null && !idNum.equals("")) {
                 sql += " and s.student_idcard='" + idNum + "'";
             }
             if (name != null && !name.equals("")) {
-                sql += " and s.student_name='" + name + "'";
+                sql += " and s.student_name like '%" + name + "%'";
             }
             ResultSet rs = statement.executeQuery(sql);
             while(rs.next()) {

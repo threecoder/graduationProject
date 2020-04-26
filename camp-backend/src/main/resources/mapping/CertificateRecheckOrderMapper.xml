@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.lutayy.campbackend.dao.ActivityOrderMapper">
-  <resultMap id="BaseResultMap" type="com.lutayy.campbackend.pojo.ActivityOrder">
+<mapper namespace="com.lutayy.campbackend.dao.CertificateRecheckOrderMapper">
+  <resultMap id="BaseResultMap" type="com.lutayy.campbackend.pojo.CertificateRecheckOrder">
     <id column="order_key_id" jdbcType="INTEGER" property="orderKeyId" />
-    <result column="activity_order_id" jdbcType="VARCHAR" property="activityOrderId" />
-    <result column="activity_id" jdbcType="INTEGER" property="activityId" />
-    <result column="order_type" jdbcType="BIT" property="orderType" />
-    <result column="member_key_id" jdbcType="INTEGER" property="memberKeyId" />
+    <result column="certificate_recheck_order_id" jdbcType="VARCHAR" property="certificateRecheckOrderId" />
+    <result column="certificate_id" jdbcType="INTEGER" property="certificateId" />
     <result column="student_id" jdbcType="INTEGER" property="studentId" />
     <result column="order_price" jdbcType="DECIMAL" property="orderPrice" />
     <result column="order_begin_time" jdbcType="TIMESTAMP" property="orderBeginTime" />
@@ -77,17 +75,17 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    order_key_id, activity_order_id, activity_id, order_type, member_key_id, student_id, 
-    order_price, order_begin_time, payment_state, close, pay_time, is_delete_user, is_delete_admin, 
+    order_key_id, certificate_recheck_order_id, certificate_id, student_id, order_price, 
+    order_begin_time, payment_state, close, pay_time, is_delete_user, is_delete_admin, 
     op_man_name, business_name
   </sql>
-  <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.ActivityOrderExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.CertificateRecheckOrderExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from activity_order
+    from certificate_recheck_order
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -101,51 +99,45 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from activity_order
+    from certificate_recheck_order
     where order_key_id = #{orderKeyId,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from activity_order
+    delete from certificate_recheck_order
     where order_key_id = #{orderKeyId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.lutayy.campbackend.pojo.ActivityOrderExample">
-    delete from activity_order
+  <delete id="deleteByExample" parameterType="com.lutayy.campbackend.pojo.CertificateRecheckOrderExample">
+    delete from certificate_recheck_order
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.lutayy.campbackend.pojo.ActivityOrder">
+  <insert id="insert" parameterType="com.lutayy.campbackend.pojo.CertificateRecheckOrder">
     <selectKey keyProperty="orderKeyId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into activity_order (activity_order_id, activity_id, order_type, 
-      member_key_id, student_id, order_price, 
-      order_begin_time, payment_state, close, 
-      pay_time, is_delete_user, is_delete_admin, 
-      op_man_name, business_name)
-    values (#{activityOrderId,jdbcType=VARCHAR}, #{activityId,jdbcType=INTEGER}, #{orderType,jdbcType=BIT}, 
-      #{memberKeyId,jdbcType=INTEGER}, #{studentId,jdbcType=INTEGER}, #{orderPrice,jdbcType=DECIMAL}, 
-      #{orderBeginTime,jdbcType=TIMESTAMP}, #{paymentState,jdbcType=BIT}, #{close,jdbcType=BIT}, 
-      #{payTime,jdbcType=TIMESTAMP}, #{isDeleteUser,jdbcType=BIT}, #{isDeleteAdmin,jdbcType=BIT}, 
-      #{opManName,jdbcType=VARCHAR}, #{businessName,jdbcType=VARCHAR})
+    insert into certificate_recheck_order (certificate_recheck_order_id, certificate_id, 
+      student_id, order_price, order_begin_time, 
+      payment_state, close, pay_time, 
+      is_delete_user, is_delete_admin, op_man_name, 
+      business_name)
+    values (#{certificateRecheckOrderId,jdbcType=VARCHAR}, #{certificateId,jdbcType=INTEGER}, 
+      #{studentId,jdbcType=INTEGER}, #{orderPrice,jdbcType=DECIMAL}, #{orderBeginTime,jdbcType=TIMESTAMP}, 
+      #{paymentState,jdbcType=BIT}, #{close,jdbcType=BIT}, #{payTime,jdbcType=TIMESTAMP}, 
+      #{isDeleteUser,jdbcType=BIT}, #{isDeleteAdmin,jdbcType=BIT}, #{opManName,jdbcType=VARCHAR}, 
+      #{businessName,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.ActivityOrder">
+  <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.CertificateRecheckOrder">
     <selectKey keyProperty="orderKeyId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into activity_order
+    insert into certificate_recheck_order
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="activityOrderId != null">
-        activity_order_id,
+      <if test="certificateRecheckOrderId != null">
+        certificate_recheck_order_id,
       </if>
-      <if test="activityId != null">
-        activity_id,
-      </if>
-      <if test="orderType != null">
-        order_type,
-      </if>
-      <if test="memberKeyId != null">
-        member_key_id,
+      <if test="certificateId != null">
+        certificate_id,
       </if>
       <if test="studentId != null">
         student_id,
@@ -179,17 +171,11 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="activityOrderId != null">
-        #{activityOrderId,jdbcType=VARCHAR},
+      <if test="certificateRecheckOrderId != null">
+        #{certificateRecheckOrderId,jdbcType=VARCHAR},
       </if>
-      <if test="activityId != null">
-        #{activityId,jdbcType=INTEGER},
-      </if>
-      <if test="orderType != null">
-        #{orderType,jdbcType=BIT},
-      </if>
-      <if test="memberKeyId != null">
-        #{memberKeyId,jdbcType=INTEGER},
+      <if test="certificateId != null">
+        #{certificateId,jdbcType=INTEGER},
       </if>
       <if test="studentId != null">
         #{studentId,jdbcType=INTEGER},
@@ -223,29 +209,23 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.lutayy.campbackend.pojo.ActivityOrderExample" resultType="java.lang.Long">
-    select count(*) from activity_order
+  <select id="countByExample" parameterType="com.lutayy.campbackend.pojo.CertificateRecheckOrderExample" resultType="java.lang.Long">
+    select count(*) from certificate_recheck_order
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update activity_order
+    update certificate_recheck_order
     <set>
       <if test="record.orderKeyId != null">
         order_key_id = #{record.orderKeyId,jdbcType=INTEGER},
       </if>
-      <if test="record.activityOrderId != null">
-        activity_order_id = #{record.activityOrderId,jdbcType=VARCHAR},
+      <if test="record.certificateRecheckOrderId != null">
+        certificate_recheck_order_id = #{record.certificateRecheckOrderId,jdbcType=VARCHAR},
       </if>
-      <if test="record.activityId != null">
-        activity_id = #{record.activityId,jdbcType=INTEGER},
-      </if>
-      <if test="record.orderType != null">
-        order_type = #{record.orderType,jdbcType=BIT},
-      </if>
-      <if test="record.memberKeyId != null">
-        member_key_id = #{record.memberKeyId,jdbcType=INTEGER},
+      <if test="record.certificateId != null">
+        certificate_id = #{record.certificateId,jdbcType=INTEGER},
       </if>
       <if test="record.studentId != null">
         student_id = #{record.studentId,jdbcType=INTEGER},
@@ -283,12 +263,10 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update activity_order
+    update certificate_recheck_order
     set order_key_id = #{record.orderKeyId,jdbcType=INTEGER},
-      activity_order_id = #{record.activityOrderId,jdbcType=VARCHAR},
-      activity_id = #{record.activityId,jdbcType=INTEGER},
-      order_type = #{record.orderType,jdbcType=BIT},
-      member_key_id = #{record.memberKeyId,jdbcType=INTEGER},
+      certificate_recheck_order_id = #{record.certificateRecheckOrderId,jdbcType=VARCHAR},
+      certificate_id = #{record.certificateId,jdbcType=INTEGER},
       student_id = #{record.studentId,jdbcType=INTEGER},
       order_price = #{record.orderPrice,jdbcType=DECIMAL},
       order_begin_time = #{record.orderBeginTime,jdbcType=TIMESTAMP},
@@ -303,20 +281,14 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.lutayy.campbackend.pojo.ActivityOrder">
-    update activity_order
+  <update id="updateByPrimaryKeySelective" parameterType="com.lutayy.campbackend.pojo.CertificateRecheckOrder">
+    update certificate_recheck_order
     <set>
-      <if test="activityOrderId != null">
-        activity_order_id = #{activityOrderId,jdbcType=VARCHAR},
+      <if test="certificateRecheckOrderId != null">
+        certificate_recheck_order_id = #{certificateRecheckOrderId,jdbcType=VARCHAR},
       </if>
-      <if test="activityId != null">
-        activity_id = #{activityId,jdbcType=INTEGER},
-      </if>
-      <if test="orderType != null">
-        order_type = #{orderType,jdbcType=BIT},
-      </if>
-      <if test="memberKeyId != null">
-        member_key_id = #{memberKeyId,jdbcType=INTEGER},
+      <if test="certificateId != null">
+        certificate_id = #{certificateId,jdbcType=INTEGER},
       </if>
       <if test="studentId != null">
         student_id = #{studentId,jdbcType=INTEGER},
@@ -351,12 +323,10 @@
     </set>
     where order_key_id = #{orderKeyId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.lutayy.campbackend.pojo.ActivityOrder">
-    update activity_order
-    set activity_order_id = #{activityOrderId,jdbcType=VARCHAR},
-      activity_id = #{activityId,jdbcType=INTEGER},
-      order_type = #{orderType,jdbcType=BIT},
-      member_key_id = #{memberKeyId,jdbcType=INTEGER},
+  <update id="updateByPrimaryKey" parameterType="com.lutayy.campbackend.pojo.CertificateRecheckOrder">
+    update certificate_recheck_order
+    set certificate_recheck_order_id = #{certificateRecheckOrderId,jdbcType=VARCHAR},
+      certificate_id = #{certificateId,jdbcType=INTEGER},
       student_id = #{studentId,jdbcType=INTEGER},
       order_price = #{orderPrice,jdbcType=DECIMAL},
       order_begin_time = #{orderBeginTime,jdbcType=TIMESTAMP},

@@ -115,7 +115,7 @@ public class VoteServiceImpl implements VoteService {
         }
         data.put("name", vote.getVoteContent());
         data.put("type", vote.getOptionalNum() > 1 ? "多选" : "单选");
-        data.put("num", vote.getOptionalSum());
+        data.put("num", vote.getOptionalNum());
         JSONArray options = new JSONArray();
 
         VoteOptionExample voteOptionExample = new VoteOptionExample();
@@ -148,6 +148,7 @@ public class VoteServiceImpl implements VoteService {
                 voteOptionStudentExample.createCriteria().andVoteIdEqualTo(voteId).andOptionIdEqualTo(voteOption.getOptionId());
                 num += voteOptionStudentMapper.countByExample(voteOptionStudentExample);
             }
+            object.put("quantity", num);
             object.put("per", sum == 0 ? 0 : (int) ((float) num / sum * 100));
             options.add(object);
         }
@@ -200,34 +201,36 @@ public class VoteServiceImpl implements VoteService {
 
     //会员
     @Override
-    public JSONObject getMemberCanVoteList(String name, Integer isFinish, Integer currentPage, Integer pageSize) {
+    public JSONObject getMemberCanVoteList(Integer memberId, String name, Integer currentPage, Integer pageSize) {
         JSONObject result = new JSONObject();
-        VoteExample voteExample = new VoteExample();
-        VoteExample.Criteria criteria = voteExample.createCriteria();
-        VoteExample.Criteria criteria1 = voteExample.createCriteria();
-        criteria.andVoteTypeEqualTo((byte)2);
-        criteria1.andVoteTypeEqualTo((byte)0);
-        if (name != null && !name.equals("")) {
-            criteria.andVoteContentLike("%" + name + "%");
-            criteria1.andVoteContentLike("%" + name + "%");
-        }
-        if (isFinish != null) {
-            Date date = new Date();
-            if (isFinish.equals(0)) {
-                criteria.andEndTimeGreaterThan(date);
-                criteria1.andEndTimeGreaterThan(date);
-            } else {
-                criteria.andEndTimeLessThan(date);
-                criteria1.andEndTimeLessThan(date);
-            }
-        }
-        voteExample.or(criteria1);
-        long sum = voteMapper.countByExample(voteExample);
-        voteExample.setOffset((currentPage - 1) * pageSize);
-        voteExample.setLimit(pageSize);
-        List<Vote> votes = voteMapper.selectByExample(voteExample);
+//        VoteExample voteExample = new VoteExample();
+//        VoteExample.Criteria criteria = voteExample.createCriteria();
+//        VoteExample.Criteria criteria1 = voteExample.createCriteria();
+//        criteria.andVoteTypeEqualTo((byte)2);
+//        criteria1.andVoteTypeEqualTo((byte)0);
+//        if (name != null && !name.equals("")) {
+//            criteria.andVoteContentLike("%" + name + "%");
+//            criteria1.andVoteContentLike("%" + name + "%");
+//        }
+//        if (isFinish != null) {
+//            Date date = new Date();
+//            if (isFinish.equals(0)) {
+//                criteria.andEndTimeGreaterThan(date);
+//                criteria1.andEndTimeGreaterThan(date);
+//            } else {
+//                criteria.andEndTimeLessThan(date);
+//                criteria1.andEndTimeLessThan(date);
+//            }
+//        }
+//        voteExample.or(criteria1);
+//        long sum = voteMapper.countByExample(voteExample);
+//        voteExample.setOffset((currentPage - 1) * pageSize);
+//        voteExample.setLimit(pageSize);
+        int total=VoteSQLConn.countCanVoted(0, name, memberId);
+//        List<Vote> votes = voteMapper.selectByExample(voteExample);
+        List<Vote> votes = VoteSQLConn.getCanVotedList(0, name, memberId, currentPage, pageSize);
         JSONObject data = new JSONObject();
-        data.put("total", sum);
+        data.put("total", total);
         JSONArray list = new JSONArray();
         for (Vote vote : votes) {
             JSONObject object = new JSONObject();
@@ -255,10 +258,11 @@ public class VoteServiceImpl implements VoteService {
             result.put("data", data);
             return result;
         }
+
         data.put("name", vote.getVoteContent());
         data.put("date", vote.getEndTime());
-        data.put("type", vote.getOptionalNum() > 0 ? "多选" : "单选");
-        data.put("num", vote.getOptionalSum());
+        data.put("type", vote.getOptionalNum() > 1 ? "多选" : "单选");
+        data.put("num", vote.getOptionalNum());
         JSONArray options = new JSONArray();
 
         VoteOptionExample voteOptionExample = new VoteOptionExample();
@@ -343,34 +347,36 @@ public class VoteServiceImpl implements VoteService {
 
     //学员
     @Override
-    public JSONObject getStudentCanVoteList(String name, Integer isFinish, Integer currentPage, Integer pageSize) {
+    public JSONObject getStudentCanVoteList(Integer studentId, String name, Integer currentPage, Integer pageSize) {
         JSONObject result = new JSONObject();
-        VoteExample voteExample = new VoteExample();
-        VoteExample.Criteria criteria = voteExample.createCriteria();
-        VoteExample.Criteria criteria1 = voteExample.createCriteria();
-        criteria.andVoteTypeEqualTo((byte)2);
-        criteria1.andVoteTypeEqualTo((byte)1);
-        if (name != null && !name.equals("")) {
-            criteria.andVoteContentLike("%" + name + "%");
-            criteria1.andVoteContentLike("%" + name + "%");
-        }
-        if (isFinish != null) {
-            Date date = new Date();
-            if (isFinish.equals(0)) {
-                criteria.andEndTimeGreaterThan(date);
-                criteria1.andEndTimeGreaterThan(date);
-            } else {
-                criteria.andEndTimeLessThan(date);
-                criteria1.andEndTimeLessThan(date);
-            }
-        }
-        voteExample.or(criteria1);
-        long sum = voteMapper.countByExample(voteExample);
-        voteExample.setOffset((currentPage - 1) * pageSize);
-        voteExample.setLimit(pageSize);
-        List<Vote> votes = voteMapper.selectByExample(voteExample);
+//        VoteExample voteExample = new VoteExample();
+//        VoteExample.Criteria criteria = voteExample.createCriteria();
+//        VoteExample.Criteria criteria1 = voteExample.createCriteria();
+//        criteria.andVoteTypeEqualTo((byte)2);
+//        criteria1.andVoteTypeEqualTo((byte)1);
+//        if (name != null && !name.equals("")) {
+//            criteria.andVoteContentLike("%" + name + "%");
+//            criteria1.andVoteContentLike("%" + name + "%");
+//        }
+//        if (isFinish != null) {
+//            Date date = new Date();
+//            if (isFinish.equals(0)) {
+//                criteria.andEndTimeGreaterThan(date);
+//                criteria1.andEndTimeGreaterThan(date);
+//            } else {
+//                criteria.andEndTimeLessThan(date);
+//                criteria1.andEndTimeLessThan(date);
+//            }
+//        }
+//        voteExample.or(criteria1);
+//        long sum = voteMapper.countByExample(voteExample);
+//        voteExample.setOffset((currentPage - 1) * pageSize);
+//        voteExample.setLimit(pageSize);
+//        List<Vote> votes = voteMapper.selectByExample(voteExample);
+        int total=VoteSQLConn.countCanVoted(1, name, studentId);
+        List<Vote> votes=VoteSQLConn.getCanVotedList(1, name, studentId, currentPage, pageSize);
         JSONObject data = new JSONObject();
-        data.put("total", sum);
+        data.put("total", total);
         JSONArray list = new JSONArray();
         for (Vote vote : votes) {
             JSONObject object = new JSONObject();

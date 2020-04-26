@@ -58,6 +58,11 @@ CREATE TABLE `activity_order` (
   `order_begin_time` datetime DEFAULT NULL,
   `payment_state` tinyint(1) DEFAULT '0' COMMENT '0为未付款，1为已付款',
   `close` tinyint(1) DEFAULT '0' COMMENT '1为订单关闭',
+  `pay_time` datetime DEFAULT NULL COMMENT '付款时间',
+  `is_delete_user` tinyint(1) DEFAULT '0',
+  `is_delete_admin` tinyint(1) DEFAULT '0',
+  `op_man_name` varchar(50) DEFAULT NULL COMMENT '下单人/组织名称',
+  `business_name` varchar(50) DEFAULT NULL COMMENT '业务名称(活动名等)',
   PRIMARY KEY (`order_key_id`),
   UNIQUE KEY `activity_order_id` (`activity_order_id`),
   KEY `activity_id` (`activity_id`),
@@ -67,11 +72,11 @@ CREATE TABLE `activity_order` (
   CONSTRAINT `activity_order_ibfk_1` FOREIGN KEY (`activity_id`) REFERENCES `activity` (`activity_id`),
   CONSTRAINT `activity_order_ibfk_3` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`),
   CONSTRAINT `activity_order_ibfk_4` FOREIGN KEY (`member_key_id`) REFERENCES `member` (`member_key_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 /*Data for the table `activity_order` */
 
-insert  into `activity_order`(`order_key_id`,`activity_order_id`,`activity_id`,`order_type`,`member_key_id`,`student_id`,`order_price`,`order_begin_time`,`payment_state`,`close`) values (1,'20191001145853382363',1,1,NULL,1,'188.88','2019-10-01 14:58:54',1,0),(2,'20191009163126575245',4,0,1,NULL,'426.44','2019-10-09 16:31:27',1,0),(3,'20191009163703148065',4,0,1,NULL,'213.22','2019-10-09 16:37:04',0,0),(4,'20191010164121915078',4,0,1,NULL,'426.44','2019-10-10 16:41:22',0,0),(5,'20200313145643717849',3,0,1,NULL,'399.98','2020-03-13 14:56:44',0,0),(8,'20200313150507599301',3,0,1,NULL,'199.99','2020-03-13 15:05:08',0,0);
+insert  into `activity_order`(`order_key_id`,`activity_order_id`,`activity_id`,`order_type`,`member_key_id`,`student_id`,`order_price`,`order_begin_time`,`payment_state`,`close`,`pay_time`,`is_delete_user`,`is_delete_admin`,`op_man_name`,`business_name`) values (1,'20191001145853382363',1,1,NULL,1,'188.88','2019-10-01 14:58:54',1,0,NULL,0,0,NULL,NULL),(2,'20191009163126575245',4,0,1,NULL,'426.44','2019-10-09 16:31:27',1,0,NULL,0,0,NULL,NULL),(3,'20191009163703148065',4,0,1,NULL,'213.22','2019-10-09 16:37:04',0,1,NULL,0,0,NULL,NULL),(4,'20191010164121915078',4,0,1,NULL,'426.44','2019-10-10 16:41:22',0,1,NULL,0,0,NULL,NULL),(5,'20200313145643717849',3,0,1,NULL,'399.98','2020-03-13 14:56:44',0,1,NULL,0,0,NULL,NULL),(8,'20200313150507599301',3,0,1,NULL,'199.99','2020-03-13 15:05:08',0,1,NULL,0,0,NULL,NULL);
 
 /*Table structure for table `activity_order_student` */
 
@@ -279,6 +284,11 @@ CREATE TABLE `certificate_change_order` (
   `order_begin_time` datetime DEFAULT NULL COMMENT '订单生成时间',
   `payment_state` tinyint(1) DEFAULT NULL COMMENT '0为未付款，1为已付款',
   `close` tinyint(1) DEFAULT '0' COMMENT '1为订单关闭',
+  `pay_time` datetime DEFAULT NULL COMMENT '付款时间',
+  `is_delete_user` tinyint(1) DEFAULT '0',
+  `is_delete_admin` tinyint(1) DEFAULT '0',
+  `op_man_name` varchar(50) DEFAULT NULL,
+  `business_name` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`order_key_id`),
   KEY `certificate_id` (`certificate_id`),
   KEY `student_id` (`student_id`),
@@ -364,6 +374,11 @@ CREATE TABLE `certificate_recheck_order` (
   `order_begin_time` datetime DEFAULT NULL COMMENT '订单生成时间',
   `payment_state` tinyint(1) DEFAULT NULL COMMENT '0为未付款，1为已付款',
   `close` tinyint(1) DEFAULT NULL COMMENT '1为订单关闭',
+  `pay_time` datetime DEFAULT NULL COMMENT '付款时间',
+  `is_delete_user` tinyint(1) DEFAULT '0',
+  `is_delete_admin` tinyint(1) DEFAULT '0',
+  `op_man_name` varchar(50) DEFAULT NULL,
+  `business_name` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`order_key_id`),
   KEY `certificate_id` (`certificate_id`),
   KEY `student_id` (`student_id`),
@@ -391,13 +406,20 @@ DROP TABLE IF EXISTS `coupon`;
 
 CREATE TABLE `coupon` (
   `coupon_id` int(11) NOT NULL AUTO_INCREMENT,
-  `type` tinyint(4) DEFAULT NULL COMMENT '金额折扣:0  百分比折扣:1',
+  `type` int(11) DEFAULT '0' COMMENT '金额折扣:0  百分比折扣:1',
   `amount_discount` decimal(10,2) DEFAULT NULL COMMENT '金额折扣形式(两位小数)',
   `percent_discount` int(11) DEFAULT NULL COMMENT '百分比折扣形式(-1~100%)',
+  `coupon_name` varchar(50) DEFAULT NULL,
+  `start_time` datetime DEFAULT NULL,
+  `end_time` datetime DEFAULT NULL,
+  `is_invalid` tinyint(1) DEFAULT '0',
+  `create_time` datetime DEFAULT NULL,
   PRIMARY KEY (`coupon_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 /*Data for the table `coupon` */
+
+insert  into `coupon`(`coupon_id`,`type`,`amount_discount`,`percent_discount`,`coupon_name`,`start_time`,`end_time`,`is_invalid`,`create_time`) values (1,0,'20.00',NULL,'测试用券','2020-04-30 00:00:00','2020-05-01 00:00:00',0,'2020-04-25 14:58:18'),(2,0,'0.01',NULL,'测试用券2','2020-04-30 00:00:00','2020-05-13 00:00:00',0,'2020-04-25 15:04:04');
 
 /*Table structure for table `coupon_member` */
 
@@ -409,6 +431,8 @@ CREATE TABLE `coupon_member` (
   `coupon_code` varchar(20) NOT NULL COMMENT '优惠券码（唯一）',
   `member_key_id` int(11) DEFAULT NULL COMMENT '所属会员',
   `state` tinyint(1) DEFAULT '0' COMMENT '0为未使用，1为已使用',
+  `is_invalid` tinyint(1) DEFAULT '0',
+  `send_time` datetime DEFAULT NULL COMMENT '发放时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `coupon_code` (`coupon_code`),
   KEY `member_key_id` (`member_key_id`),
@@ -592,13 +616,19 @@ insert  into `member_re_student`(`student_id`,`member_key_id`) values (1,1),(38,
 DROP TABLE IF EXISTS `member_subscription_order`;
 
 CREATE TABLE `member_subscription_order` (
+  `order_key_id` int(11) NOT NULL AUTO_INCREMENT,
   `subscription_order_id` varchar(20) NOT NULL COMMENT '协会会员会费订单',
   `member_key_id` int(11) DEFAULT NULL,
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `fee` decimal(10,2) DEFAULT NULL COMMENT '费用',
   `payment_state` tinyint(1) DEFAULT '0' COMMENT '0:未付款 1:已付款',
   `close` tinyint(1) DEFAULT '0' COMMENT '0:订单有效/待支付 1:订单关闭/完成',
-  PRIMARY KEY (`subscription_order_id`),
+  `pay_time` datetime DEFAULT NULL,
+  `is_delete_user` tinyint(1) DEFAULT '0',
+  `is_delete_admin` tinyint(1) DEFAULT '0',
+  `op_man_name` varchar(50) DEFAULT NULL,
+  `business_name` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`order_key_id`),
   KEY `member_key_id` (`member_key_id`),
   CONSTRAINT `member_subscription_order_ibfk_1` FOREIGN KEY (`member_key_id`) REFERENCES `member` (`member_key_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -613,10 +643,14 @@ CREATE TABLE `message_text` (
   `message_id` int(11) NOT NULL AUTO_INCREMENT,
   `message` varchar(1000) DEFAULT NULL,
   `send_time` datetime DEFAULT NULL,
+  `type` varchar(20) DEFAULT NULL COMMENT '类别',
+  `title` varchar(200) DEFAULT NULL COMMENT '标题',
   PRIMARY KEY (`message_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 /*Data for the table `message_text` */
+
+insert  into `message_text`(`message_id`,`message`,`send_time`,`type`,`title`) values (1,'站内信测试','2020-04-26 02:53:03','signedActivity','站内信测试');
 
 /*Table structure for table `message_to_admin` */
 
@@ -624,21 +658,26 @@ DROP TABLE IF EXISTS `message_to_admin`;
 
 CREATE TABLE `message_to_admin` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `receive_admin_id` int(11) DEFAULT NULL COMMENT '接收消息的管理员id',
   `admin_id` int(11) DEFAULT NULL COMMENT '三选一',
   `member_id` int(11) DEFAULT NULL COMMENT '三选一',
   `student_id` int(11) DEFAULT NULL COMMENT '三选一',
-  `who_send` tinyint(4) DEFAULT NULL COMMENT '管理员法:0 学生发:1 会员发:2',
+  `who_send` tinyint(4) DEFAULT NULL COMMENT '管理员发:0 学生发:1 会员发:2',
   `message_id` int(11) DEFAULT NULL COMMENT '对应的站内信id',
   `send_time` datetime DEFAULT NULL,
+  `is_invalid` tinyint(1) DEFAULT '0',
+  `status` tinyint(1) DEFAULT '0' COMMENT '1:已读',
   PRIMARY KEY (`id`),
   KEY `admin_id` (`admin_id`),
   KEY `member_id` (`member_id`),
   KEY `student_id` (`student_id`),
   KEY `message_id` (`message_id`),
+  KEY `receive_admin_id` (`receive_admin_id`),
   CONSTRAINT `message_to_admin_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`admin_id`),
   CONSTRAINT `message_to_admin_ibfk_2` FOREIGN KEY (`member_id`) REFERENCES `member` (`member_key_id`),
   CONSTRAINT `message_to_admin_ibfk_3` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`),
-  CONSTRAINT `message_to_admin_ibfk_4` FOREIGN KEY (`message_id`) REFERENCES `message_text` (`message_id`)
+  CONSTRAINT `message_to_admin_ibfk_4` FOREIGN KEY (`message_id`) REFERENCES `message_text` (`message_id`),
+  CONSTRAINT `message_to_admin_ibfk_5` FOREIGN KEY (`receive_admin_id`) REFERENCES `admin` (`admin_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `message_to_admin` */
@@ -654,10 +693,13 @@ CREATE TABLE `message_to_member` (
   `message_id` int(11) DEFAULT NULL COMMENT '站内信id',
   `status` tinyint(1) DEFAULT '0' COMMENT '1为已读',
   `send_time` datetime DEFAULT NULL COMMENT '发送时间',
+  `is_invalid` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 /*Data for the table `message_to_member` */
+
+insert  into `message_to_member`(`id`,`admin_id`,`member_id`,`message_id`,`status`,`send_time`,`is_invalid`) values (1,1,1,1,1,'2020-04-26 02:53:03',0);
 
 /*Table structure for table `message_to_student` */
 
@@ -670,6 +712,7 @@ CREATE TABLE `message_to_student` (
   `message_id` int(11) DEFAULT NULL COMMENT '站内信编号',
   `status` tinyint(1) DEFAULT '0' COMMENT '1为已读',
   `send_time` datetime DEFAULT NULL COMMENT '发送时间',
+  `is_invalid` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `admin_id` (`admin_id`),
   KEY `student_id` (`student_id`),
@@ -677,9 +720,11 @@ CREATE TABLE `message_to_student` (
   CONSTRAINT `message_to_student_ibfk_1` FOREIGN KEY (`message_id`) REFERENCES `message_text` (`message_id`),
   CONSTRAINT `message_to_student_ibfk_2` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`admin_id`),
   CONSTRAINT `message_to_student_ibfk_3` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 /*Data for the table `message_to_student` */
+
+insert  into `message_to_student`(`id`,`admin_id`,`student_id`,`message_id`,`status`,`send_time`,`is_invalid`) values (1,1,1,1,0,'2020-04-26 02:53:03',0),(2,1,2,1,0,'2020-04-26 02:53:03',0),(3,1,8,1,0,'2020-04-26 02:53:03',0),(4,1,38,1,0,'2020-04-26 02:53:03',0),(5,1,39,1,0,'2020-04-26 02:53:03',0),(6,1,40,1,0,'2020-04-26 02:53:03',0);
 
 /*Table structure for table `news` */
 
@@ -698,11 +743,11 @@ CREATE TABLE `news` (
   PRIMARY KEY (`news_id`),
   KEY `admin_id` (`admin_id`),
   CONSTRAINT `news_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`admin_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
 
 /*Data for the table `news` */
 
-insert  into `news`(`news_id`,`admin_id`,`title`,`description`,`content`,`img_placeholder`,`post_time`,`type`,`is_invalid`) values (27,1,'这是一条新闻','这是简介','<p>这是@图#片$占#位@@图#片$占#位@@图#片$占#位@@图#片$占#位@</p><p>新闻@图#片$占#位@内容@图#片$占#位@</p>','@图#片$占#位@','2020-04-18 20:43:26','dynamic',0),(33,1,'新闻示例222','试试','<p>试试@图#片$占#位@存@图#片$占#位@</p>','@图#片$占#位@','2020-04-20 00:14:59','news',1),(34,1,'新闻333','都是','<p>@图#片$占#位@</p>','@图#片$占#位@','2020-04-20 00:41:13','news',1),(35,1,'新闻1123','试试','<p>@图#片$占#位@</p>','@图#片$占#位@','2020-04-20 00:42:37','news',0),(36,1,'dfd','dsdsd','<p>@图#片$占#位@</p>','@图#片$占#位@','2020-04-20 00:55:02','news',0),(37,1,'xsss','sssss','<p>@图#片$占#位@</p>','@图#片$占#位@','2020-04-20 00:58:14','news',0);
+insert  into `news`(`news_id`,`admin_id`,`title`,`description`,`content`,`img_placeholder`,`post_time`,`type`,`is_invalid`) values (27,1,'这是一条新闻','这是简介','<p>这是@图#片$占#位@@图#片$占#位@@图#片$占#位@@图#片$占#位@</p><p>新闻@图#片$占#位@内容@图#片$占#位@</p>','@图#片$占#位@','2020-04-18 20:43:26','dynamic',0),(33,1,'新闻示例222','试试','<p>试试@图#片$占#位@存@图#片$占#位@</p>','@图#片$占#位@','2020-04-20 00:14:59','news',1),(34,1,'新闻333','都是','<p>@图#片$占#位@</p>','@图#片$占#位@','2020-04-20 00:41:13','news',1),(35,1,'新闻1123','试试','<p>dfd@图#片$占#位@sas</p>','@图#片$占#位@','2020-04-20 00:42:37','news',0),(36,1,'dfd','dsdsd','<p>@图#片$占#位@@图#片$占#位@@图#片$占#位@</p>','@图#片$占#位@','2020-04-20 00:55:02','news',0),(37,1,'xsss','sssss','<p>@图#片$占#位@</p>','@图#片$占#位@','2020-04-20 00:58:14','news',1),(38,1,'小新闻11','简介','<p>@图#片$占#位@</p>','@图#片$占#位@','2020-04-20 23:52:31','news',1);
 
 /*Table structure for table `news_img` */
 
@@ -715,11 +760,11 @@ CREATE TABLE `news_img` (
   `img_news_index` int(11) DEFAULT NULL COMMENT '是新闻中的第几张图片',
   `is_invalid` tinyint(1) DEFAULT '0' COMMENT '0:有效  1:无效',
   PRIMARY KEY (`img_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8;
 
 /*Data for the table `news_img` */
 
-insert  into `news_img`(`img_id`,`img_path`,`news_id`,`img_news_index`,`is_invalid`) values (25,'/image/dynamic/1/1-1587213805718.jpg',27,1,1),(26,'/image/dynamic/1/2-1587213805721.jpg',27,2,1),(27,'/image/dynamic/1/3-1587213805721.jpg',27,3,1),(28,'/image/dynamic/1/2-1587226574631.jpg',27,2,1),(29,'/image/dynamic/1/1-1587228110132.jpg',27,1,0),(30,'/image/dynamic/1/3-1587228341430.jpg',27,6,0),(31,'/image/dynamic/1/2-1587228517842.jpg',27,5,0),(32,'/image/dynamic/1/2-1587228844280.jpg',27,2,0),(33,'/image/dynamic/1/3-1587229521048.jpg',27,3,0),(34,'/image/dynamic/1/4-1587229642017.jpg',27,4,1),(35,'/image/dynamic/1/4-1587229982286.jpg',27,4,0),(41,'/image/news/1//1-1587312898302.jpg',33,1,1),(42,'/image/news/1//2-1587312898303.jpg',33,2,1),(43,'/image/news/1//1-1587314472559.jpg',34,1,1),(44,'/image/news/1/1-1587314556857.jpg',35,1,0),(45,'/image/news/1/1-1587315301778.jpg',36,1,0),(46,'/image/news/1/1-1587315493676.jpg',37,1,0);
+insert  into `news_img`(`img_id`,`img_path`,`news_id`,`img_news_index`,`is_invalid`) values (25,'/image/dynamic/1/1-1587213805718.jpg',27,1,1),(26,'/image/dynamic/1/2-1587213805721.jpg',27,2,1),(27,'/image/dynamic/1/3-1587213805721.jpg',27,3,1),(28,'/image/dynamic/1/2-1587226574631.jpg',27,2,1),(29,'/image/dynamic/1/1-1587228110132.jpg',27,1,0),(30,'/image/dynamic/1/3-1587228341430.jpg',27,6,0),(31,'/image/dynamic/1/2-1587228517842.jpg',27,5,0),(32,'/image/dynamic/1/2-1587228844280.jpg',27,2,0),(33,'/image/dynamic/1/3-1587229521048.jpg',27,3,0),(34,'/image/dynamic/1/4-1587229642017.jpg',27,4,1),(35,'/image/dynamic/1/4-1587229982286.jpg',27,4,0),(41,'/image/news/1//1-1587312898302.jpg',33,1,1),(42,'/image/news/1//2-1587312898303.jpg',33,2,1),(43,'/image/news/1//1-1587314472559.jpg',34,1,1),(44,'/image/news/1/1-1587314556857.jpg',35,1,1),(45,'/image/news/1/1-1587315301778.jpg',36,1,1),(46,'/image/news/1/1-1587315493676.jpg',37,1,1),(47,'/image/dynamic/1/1-1587389854644.jpg',35,1,0),(48,'/image/dynamic/1/2-1587389854644.jpg',35,2,1),(49,'/image/dynamic/1/2-1587389877724.jpg',35,2,1),(50,'/image/dynamic/1/2-1587389946917.jpg',35,2,1),(51,'/image/dynamic/1/2-1587389946917.jpg',35,2,0),(52,'/image/dynamic/1/2-1587389971972.jpg',36,2,1),(53,'/image/news/1/3-1587390657142.jpg',36,3,1),(54,'/image/dynamic/1/1-1587397950228.jpg',38,1,1),(55,'/image/news/1/1-1587398827582.jpg',36,2,0),(56,'/image/news/1/1-1587398897307.jpg',36,1,0),(57,'/image/news/1/3-1587398897308.jpg',36,3,0);
 
 /*Table structure for table `payment` */
 
@@ -856,6 +901,11 @@ CREATE TABLE `training_order` (
   `order_begin_time` datetime DEFAULT NULL COMMENT '订单生成时间',
   `payment_state` tinyint(1) DEFAULT '0' COMMENT '0为未付款，1为已付款',
   `close` tinyint(1) DEFAULT '0' COMMENT '1为订单关闭',
+  `pay_time` datetime DEFAULT NULL,
+  `is_delete_user` tinyint(1) DEFAULT '0',
+  `is_delete_admin` tinyint(1) DEFAULT '0',
+  `op_man_name` varchar(50) DEFAULT NULL,
+  `business_name` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`order_key_id`),
   KEY `training_id` (`training_id`),
   KEY `student_id` (`student_id`),
@@ -868,7 +918,7 @@ CREATE TABLE `training_order` (
 
 /*Data for the table `training_order` */
 
-insert  into `training_order`(`order_key_id`,`training_order_id`,`training_id`,`order_type`,`member_key_id`,`student_id`,`order_price`,`order_begin_time`,`payment_state`,`close`) values (1,'20191023111733112724',2,0,1,NULL,'2097.03','2019-10-23 11:17:34',1,0),(2,'20191023112509346401',4,0,1,NULL,'2100.00','2019-10-23 11:25:10',1,0),(3,'20200313152644744451',3,0,1,NULL,'3798.22','2020-03-13 15:26:44',1,0),(5,'20200313152950680848',3,0,1,NULL,'1899.11','2020-03-13 15:29:51',1,0);
+insert  into `training_order`(`order_key_id`,`training_order_id`,`training_id`,`order_type`,`member_key_id`,`student_id`,`order_price`,`order_begin_time`,`payment_state`,`close`,`pay_time`,`is_delete_user`,`is_delete_admin`,`op_man_name`,`business_name`) values (1,'20191023111733112724',2,0,1,NULL,'2097.03','2019-10-23 11:17:34',1,0,NULL,0,0,NULL,NULL),(2,'20191023112509346401',4,0,1,NULL,'2100.00','2019-10-23 11:25:10',1,0,NULL,0,0,NULL,NULL),(3,'20200313152644744451',3,0,1,NULL,'3798.22','2020-03-13 15:26:44',1,0,NULL,0,0,NULL,NULL),(5,'20200313152950680848',3,0,1,NULL,'1899.11','2020-03-13 15:29:51',1,0,NULL,0,0,NULL,NULL);
 
 /*Table structure for table `training_order_student` */
 
@@ -928,7 +978,7 @@ CREATE TABLE `vote` (
 
 /*Data for the table `vote` */
 
-insert  into `vote`(`vote_id`,`vote_content`,`end_time`,`vote_type`,`optional_sum`,`optional_num`,`post_time`) values (1,'投票测试1','2020-11-01 15:00:00',2,3,3,'2020-03-22 02:45:55'),(3,'投票测试2','2020-11-01 15:00:00',1,4,3,'2020-03-23 00:30:04'),(4,'投票测试3','2020-03-20 12:49:41',2,3,3,'2020-03-29 12:50:02');
+insert  into `vote`(`vote_id`,`vote_content`,`end_time`,`vote_type`,`optional_sum`,`optional_num`,`post_time`) values (1,'投票测试1','2020-11-01 15:00:00',2,3,3,'2020-03-22 02:45:55'),(3,'投票测试2','2020-11-01 15:00:00',2,4,3,'2020-03-23 00:30:04'),(4,'投票测试3','2020-05-15 12:49:41',2,3,3,'2020-03-29 12:50:02');
 
 /*Table structure for table `vote_option` */
 
@@ -965,7 +1015,7 @@ CREATE TABLE `vote_option_member` (
 
 /*Data for the table `vote_option_member` */
 
-insert  into `vote_option_member`(`vote_id`,`option_id`,`member_key_id`) values (1,1,1),(1,3,1),(3,8,1),(3,9,1),(4,12,1);
+insert  into `vote_option_member`(`vote_id`,`option_id`,`member_key_id`) values (1,1,1),(1,3,1);
 
 /*Table structure for table `vote_option_student` */
 

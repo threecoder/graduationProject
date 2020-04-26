@@ -5,12 +5,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class TrainingOrderExample {
+public class CertificateChangeOrderExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
+
     //加入 offset 起始位置 和 limit 查询页数 用来分页
     protected Integer offset;
     protected Integer limit;
@@ -30,7 +31,8 @@ public class TrainingOrderExample {
     public void setLimit(Integer limit) {
         this.limit = limit;
     }
-    public TrainingOrderExample() {
+
+    public CertificateChangeOrderExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -184,133 +186,193 @@ public class TrainingOrderExample {
             return (Criteria) this;
         }
 
-        public Criteria andTrainingOrderIdIsNull() {
-            addCriterion("training_order_id is null");
+        public Criteria andCertificateChangeOrderIdIsNull() {
+            addCriterion("certificate_change_order_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andTrainingOrderIdIsNotNull() {
-            addCriterion("training_order_id is not null");
+        public Criteria andCertificateChangeOrderIdIsNotNull() {
+            addCriterion("certificate_change_order_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andTrainingOrderIdEqualTo(String value) {
-            addCriterion("training_order_id =", value, "trainingOrderId");
+        public Criteria andCertificateChangeOrderIdEqualTo(String value) {
+            addCriterion("certificate_change_order_id =", value, "certificateChangeOrderId");
             return (Criteria) this;
         }
 
-        public Criteria andTrainingOrderIdNotEqualTo(String value) {
-            addCriterion("training_order_id <>", value, "trainingOrderId");
+        public Criteria andCertificateChangeOrderIdNotEqualTo(String value) {
+            addCriterion("certificate_change_order_id <>", value, "certificateChangeOrderId");
             return (Criteria) this;
         }
 
-        public Criteria andTrainingOrderIdGreaterThan(String value) {
-            addCriterion("training_order_id >", value, "trainingOrderId");
+        public Criteria andCertificateChangeOrderIdGreaterThan(String value) {
+            addCriterion("certificate_change_order_id >", value, "certificateChangeOrderId");
             return (Criteria) this;
         }
 
-        public Criteria andTrainingOrderIdGreaterThanOrEqualTo(String value) {
-            addCriterion("training_order_id >=", value, "trainingOrderId");
+        public Criteria andCertificateChangeOrderIdGreaterThanOrEqualTo(String value) {
+            addCriterion("certificate_change_order_id >=", value, "certificateChangeOrderId");
             return (Criteria) this;
         }
 
-        public Criteria andTrainingOrderIdLessThan(String value) {
-            addCriterion("training_order_id <", value, "trainingOrderId");
+        public Criteria andCertificateChangeOrderIdLessThan(String value) {
+            addCriterion("certificate_change_order_id <", value, "certificateChangeOrderId");
             return (Criteria) this;
         }
 
-        public Criteria andTrainingOrderIdLessThanOrEqualTo(String value) {
-            addCriterion("training_order_id <=", value, "trainingOrderId");
+        public Criteria andCertificateChangeOrderIdLessThanOrEqualTo(String value) {
+            addCriterion("certificate_change_order_id <=", value, "certificateChangeOrderId");
             return (Criteria) this;
         }
 
-        public Criteria andTrainingOrderIdLike(String value) {
-            addCriterion("training_order_id like", value, "trainingOrderId");
+        public Criteria andCertificateChangeOrderIdLike(String value) {
+            addCriterion("certificate_change_order_id like", value, "certificateChangeOrderId");
             return (Criteria) this;
         }
 
-        public Criteria andTrainingOrderIdNotLike(String value) {
-            addCriterion("training_order_id not like", value, "trainingOrderId");
+        public Criteria andCertificateChangeOrderIdNotLike(String value) {
+            addCriterion("certificate_change_order_id not like", value, "certificateChangeOrderId");
             return (Criteria) this;
         }
 
-        public Criteria andTrainingOrderIdIn(List<String> values) {
-            addCriterion("training_order_id in", values, "trainingOrderId");
+        public Criteria andCertificateChangeOrderIdIn(List<String> values) {
+            addCriterion("certificate_change_order_id in", values, "certificateChangeOrderId");
             return (Criteria) this;
         }
 
-        public Criteria andTrainingOrderIdNotIn(List<String> values) {
-            addCriterion("training_order_id not in", values, "trainingOrderId");
+        public Criteria andCertificateChangeOrderIdNotIn(List<String> values) {
+            addCriterion("certificate_change_order_id not in", values, "certificateChangeOrderId");
             return (Criteria) this;
         }
 
-        public Criteria andTrainingOrderIdBetween(String value1, String value2) {
-            addCriterion("training_order_id between", value1, value2, "trainingOrderId");
+        public Criteria andCertificateChangeOrderIdBetween(String value1, String value2) {
+            addCriterion("certificate_change_order_id between", value1, value2, "certificateChangeOrderId");
             return (Criteria) this;
         }
 
-        public Criteria andTrainingOrderIdNotBetween(String value1, String value2) {
-            addCriterion("training_order_id not between", value1, value2, "trainingOrderId");
+        public Criteria andCertificateChangeOrderIdNotBetween(String value1, String value2) {
+            addCriterion("certificate_change_order_id not between", value1, value2, "certificateChangeOrderId");
             return (Criteria) this;
         }
 
-        public Criteria andTrainingIdIsNull() {
-            addCriterion("training_id is null");
+        public Criteria andCertificateIdIsNull() {
+            addCriterion("certificate_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andTrainingIdIsNotNull() {
-            addCriterion("training_id is not null");
+        public Criteria andCertificateIdIsNotNull() {
+            addCriterion("certificate_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andTrainingIdEqualTo(Integer value) {
-            addCriterion("training_id =", value, "trainingId");
+        public Criteria andCertificateIdEqualTo(Integer value) {
+            addCriterion("certificate_id =", value, "certificateId");
             return (Criteria) this;
         }
 
-        public Criteria andTrainingIdNotEqualTo(Integer value) {
-            addCriterion("training_id <>", value, "trainingId");
+        public Criteria andCertificateIdNotEqualTo(Integer value) {
+            addCriterion("certificate_id <>", value, "certificateId");
             return (Criteria) this;
         }
 
-        public Criteria andTrainingIdGreaterThan(Integer value) {
-            addCriterion("training_id >", value, "trainingId");
+        public Criteria andCertificateIdGreaterThan(Integer value) {
+            addCriterion("certificate_id >", value, "certificateId");
             return (Criteria) this;
         }
 
-        public Criteria andTrainingIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("training_id >=", value, "trainingId");
+        public Criteria andCertificateIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("certificate_id >=", value, "certificateId");
             return (Criteria) this;
         }
 
-        public Criteria andTrainingIdLessThan(Integer value) {
-            addCriterion("training_id <", value, "trainingId");
+        public Criteria andCertificateIdLessThan(Integer value) {
+            addCriterion("certificate_id <", value, "certificateId");
             return (Criteria) this;
         }
 
-        public Criteria andTrainingIdLessThanOrEqualTo(Integer value) {
-            addCriterion("training_id <=", value, "trainingId");
+        public Criteria andCertificateIdLessThanOrEqualTo(Integer value) {
+            addCriterion("certificate_id <=", value, "certificateId");
             return (Criteria) this;
         }
 
-        public Criteria andTrainingIdIn(List<Integer> values) {
-            addCriterion("training_id in", values, "trainingId");
+        public Criteria andCertificateIdIn(List<Integer> values) {
+            addCriterion("certificate_id in", values, "certificateId");
             return (Criteria) this;
         }
 
-        public Criteria andTrainingIdNotIn(List<Integer> values) {
-            addCriterion("training_id not in", values, "trainingId");
+        public Criteria andCertificateIdNotIn(List<Integer> values) {
+            addCriterion("certificate_id not in", values, "certificateId");
             return (Criteria) this;
         }
 
-        public Criteria andTrainingIdBetween(Integer value1, Integer value2) {
-            addCriterion("training_id between", value1, value2, "trainingId");
+        public Criteria andCertificateIdBetween(Integer value1, Integer value2) {
+            addCriterion("certificate_id between", value1, value2, "certificateId");
             return (Criteria) this;
         }
 
-        public Criteria andTrainingIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("training_id not between", value1, value2, "trainingId");
+        public Criteria andCertificateIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("certificate_id not between", value1, value2, "certificateId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentIdIsNull() {
+            addCriterion("student_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentIdIsNotNull() {
+            addCriterion("student_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentIdEqualTo(Integer value) {
+            addCriterion("student_id =", value, "studentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentIdNotEqualTo(Integer value) {
+            addCriterion("student_id <>", value, "studentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentIdGreaterThan(Integer value) {
+            addCriterion("student_id >", value, "studentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("student_id >=", value, "studentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentIdLessThan(Integer value) {
+            addCriterion("student_id <", value, "studentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentIdLessThanOrEqualTo(Integer value) {
+            addCriterion("student_id <=", value, "studentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentIdIn(List<Integer> values) {
+            addCriterion("student_id in", values, "studentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentIdNotIn(List<Integer> values) {
+            addCriterion("student_id not in", values, "studentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentIdBetween(Integer value1, Integer value2) {
+            addCriterion("student_id between", value1, value2, "studentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("student_id not between", value1, value2, "studentId");
             return (Criteria) this;
         }
 
@@ -431,66 +493,6 @@ public class TrainingOrderExample {
 
         public Criteria andMemberKeyIdNotBetween(Integer value1, Integer value2) {
             addCriterion("member_key_id not between", value1, value2, "memberKeyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdIsNull() {
-            addCriterion("student_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdIsNotNull() {
-            addCriterion("student_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdEqualTo(Integer value) {
-            addCriterion("student_id =", value, "studentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdNotEqualTo(Integer value) {
-            addCriterion("student_id <>", value, "studentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdGreaterThan(Integer value) {
-            addCriterion("student_id >", value, "studentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("student_id >=", value, "studentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdLessThan(Integer value) {
-            addCriterion("student_id <", value, "studentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdLessThanOrEqualTo(Integer value) {
-            addCriterion("student_id <=", value, "studentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdIn(List<Integer> values) {
-            addCriterion("student_id in", values, "studentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdNotIn(List<Integer> values) {
-            addCriterion("student_id not in", values, "studentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdBetween(Integer value1, Integer value2) {
-            addCriterion("student_id between", value1, value2, "studentId");
-            return (Criteria) this;
-        }
-
-        public Criteria andStudentIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("student_id not between", value1, value2, "studentId");
             return (Criteria) this;
         }
 

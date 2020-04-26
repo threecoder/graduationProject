@@ -12,7 +12,7 @@ public interface VoteService {
 
     JSONObject getVoteList(String name, Integer type, Integer currentPage, Integer pageSize);
 
-    JSONObject getMemberCanVoteList(String name, Integer isFinish, Integer currentPage, Integer pageSize);
+    JSONObject getMemberCanVoteList(Integer memberId, String name, Integer currentPage, Integer pageSize);
 
     JSONObject getVoteDetail(Integer voteId);
 
@@ -20,7 +20,7 @@ public interface VoteService {
 
     JSONObject getMemberHasVotedList(String name, Integer isFinish, Integer currentPage, Integer pageSize, int memberKeyId);
 
-    JSONObject getStudentCanVoteList(String name, Integer isFinish, Integer currentPage, Integer pageSize);
+    JSONObject getStudentCanVoteList(Integer studentId, String name, Integer currentPage, Integer pageSize);
 
     JSONObject studentVote(JSONObject jsonObject);
 
