@@ -78,7 +78,7 @@ export default {
             let data = { voteId: this.id };
             let arr = [];
             this.selected.forEach(text => {
-                let index = this.info.options.indexOf(text);
+                let index = this.info.options.indexOf(text)+1;
                 arr.push({ index, text });
             });
             data.data = arr;

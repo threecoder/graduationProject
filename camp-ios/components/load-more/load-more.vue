@@ -39,12 +39,6 @@ export default {
             }
         }
     },
-    data() {
-        return {
-            webviewHide: false,
-            platform: platform
-        };
-    },
     methods: {
         onClick() {
             if (this.status == "more") {

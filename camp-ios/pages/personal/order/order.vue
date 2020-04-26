@@ -3,10 +3,7 @@
 		<view>
 			<seg :isFixed="isFixed" :current="contentIndex" :segItem="segItem" @clickItem="onClickItem"></seg>
 			<view class="content" :class="{ mt: isFixed }">
-				<view v-show="contentIndex === 0">
-					<single v-for="(item, i) in joinableList" :key="i" :item="item" status="vote" @refresh="refresh" @activityDetail="activityDetail(item)" />
-				</view>
-				<view v-show="contentIndex === 1"><single v-for="(item, i) in signedList" :key="i" :item="item" @refresh="refresh" @activityDetail="activityDetail(item)" /></view>
+				<view><single v-for="(item, i) in orderList" :key="i" :item="item" status="vote" @refresh="refresh" @activityDetail="activityDetail(item)" /></view>
 				<load-more :status="hasMore" @clickLoadMore="loadMore"></load-more>
 			</view>
 		</view>
@@ -22,10 +19,10 @@
 
 <script>
 import seg from '../../../components/seg/seg.vue';
-import single from './components/singleTraining.vue';
+import single from './components/singleOrder.vue';
 import uniPopup from '../../../components/uni-popup/uni-popup.vue';
 import loadMore from '../../../components/load-more/load-more.vue';
-import trainingApi from '../../../api/modules/training.js';
+import orderApi from '../../../api/modules/order.js';
 import { toast } from '../../../assets/js/commom.js';
 export default {
 	components: {
@@ -36,43 +33,26 @@ export default {
 	},
 	data() {
 		return {
-			res: null,
 			contentIndex: 0,
-			segItem: ['可报名培训', '已报名培训'],
+			segItem: ['活动订单', '培训订单', '证书变更订单', '证书复审订单'],
 			isFixed: false,
-			joinableList: [
-				// {
-				//     id: "111",
-				//     name: "质量检测",
-				//     date: "2020-02-02 14:00",
-				//     phone: "15183650703",
-				//     fee: 2222,
-				//     contacts: "糖好酸",
-				//     address:
-				//         "广东省广州市番禺区小谷围街道华南理工大学广东省广州市番禺区小谷围街道华南理工大学",
-				//     introduction: [
-				//         "广东省广州市番禺区小谷围街道华南理工大学广东省广州市番禺区小谷围街道华南理工大学广东省广州市番禺区小谷围街道华南理工大学广东省广州市番禺区小谷围街道华南理工大学广东省广州市番禺区小谷围街道华南理工大学广东省广州市番禺区小谷围街道华南理工大学",
-				//         "222"
-				//     ],
-				//     status: "可报名"
-				// }
-			],
-			signedList: [
-				// {
-				//     id: "111",
-				//     name: "质量检测",
-				//     date: "2020-02-02 14:00",
-				//     phone: "15183650703",
-				//     fee: 2222,
-				//     contacts: "糖好酸",
-				//     address: "广东省广州市番禺区小谷围街道华南理工大学",
-				//     introduction: ["111", "222"],
-				//     status: "已支付"
-				// }
+			orderList: [
+				{
+					orderNum: "11111",
+					orderType: 'activity',
+					businessName: '关联活动',
+					builder: "李四",
+					buildTime: '2020-02-02 20:00:00',
+					endTime: '2020-02-02 21:00:00',
+					payTime: '2020-02-02 20:30:00',
+					status: '未支付',
+					price: 100
+				}
 			],
 			par: {
 				currentPage: 1,
-				pageSize: 10
+				pageSize: 10,
+				type: 'activity'
 			},
 			hasMore: 'more',
 			introduction: []
@@ -94,31 +74,22 @@ export default {
 		this.isFixed = scroll.scrollTop > 0 ? true : false;
 	},
 	methods: {
-		async getSignedList(type = 'add') {
+		async getOrderList(type = 'add') {
 			try {
-				let res = await trainingApi.getsignedTraining(this.par);
+				let res = null;
 				if (type == 'add') {
-					this.signedList.push(...res.data.list);
-					if (res.data.list.length == 0) {
-						this.hasMore = false;
-					}
+					this.par.currentPage++;
+					res = await orderApi.getOrderList(this.par);
+					this.orderList.push(...res.data.list);
 				} else {
-					this.signedList = res.data;
+					this.par.currentPage = 1;
+					res = await orderApi.getOrderList(this.par);
+					this.orderList = res.data ? res.data : [];
 				}
-			} catch (e) {
-				toast(e.message);
-			}
-		},
-		async getJoinableList(type = 'add') {
-			try {
-				let res = await trainingApi.getJoinableTraining(this.par);
-				if (type == 'add') {
-					this.joinableList.push(...res.data.list);
-					if (res.data.list.length == 0) {
-						this.hasMore = false;
-					}
+				if (res.data.list.length == 0) {
+					this.hasMore = 'more';
 				} else {
-					this.joinableList = res.data ? res.data : [];
+					this.hasMore = 'noMore';
 				}
 			} catch (e) {
 				toast(e.message);
@@ -127,12 +98,27 @@ export default {
 		onClickItem(index) {
 			this.contentIndex = index;
 		},
-		async refresh() {
-			if (this.contentIndex == 0) {
-				await this.getJoinableList('new');
-			} else {
-				await this.getSignedList('new');
+		$_setType() {
+			switch (this.contentIndex) {
+				case 0:
+					this.par.type = 'activity';
+					break;
+				case 1:
+					this.par.type = 'training';
+					break;
+				case 2:
+					this.par.type = 'cerChange';
+					break;
+				case 3:
+					this.par.type = 'cerRecheck';
+					break;
+				default:
+					this.par.type = 'activity';
 			}
+		},
+		async refresh() {
+			this.$_setType();
+			await this.getOrderList('new');
 			this.hasMore = 'more';
 		},
 		activityDetail(item) {
@@ -141,11 +127,7 @@ export default {
 		},
 		loadMore() {
 			this.hasMore = 'loading';
-			if (this.contentIndex == 0) {
-				this.getJoinableList('add');
-			} else {
-				this.getSignedList('add');
-			}
+			this.getOrderList();
 		}
 	}
 };

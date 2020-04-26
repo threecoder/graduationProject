@@ -45,6 +45,9 @@ export default {
             selected: []
         };
     },
+	mounted() {
+		this.getVoteDetail();
+	},
     methods: {
         async getVoteDetail() {
             try {

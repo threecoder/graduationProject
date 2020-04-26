@@ -91,6 +91,13 @@
 				"enablePullDownRefresh":true
 			}
 		}
+        ,{
+            "path" : "pages/personal/order/order",
+            "style" : {
+				"navigationBarTitleText": "我的订单",
+				"enablePullDownRefresh":true
+			}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "#fff",

@@ -20,7 +20,12 @@ let cookie = null;
  * @responseType    返回类型
  */
 export function request(url, type, data = {}, responseType = "json") {
+	// if()
 	return new Promise((resolve, reject) => {
+		let networkStatus = getApp().globalData.network;
+		if (networkStatus == "none") {
+			throw new Error("当前网络异常，请重试");
+		}
 		uni.request({
 			method: type.toUpperCase(), //请求类型
 			url: baseUrl + url, //接收请求的接口
@@ -33,18 +38,19 @@ export function request(url, type, data = {}, responseType = "json") {
 			},
 			responseType //浏览器返回的数据类型
 		}).then(res => {
-			let response = res[ 1 ];
+			console.log(url, res);
+			let response = res[1];
 			if (response) {
-				let cook = response.header[ 'Set-Cookie' ];
+				let cook = response.header['Set-Cookie'];
 				if (cook) {
 					let start = cook.indexOf("; Path=/");
 					cookie = cook.substring(0, start);
 				}
-				if (response.header[ 'Content-Type' ] == 'application/json;charset=UTF-8') {
+				if (response.header['Content-Type'] == 'application/json;charset=UTF-8') {
 					if (response.data.code == 'success') {
 						resolve(response.data);
 					} else if (response.data.code = 'error') {
-						console.log("未登录");
+						console.log(url, "未登录");
 						//处理未登录
 					} else if (response.data.code == 'fail') {
 						throw new Error(response.data.msg);
@@ -55,7 +61,8 @@ export function request(url, type, data = {}, responseType = "json") {
 					resolve(response);
 				}
 			} else {
-				throw new Error("你当前网络有问题哦")
+				console.log("出错啦", url);
+				throw new Error("请求数据超时");
 			}
 		}).catch(e => {
 			reject(e);
@@ -82,7 +89,7 @@ export function getRandomNum() {
 	let randomNum = '';
 	for (let i = 0; i < 16; i++) {
 		let index = Number.parseInt(Math.random() * 61);
-		randomNum += myStr[ index ];
+		randomNum += myStr[index];
 	}
 	return randomNum;
 }

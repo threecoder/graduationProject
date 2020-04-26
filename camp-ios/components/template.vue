@@ -72,6 +72,7 @@ export default {
 	},
 	async onPullDownRefresh() {
 		console.log('下拉刷新');
+		this.getSwiperList();
 		this.par.currentPage == 1;
 		if (this.contentIndex == 0) {
 			await this.getCanvoteList('new');
@@ -89,12 +90,11 @@ export default {
 				let res = null;
 				if (type == 'add') {
 					this.par.currentPage++;
-					res = await voteApi.getStudentHasVotedList(this.par);
-					
+					res = await voteApi.getStudentCanVoteList(this.par);
 					this.votedList.push(...res.data.list);
 				} else {
 					this.par.currentPage = 1;
-					res = await voteApi.getStudentHasVotedList(this.par);
+					res = await voteApi.getStudentCanVoteList(this.par);
 					this.votedList = res.data.list;
 				}
 				if (res.data.list.length == 0) {
@@ -111,12 +111,12 @@ export default {
 				let res = null;
 				if (type == 'add') {
 					this.par.currentPage++;
-					res = await voteApi.getStudentCanVoteList(this.par);
-					this.canvoteList.push(...res.data.list);
+					res = await voteApi.getStudentHasVotedList(this.par);
+					this.votedList.push(...res.data.list);
 				} else {
 					this.par.currentPage = 1;
-					res = await voteApi.getStudentCanVoteList(this.par);
-					this.canvoteList = res.data.list;
+					res = await voteApi.getStudentHasVotedList(this.par);
+					this.votedList = res.data.list;
 				}
 				if (res.data.list.length == 0) {
 					this.hasMore = 'noMore';

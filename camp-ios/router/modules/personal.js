@@ -32,7 +32,12 @@ const funPath = [
     {
         path: '/pages/personal/exam/exam',
         name: 'exam'
-    }
+    },
+	//订单
+	{
+		path: '/pages/personal/order/order',
+		name: 'order'
+	}
 ]
 
 export default funPath;
