@@ -194,7 +194,7 @@ public class MessageServiceImpl implements MessageService {
                 object.put("time", messageToMember.getSendTime());
                 object.put("title", messageText.getTitle());
                 String msg=messageText.getMessage();
-                object.put("shortMsg", msg.length()>8?msg.substring(0, 8):msg);
+                object.put("shortMsg", msg.length()>8?msg.substring(0, 8)+"...":msg);
                 object.put("read", messageToMember.getStatus() ? "已读" : "未读");
                 list.add(object);
             }
@@ -211,7 +211,8 @@ public class MessageServiceImpl implements MessageService {
                 object.put("type", messageText.getType());
                 object.put("time", messageToStudent.getSendTime());
                 object.put("title", messageText.getTitle());
-                object.put("shortMsg", messageText.getMessage().substring(0, 8));
+                String msg = messageText.getMessage();
+                object.put("shortMsg", msg.length()>8?msg.substring(0, 8)+"...":msg);
                 object.put("read", messageToStudent.getStatus() ? "已读" : "未读");
                 list.add(object);
             }

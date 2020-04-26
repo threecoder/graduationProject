@@ -62,22 +62,22 @@ export default {
     data() {
         return {
             tableData: [
-                {
-                    idNum: "111",
-                    name: "张三",
-                    member: "BB股份有限公司",
-                    grade: 100,
-                    times: 3,
-                    id: "123"
-                },
-                {
-                    idNum: "111",
-                    name: "张三",
-                    member: "BB股份有限公司",
-                    grade: 201,
-                    times: 3,
-                    id: "11"
-                }
+                // {
+                //     idNum: "111",
+                //     name: "张三",
+                //     member: "BB股份有限公司",
+                //     grade: 100,
+                //     times: 3,
+                //     id: "123"
+                // },
+                // {
+                //     idNum: "111",
+                //     name: "张三",
+                //     member: "BB股份有限公司",
+                //     grade: 201,
+                //     times: 3,
+                //     id: "11"
+                // }
             ],
             tableConfig: [
                 { slot: "select", "reserve-selection": true },
@@ -104,7 +104,7 @@ export default {
                 memberId: null,
                 name: null,
                 total: 100,
-                pageSize: 1,
+                pageSize: 10,
                 currentPage: 1
             },
             selected: []

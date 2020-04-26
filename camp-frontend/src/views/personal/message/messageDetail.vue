@@ -1,6 +1,6 @@
 <template>
     <div class="detail-content-container">
-        <div v-if="msgID===null" class="no-msg-container">
+        <div v-if="msgID==null" class="no-msg-container">
             <p>暂无消息内容</p>
         </div>
         <div v-else class="content-container" v-loading="loading">
@@ -9,21 +9,21 @@
                     <h3>{{msgInfo.title}}</h3>
                     <p>
                         <span>类型：</span>
-                        <span>{{msgInfo.type}}</span>
+                        <span>{{getMsgType(msgInfo.type)}}</span>
                     </p>
                     <p>
                         <span>时间：</span>
                         <span>{{msgInfo.time}}</span>
                     </p>
                     <p>
-                        <span>状态：</span>                        
+                        <span>状态：</span>
                         <span>{{msgInfo.read}}</span>
                     </p>
                 </div>
                 <div class="divider"></div>
                 <div class="content">{{msgInfo.msg}}</div>
                 <div class="tac">
-                    <!-- <el-button type="primary" size="small" @click="toSee">去看看</el-button> -->
+                    <el-button type="primary" size="small" @click="toSee(msgInfo.type)">去看看</el-button>
                     <el-button type="primary" size="small" @click="deleteMsg">删除本条消息</el-button>
                 </div>
             </div>
@@ -33,6 +33,7 @@
 <script>
 import msgApi from "../../../api/modules/message";
 import event from "../../../assets/js/eventBus";
+import { msgTypeList } from "../../../const";
 export default {
     data() {
         return {
@@ -45,12 +46,18 @@ export default {
                 read: "未读"
             },
             msgID: null,
-            loading: true
+            loading: false
         };
     },
     watch: {
         "$route.query"(newVal) {
             this.msgID = newVal.msgID;
+            this.getMsgDetail();
+        }
+    },
+    mounted() {
+        this.msgID = this.$route.query.msgID;
+        if (this.msgID) {
             this.getMsgDetail();
         }
     },
@@ -60,17 +67,36 @@ export default {
         }
     },
     methods: {
+        getMsgType(type) {
+            for (let i = 0; i < msgTypeList.length; i++) {
+                if (msgTypeList[i].key == type) {
+                    return msgTypeList[i].label;
+                }
+            }
+        },
         async getMsgDetail() {
             this.loading = true;
             try {
                 let res = await msgApi.getMsgDetail(this.idType, this.msgID);
                 this.msgInfo = res.data;
-                await msgApi.signAsRead(this.idType, this.msgID);
+                if (res.data.read == "未读") {
+                    await msgApi.signAsRead(this.idType, this.msgID);
+                    event.$emit("updateMsgList");
+                }
             } catch (e) {
                 this.$message.error(e.message);
                 this.msgID = null;
             }
             this.loading = false;
+        },
+        toSee(type) {
+            let path = "/";
+            for (let i = 0; i < msgTypeList.length; i++) {
+                if (msgTypeList[i].key == type) {
+                    path = msgTypeList[i].path;
+                }
+            }
+            this.$router.push(path);
         },
         deleteMsg() {
             this.$confirm("确定删除这条消息吗？删除后将无法恢复", "提示", {

@@ -1,25 +1,30 @@
 <template>
     <div class="msg-list" v-loading="loading">
-        <div class="msg-container" v-for="(item,i) in msgList" :key="i" @click="toDetail(item)">
-            <div class="info">
-                <span class="type">{{item.type}}</span>
-                <span class="fr time">{{item.time}}</span>
-                <p class="title">标题：{{item.title}}</p>
+        <div v-if="msgList.length>0">
+            <div class="msg-container" v-for="(item,i) in msgList" :key="i" @click="toDetail(item)">
+                <div class="info">
+                    <span class="type">{{item.type}}</span>
+                    <span class="fr time">{{item.time}}</span>
+                    <p class="title">标题：{{item.title}}</p>
+                </div>
+                <div class="title-container">
+                    <p>内容：{{item.shortMsg}}</p>
+                </div>
+                <div class="fr" :class="getReadClass(item)">
+                    <span>{{item.read}}</span>
+                </div>
             </div>
-            <div class="title-container">
-                <p>内容：{{item.shortMsg}}</p>
-            </div>
-            <div class="fr" :class="getReadClass(item)">
-                <span>{{item.read}}</span>
+            <div class="page-container">
+                <page
+                    :total="form.total"
+                    :pageSize="form.pageSize"
+                    :currentPage="form.currentPage"
+                    @curChange="curChange"
+                />
             </div>
         </div>
-        <div class="page-container">
-            <page
-                :total="form.total"
-                :pageSize="form.pageSize"
-                :currentPage="form.currentPage"
-                @curChange="curChange"
-            />
+        <div v-else class="no-msg-list">
+            <p>暂无消息</p>
         </div>
     </div>
 </template>
@@ -127,6 +132,13 @@ export default {
         .read {
             color: green;
         }
+    }
+    .no-msg-list {
+        background-color: #fff;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 }
 </style>

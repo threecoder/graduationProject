@@ -10,13 +10,13 @@ const deleteCoupon = couponId => request(`${apiPrefix}/deleteCoupon`, 'post', { 
 //发放优惠券给会员
 const grantCoupon = data => request(`${apiPrefix}/grantCoupon`, 'post', data);
 
-//发给所有会员(ww )
+//发给所有会员
 const allGrantCoupon = couponId => request(`${apiPrefix}/allGrantCoupon`, 'post', { couponId });
 
 //新建优惠券
 const addCoupon = data => request(`${apiPrefix}/addCoupon`, 'post', data);
 
-//获取会员列表(ww )
+//获取会员列表
 const getMemberList = par => request(`${apiPrefix}/couponGetMemberList`, 'get', par);
 
 

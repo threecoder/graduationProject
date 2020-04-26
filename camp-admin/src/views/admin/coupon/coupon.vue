@@ -2,7 +2,7 @@
     <div>
         <el-row>
             <el-col :span="18">
-                <h3>已发布的培训</h3>
+                <h3>现有的优惠券</h3>
             </el-col>
             <el-col :offset="4" :span="2">
                 <el-button type="primary" @click="newCoupon.flag=true">添加优惠券</el-button>
@@ -15,22 +15,22 @@
                     <el-input v-model="searchForm.name" clearable placeholder="优惠券名称"></el-input>
                 </el-form-item>
                 <el-form-item label="优惠券价值">
-                    <el-input v-model="searchForm.value"></el-input>
+                    <el-input v-model="searchForm.value" placeholder="请输入优惠券价值"></el-input>
                 </el-form-item>
-                <el-form-item label="开始时间">
+                <el-form-item label="可用范围（开始）">
                     <el-date-picker
                         v-model="searchForm.startTime"
                         clearable
                         type="date"
-                        placeholder="选择到期日期"
+                        placeholder="范围开始时间"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item label="结束时间">
+                <el-form-item label="可用范围（结束）">
                     <el-date-picker
                         v-model="searchForm.endTime"
                         clearable
                         type="date"
-                        placeholder="选择到期日期"
+                        placeholder="范围结束时间"
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item>
@@ -57,6 +57,7 @@
             />
         </div>
 
+        <!-- 发放优惠券 -->
         <el-dialog
             v-if="detailDialog.flag"
             :visible.sync="detailDialog.flag"
@@ -67,6 +68,7 @@
             <grant :couponId="detailDialog.couponId" />
         </el-dialog>
 
+        <!-- 添加优惠券 -->
         <el-dialog
             v-if="newCoupon.flag"
             :visible.sync="newCoupon.flag"
@@ -74,7 +76,7 @@
             :close-on-click-modal="false"
             width="50%"
         >
-            <add-coupon @close="newCoupon.flag=false" />
+            <add-coupon @close="newCoupon.flag=false;getCouponList()" />
         </el-dialog>
     </div>
 </template>
@@ -118,13 +120,13 @@ export default {
                     }
                 ],
                 data: [
-                    {
-                        id: 1,
-                        name: "模拟数据",
-                        startTime: "2020-03-05 21:55:00",
-                        endTime: "2020-04-05 21:55:00",
-                        value: "100元"
-                    }
+                    // {
+                    //     id: 1,
+                    //     name: "模拟数据",
+                    //     startTime: "2020-03-05 21:55:00",
+                    //     endTime: "2020-04-05 21:55:00",
+                    //     value: "100元"
+                    // }
                 ],
                 loading: false
             },
@@ -144,6 +146,7 @@ export default {
     methods: {
         async getCouponList() {
             let par = { ...this.searchForm };
+            par.startTime = formatDateAndTime(par.startTime);
             par.endTime = formatDateAndTime(par.endTime);
             this.table.loading = true;
             try {
@@ -164,7 +167,8 @@ export default {
             this.getCouponList();
         },
         grant(row) {
-            this.detailDialog.info = row;
+            console.log(row);
+            this.detailDialog.couponId = row.id;
             this.detailDialog.flag = true;
             this.detailDialog.title = row.name;
         },
