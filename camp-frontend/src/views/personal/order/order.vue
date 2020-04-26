@@ -144,9 +144,20 @@ export default {
             }
             this.table.loading = false;
         },
-        pay(row) {
+        async pay(row) {
             this.payment.orderId = row.orderNum;
-            this.payment.flag = true;
+            // this.payment.flag = true;
+            let data = {
+                orderId: row.orderNum,
+                returnUrl: "/order",
+                serverPort: "8888"
+            };
+            try {
+                let res = await orderAPi.aliPay(data);
+                console.log("支付返回", res);
+            } catch (error) {
+                this.$message.error(error.message);
+            }
         }
     }
 };
