@@ -22,6 +22,7 @@ public class MemberController {
     @Autowired
     MemberService memberService;
 
+
     @RequestMapping("/getUserInfo")
     @ResponseBody
     public Object getUserInfo(@RequestParam("id") Integer memberId) {
@@ -42,8 +43,8 @@ public class MemberController {
 
     @RequestMapping("/rechargeVIP")
     @ResponseBody
-    public Object rechargeVIP(@RequestParam("id") Integer memberId) {
-        return memberService.rechargeVIP(memberId);
+    public JSONObject rechargeVIP(@RequestBody JSONObject jsonObject) {
+        return memberService.rechargeVIP(jsonObject);
     }
 
     @RequestMapping("/importSingleStudent")
