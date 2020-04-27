@@ -104,73 +104,63 @@ public class ActivityOrderStudentExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andActivityOrderIdIsNull() {
-            addCriterion("activity_order_id is null");
+        public Criteria andOrderKeyIdIsNull() {
+            addCriterion("order_key_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andActivityOrderIdIsNotNull() {
-            addCriterion("activity_order_id is not null");
+        public Criteria andOrderKeyIdIsNotNull() {
+            addCriterion("order_key_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andActivityOrderIdEqualTo(String value) {
-            addCriterion("activity_order_id =", value, "activityOrderId");
+        public Criteria andOrderKeyIdEqualTo(Integer value) {
+            addCriterion("order_key_id =", value, "orderKeyId");
             return (Criteria) this;
         }
 
-        public Criteria andActivityOrderIdNotEqualTo(String value) {
-            addCriterion("activity_order_id <>", value, "activityOrderId");
+        public Criteria andOrderKeyIdNotEqualTo(Integer value) {
+            addCriterion("order_key_id <>", value, "orderKeyId");
             return (Criteria) this;
         }
 
-        public Criteria andActivityOrderIdGreaterThan(String value) {
-            addCriterion("activity_order_id >", value, "activityOrderId");
+        public Criteria andOrderKeyIdGreaterThan(Integer value) {
+            addCriterion("order_key_id >", value, "orderKeyId");
             return (Criteria) this;
         }
 
-        public Criteria andActivityOrderIdGreaterThanOrEqualTo(String value) {
-            addCriterion("activity_order_id >=", value, "activityOrderId");
+        public Criteria andOrderKeyIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("order_key_id >=", value, "orderKeyId");
             return (Criteria) this;
         }
 
-        public Criteria andActivityOrderIdLessThan(String value) {
-            addCriterion("activity_order_id <", value, "activityOrderId");
+        public Criteria andOrderKeyIdLessThan(Integer value) {
+            addCriterion("order_key_id <", value, "orderKeyId");
             return (Criteria) this;
         }
 
-        public Criteria andActivityOrderIdLessThanOrEqualTo(String value) {
-            addCriterion("activity_order_id <=", value, "activityOrderId");
+        public Criteria andOrderKeyIdLessThanOrEqualTo(Integer value) {
+            addCriterion("order_key_id <=", value, "orderKeyId");
             return (Criteria) this;
         }
 
-        public Criteria andActivityOrderIdLike(String value) {
-            addCriterion("activity_order_id like", value, "activityOrderId");
+        public Criteria andOrderKeyIdIn(List<Integer> values) {
+            addCriterion("order_key_id in", values, "orderKeyId");
             return (Criteria) this;
         }
 
-        public Criteria andActivityOrderIdNotLike(String value) {
-            addCriterion("activity_order_id not like", value, "activityOrderId");
+        public Criteria andOrderKeyIdNotIn(List<Integer> values) {
+            addCriterion("order_key_id not in", values, "orderKeyId");
             return (Criteria) this;
         }
 
-        public Criteria andActivityOrderIdIn(List<String> values) {
-            addCriterion("activity_order_id in", values, "activityOrderId");
+        public Criteria andOrderKeyIdBetween(Integer value1, Integer value2) {
+            addCriterion("order_key_id between", value1, value2, "orderKeyId");
             return (Criteria) this;
         }
 
-        public Criteria andActivityOrderIdNotIn(List<String> values) {
-            addCriterion("activity_order_id not in", values, "activityOrderId");
-            return (Criteria) this;
-        }
-
-        public Criteria andActivityOrderIdBetween(String value1, String value2) {
-            addCriterion("activity_order_id between", value1, value2, "activityOrderId");
-            return (Criteria) this;
-        }
-
-        public Criteria andActivityOrderIdNotBetween(String value1, String value2) {
-            addCriterion("activity_order_id not between", value1, value2, "activityOrderId");
+        public Criteria andOrderKeyIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("order_key_id not between", value1, value2, "orderKeyId");
             return (Criteria) this;
         }
 

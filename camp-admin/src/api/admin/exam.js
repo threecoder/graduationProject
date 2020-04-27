@@ -22,16 +22,16 @@ const randomFillExam = examId => request(apiPrefix + `/randomFillExam`, 'post', 
 const getNotPostExam = currentPage => request(apiPrefix + `/getNotPostExam`, 'get', { currentPage, pageSize: 6 });
 
 //获取已经添加的考试信息(根据id)
-const getExamInfo = id => request(apiPrefix + `/getExamInfo`, 'get', { id });
+const getExamInfo = examId => request(apiPrefix + `/getExamInfo`, 'get', { examId });
 
 //修改已经添加的考试信息
 const modifyExam = data => request(apiPrefix + "/modifyExamInfo", 'post', data);
 
 //根据试卷id获取试卷题目id列表
-const getExamQuestionList = id => request(apiPrefix + `/getExamQuestionList`, 'get', { id });
+const getExamQuestionList = examId => request(apiPrefix + `/getExamQuestionList`, 'get', { examId });
 
 //根据题目id获取题目信息
-const getSingleQuestion = id => request(apiPrefix + `/getQuestionInfo`, 'get', { id });
+const getSingleQuestion = questionId => request(apiPrefix + `/getQuestionInfo`, 'get', { questionId });
 
 //保存给某个试卷挑选的题目
 const saveQuestionForExam = par => request(apiPrefix + "/saveQuestionForExam", 'post', par);
@@ -51,6 +51,9 @@ const closeExam = examId => request(apiPrefix + `/closeExam`, 'post', { examId }
 //获取已作答学生信息
 const getFinishedStudentList = examId => request(apiPrefix + `/getFinishedStudentList`, "get", { examId });
 
+//修改考试成绩
+const modifyGrade = data => request(apiPrefix + '/modifyGrade', 'post', data);
+
 //下载成绩单模板
 const getGradeTemplate = () => request(apiPrefix + "/getGradeTemplate", "get", {}, 'blob');
 
@@ -67,6 +70,24 @@ const getGradeList = examId => request(`${apiPrefix}/getGradeList`, 'get', { exa
 
 //提交成绩审核
 const submitGradeList = data => request(`${apiPrefix}/submitGradeList`, 'post', data);
+
+//获取本账号待审核成绩记录
+const getWaitingGradeList = par => request(`${apiPrefix}/getWaitingGradeList`, 'get', par);
+
+//通过某条记录
+const approvalSingleRecord = recordId => request(`${apiPrefix}/approvalSingleRecord`, 'post', { recordId });
+
+//通过一批记录
+const approvalManyRecords = ids => request(`${apiPrefix}/approvalManyRecords`, 'post', { ids });
+
+//拒绝某条记录
+const refuseSingleRecord = data => request(`${apiPrefix}/refuseSingleRecord`, 'post', data);
+
+//拒绝一批记录
+const refuseManyRecords = data => request(`${apiPrefix}/refuseManyRecords`, 'post', data);
+
+//获取某次考试的审核记录
+const getCheckRecordList = par => request(`${apiPrefix}/getCheckRecordList`, 'get', par);
 
 export default {
     getQuestionList,
@@ -89,5 +110,12 @@ export default {
     getExamDetail,
     getCheckerList,
     getGradeList,
-    submitGradeList
+    submitGradeList,
+    getWaitingGradeList,
+    approvalSingleRecord,
+    approvalManyRecords,
+    refuseSingleRecord,
+    refuseManyRecords,
+    getCheckRecordList,
+    modifyGrade
 }

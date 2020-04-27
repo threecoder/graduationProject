@@ -12,7 +12,15 @@
                     <el-input placeholder="学员号码" v-model="form.phone" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="公司" label-position="top">
-                    <el-select v-model="form.company" clearable></el-select>
+                    <el-select v-model="form.company" clearable>
+                        <el-option :value="0" label="无挂靠"></el-option>
+                        <el-option
+                            v-for="(item,i) in companyList"
+                            :value="item.id"
+                            :label="item.name"
+                            :key="i"
+                        ></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="挂靠组织" label-position="top">
                     <el-select v-model="form.hasOrg" clearable>
@@ -20,7 +28,7 @@
                         <el-option value="1" label="有"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-button type="primary" @click="search">搜索</el-button>
+                <el-button :loading="table.loading" type="primary" @click="search">搜索</el-button>
             </el-form>
         </div>
 
@@ -31,11 +39,20 @@
                 :loading="table.loading"
             >
                 <el-table-column slot="oper" align="center" slot-scope="{ params }" v-bind="params">
-                    <div slot-scope=" {row}">
-                        <el-button v-if="type==0" type="primary" size="small" @click="modifyInfo(row)">修改信息</el-button>
-                        <el-button v-if="type==0" type="primary" size="small" @click="deleteOneStudent(row)">解除挂靠</el-button>
-                        <el-button v-if="type==0" type="primary" size="small" @click="resetPass(row)">重置密码</el-button>
-                        
+                    <div slot-scope="{row}">
+                        <div v-if="type==0">
+                            <el-button type="primary" size="small" @click="modifyInfo(row)">修改信息</el-button>
+                            <el-button type="primary" size="small" @click="deleteOneStudent(row)">挂靠</el-button>
+                            <el-button type="primary" size="small" @click="resetPass(row)">重置密码</el-button>
+                        </div>
+                        <div v-if="type==1">
+                            <el-button
+                                type="primary"
+                                size="small"
+                                @click="trainingHistory(row)"
+                            >培训记录</el-button>
+                            <el-button type="primary" size="small" @click="certificate(row)">持有证书</el-button>
+                        </div>
                     </div>
                 </el-table-column>
             </m-table>
@@ -52,7 +69,7 @@
 import mTable from "../../../../components/mTable.vue";
 import page from "../../../../components/page.vue";
 import adminStudentApi from "../../../../api/admin/student";
-
+import event from "../../../../assets/js/eventBus";
 export default {
     props: {
         type: {
@@ -111,38 +128,71 @@ export default {
                     }
                 ],
                 loading: false
-            }
+            },
+            companyList: []
         };
     },
     mounted() {
+        this.init();
         this.search();
-        console.log(this.$parent);
+        this.getCompanyList();
+        event.$on("refreshStudent", this.search);
     },
     methods: {
+        init() {
+            if (this.type == 1) {
+                this.table.tableConfig = [
+                    { prop: "idNum", label: "学员身份证" },
+                    { prop: "name", label: "学员姓名" },
+                    { prop: "phone", label: "联系电话" },
+                    { prop: "email", label: "邮箱" },
+                    { prop: "company", label: "所属公司" },
+                    {
+                        slot: "oper",
+                        label: "操作",
+                        fixed: "right",
+                        width: "300px"
+                    }
+                ];
+            }
+        },
         async search() {
+            this.table.loading = true;
             try {
-                let que = "";
-                let res = await adminStudentApi.getStudentList(que);
-                console.log(res);
+                let res = await adminStudentApi.getStudentList(this.form);
                 this.table.tableData = res.data.list;
                 this.form.total = res.data.total;
             } catch (error) {
                 this.$message.error(error.message);
-                console.log(error);
+            }
+            this.table.loading = false;
+        },
+        async getCompanyList() {
+            try {
+                let res = await adminStudentApi.getMemSelectList();
+                this.companyList = res.data;
+            } catch (error) {
+                this.$message.error(error.message);
             }
         },
         curChange(val) {
             this.form.currentPage = val;
             this.search();
         },
-        modifyInfo(row){
-            this.$emit("modifyInfo",row)
+        modifyInfo(row) {
+            this.$emit("modifyInfo", row);
         },
-        deleteOneStudent(row){
-            this.$emit("delete",row)
+        deleteOneStudent(row) {
+            this.$emit("delete", row);
         },
-        resetPass(row){
-            this.$emit("resetPass",row)
+        resetPass(row) {
+            this.$emit("resetPass", row);
+        },
+        trainingHistory(row) {
+            this.$emit("trainingHistory", row);
+        },
+        certificate(row) {
+            this.$emit("certificate", row);
         }
     }
 };

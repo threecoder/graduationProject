@@ -1,0 +1,131 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/dynamic/dynamic",
+			"style": {
+				"navigationBarTextStyle": "#fff",
+				"navigationBarTitleText": "协会动态",
+				"navigationBarBackgroundColor": "rgb(64,158,255)",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/notice/notice",
+			"style": {
+				"navigationBarTextStyle": "#fff",
+				"navigationBarTitleText": "协会公告",
+				"navigationBarBackgroundColor": "rgb(64,158,255)",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/training/training",
+			"style": {
+				"navigationBarTextStyle": "#fff",
+				"navigationBarTitleText": "协会培训",
+				"navigationBarBackgroundColor": "rgb(64,158,255)",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/personal/personal",
+			"style": {
+				"navigationStyle":"custom"
+			}
+
+		},
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+            "path" : "pages/dynamic/dynamicDetail",
+            "style" : {
+				"navigationBarTitleText": "详情"
+			}
+		},
+		{
+			"path": "pages/personal/info/info",
+			"style": {
+				"navigationBarTitleText": "我的信息"
+			}
+		},
+		{
+			"path": "pages/personal/vote/vote",
+			"style": {
+				"navigationBarTitleText": "我的投票"
+			}
+		},
+		{
+			"path": "pages/personal/vote/toVote",
+			"style": {
+				"navigationBarTitleText": "投票"
+			}
+		},
+		{
+			"path": "pages/personal/vote/voteDetail",
+			"style": {
+				"navigationBarTitleText": "投票详情"
+			}
+		},
+		{
+			"path": "pages/personal/activity/activity",
+			"style": {
+				"navigationBarTitleText": "我的活动",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/personal/training/training",
+			"style": {
+				"navigationBarTitleText":"我的培训",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path":"pages/personal/exam/exam",
+			"style": {
+				"navigationBarTitleText": "我的考试",
+				"enablePullDownRefresh":true
+			}
+		}
+        ,{
+            "path" : "pages/personal/order/order",
+            "style" : {
+				"navigationBarTitleText": "我的订单",
+				"enablePullDownRefresh":true
+			}
+        }
+    ],
+	"globalStyle": {
+		"navigationBarTextStyle": "#fff",
+		"navigationBarBackgroundColor": "rgb(64,158,255)",
+		"backgroundColor": "#F8F8F8",
+		"backgroundColorTop": "#ffffff"
+	},
+	"tabBar": {
+		"color": "#7A7E83",
+		"selectedColor": "#049EFF",
+		"borderStyle": "black",
+		"backgroundColor": "#ffffff",
+		"list": [{
+				"pagePath": "pages/dynamic/dynamic",
+				"text": "动态"
+			},
+			{
+				"pagePath": "pages/notice/notice",
+				"text": "公告"
+			},
+			{
+				"pagePath": "pages/training/training",
+				"text": "训练"
+			},
+			{
+				"pagePath": "pages/personal/personal",
+				"text": "我的"
+			}
+		]
+	}
+}

@@ -16,6 +16,7 @@
                     :uploadUrl="uploadAttr.uploadUrl"
                     :formData="uploadAttr.data"
                     :size="'medium'"
+                    @uploadSuccess="success"
                 />
             </div>
         </div>
@@ -30,7 +31,7 @@
                     <el-select clearable v-model="form.type">
                         <el-option value="0" label="单选题"></el-option>
                         <el-option value="1" label="多选题"></el-option>
-                        <!-- <el-option value="2" label="判断题"></el-option> -->
+                        <el-option value="2" label="判断题"></el-option>
                     </el-select>
                 </el-form-item>
                 <!-- <el-form-item label="所属培训" label-position="top">
@@ -40,7 +41,7 @@
                         </template>
                     </el-select>
                 </el-form-item>-->
-                <el-button size="medium" type="primary" @click="search">搜索</el-button>
+                <el-button size="medium" type="primary" @click="search" :loading="table.loading">搜索</el-button>
             </el-form>
         </div>
 
@@ -79,11 +80,13 @@
         <!-- 题目详情弹框 -->
         <div class="dialog-container">
             <el-dialog title="修改试题" :visible.sync="flag">
-                <h3>题目内容：{{dialog.state}}</h3>
+                <h3>题目内容：</h3>
+                <el-input v-model="dialog.state" type="textarea"></el-input>
                 <div class="question-type">
                     <el-select v-model="dialog.type">
-                        <el-option value="0" label="单选题"></el-option>
-                        <el-option value="1" label="多选题"></el-option>
+                        <el-option value="单选题" label="单选题"></el-option>
+                        <el-option value="多选题" label="多选题"></el-option>
+                        <el-option value="判断题" label="判断题"></el-option>
                     </el-select>
                 </div>
                 <div class="option">
@@ -107,7 +110,7 @@
                     <el-input v-model="dialog.choiceD"></el-input>
                 </div>
 
-                <div class="button-container">
+                <div class="dialog-button-container">
                     <el-button @click="flag=false">取 消</el-button>
                     <el-button type="primary" @click="modefyQuestion">确 定</el-button>
                 </div>
@@ -182,7 +185,7 @@ export default {
                 tableAttr: {
                     stripe: true
                 },
-                tableLoading: false
+                loading: false
             },
             buttonLoading: false,
             flag: false,
@@ -208,6 +211,7 @@ export default {
     },
     methods: {
         async search() {
+            this.table.loading = true;
             try {
                 let res = await adminExamApi.getQuestionList(this.form);
                 this.table.tableData = res.data.list;
@@ -238,6 +242,7 @@ export default {
             } catch (error) {
                 this.$message.error(error.message);
             }
+            this.table.loading = false;
         },
         async getTraining() {
             try {
@@ -255,11 +260,38 @@ export default {
             this.flag = true;
             this.dialog = { ...row };
         },
+        beforeModify() {
+            let data = { ...this.dialog };
+            let ans = data.answer,
+                tem = [];
+            for (let i = 0; i < ans.length; i++) {
+                switch (ans[i].toUpperCase()) {
+                    case "A":
+                        tem.push(1);
+                        break;
+                    case "B":
+                        tem.push(2);
+                        break;
+                    case "C":
+                        tem.push(3);
+                        break;
+                    case "D":
+                        tem.push(4);
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+            data.answer = tem;
+            return data;
+        },
         async modefyQuestion() {
             try {
-                let res = await adminExamApi.modefyQuestionInfo(this.dialog);
+                let data = this.beforeModify();
+                let res = await adminExamApi.modefyQuestionInfo(data);
                 this.$message.success("修改试题成功");
-                this.getQuestionList();
+                this.search();
                 this.flag = false;
             } catch (error) {
                 this.$message.error(error.message);
@@ -272,6 +304,13 @@ export default {
             } catch (error) {
                 this.$message.error(error.message);
             }
+        },
+        async success(res) {
+            this.$alert(res.msg, "提示", {
+                confirmButtonText: "确定",
+                type: "info"
+            });
+            this.search();
         }
     }
 };
@@ -280,12 +319,14 @@ export default {
 <style lang="scss" scoped>
 .all-container {
     .button-container {
-        width: 400px;
         display: flex;
         justify-content: flex-start;
         align-items: flex-start;
     }
     .dialog-container {
+        h3 {
+            margin-bottom: 10px;
+        }
         .question-type {
             position: absolute;
             right: 10%;
@@ -298,7 +339,7 @@ export default {
                 display: block;
             }
         }
-        .button-container {
+        .dialog-button-container {
             margin-top: 20px;
             text-align: center;
         }

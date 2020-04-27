@@ -10,7 +10,7 @@ public interface TrainingOrderMapper {
 
     int deleteByExample(TrainingOrderExample example);
 
-    int deleteByPrimaryKey(String trainingOrderId);
+    int deleteByPrimaryKey(Integer orderKeyId);
 
     int insert(TrainingOrder record);
 
@@ -18,7 +18,7 @@ public interface TrainingOrderMapper {
 
     List<TrainingOrder> selectByExample(TrainingOrderExample example);
 
-    TrainingOrder selectByPrimaryKey(String trainingOrderId);
+    TrainingOrder selectByPrimaryKey(Integer orderKeyId);
 
     int updateByExampleSelective(@Param("record") TrainingOrder record, @Param("example") TrainingOrderExample example);
 

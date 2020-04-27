@@ -8,6 +8,7 @@
             :current-page="currentPage"
             :page-size="pageSize"
             :total="total"
+            :hide-on-single-page="true"
         ></el-pagination>
     </el-col>
 </template>

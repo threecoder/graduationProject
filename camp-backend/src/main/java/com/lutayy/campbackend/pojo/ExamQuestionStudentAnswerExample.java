@@ -104,6 +104,66 @@ public class ExamQuestionStudentAnswerExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
+        public Criteria andIdIsNull() {
+            addCriterion("id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdIsNotNull() {
+            addCriterion("id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdEqualTo(Integer value) {
+            addCriterion("id =", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdNotEqualTo(Integer value) {
+            addCriterion("id <>", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdGreaterThan(Integer value) {
+            addCriterion("id >", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("id >=", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdLessThan(Integer value) {
+            addCriterion("id <", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdLessThanOrEqualTo(Integer value) {
+            addCriterion("id <=", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdIn(List<Integer> values) {
+            addCriterion("id in", values, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdNotIn(List<Integer> values) {
+            addCriterion("id not in", values, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdBetween(Integer value1, Integer value2) {
+            addCriterion("id between", value1, value2, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("id not between", value1, value2, "id");
+            return (Criteria) this;
+        }
+
         public Criteria andExamIdIsNull() {
             addCriterion("exam_id is null");
             return (Criteria) this;
@@ -521,6 +581,66 @@ public class ExamQuestionStudentAnswerExample {
 
         public Criteria andAnswerFourNotBetween(Byte value1, Byte value2) {
             addCriterion("answer_four not between", value1, value2, "answerFour");
+            return (Criteria) this;
+        }
+
+        public Criteria andCorrectOrNotIsNull() {
+            addCriterion("correct_or_not is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCorrectOrNotIsNotNull() {
+            addCriterion("correct_or_not is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCorrectOrNotEqualTo(Boolean value) {
+            addCriterion("correct_or_not =", value, "correctOrNot");
+            return (Criteria) this;
+        }
+
+        public Criteria andCorrectOrNotNotEqualTo(Boolean value) {
+            addCriterion("correct_or_not <>", value, "correctOrNot");
+            return (Criteria) this;
+        }
+
+        public Criteria andCorrectOrNotGreaterThan(Boolean value) {
+            addCriterion("correct_or_not >", value, "correctOrNot");
+            return (Criteria) this;
+        }
+
+        public Criteria andCorrectOrNotGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("correct_or_not >=", value, "correctOrNot");
+            return (Criteria) this;
+        }
+
+        public Criteria andCorrectOrNotLessThan(Boolean value) {
+            addCriterion("correct_or_not <", value, "correctOrNot");
+            return (Criteria) this;
+        }
+
+        public Criteria andCorrectOrNotLessThanOrEqualTo(Boolean value) {
+            addCriterion("correct_or_not <=", value, "correctOrNot");
+            return (Criteria) this;
+        }
+
+        public Criteria andCorrectOrNotIn(List<Boolean> values) {
+            addCriterion("correct_or_not in", values, "correctOrNot");
+            return (Criteria) this;
+        }
+
+        public Criteria andCorrectOrNotNotIn(List<Boolean> values) {
+            addCriterion("correct_or_not not in", values, "correctOrNot");
+            return (Criteria) this;
+        }
+
+        public Criteria andCorrectOrNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("correct_or_not between", value1, value2, "correctOrNot");
+            return (Criteria) this;
+        }
+
+        public Criteria andCorrectOrNotNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("correct_or_not not between", value1, value2, "correctOrNot");
             return (Criteria) this;
         }
     }

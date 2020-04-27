@@ -36,7 +36,13 @@
                         type="primary"
                         @click="fillExam"
                     >随机出题</el-button>
-                    <el-button size="small" class="items" v-if="status==1" type="primary">查看试题</el-button>
+                    <el-button
+                        size="small"
+                        class="items"
+                        v-if="status==1"
+                        type="primary"
+                        @click="pick"
+                    >查看试题</el-button>
                     <el-button
                         size="small"
                         class="items"
@@ -86,7 +92,9 @@ export default {
                 let res = await adminExamApi.randomFillExam(this.examId);
                 this.$message.success("随机出题成功");
                 this.$emit("refresh");
-            } catch (error) {}
+            } catch (error) {
+                this.$message.error(error.message);
+            }
         },
         async publish() {
             try {
@@ -95,7 +103,9 @@ export default {
                     "发布考试成功，考生可以在规定时间内参与考试"
                 );
                 this.$emit("refresh");
-            } catch (error) {}
+            } catch (error) {
+                this.$message.error(error.message);
+            }
         }
     }
 };

@@ -13,6 +13,7 @@ module.exports = {
             '/campback':{
                 // target:'http://112.126.67.240:3000',
                 target:'http://localhost:3000',
+                // target: 'http://112.126.67.240:3000',
                 pathRewrite:{
                     '^/campback':'/'
                 }

@@ -4,6 +4,7 @@ package com.lutayy.campbackend.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.lutayy.campbackend.service.ActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,14 +19,19 @@ public class ActivityController {
 
     @RequestMapping(value={"/student/getJoinableActivities","/member/getJoinableActivities"})
     @ResponseBody
-    public Object getJoinableActivities(){
-        return activityService.getJoinableActivities();
+    public Object getJoinableActivities(@RequestParam("pageSize") Integer pageSize,
+                                        @RequestParam("currentPage") Integer currentPage,
+                                        @RequestParam("name") String name){
+        return activityService.getJoinableActivities(pageSize, currentPage, name);
     }
 
     @RequestMapping("/student/getSignedActivities")
     @ResponseBody
-    public Object getSignedActivities(@RequestParam("id") Integer studentId){
-        return activityService.getSignedActivities(studentId);
+    public Object getSignedActivities(@RequestParam("id") Integer studentId,
+                                      @RequestParam("currentPage") Integer currentPage,
+                                      @RequestParam("pageSize") Integer pageSize,
+                                      @RequestParam(value = "name",required = false) String name){
+        return activityService.getSignedActivities(studentId, currentPage, pageSize, name);
     }
 
     @RequestMapping("/student/getSeatNum")
@@ -54,8 +60,11 @@ public class ActivityController {
 
     @RequestMapping("/member/getSignedActivities")
     @ResponseBody
-    public Object memberGetSignedActivities(@RequestParam("id") Integer memberId){
-        return activityService.memberGetSignedActivities(memberId);
+    public Object memberGetSignedActivities(@RequestParam("id") Integer memberId,
+                                            @RequestParam("currentPage") Integer currentPage,
+                                            @RequestParam("pageSize") Integer pageSize,
+                                            @RequestParam(value = "name",required = false) String name){
+        return activityService.memberGetSignedActivities(memberId, currentPage, pageSize, name);
     }
 
     @RequestMapping("/admin/addNewActivity")
@@ -70,5 +79,24 @@ public class ActivityController {
         return activityService.adminGetActivityList();
     }
 
+
+    @RequestMapping("/admin/getEntryForm")
+    @ResponseBody
+    public ResponseEntity<byte[]> getEntryForm(@RequestParam("activityId") Integer activityId,
+                                               @RequestParam("id") Integer adminId){
+        return activityService.getEntryForm(activityId, adminId);
+    }
+
+    @RequestMapping("/admin/setSEATInfo")
+    @ResponseBody
+    public JSONObject setSEATInfo(@RequestBody JSONObject jsonObject){
+        return activityService.setSEATInfo(jsonObject);
+    }
+
+    @RequestMapping("/admin/getActivitySEAT")
+    @ResponseBody
+    public Object getActivitySEAT(@RequestParam("activityId") Integer activityId){
+        return activityService.getActivitySEAT(activityId);
+    }
 
 }

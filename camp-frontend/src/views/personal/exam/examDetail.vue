@@ -74,7 +74,7 @@ export default {
             try {
                 let res = await examApi.getExamDetail(this.examId);
                 console.log("res", res);
-                this.list = res.data.questionList;
+                this.list = res.data.list;
                 this.examInfo = res.data.examInfo;
                 this.loading = false;
             } catch (error) {

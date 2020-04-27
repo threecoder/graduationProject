@@ -5,8 +5,12 @@ import Axios from 'axios'
 import store from './store'
 import element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-import { getCanGoPath } from '@/assets/js/util.js';
+import { getCanGoPath } from './assets/js/util';
 import Distpicker from 'v-distpicker'
+
+// import 'vue-fabric/dist/vue-fabric.min.css';
+// import { Fabric } from 'vue-fabric';
+// Vue.use(Fabric);
 
 Vue.config.productionTip = false
 Vue.prototype.$message = element.Message;
@@ -17,9 +21,15 @@ Vue.use(element);
 Vue.component('v-distpicker', Distpicker)
 // 配置路由拦截
 router.beforeEach((to, from, next) => {
-    let token = document.cookie.indexOf("token");
-    let canGoPath = getCanGoPath();
-    if (token == -1 && canGoPath.indexOf(to.path) == -1) {
+    store.commit("init");
+    let user = store.getters.user,
+        token = document.cookie.indexOf("token"),
+        canGoPath = getCanGoPath(),
+        time = new Date().getTime();
+    if ((token == -1 || user.expire < time) && canGoPath.indexOf(to.path) == -1) {
+        if (user.expire < time) {
+            element.Message.error("登录信息已过期，请重新登录");
+        }
         let url = escape(to.fullPath);
         next({
             path: `/adminLogin?redirect=${url}`
@@ -36,7 +46,7 @@ Axios.interceptors.response.use(
             if (response.data.code == 'success') {
                 return response.data;
             } else if (response.data.code == 'error') {
-                router.push({ path: '/login' });
+                router.push({ path: '/adminLogin' });
                 throw new Error("请先登录您的账号");
             } else if (response.data.code == 'fail') {
                 throw new Error(response.data.msg);

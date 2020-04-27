@@ -123,7 +123,11 @@
     </div>
 </template>
 <script>
-import { formatDate, formatTime, formatDateAndTime } from "../../../assets/js/util.js";
+import {
+    formatDate,
+    formatTime,
+    formatDateAndTime
+} from "../../../assets/js/util";
 import adminTrainingApi from "../../../api/admin/training";
 export default {
     data() {

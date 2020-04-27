@@ -5,21 +5,25 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.lutayy.campbackend.common.util.OrderIdGenerator;
+import com.lutayy.campbackend.common.util.RedisUtil;
 import com.lutayy.campbackend.common.util.UUIDUtil;
 import com.lutayy.campbackend.dao.*;
 import com.lutayy.campbackend.pojo.*;
 import com.lutayy.campbackend.service.SQLConn.SystemParamManager;
 import com.lutayy.campbackend.service.SQLConn.TrainingStudentSQLConn;
 import com.lutayy.campbackend.service.TrainingService;
+import org.apache.poi.ss.formula.functions.T;
 import org.omg.PortableInterceptor.INACTIVE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
 @Service
@@ -45,6 +49,8 @@ public class TrainingServiceImpl implements TrainingService {
     ExamReStudentMapper examReStudentMapper;
     @Autowired
     GetObjectHelper getObjectHelper;
+    @Resource
+    private RedisUtil redisUtil;
 
 
     private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
@@ -58,81 +64,105 @@ public class TrainingServiceImpl implements TrainingService {
         TrainingReStudentExample trainingReStudentExample=new TrainingReStudentExample();
         TrainingReStudentExample.Criteria criteria=trainingReStudentExample.createCriteria();
         criteria.andStudentIdEqualTo(studentId).andTrainingIdEqualTo(trainingId).andIsInvalidEqualTo(false);
-        List<TrainingReStudent> trainingReStudents=trainingReStudentMapper.selectByExample(trainingReStudentExample);
-        if(trainingReStudents.size()==0){
-            return 0;
-        }else {
-            return 1;
-        }
+        long hasOrNot=trainingReStudentMapper.countByExample(trainingReStudentExample);
+        return (int)hasOrNot;
     }
 
 
     @Override
-    public JSONObject getCourses(JSONObject jsonObject) {
-        String keyword=jsonObject.getString("keyWord");
-        Date startDate=jsonObject.getDate("startDate");
-        Date endDate=jsonObject.getDate("endDate");
-        Integer pageSize=jsonObject.getInteger("pageSize");
-        Integer currentPage=jsonObject.getInteger("currentPage");
-        if(pageSize==null){
-            pageSize=10;
+    public JSONObject getCourses(String keyWord, String startDateStr, String endDateStr,
+                                 Integer pageSize, Integer currentPage, String type) {
+        JSONObject result = new JSONObject();
+        JSONObject data = new JSONObject();
+        result.put("data", data);
+        result.put("code", "fail");
+        if (pageSize == null || pageSize < 1) {
+            pageSize = 10;
         }
-        if(currentPage==null){
-            currentPage=1;
+        if (currentPage == null || currentPage < 1) {
+            currentPage = 1;
         }
-        TrainingExample trainingExample=new TrainingExample();
-        TrainingExample.Criteria criteria=trainingExample.createCriteria();
-        criteria.andTrainingNameLike("%"+keyword+"%");
-        if(startDate!=null){
+        TrainingExample trainingExample = new TrainingExample();
+        TrainingExample.Criteria criteria = trainingExample.createCriteria();
+        if((startDateStr==null || startDateStr.equals("")) && (endDateStr==null || endDateStr.equals(""))) {
+            if (type.equals("previous")) {
+                criteria.andTrainingEndTimeLessThan(new Date());
+            } else if (type.equals("now")) {
+                criteria.andTrainingStartTimeLessThanOrEqualTo(new Date());
+                criteria.andTrainingEndTimeGreaterThanOrEqualTo(new Date());
+            } else {
+                criteria.andTrainingStartTimeGreaterThanOrEqualTo(new Date());
+            }
+        }
+
+        if(keyWord!=null && !keyWord.equals("")) {
+            criteria.andTrainingNameLike("%" + keyWord + "%");
+        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        if (startDateStr != null && !startDateStr.equals("")) {
+            Date startDate;
+            try {
+                startDate = simpleDateFormat.parse(startDateStr);
+            }catch (Exception e){
+                result.put("msg", "日期格式错误");
+                return result;
+            }
             criteria.andTrainingStartTimeGreaterThanOrEqualTo(startDate);
         }
-        if(endDate!=null){
-            Calendar c = Calendar.getInstance();
-            c.setTime(endDate);
-            c.add(Calendar.DAY_OF_MONTH, +1);
-            criteria.andTrainingEndTimeLessThanOrEqualTo(c.getTime());
+        if (endDateStr != null && !endDateStr.equals("")) {
+//            Calendar c = Calendar.getInstance();
+//            c.setTime(endDate);
+//            c.add(Calendar.DAY_OF_MONTH, +1);
+//            criteria.andTrainingEndTimeLessThanOrEqualTo(c.getTime());
+            Date endDate;
+            try {
+                endDate = simpleDateFormat.parse(endDateStr);
+            }catch (Exception e){
+                result.put("msg", "日期格式错误");
+                return result;
+            }
+            criteria.andTrainingEndTimeLessThan(endDate);
         }
         trainingExample.setOrderByClause("post_time DESC");
-        List<Training> trainings=trainingMapper.selectByExample(trainingExample);
-        int size=trainings.size();
+        List<Training> trainings = trainingMapper.selectByExample(trainingExample);
+        int size = trainings.size();
         JSONArray list = new JSONArray();
-        int i=1;//计数
-        int sum=0;//每页数目;
-        for(Training training:trainings){
-            if(i<=pageSize*(currentPage-1)){
+        int i = 1;//计数
+        int sum = 0;//每页数目;
+        for (Training training : trainings) {
+            if (i <= pageSize * (currentPage - 1)) {
                 i++;
                 continue;
             }
             /*获取参与培训的学生数目*/
-            TrainingReStudentExample trainingReStudentExample=new TrainingReStudentExample();
-            TrainingReStudentExample.Criteria criteria1=trainingReStudentExample.createCriteria();
+            TrainingReStudentExample trainingReStudentExample = new TrainingReStudentExample();
+            TrainingReStudentExample.Criteria criteria1 = trainingReStudentExample.createCriteria();
             criteria1.andTrainingIdEqualTo(training.getTrainingId());
-            List<TrainingReStudent> trainingReStudents=trainingReStudentMapper.selectByExample(trainingReStudentExample);
-            int studentNums=trainingReStudents.size();
+            List<TrainingReStudent> trainingReStudents = trainingReStudentMapper.selectByExample(trainingReStudentExample);
+            int studentNums = trainingReStudents.size();
 
-            JSONObject data0=new JSONObject();
+            JSONObject data0 = new JSONObject();
             data0.put("title", training.getTrainingName());
-            data0.put("abstract",training.getTrainingIntroduce());
-            data0.put("viewers",studentNums);
-            data0.put("url",training.getTrainingPic());
-            data0.put("level",training.getLevel());
+            data0.put("abstract", training.getTrainingIntroduce());
+            data0.put("viewers", studentNums);
+            data0.put("url", training.getTrainingPic());
+            data0.put("level", training.getLevel());
             list.add(data0);
             sum++;
-            if(sum==pageSize){
+            if (sum == pageSize) {
                 break;
             }
         }
-        JSONObject result = new JSONObject();
-        JSONObject data=new JSONObject();
+
         data.put("list", list);
         data.put("allNum", size);
-        data.put("pageSize",sum);
+        data.put("pageSize", sum);
         data.put("currentPage", currentPage);
         result.put("data", data);
-        if(size==0){
-            result.put("code","success");
-            result.put("msg","无结果");
-        }else {
+        if (size == 0) {
+            result.put("code", "success");
+            result.put("msg", "无结果");
+        } else {
             result.put("code", "success");
             result.put("msg", "查询成功!");
         }
@@ -140,48 +170,57 @@ public class TrainingServiceImpl implements TrainingService {
     }
 
     @Override
-    public JSONObject getJoinableTraining(Integer memberId) {
-        JSONObject result=new JSONObject();
-        JSONArray data=new JSONArray();
+    public JSONObject getJoinableTraining(Integer memberId, Integer pageSize, Integer currentPage, String name) {
+        JSONObject result = new JSONObject();
+        JSONObject data = new JSONObject();
+        JSONArray list = new JSONArray();
 
-        TrainingExample trainingExample=new TrainingExample();
-        TrainingExample.Criteria criteria=trainingExample.createCriteria();
+        TrainingExample trainingExample = new TrainingExample();
+        TrainingExample.Criteria criteria = trainingExample.createCriteria();
         criteria.andTrainingStartTimeLessThan(new Date()).andTrainingEndTimeGreaterThan(new Date());
-        List<Training> trainings=trainingMapper.selectByExample(trainingExample);
-        if(trainings.size()==0){
+        if (name != null && !name.equals("")) {
+            criteria.andTrainingNameLike("%" + name + "%");
+        }
+        long total = trainingMapper.countByExample(trainingExample);
+        trainingExample.setOffset((currentPage - 1) * pageSize);
+        trainingExample.setLimit(pageSize);
+        List<Training> trainings = trainingMapper.selectByExample(trainingExample);
+        if (total == 0) {
             result.put("code", "success");
             result.put("msg", "无可报名培训");
             result.put("data", null);
             return result;
         }
-        int isVip=0;
-        Member member=memberMapper.selectByPrimaryKey(memberId);
-        if(member!=null){
-            if(member.getIsVip()==true){
-                isVip=1;
+        int isVip = 0;
+        Member member = memberMapper.selectByPrimaryKey(memberId);
+        if (member != null) {
+            if (member.getIsVip()) {
+                isVip = 1;
             }
         }
-        for(Training training:trainings){
-            JSONObject object=new JSONObject();
+        for (Training training : trainings) {
+            JSONObject object = new JSONObject();
             object.put("id", training.getTrainingId());
             object.put("name", training.getTrainingName());
-            object.put("date", simpleDateFormat.format(training.getTrainingStartTime())+"----"+simpleDateFormat.format(training.getTrainingEndTime()));
+            object.put("date", simpleDateFormat.format(training.getTrainingStartTime()) + "----" + simpleDateFormat.format(training.getTrainingEndTime()));
             object.put("address", training.getTrainingAddress());
-            JSONArray introduce=new JSONArray();
-            String[] introduceStrs=training.getTrainingIntroduce().split("\\|");
-            for(String intro:introduceStrs){
+            JSONArray introduce = new JSONArray();
+            String[] introduceStrs = training.getTrainingIntroduce().split("\\|");
+            for (String intro : introduceStrs) {
                 introduce.add(intro);
             }
             object.put("introduction", introduce);
-            if(isVip==0){
+            if (isVip == 0) {
                 object.put("fee", training.getTrainingFeeNormal());
-            }else {
+            } else {
                 object.put("fee", training.getTrainingFeeVip());
             }
             object.put("contacts", training.getContactName());
             object.put("phone", training.getContactPhone());
-            data.add(object);
+            list.add(object);
         }
+        data.put("list", list);
+        data.put("total", total);
         result.put("code", "success");
         result.put("msg", "获取可报名培训成功");
         result.put("data", data);
@@ -189,13 +228,20 @@ public class TrainingServiceImpl implements TrainingService {
     }
 
     @Override
-    public JSONObject getJoinableTraining() {
+    public JSONObject getJoinableTraining(Integer pageSize, Integer currentPage, String name) {
         JSONObject result=new JSONObject();
-        JSONArray data=new JSONArray();
+        JSONObject data = new JSONObject();
+        JSONArray list = new JSONArray();
 
         TrainingExample trainingExample=new TrainingExample();
         TrainingExample.Criteria criteria=trainingExample.createCriteria();
         criteria.andTrainingStartTimeLessThan(new Date()).andTrainingEndTimeGreaterThan(new Date());
+        if (name != null && !name.equals("")) {
+            criteria.andTrainingNameLike("%" + name + "%");
+        }
+        long total = trainingMapper.countByExample(trainingExample);
+        trainingExample.setOffset((currentPage - 1) * pageSize);
+        trainingExample.setLimit(pageSize);
         List<Training> trainings=trainingMapper.selectByExample(trainingExample);
         if(trainings.size()==0){
             result.put("code", "success");
@@ -218,8 +264,10 @@ public class TrainingServiceImpl implements TrainingService {
             object.put("fee", training.getTrainingFeeNormal());
             object.put("contacts", training.getContactName());
             object.put("phone", training.getContactPhone());
-            data.add(object);
+            list.add(object);
         }
+        data.put("list", list);
+        data.put("total", total);
         result.put("code", "success");
         result.put("msg", "获取可报名培训成功");
         result.put("data", data);
@@ -228,65 +276,90 @@ public class TrainingServiceImpl implements TrainingService {
 
     /** 学员中心接口 **/
     @Override
-    public JSONObject getStudentSignedTraining(Integer studentId) {
-        JSONObject result=new JSONObject();
-        Student student=studentMapper.selectByPrimaryKey(studentId);
-        if(student==null){
+    public JSONObject getStudentSignedTraining(Integer studentId, Integer currentPage, Integer pageSize, String name) {
+        JSONObject result = new JSONObject();
+        JSONObject data=new JSONObject();
+        JSONArray list=new JSONArray();
+
+        Student student = studentMapper.selectByPrimaryKey(studentId);
+        if (student == null) {
             result.put("code", "fail");
             result.put("msg", "当前用户不存在！");
             result.put("data", null);
             return result;
         }
-        TrainingOrderExample trainingOrderExample=new TrainingOrderExample();
-        TrainingOrderExample.Criteria criteria1=trainingOrderExample.createCriteria();
+        TrainingOrderExample trainingOrderExample = new TrainingOrderExample();
+        TrainingOrderExample.Criteria criteria1 = trainingOrderExample.createCriteria();
         criteria1.andOrderTypeEqualTo(true).andPaymentStateEqualTo(false).andStudentIdEqualTo(studentId);
-        List<TrainingOrder> trainingOrders=trainingOrderMapper.selectByExample(trainingOrderExample);
+        List<TrainingOrder> trainingOrders = trainingOrderMapper.selectByExample(trainingOrderExample);
 
-        TrainingReStudentExample trainingReStudentExample=new TrainingReStudentExample();
-        TrainingReStudentExample.Criteria criteria=trainingReStudentExample.createCriteria();
+        TrainingReStudentExample trainingReStudentExample = new TrainingReStudentExample();
+        TrainingReStudentExample.Criteria criteria = trainingReStudentExample.createCriteria();
         criteria.andIsInvalidEqualTo(false).andStudentIdEqualTo(studentId);
-        List<TrainingReStudent> trainingReStudents=trainingReStudentMapper.selectByExample(trainingReStudentExample);
+        List<TrainingReStudent> trainingReStudents = trainingReStudentMapper.selectByExample(trainingReStudentExample);
 
-        if(trainingOrders.size()==0 && trainingReStudents.size()==0){
+        int total=-1;
+
+        if (trainingOrders.size() == 0 && trainingReStudents.size() == 0) {
             result.put("code", "success");
-            result.put("msg", "用户暂无报名任何活动");
-            result.put("data", null);
+            result.put("msg", "该用户暂无报名任何培训");
+            data.put("total", total+1);
+            data.put("list", list);
+            result.put("data", data);
             return result;
         }
-        List<Training> trainings=new ArrayList<>();
-        for(TrainingOrder trainingOrder:trainingOrders){
+        List<Training> trainings = new ArrayList<>();
+        for (TrainingOrder trainingOrder : trainingOrders) {
             trainings.add(trainingMapper.selectByPrimaryKey(trainingOrder.getTrainingId()));
         }
-        for(TrainingReStudent trainingReStudent:trainingReStudents){
+        for (TrainingReStudent trainingReStudent : trainingReStudents) {
             trainings.add(trainingMapper.selectByPrimaryKey(trainingReStudent.getTrainingId()));
         }
-        JSONArray data=new JSONArray();
-        int num=0;
-        for(Training training:trainings){
-            JSONObject object=new JSONObject();
-            object.put("id", training.getTrainingId());
-            object.put("name", training.getTrainingName());
-            object.put("date", simpleDateFormat.format(training.getTrainingStartTime())+"----"+simpleDateFormat.format(training.getTrainingEndTime()));
-            object.put("address", training.getTrainingAddress());
-            JSONArray introduce=new JSONArray();
-            String[] introduceStrs=training.getTrainingIntroduce().split("\\|");
-            for(String intro:introduceStrs){
-                introduce.add(intro);
+
+        int num = -1; //用于区分未支付和报名成功的培训
+        int orderIndex=-1;
+        Set<Integer> trainingIdsSet=new HashSet<>();//用于将未支付的订单属于同一活动的进行去重
+        for (Training training : trainings) {
+            num++;
+            if (num < trainingOrders.size()){
+                orderIndex++;
+                if(getObjectHelper.checkTrainingOrderOutOfTime(trainingOrders.get(orderIndex)))
+                    continue;
+                if(!trainingIdsSet.add(training.getTrainingId()))
+                    continue;
             }
-            object.put("introduction", introduce);
-            object.put("fee", training.getTrainingFeeNormal());
-            if(num<trainingOrders.size()){
-                object.put("status", "未支付");
-            } else {
-                object.put("status", "已支付");
+            if(name!=null && !name.equals("")){
+                if(!training.getTrainingName().contains(name))
+                    continue;
             }
-            object.put("contacts", training.getContactName());
-            object.put("phone", training.getContactPhone());
-            data.add(object);
-            num+=1;
+            total++;
+            if(total>=(currentPage-1)*pageSize && total<currentPage*pageSize) {
+                JSONObject object = new JSONObject();
+                object.put("id", training.getTrainingId());
+                object.put("name", training.getTrainingName());
+                object.put("date", simpleDateFormat.format(training.getTrainingStartTime()) + "----" + simpleDateFormat.format(training.getTrainingEndTime()));
+                object.put("address", training.getTrainingAddress());
+                JSONArray introduce = new JSONArray();
+                String[] introduceStrs = training.getTrainingIntroduce().split("\\|");
+                for (String intro : introduceStrs) {
+                    introduce.add(intro);
+                }
+                object.put("introduction", introduce);
+                object.put("fee", training.getTrainingFeeNormal());
+                if (num < trainingOrders.size()) {
+                    object.put("status", "未支付");
+                } else {
+                    object.put("status", "已支付");
+                }
+                object.put("contacts", training.getContactName());
+                object.put("phone", training.getContactPhone());
+                list.add(object);
+            }
         }
         result.put("code", "success");
         result.put("msg", "成功获取已报名的培训");
+        data.put("list", list);
+        data.put("total", total+1);
         result.put("data", data);
         return result;
 
@@ -294,56 +367,60 @@ public class TrainingServiceImpl implements TrainingService {
 
     @Override
     public JSONObject studentJoinTraining(JSONObject jsonObject) {
-        JSONObject result=new JSONObject();
-        if(SystemParamManager.getValueByKey("stu_tran_permission").equals("0")){
+        JSONObject result = new JSONObject();
+        if (SystemParamManager.getValueByKey("stu_tran_permission").equals("0")) {
             result.put("code", "fail");
             result.put("msg", "当前用户没有报名培训的权限");
             return result;
         }
-        Integer studentId=jsonObject.getInteger("id");
-        MemberReStudentExample memberReStudentExample=new MemberReStudentExample();
-        MemberReStudentExample.Criteria criteria=memberReStudentExample.createCriteria();
+        Integer studentId = jsonObject.getInteger("id");
+        Student student=studentMapper.selectByPrimaryKey(studentId);
+        MemberReStudentExample memberReStudentExample = new MemberReStudentExample();
+        MemberReStudentExample.Criteria criteria = memberReStudentExample.createCriteria();
         criteria.andStudentIdEqualTo(studentId);
-        if(memberReStudentMapper.selectByExample(memberReStudentExample)!=null){
+        if (memberReStudentMapper.selectByExample(memberReStudentExample) != null) {
             result.put("code", "fail");
             result.put("msg", "请由所属单位报名");
             return result;
         }
 
-        int trainingId=jsonObject.getInteger("trainingId");
+        int trainingId = jsonObject.getInteger("trainingId");
 
-        Training training=trainingMapper.selectByPrimaryKey(trainingId);
-        if(training==null){
+        Training training = trainingMapper.selectByPrimaryKey(trainingId);
+        if (training == null) {
             result.put("code", "fail");
             result.put("msg", "系统中查询不到该项培训");
             return result;
         }
 
-        if(checkStudentTraining(studentId, trainingId)==1){
+        if (checkStudentTraining(studentId, trainingId) == 1) {
             result.put("code", "fail");
             result.put("msg", "已报名该培训");
             return result;
         }
 
-        TrainingOrderExample trainingOrderExample=new TrainingOrderExample();
-        TrainingOrderExample.Criteria criteria1=trainingOrderExample.createCriteria();
+        TrainingOrderExample trainingOrderExample = new TrainingOrderExample();
+        TrainingOrderExample.Criteria criteria1 = trainingOrderExample.createCriteria();
         criteria1.andTrainingIdEqualTo(trainingId).andStudentIdEqualTo(studentId).andCloseEqualTo(false).andPaymentStateEqualTo(false).andOrderTypeEqualTo(true);
-        List<TrainingOrder> trainingOrders=trainingOrderMapper.selectByExample(trainingOrderExample);
-        if(trainingOrders.size()!=0){
+        List<TrainingOrder> trainingOrders = trainingOrderMapper.selectByExample(trainingOrderExample);
+        if (trainingOrders.size() != 0) {
             result.put("code", "fail");
             result.put("msg", "已报名此培训但未支付，请前往订单中心查看");
             return result;
         }
 
-        String orderId=OrderIdGenerator.getUniqueId();
-        //订单号生成并查重（查重如非高并发系统基本上可以省略）
-        while(trainingOrderMapper.selectByPrimaryKey(orderId)!=null){
-            orderId=OrderIdGenerator.getUniqueId();
+        String orderId = OrderIdGenerator.getUniqueId();
+        while (!redisUtil.hset("order_no_map", orderId, "training")) {
+            orderId = OrderIdGenerator.getUniqueId();
         }
+        //订单号生成并查重（查重如非高并发系统基本上可以省略）
+//        while(trainingOrderMapper.selectByPrimaryKey(orderId)!=null){
+//            orderId=OrderIdGenerator.getUniqueId();
+//        }
         /**
          * 由学员自行报名，对应的订单，无须插入“订单—学生”表
          * **/
-        TrainingOrder trainingOrder=new TrainingOrder();
+        TrainingOrder trainingOrder = new TrainingOrder();
         trainingOrder.setTrainingOrderId(orderId);
         trainingOrder.setTrainingId(trainingId);
         trainingOrder.setOrderType(true);
@@ -352,10 +429,12 @@ public class TrainingServiceImpl implements TrainingService {
         trainingOrder.setOrderBeginTime(new Date());
         trainingOrder.setPaymentState(false);
         trainingOrder.setClose(false);
-        if(trainingOrderMapper.insert(trainingOrder)>0){
+        trainingOrder.setBusinessName(training.getTrainingName());
+        trainingOrder.setOpManName(student.getStudentName());
+        if (trainingOrderMapper.insert(trainingOrder) > 0) {
             result.put("code", "success");
             result.put("msg", "订单生成生成!待支付");
-        }else{
+        } else {
             result.put("code", "fail");
             result.put("msg", "订单生成失败!");
         }
@@ -365,8 +444,10 @@ public class TrainingServiceImpl implements TrainingService {
 
     /** 会员中心接口 **/
     @Override
-    public JSONObject getMemberSignedTraining(Integer memberId) {
+    public JSONObject getMemberSignedTraining(Integer memberId, Integer currentPage, Integer pageSize, String name) {
         JSONObject result=new JSONObject();
+        JSONObject data=new JSONObject();
+        JSONArray list=new JSONArray();
 
         TrainingOrderExample trainingOrderExample=new TrainingOrderExample();
         TrainingOrderExample.Criteria criteria=trainingOrderExample.createCriteria();
@@ -376,10 +457,15 @@ public class TrainingServiceImpl implements TrainingService {
 
         List<Integer> trainingIds=TrainingStudentSQLConn.getTrainingIdByMemberId(memberId);
 
+        int total=-1;
+
         if(trainingIds.size()==0 && trainingOrders.size()==0){
             result.put("code", "success");
-            result.put("msg", "暂无已报名培训");
-            result.put("data", null);
+            result.put("msg", "暂未给名下学员报名培训");
+            data.put("total", total);
+            data.put("list", list);
+            result.put("data", data);
+            return result;
         }
         List<Training> trainings=new ArrayList<Training>();
         //此处可以使排列倒过来，使排在前面的是最新报名的培训
@@ -392,41 +478,59 @@ public class TrainingServiceImpl implements TrainingService {
         int isVip=0;
         Member member=memberMapper.selectByPrimaryKey(memberId);
         if(member!=null){
-            if(member.getIsVip()==true){
+            if(member.getIsVip()){
                 isVip=1;
             }
         }
-        JSONArray data=new JSONArray();
-        int num=0;
+
+        int num = -1; //用于区分未支付和报名成功的培训
+        int orderIndex=-1;
+        Set<Integer> trainingIdsSet=new HashSet<>();//用于将未支付的订单属于同一活动的进行去重
         for(Training training:trainings){
-            JSONObject object=new JSONObject();
-            object.put("id", training.getTrainingId());
-            object.put("name", training.getTrainingName());
-            object.put("date", simpleDateFormat.format(training.getTrainingStartTime())+"----"+simpleDateFormat.format(training.getTrainingEndTime()));
-            object.put("address", training.getTrainingAddress());
-            JSONArray introduce=new JSONArray();
-            String[] introduceStrs=training.getTrainingIntroduce().split("\\|");
-            for(String intro:introduceStrs){
-                introduce.add(intro);
+            num++;
+            if (num < trainingOrders.size()){
+                orderIndex++;
+                if(getObjectHelper.checkTrainingOrderOutOfTime(trainingOrders.get(orderIndex)))
+                    continue;
+                if(!trainingIdsSet.add(training.getTrainingId()))
+                    continue;
             }
-            object.put("introduction", introduce);
-            if(isVip==0){
-                object.put("fee", training.getTrainingFeeNormal());
-            }else {
-                object.put("fee", training.getTrainingFeeVip());
+            if(name!=null && !name.equals("")){
+                if(!training.getTrainingName().contains(name))
+                    continue;
             }
-            if(num<trainingOrders.size()){
-                object.put("status", "有订单未支付");
-            } else {
-                object.put("status", "已支付");
+            total++;
+            if(total>=(currentPage-1)*pageSize && total<currentPage*pageSize) {
+                JSONObject object = new JSONObject();
+                object.put("id", training.getTrainingId());
+                object.put("name", training.getTrainingName());
+                object.put("date", simpleDateFormat.format(training.getTrainingStartTime()) + "----" + simpleDateFormat.format(training.getTrainingEndTime()));
+                object.put("address", training.getTrainingAddress());
+                JSONArray introduce = new JSONArray();
+                String[] introduceStrs = training.getTrainingIntroduce().split("\\|");
+                for (String intro : introduceStrs) {
+                    introduce.add(intro);
+                }
+                object.put("introduction", introduce);
+                if (isVip == 0) {
+                    object.put("fee", training.getTrainingFeeNormal());
+                } else {
+                    object.put("fee", training.getTrainingFeeVip());
+                }
+                if (num < trainingOrders.size()) {
+                    object.put("status", "有订单未支付");
+                } else {
+                    object.put("status", "已支付");
+                }
+                object.put("contacts", training.getContactName());
+                object.put("phone", training.getContactPhone());
+                list.add(object);
             }
-            object.put("contacts", training.getContactName());
-            object.put("phone", training.getContactPhone());
-            data.add(object);
-            num+=1;
         }
         result.put("code", "success");
         result.put("msg", "成功获取已报名的培训");
+        data.put("list", list);
+        data.put("total", total+1);
         result.put("data", data);
         return result;
     }
@@ -435,6 +539,7 @@ public class TrainingServiceImpl implements TrainingService {
     public JSONObject memberJoinTraining(JSONObject jsonObject) {
         JSONObject result=new JSONObject();
         Integer memberId=jsonObject.getInteger("id");
+        Member member=memberMapper.selectByPrimaryKey(memberId);
         int trainingId=jsonObject.getInteger("trainingId");
         JSONArray idNums=jsonObject.getJSONArray("idNums");
         Training training=trainingMapper.selectByPrimaryKey(trainingId);
@@ -445,10 +550,13 @@ public class TrainingServiceImpl implements TrainingService {
         }
 
         String orderId= OrderIdGenerator.getUniqueId();
-        //订单号生成并查重（如非高并发系统基本上可以省略）
-        while(trainingOrderMapper.selectByPrimaryKey(orderId)!=null){
-            orderId=OrderIdGenerator.getUniqueId();
+        while (!redisUtil.hset("order_no_map", orderId, "training")) {
+            orderId = OrderIdGenerator.getUniqueId();
         }
+        //订单号生成并查重（如非高并发系统基本上可以省略）
+//        while(trainingOrderMapper.selectByPrimaryKey(orderId)!=null){
+//            orderId=OrderIdGenerator.getUniqueId();
+//        }
         /**
          * 由会员报名，对应的订单，还需插入“订单—学生”表
          **/
@@ -460,9 +568,11 @@ public class TrainingServiceImpl implements TrainingService {
         trainingOrder.setOrderBeginTime(new Date());
         trainingOrder.setClose(false);
         trainingOrder.setPaymentState(false);
+        trainingOrder.setBusinessName(training.getTrainingName());
+        trainingOrder.setOpManName(member.getMemberName());
         trainingOrderMapper.insertSelective(trainingOrder);
         int isVip=0;
-        Member member=memberMapper.selectByPrimaryKey(memberId);
+
         if(member!=null){
             if(member.getIsVip()){
                 isVip=1;
@@ -490,7 +600,7 @@ public class TrainingServiceImpl implements TrainingService {
             }
             //插入“订单—学生”表
             TrainingOrderStudent trainingOrderStudent=new TrainingOrderStudent();
-            trainingOrderStudent.setTrainingOrderId(orderId);
+            trainingOrderStudent.setOrderKeyId(trainingOrder.getOrderKeyId());
             trainingOrderStudent.setStudentId(student.getStudentId());
             trainingOrderStudentMapper.insertSelective(trainingOrderStudent);
         }
@@ -510,7 +620,7 @@ public class TrainingServiceImpl implements TrainingService {
             result.put("code", "fail");
             result.put("data",null);
             //提交的名单没有报名成功的，删除订单
-            trainingOrderMapper.deleteByPrimaryKey(orderId);
+            trainingOrderMapper.deleteByPrimaryKey(trainingOrder.getOrderKeyId());
         }else {
             result.put("code", "success");
             result.put("data", orderId);
@@ -528,11 +638,15 @@ public class TrainingServiceImpl implements TrainingService {
     /** 会员订单成功支付 **/
     private int confirmOrder(String orderId){
         System.out.println("---- 模拟订单支付确认 开启 ----");
-        TrainingOrder trainingOrder=trainingOrderMapper.selectByPrimaryKey(orderId);
-        if(trainingOrder==null){
+        TrainingOrderExample trainingOrderExample=new TrainingOrderExample();
+        TrainingOrderExample.Criteria criteriaOrder=trainingOrderExample.createCriteria();
+        criteriaOrder.andTrainingOrderIdEqualTo(orderId);
+        List<TrainingOrder> trainingOrders=trainingOrderMapper.selectByExample(trainingOrderExample);
+        if(trainingOrders.size()<1){
             System.out.println("---- 该订单不存在 ----");
             return -1;
         }
+        TrainingOrder trainingOrder=trainingOrders.get(0);
         int trainingId=trainingOrder.getTrainingId();
         trainingOrder.setPaymentState(true);
         trainingOrderMapper.updateByPrimaryKeySelective(trainingOrder);
@@ -540,7 +654,7 @@ public class TrainingServiceImpl implements TrainingService {
         if(trainingOrder.getOrderType()!=null && !trainingOrder.getOrderType()){
             TrainingOrderStudentExample trainingOrderStudentExample=new TrainingOrderStudentExample();
             TrainingOrderStudentExample.Criteria criteria=trainingOrderStudentExample.createCriteria();
-            criteria.andTrainingOrderIdEqualTo(orderId);
+            criteria.andOrderKeyIdEqualTo(trainingOrder.getOrderKeyId());
             List<TrainingOrderStudent> trainingOrderStudents=trainingOrderStudentMapper.selectByExample(trainingOrderStudentExample);
             if(trainingOrderStudents.size()==0){
                 System.out.println("---- 该订单下无学员 结束 ----");
@@ -684,6 +798,132 @@ public class TrainingServiceImpl implements TrainingService {
         result.put("msg", "获取已发布培训成功");
         return result;
 
+    }
+
+    //管理员获取学员参加过的培训记录
+    @Override
+    public JSONObject getStudentTrainingHistory(String idCard, Integer currentPage, Integer pageSize) {
+        JSONObject result=new JSONObject();
+        JSONObject data=new JSONObject();
+        Student student=getObjectHelper.getStudentFromIdCard(idCard);
+        if(student==null){
+            result.put("code", "fail");
+            result.put("msg", "系统中没有该名学员");
+            result.put("data", data);
+            return result;
+        }
+        if (pageSize == null || pageSize < 1) {
+            pageSize = 10;
+        }
+        if (currentPage == null || currentPage < 1) {
+            currentPage = 1;
+        }
+        TrainingReStudentExample trainingReStudentExample=new TrainingReStudentExample();
+        trainingReStudentExample.createCriteria().andStudentIdEqualTo(student.getStudentId());
+        long total=trainingReStudentMapper.countByExample(trainingReStudentExample);
+        trainingReStudentExample.setOffset((currentPage-1)*pageSize);
+        trainingReStudentExample.setLimit(pageSize);
+        trainingReStudentExample.setOrderByClause("is_invalid ASC");
+        List<TrainingReStudent> trainingReStudents=trainingReStudentMapper.selectByExample(trainingReStudentExample);
+        data.put("total", total);
+        JSONArray list=new JSONArray();
+        for(TrainingReStudent trainingReStudent:trainingReStudents){
+            JSONObject object=new JSONObject();
+            object.put("id", trainingReStudent.getTrainingId());
+            Training training=trainingMapper.selectByPrimaryKey(trainingReStudent.getTrainingId());
+            object.put("name", training.getTrainingName());
+            object.put("startTime", trainingReStudent.getBeginTime());
+            object.put("endTime", trainingReStudent.getFinishTime());
+            object.put("address", training.getTrainingAddress());
+            if(trainingReStudent.getIsInvalid()){
+                object.put("status", "培训失效(或考试不通过次数已达上限)");
+            }else {
+                if(trainingReStudent.getIsDone())
+                    object.put("status", "已完成培训");
+                else
+                    object.put("status", "正在培训中");
+            }
+            list.add(object);
+        }
+        data.put("list", list);
+        result.put("data", data);
+        result.put("code", "success");
+        result.put("msg", "获取学员"+student.getStudentName()+"培训记录成功");
+        return result;
+    }
+
+    //管理员获取已经发布的培训
+    @Override
+    public JSONObject getPublishedTraining(Integer pageSize, Integer currentPage,
+                                           String startDateStr, String endDateStr, String name) {
+        JSONObject result = new JSONObject();
+        JSONObject data = new JSONObject();
+        result.put("data", data);
+        result.put("code", "fail");
+        if (pageSize == null || pageSize < 1) {
+            pageSize = 10;
+        }
+        if (currentPage == null || currentPage < 1) {
+            currentPage = 1;
+        }
+        TrainingExample trainingExample = new TrainingExample();
+        TrainingExample.Criteria criteria = trainingExample.createCriteria();
+        if(name!=null && !name.equals("")){
+            criteria.andTrainingNameLike("%"+name+"%");
+        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        if (startDateStr != null && !startDateStr.equals("")) {
+            Date startDate;
+            try {
+                startDate = simpleDateFormat.parse(startDateStr);
+            }catch (Exception e){
+                result.put("msg", "日期格式错误");
+                return result;
+            }
+            criteria.andTrainingStartTimeGreaterThanOrEqualTo(startDate);
+        }
+        if (endDateStr != null && !endDateStr.equals("")) {
+            Date endDate;
+            try {
+                endDate = simpleDateFormat.parse(endDateStr);
+            }catch (Exception e){
+                result.put("msg", "日期格式错误");
+                return result;
+            }
+            criteria.andTrainingEndTimeLessThan(endDate);
+        }
+        long total=trainingMapper.countByExample(trainingExample);
+        trainingExample.setOffset((currentPage-1)*pageSize);
+        trainingExample.setLimit(pageSize);
+        trainingExample.setOrderByClause("post_time DESC");
+        List<Training> trainings = trainingMapper.selectByExample(trainingExample);
+        JSONArray list=new JSONArray();
+        for(Training training:trainings){
+            JSONObject object=new JSONObject();
+            object.put("id", training.getTrainingId());
+            object.put("name", training.getTrainingName());
+            object.put("startTime", training.getTrainingStartTime());
+            object.put("endTime", training.getTrainingEndTime());
+            object.put("address", training.getTrainingAddress());
+            object.put("fee", training.getTrainingFeeNormal());
+            object.put("vipFee", training.getTrainingFeeVip());
+            object.put("level", training.getLevel());
+            object.put("phone", training.getContactPhone());
+            object.put("contacts", training.getContactName());
+            JSONArray introduce = new JSONArray();
+            String[] introduceStrs = training.getTrainingIntroduce().split("\\|");
+            for (String intro : introduceStrs) {
+                introduce.add(intro);
+            }
+            object.put("introduction", introduce);
+            list.add(object);
+        }
+        data.put("list", list);
+        data.put("total", total);
+        result.put("data", data);
+        result.put("code", "success");
+        result.put("msg", "获取已经发布的培训列表成功！");
+        return result;
     }
 }
 

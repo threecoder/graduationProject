@@ -23,23 +23,23 @@
                 </el-table-column>
             </m-table>
 
-            <page
+            <!-- <page
                 :pageSize="form.pageSize"
                 :total="form.total"
                 :currentPage="form.currentPage"
                 @curChange="handleCurrentChange"
-            />
+            />-->
         </div>
 
         <div class="tac mt30">
             <el-row>
                 <el-col :span="6">
-                    <el-select placeholder="选择审核员" :value="form.checker">
+                    <el-select placeholder="选择审核员" v-model="form.checker">
                         <el-option
                             v-for="(item,i) in checkers"
                             :key="i"
                             :label="item.name"
-                            :value="item.value"
+                            :value="item.id"
                         ></el-option>
                     </el-select>
                 </el-col>
@@ -60,7 +60,7 @@ import adminExamApi from "../../../../api/admin/exam";
 export default {
     props: {
         examId: {
-            type: String,
+            type: String | Number,
             default: ""
         }
     },
@@ -70,24 +70,7 @@ export default {
     },
     data() {
         return {
-            tableData: [
-                {
-                    idNum: "111",
-                    name: "张三",
-                    member: "BB股份有限公司",
-                    grade: 100,
-                    times: 3,
-                    id: "123"
-                },
-                {
-                    idNum: "111",
-                    name: "张三",
-                    member: "BB股份有限公司",
-                    grade: 201,
-                    times: 3,
-                    id: "11"
-                }
-            ],
+            tableData: [],
             // 试卷编号、学生编号、学员姓名、学员挂靠的会员名称，分数
             tableConfig: [
                 { slot: "select", "reserve-selection": true },
@@ -123,7 +106,9 @@ export default {
         async getGradeList() {
             this.loading = true;
             try {
-                let res = adminExamApi.getGradeList(this.examId);
+                let res = await adminExamApi.getGradeList(this.examId);
+                this.tableData = res.data;
+                console.log(res);
             } catch (error) {
                 this.$message.error(error.message);
             }
@@ -144,8 +129,14 @@ export default {
                 type: "info"
             }).then(async ({ value }) => {
                 try {
-                    let res = await adminExamApi.modifyGrade();
+                    let data = {
+                        examId: this.examId,
+                        idNum: row.idNum,
+                        grade: value
+                    };
+                    let res = await adminExamApi.modifyGrade(data);
                     this.$message.success("修改成绩成功");
+                    this.getGradeList();
                 } catch (error) {
                     this.$message.error(error.message);
                 }
@@ -159,8 +150,16 @@ export default {
                 this.$message.error("请选择要提交的成绩列表");
                 return false;
             }
+            if (this.form.checker === null) {
+                this.$message.error("请选择审核员");
+                return false;
+            }
             try {
-                let res = await adminExamApi.submitGradeList(this.form);
+                let data = {};
+                data.checker = String(this.form.checker);
+                data.ids = this.form.selected.map(val => val.id);
+                let res = await adminExamApi.submitGradeList(data);
+                this.$message.success("提交审核成功");
             } catch (error) {
                 this.$message.error(error.message);
             }
@@ -171,29 +170,6 @@ export default {
         },
         handleCurrentChange(val) {
             this.form.currentPage = val;
-            // if (val == 1) {
-            //     this.tableData = [
-            //         {
-            //             idNum: "111",
-            //             name: "张三",
-            //             member: "BB股份有限公司",
-            //             grade: 201,
-            //             times: 3,
-            //             id: "11"
-            //         }
-            //     ];
-            // } else {
-            //     this.tableData = [
-            //         {
-            //             idNum: "123",
-            //             name: "张三",
-            //             member: "BB股份有限公司",
-            //             grade: 201,
-            //             times: 3,
-            //             id: "12"
-            //         }
-            //     ];
-            // }
             this.getGradeList();
         }
     }

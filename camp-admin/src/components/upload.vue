@@ -89,7 +89,9 @@ export default {
     methods: {
         submitUpload() {
             this.uploadData = this.formData;
-            setTimeout(()=>{this.$refs.upload.submit();},400);
+            setTimeout(() => {
+                this.$refs.upload.submit();
+            }, 400);
         },
         handleRemove(file, fileList) {
             let t = -1;
@@ -109,7 +111,6 @@ export default {
         },
         handleSuccess(response) {
             this.$emit("uploadSuccess", response);
-            this.$message.success("文件上传成功");
             if (this.path) {
                 this.$router.push({ path: this.path });
             }

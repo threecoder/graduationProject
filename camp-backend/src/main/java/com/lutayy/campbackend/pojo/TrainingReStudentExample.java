@@ -11,6 +11,26 @@ public class TrainingReStudentExample {
 
     protected List<Criteria> oredCriteria;
 
+    //加入 offset 起始位置 和 limit 查询页数 用来分页
+    protected Integer offset;
+    protected Integer limit;
+
+    public Integer getOffset() {
+        return offset;
+    }
+
+    public void setOffset(Integer offset) {
+        this.offset = offset;
+    }
+
+    public int getLimit() {
+        return limit;
+    }
+
+    public void setLimit(Integer limit) {
+        this.limit = limit;
+    }
+
     public TrainingReStudentExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
@@ -103,6 +123,66 @@ public class TrainingReStudentExample {
                 throw new RuntimeException("Between values for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value1, value2));
+        }
+
+        public Criteria andReIdIsNull() {
+            addCriterion("re_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReIdIsNotNull() {
+            addCriterion("re_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReIdEqualTo(Integer value) {
+            addCriterion("re_id =", value, "reId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReIdNotEqualTo(Integer value) {
+            addCriterion("re_id <>", value, "reId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReIdGreaterThan(Integer value) {
+            addCriterion("re_id >", value, "reId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("re_id >=", value, "reId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReIdLessThan(Integer value) {
+            addCriterion("re_id <", value, "reId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReIdLessThanOrEqualTo(Integer value) {
+            addCriterion("re_id <=", value, "reId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReIdIn(List<Integer> values) {
+            addCriterion("re_id in", values, "reId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReIdNotIn(List<Integer> values) {
+            addCriterion("re_id not in", values, "reId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReIdBetween(Integer value1, Integer value2) {
+            addCriterion("re_id between", value1, value2, "reId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("re_id not between", value1, value2, "reId");
+            return (Criteria) this;
         }
 
         public Criteria andApplyIdIsNull() {
@@ -352,6 +432,66 @@ public class TrainingReStudentExample {
 
         public Criteria andBeginTimeNotBetween(Date value1, Date value2) {
             addCriterion("begin_time not between", value1, value2, "beginTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinishTimeIsNull() {
+            addCriterion("finish_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinishTimeIsNotNull() {
+            addCriterion("finish_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinishTimeEqualTo(Date value) {
+            addCriterion("finish_time =", value, "finishTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinishTimeNotEqualTo(Date value) {
+            addCriterion("finish_time <>", value, "finishTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinishTimeGreaterThan(Date value) {
+            addCriterion("finish_time >", value, "finishTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinishTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("finish_time >=", value, "finishTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinishTimeLessThan(Date value) {
+            addCriterion("finish_time <", value, "finishTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinishTimeLessThanOrEqualTo(Date value) {
+            addCriterion("finish_time <=", value, "finishTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinishTimeIn(List<Date> values) {
+            addCriterion("finish_time in", values, "finishTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinishTimeNotIn(List<Date> values) {
+            addCriterion("finish_time not in", values, "finishTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinishTimeBetween(Date value1, Date value2) {
+            addCriterion("finish_time between", value1, value2, "finishTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinishTimeNotBetween(Date value1, Date value2) {
+            addCriterion("finish_time not between", value1, value2, "finishTime");
             return (Criteria) this;
         }
 

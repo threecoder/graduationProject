@@ -10,7 +10,7 @@ public interface TrainingReStudentMapper {
 
     int deleteByExample(TrainingReStudentExample example);
 
-    int deleteByPrimaryKey(String applyId);
+    int deleteByPrimaryKey(Integer reId);
 
     int insert(TrainingReStudent record);
 
@@ -18,7 +18,7 @@ public interface TrainingReStudentMapper {
 
     List<TrainingReStudent> selectByExample(TrainingReStudentExample example);
 
-    TrainingReStudent selectByPrimaryKey(String applyId);
+    TrainingReStudent selectByPrimaryKey(Integer reId);
 
     int updateByExampleSelective(@Param("record") TrainingReStudent record, @Param("example") TrainingReStudentExample example);
 

@@ -2,6 +2,8 @@ package com.lutayy.campbackend.common.util;
 
 import org.springframework.util.DigestUtils;
 
+import java.util.Date;
+
 public class Md5 {
 
     public static String digest(String source){
@@ -9,7 +11,7 @@ public class Md5 {
         return md5word.toUpperCase();
     }
     public static void main(String[] args){
-        String a="123456";
-        System.out.println(digest(a));
+        Date time=new Date();
+        System.out.println(time.toString());
     }
 }

@@ -10,7 +10,7 @@
         </div>
         <div class="container">
             <template v-for="(item,i) in list">
-                <singleOne :key="i" :item="item" />
+                <single-one :key="i" :item="item" />
             </template>
         </div>
     </div>
@@ -21,7 +21,7 @@ import adminExamApi from "../../../api/admin/exam";
 export default {
     data() {
         return {
-            examId: this.$route.params.id,
+            examId: this.$route.params.examId,
             sName: this.$route.params.name,
             idNum: this.$route.params.idNum,
             examInfo: {
@@ -75,15 +75,19 @@ export default {
         async init() {
             this.loading = true;
             try {
-                let res = await adminExamApi.getExamDetail({examId:this.examId,});
-                this.list = res.data.questionList;
+                let par = {
+                    examId: this.examId,
+                    idNum: this.idNum
+                };
+                let res = await adminExamApi.getExamDetail(par);
+                this.list = res.data.list;
                 this.examInfo = res.data.examInfo;
             } catch (error) {
                 this.$message.error(error.message);
             }
             this.loading = false;
         },
-        goBack(){
+        goBack() {
             this.$router.go(-1);
         }
     }

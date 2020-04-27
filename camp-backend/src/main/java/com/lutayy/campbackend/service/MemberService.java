@@ -16,7 +16,7 @@ public interface MemberService {
 
     JSONObject setNewPassword(JSONObject jsonObject);
 
-    JSONObject rechargeVIP(Integer id);
+    JSONObject rechargeVIP(JSONObject jsonObject);
 
     JSONObject importSingleStudent(JSONObject jsonObject);
 
@@ -28,6 +28,9 @@ public interface MemberService {
 
     JSONObject getStudentList(Integer memberId);
 
-    JSONObject getStudentListByCondition(Integer memberId,String phone,String idNum,String name,
-                                         Integer currentPage,Integer pageSize);
+    JSONObject getStudentListByCondition(Integer memberId, String phone, String idNum, String name,
+                                         Integer currentPage, Integer pageSize);
+
+    JSONObject getStudentTrainingHistory(Integer memberId, String idNum, Integer currentPage, Integer pageSize);
+
 }

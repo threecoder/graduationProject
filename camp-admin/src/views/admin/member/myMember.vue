@@ -1,6 +1,13 @@
 <template>
     <div>
-        <h3>我的会员</h3>
+        <el-row>
+            <el-col :span="22">
+                <h3>我的会员</h3>
+            </el-col>
+            <el-col :span="2">
+                <el-button @click="newFlag=true" type="primary">添加会员</el-button>
+            </el-col>
+        </el-row>
         <div class="divider"></div>
         <div class="form-container">
             <el-form :model="form" inline>
@@ -20,7 +27,6 @@
                     </el-select>
                 </el-form-item>
                 <el-button type="primary" @click="search">搜索</el-button>
-                <el-button @click="newFlag=true" type="primary">添加会员</el-button>
             </el-form>
         </div>
 
@@ -35,7 +41,7 @@
                         <el-button type="primary" size="small" @click="checkInfo(row)">修改信息</el-button>
                         <el-button type="primary" size="small" @click="checkStudent(row)">查看成员</el-button>
                         <el-button
-                            v-if="row.vip==1"
+                            v-if="row.vip=='是'"
                             type="primary"
                             size="small"
                             @click="remind(row)"
@@ -137,11 +143,11 @@ export default {
                     }
                 ],
                 tableConfig: [
-                    { prop: "id", label: "会员ID", width: "150px" },
+                    { prop: "id", label: "会员ID" },
                     { prop: "name", label: "公司名称", width: "150px" },
                     { prop: "phone", label: "联系电话", width: "150px" },
                     { prop: "email", label: "邮箱", width: "150px" },
-                    { prop: "enterData", label: "加入时间" },
+                    { prop: "enterDate", label: "加入时间", width: "150px" },
                     { prop: "vip", label: "是否会员" },
                     { prop: "vipBegin", label: "会员开始时间", width: "150px" },
                     { prop: "vipEnd", label: "会员结束时间", width: "150px" },
@@ -174,17 +180,17 @@ export default {
                     { slot: "oper", label: "操作", width: "100px" }
                 ],
                 tableData: [
-                    {
-                        idNum: "44512122",
-                        name: "张三",
-                        phone: 15555,
-                        email: "101@qq.com",
-                        position: "经理",
-                        province: "广东",
-                        city: "广州",
-                        area: "番禺",
-                        zone: "华南理工大学"
-                    }
+                    // {
+                    //     idNum: "44512122",
+                    //     name: "张三",
+                    //     phone: 15555,
+                    //     email: "101@qq.com",
+                    //     position: "经理",
+                    //     province: "广东",
+                    //     city: "广州",
+                    //     area: "番禺",
+                    //     zone: "华南理工大学"
+                    // }
                 ],
                 flag: false
             },
@@ -206,7 +212,7 @@ export default {
                 let res = await adminMemberApi.getMemberList(this.form);
                 console.log(res);
                 this.memberTable.tableData = res.data.list;
-                let t = memberTable.tableData;
+                let t = this.memberTable.tableData;
                 t.forEach((val, i) => {
                     t[i].vip = t[i].vip == 0 ? "否" : "是";
                     t[i].deadline = t[i].deadline == 0 ? "否" : "是";
@@ -273,6 +279,7 @@ export default {
         //会员弹窗相关
         closeMember() {
             this.newFlag = false;
+            this.search();
         },
         handleSuccess(response) {
             this.$alert(response.msg, "上传文件成功", {
@@ -292,8 +299,9 @@ export default {
 .button-container {
     display: flex;
     position: absolute;
+    align-items: flex-start;
     right: 5%;
-    top: 60px;
+    top: 40px;
 }
 .new-container {
     position: absolute;

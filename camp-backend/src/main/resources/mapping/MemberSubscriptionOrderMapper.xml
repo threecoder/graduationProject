@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lutayy.campbackend.dao.MemberSubscriptionOrderMapper">
+  <resultMap id="BaseResultMap" type="com.lutayy.campbackend.pojo.MemberSubscriptionOrder">
+    <id column="order_key_id" jdbcType="INTEGER" property="orderKeyId" />
+    <result column="subscription_order_id" jdbcType="VARCHAR" property="subscriptionOrderId" />
+    <result column="member_key_id" jdbcType="INTEGER" property="memberKeyId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="fee" jdbcType="DECIMAL" property="fee" />
+    <result column="payment_state" jdbcType="BIT" property="paymentState" />
+    <result column="close" jdbcType="BIT" property="close" />
+    <result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
+    <result column="is_delete_user" jdbcType="BIT" property="isDeleteUser" />
+    <result column="is_delete_admin" jdbcType="BIT" property="isDeleteAdmin" />
+    <result column="op_man_name" jdbcType="VARCHAR" property="opManName" />
+    <result column="business_name" jdbcType="VARCHAR" property="businessName" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    order_key_id, subscription_order_id, member_key_id, create_time, fee, payment_state, 
+    close, pay_time, is_delete_user, is_delete_admin, op_man_name, business_name
+  </sql>
+  <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.MemberSubscriptionOrderExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from member_subscription_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="offset != null and limit != null">
+      limit ${offset},${limit}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from member_subscription_order
+    where order_key_id = #{orderKeyId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from member_subscription_order
+    where order_key_id = #{orderKeyId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.lutayy.campbackend.pojo.MemberSubscriptionOrderExample">
+    delete from member_subscription_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lutayy.campbackend.pojo.MemberSubscriptionOrder">
+    <selectKey keyProperty="orderKeyId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into member_subscription_order (subscription_order_id, member_key_id, 
+      create_time, fee, payment_state, 
+      close, pay_time, is_delete_user, 
+      is_delete_admin, op_man_name, business_name
+      )
+    values (#{subscriptionOrderId,jdbcType=VARCHAR}, #{memberKeyId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{fee,jdbcType=DECIMAL}, #{paymentState,jdbcType=BIT}, 
+      #{close,jdbcType=BIT}, #{payTime,jdbcType=TIMESTAMP}, #{isDeleteUser,jdbcType=BIT}, 
+      #{isDeleteAdmin,jdbcType=BIT}, #{opManName,jdbcType=VARCHAR}, #{businessName,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.MemberSubscriptionOrder">
+    <selectKey keyProperty="orderKeyId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into member_subscription_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="subscriptionOrderId != null">
+        subscription_order_id,
+      </if>
+      <if test="memberKeyId != null">
+        member_key_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="fee != null">
+        fee,
+      </if>
+      <if test="paymentState != null">
+        payment_state,
+      </if>
+      <if test="close != null">
+        close,
+      </if>
+      <if test="payTime != null">
+        pay_time,
+      </if>
+      <if test="isDeleteUser != null">
+        is_delete_user,
+      </if>
+      <if test="isDeleteAdmin != null">
+        is_delete_admin,
+      </if>
+      <if test="opManName != null">
+        op_man_name,
+      </if>
+      <if test="businessName != null">
+        business_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="subscriptionOrderId != null">
+        #{subscriptionOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="memberKeyId != null">
+        #{memberKeyId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fee != null">
+        #{fee,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentState != null">
+        #{paymentState,jdbcType=BIT},
+      </if>
+      <if test="close != null">
+        #{close,jdbcType=BIT},
+      </if>
+      <if test="payTime != null">
+        #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleteUser != null">
+        #{isDeleteUser,jdbcType=BIT},
+      </if>
+      <if test="isDeleteAdmin != null">
+        #{isDeleteAdmin,jdbcType=BIT},
+      </if>
+      <if test="opManName != null">
+        #{opManName,jdbcType=VARCHAR},
+      </if>
+      <if test="businessName != null">
+        #{businessName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lutayy.campbackend.pojo.MemberSubscriptionOrderExample" resultType="java.lang.Long">
+    select count(*) from member_subscription_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update member_subscription_order
+    <set>
+      <if test="record.orderKeyId != null">
+        order_key_id = #{record.orderKeyId,jdbcType=INTEGER},
+      </if>
+      <if test="record.subscriptionOrderId != null">
+        subscription_order_id = #{record.subscriptionOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.memberKeyId != null">
+        member_key_id = #{record.memberKeyId,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.fee != null">
+        fee = #{record.fee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.paymentState != null">
+        payment_state = #{record.paymentState,jdbcType=BIT},
+      </if>
+      <if test="record.close != null">
+        close = #{record.close,jdbcType=BIT},
+      </if>
+      <if test="record.payTime != null">
+        pay_time = #{record.payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isDeleteUser != null">
+        is_delete_user = #{record.isDeleteUser,jdbcType=BIT},
+      </if>
+      <if test="record.isDeleteAdmin != null">
+        is_delete_admin = #{record.isDeleteAdmin,jdbcType=BIT},
+      </if>
+      <if test="record.opManName != null">
+        op_man_name = #{record.opManName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.businessName != null">
+        business_name = #{record.businessName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update member_subscription_order
+    set order_key_id = #{record.orderKeyId,jdbcType=INTEGER},
+      subscription_order_id = #{record.subscriptionOrderId,jdbcType=VARCHAR},
+      member_key_id = #{record.memberKeyId,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      fee = #{record.fee,jdbcType=DECIMAL},
+      payment_state = #{record.paymentState,jdbcType=BIT},
+      close = #{record.close,jdbcType=BIT},
+      pay_time = #{record.payTime,jdbcType=TIMESTAMP},
+      is_delete_user = #{record.isDeleteUser,jdbcType=BIT},
+      is_delete_admin = #{record.isDeleteAdmin,jdbcType=BIT},
+      op_man_name = #{record.opManName,jdbcType=VARCHAR},
+      business_name = #{record.businessName,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lutayy.campbackend.pojo.MemberSubscriptionOrder">
+    update member_subscription_order
+    <set>
+      <if test="subscriptionOrderId != null">
+        subscription_order_id = #{subscriptionOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="memberKeyId != null">
+        member_key_id = #{memberKeyId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fee != null">
+        fee = #{fee,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentState != null">
+        payment_state = #{paymentState,jdbcType=BIT},
+      </if>
+      <if test="close != null">
+        close = #{close,jdbcType=BIT},
+      </if>
+      <if test="payTime != null">
+        pay_time = #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleteUser != null">
+        is_delete_user = #{isDeleteUser,jdbcType=BIT},
+      </if>
+      <if test="isDeleteAdmin != null">
+        is_delete_admin = #{isDeleteAdmin,jdbcType=BIT},
+      </if>
+      <if test="opManName != null">
+        op_man_name = #{opManName,jdbcType=VARCHAR},
+      </if>
+      <if test="businessName != null">
+        business_name = #{businessName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where order_key_id = #{orderKeyId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lutayy.campbackend.pojo.MemberSubscriptionOrder">
+    update member_subscription_order
+    set subscription_order_id = #{subscriptionOrderId,jdbcType=VARCHAR},
+      member_key_id = #{memberKeyId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      fee = #{fee,jdbcType=DECIMAL},
+      payment_state = #{paymentState,jdbcType=BIT},
+      close = #{close,jdbcType=BIT},
+      pay_time = #{payTime,jdbcType=TIMESTAMP},
+      is_delete_user = #{isDeleteUser,jdbcType=BIT},
+      is_delete_admin = #{isDeleteAdmin,jdbcType=BIT},
+      op_man_name = #{opManName,jdbcType=VARCHAR},
+      business_name = #{businessName,jdbcType=VARCHAR}
+    where order_key_id = #{orderKeyId,jdbcType=INTEGER}
+  </update>
+</mapper>

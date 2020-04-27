@@ -1,50 +1,94 @@
 <template>
-    <el-row class="allContainer">
-        <el-col :span="24" class="header">
-            <div style="margin-left:250px;width:100%">
-                <h3 class="cursor" @click="toHomePage">协会首页</h3>
-                <div class="infoContainer fr">
-                    <span>{{name}}</span>
-                    <span class="cursor" @click="logout">退出登录</span>
+    <div>
+        <el-row class="allContainer">
+            <el-col :span="24" class="header">
+                <div style="margin-left:250px;width:100%">
+                    <h3 class="cursor" @click="toHomePage">协会首页</h3>
+                    <div class="infoContainer fr">
+                        <el-dropdown @command="handleCommand" trigger="click">
+                            <span class="el-dropdown-link">
+                                {{name}}
+                                <span>
+                                    <i class="el-icon-message-solid"></i>
+                                    ({{unReadNum}})
+                                </span>
+                                <i class="el-icon-arrow-down el-icon--right"></i>
+                            </span>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item command="msg">
+                                    <span class="message">
+                                        <i class="el-icon-message-solid"></i>
+                                        我的消息({{unReadNum}})
+                                    </span>
+                                </el-dropdown-item>
+                                <el-dropdown-item command="pas">
+                                    <span>
+                                        <i class="el-icon-message-solid"></i>
+                                        修改密码
+                                    </span>
+                                </el-dropdown-item>
+                                <el-dropdown-item command="logout">
+                                    <span class="cursor">
+                                        <i class="el-icon-close"></i>
+                                        退出登录
+                                    </span>
+                                </el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
+                    </div>
                 </div>
-            </div>
-        </el-col>
+            </el-col>
 
-        <el-col :span="24" class="mainContainer">
-            <aside>
-                <el-menu
-                    mode="vertical"
-                    default-active="/login"
-                    :router="true"
-                    :unique-opened="true"
-                    text-color="#fff"
-                >
-                    <navmenu v-if="type==1" :data="memberList"></navmenu>
-                    <navmenu v-if="type==0" :data="studentList"></navmenu>
-                </el-menu>
-            </aside>
-            <section class="content-container">
-                <el-row>
-                    <el-col :span="24" class>
-                        <transition name="fade" mode="out-in">
-                            <router-view :key="$route.path" />
-                        </transition>
-                    </el-col>
-                </el-row>
-            </section>
-        </el-col>
-    </el-row>
+            <el-col :span="24" class="mainContainer">
+                <aside>
+                    <el-menu
+                        mode="vertical"
+                        :default-active="defaulUrl"
+                        :router="true"
+                        :unique-opened="true"
+                        text-color="#fff"
+                    >
+                        <navmenu v-if="type==1" :data="memberList"></navmenu>
+                        <navmenu v-if="type==0" :data="studentList"></navmenu>
+                    </el-menu>
+                </aside>
+                <section class="content-container">
+                    <el-row>
+                        <el-col :span="24" class>
+                            <transition name="fade" mode="out-in">
+                                <router-view :key="$route.path" />
+                            </transition>
+                        </el-col>
+                    </el-row>
+                </section>
+            </el-col>
+        </el-row>
+
+        <!-- 修改密码弹窗 -->
+        <el-dialog
+            title="修改密码"
+            :visible.sync="dialogFlag"
+            v-if="dialogFlag"
+            :close-on-click-modal="false"
+        >
+            <modify-pass @hide="dialogFlag=false" />
+        </el-dialog>
+    </div>
 </template>
 <script>
 import navmenu from "../../components/navmenu.vue";
-import { getLocalStorage } from "@/assets/js/util.js";
-import { request } from "@/api/request.js";
+import modifyPass from "./components/modifyPassword.vue";
+import { getLocalStorage } from "../../assets/js/util";
+import { request } from "../../api/request";
+import msgApi from "../../api/modules/message";
 export default {
-    mounted() {
-        // document.getElementsByTagName("aside")[0].style.height = window.innerHeight+'px';
+    components: {
+        navmenu,
+        modifyPass
     },
     data() {
         return {
+            //学生菜单
             studentList: [
                 {
                     index: "1",
@@ -53,12 +97,12 @@ export default {
                 },
                 {
                     index: "",
-                    title: "我的证书"
-                    // children: [
-                    //     { index: "/personal", title: "个人证书" },
-                    //     { index: "/personal", title: "证书复审" },
-                    //     { index: "/personal", title: "证书变更" }
-                    // ]
+                    title: "我的证书",
+                    children: [
+                        { index: "/certificate", title: "现有证书" },
+                        { index: "/overdueCertificate", title: "过期证书" },
+                        { index: "/cerOperHistory", title: "审核记录" }
+                    ]
                 },
                 {
                     index: "2",
@@ -88,9 +132,13 @@ export default {
                     index: "5",
                     title: "投票",
                     children: [
-                        { index: "/vote/0",title: "全部投票" },
-                        { index: "/vote/1",title: "我参与的投票" }
+                        { index: "/canVote", title: "可参与投票" },
+                        { index: "/hasVoted", title: "已参与投票" }
                     ]
+                },
+                {
+                    index: "/order",
+                    title: "我的订单"
                 }
             ],
             //会员菜单
@@ -116,7 +164,10 @@ export default {
                 {
                     index: "4",
                     title: "学员证件",
-                    children: [{ index: "", title: "管理证件" }]
+                    children: [
+                        { index: "/certificate", title: "管理证件" },
+                        { index: "/cerOperHistory", title: "审核记录" }
+                    ]
                 },
                 {
                     index: "5",
@@ -125,35 +176,81 @@ export default {
                         { index: "/enrolableActivities", title: "可报名活动" },
                         { index: "/enrolledActivities", title: "已报名活动" }
                     ]
+                },
+                {
+                    index: "6",
+                    title: "投票",
+                    children: [
+                        { index: "/canVote", title: "可参与投票" },
+                        { index: "/hasVoted", title: "已参与投票" }
+                    ]
+                },
+                {
+                    index: "/order",
+                    title: "我的订单"
                 }
             ],
-            name: null,
-            type: null
+            unReadNum: 0,
+            defaulUrl: null,
+            dialogFlag: false
         };
     },
-    components: {
-        navmenu
+    watch: {
+        "$route.path"(newVal) {
+            this.defaulUrl = newVal;
+            if (newVal != "/message") {
+                this.getMessageNum();
+            }
+        }
     },
-    mounted(){
-        let user = getLocalStorage("user");
-        this.name = user && user.name;
-        this.type = user && user.type;
-        if(this.type!==0 && this.type!=1){
-            this.$message.error("请先登录系统");
-            this.$router.push({path: '/login'});
+    computed: {
+        name: function() {
+            return this.$store.getters.userName;
+        },
+        type: function() {
+            return this.$store.getters.idType;
         }
     },
     methods: {
         toHomePage() {
             this.$router.push("/");
         },
+        handleCommand(c) {
+            if (c == "msg") {
+                this.toMessage();
+            } else if (c == "logout") {
+                this.logout();
+            } else if (c == "pas") {
+                this.dialogFlag = true;
+            }
+        },
         logout() {
             try {
                 request("/campback/logout", "get").then(res => {
-                    window.localStorage.removeItem("user");
                     this.$message.success("注销成功");
                     this.$router.push("/login");
                 });
+            } catch (error) {
+                this.$router.push("/login");
+            }
+            this.$store.commit("removeState");
+        },
+        toMessage() {
+            this.$router.push("/message");
+        },
+        async getMessageNum() {
+            try {
+                let oldTime = Number(window.localStorage.getItem("msgTime"));
+                let newTime = new Date().getTime();
+                if (oldTime) {
+                    if (newTime - oldTime < 2000) {
+                        return false;
+                    }
+                }
+                window.localStorage.setItem("msgTime", newTime);
+                console.log("更新未读消息");
+                let res = await msgApi.getUnReadMsgNum(this.type);
+                this.unReadNum = res.data;
             } catch (error) {
                 this.$message.error(error.message);
             }
@@ -167,9 +264,6 @@ export default {
     top: 0px;
     bottom: 0px;
     width: 100%;
-    // min-width: 1700px;
-    // overflow-x: auto;
-    // min-width: 1280px;
 
     & > .el-col:nth-child(1) {
         height: 60px;
@@ -185,22 +279,30 @@ export default {
         margin: 0 !important;
     }
     .infoContainer {
+        cursor: pointer;
         display: inline-block;
         height: 60px;
         text-align: center;
         margin-right: 60px;
         line-height: 60px;
+        .el-dropdown-link:hover {
+            color: rgb(64, 158, 255);
+        }
         span {
             padding: 0 10px;
-            &:first-child::after {
-                content: "|";
-                height: 60px;
-                color: gray;
-                margin-left: 15px;
-            }
         }
-        & > :nth-child(2) {
+        & > :last-child {
             color: red;
+        }
+        .message {
+            display: block;
+            width: 100%;
+            cursor: pointer;
+            font-size: 18px;
+            color: red;
+            &:hover {
+                color: rgb(64, 158, 255);
+            }
         }
     }
 }
@@ -249,6 +351,12 @@ export default {
         padding: 30px 40px;
         width: auto;
         background-color: rgb(244, 244, 244);
+        .el-row {
+            height: 100%;
+            .el-col {
+                height: 100%;
+            }
+        }
     }
 }
 </style>

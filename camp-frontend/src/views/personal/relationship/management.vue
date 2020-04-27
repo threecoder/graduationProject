@@ -1,6 +1,15 @@
 <template>
     <div>
-        <h3>管理挂靠关系</h3>
+        <el-row>
+            <el-col :span="22">
+                <h3>管理挂靠关系</h3>
+            </el-col>
+            <el-col :span="2">
+                <el-button type="primary" @click="dialogFlag=true">添加学员</el-button>
+            </el-col>
+        </el-row>
+        <div class="divider"></div>
+
         <div class="form-container">
             <el-form :model="form" inline>
                 <el-form-item label="手机号码" label-position="left">
@@ -12,17 +21,11 @@
                 <el-form-item label="姓名" label-position="top">
                     <el-input placeholder="输入姓名" v-model="form.name"></el-input>
                 </el-form-item>
-                <el-button type="primary" round @click="search">搜索</el-button>
-                <el-button type="primary" round @click="dialogFormVisible=true">添加学员</el-button>
+                <el-button type="primary" @click="search">搜索</el-button>
             </el-form>
         </div>
         <div class="table-container">
-            <m-table
-                :data="tableData"
-                :tableConfig="tableConfig"
-                :loading="loading"
-                :tableAttr="tableAttr"
-            >
+            <m-table :data="tableData" :tableConfig="tableConfig" :loading="loading">
                 <el-table-column
                     align="center"
                     slot="oper"
@@ -31,13 +34,8 @@
                     class="myoper"
                 >
                     <div slot-scope="{ row }">
-                        <el-button
-                            size="small"
-                            type="primary"
-                            round
-                            @click="deleteRelation(row)"
-                            :loading="buttonLoading"
-                        >解除挂靠</el-button>
+                        <el-button size="small" type="primary" @click="deleteRelation(row)">解除挂靠</el-button>
+                        <el-button size="small" type="primary" @click="trainingHistory(row)">培训记录</el-button>
                     </div>
                 </el-table-column>
             </m-table>
@@ -51,67 +49,32 @@
             />
         </div>
 
-        <div class="modifyButton">
-            
-        </div>
+        <div class="modifyButton"></div>
 
-        <el-dialog title="添加学员" :visible.sync="dialogFormVisible" width="40%">
-            <h6 style="font-size: 16px">方式一：输入信息添加一个学员</h6>
-            <el-form :model="newStudent">
-                <el-form-item label="身份证号码" :label-width="formLabelWidth">
-                    <el-input v-model="newStudent.idNum" autocomplete="off" type="text"></el-input>
-                </el-form-item>
-                <el-form-item label="手机号码" :label-width="formLabelWidth">
-                    <el-input v-model="newStudent.phone" autocomplete="off" type="text"></el-input>
-                </el-form-item>
-                <el-form-item label="姓名" :label-width="formLabelWidth">
-                    <el-input v-model="newStudent.name" autocomplete="off" type="text"></el-input>
-                </el-form-item>
-            </el-form>
-            <div class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="addSingleStudent">确 定</el-button>
-            </div>
-            <div class="divider"></div>
-            <h6 style="font-size: 16px">
-                方式二：
-                <el-button type="primary" round @click="getListTemplate">导出模板</el-button>填写完信息后上传文件批量添加
-            </h6>
-            <div class="upload-container">
-                <el-upload
-                    class="upload-demo"
-                    ref="upload"
-                    action="/campback/member/importStudentByFile"
-                    :on-remove="handleRemove"
-                    :on-exceed="handleExceed"
-                    :on-success="handleSuccess"
-                    :on-error="handleError"
-                    :file-list="fileList"
-                    :auto-upload="false"
-                    :limit="1"
-                >
-                    <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                    <el-button
-                        style="margin-left: 10px;"
-                        size="small"
-                        type="success"
-                        @click="submitUpload"
-                    >上传名单</el-button>
-                    <div slot="tip" class="el-upload__tip">只能上传Excel文件，且不超过500kb</div>
-                </el-upload>
-            </div>
+        <!-- 添加学员弹框 -->
+        <el-dialog title="添加学员" :visible.sync="dialogFlag" v-if="dialogFlag" width="40%">
+            <new-student @hideDialog="dialogFlag=false" />
+        </el-dialog>
+
+        <!-- 学员培训记录弹框 -->
+        <el-dialog title="添加学员" :visible.sync="history.flag" v-if="history.flag">
+            <training-history :idNum="history.idNum" />
         </el-dialog>
     </div>
 </template>
 <script>
-import mTable from "@/components/mTable.vue";
-import page from "@/components/page.vue";
-import relaApi from "@/api/modules/relationship.js";
-import { download } from "@/api/request.js";
+import mTable from "../../../components/mTable.vue";
+import page from "../../../components/page.vue";
+import newStudent from "./components/newStudent.vue";
+import trainingHistory from "./components/trainingHistory.vue";
+import relaApi from "../../../api/modules/relationship";
+import { download } from "../../../api/request";
 export default {
     components: {
         mTable,
-        page
+        page,
+        newStudent,
+        trainingHistory
     },
     data() {
         return {
@@ -121,25 +84,9 @@ export default {
                 name: null,
                 currentPage: 1,
                 total: 100,
-                pageSize: 10
-            },
-            newStudent: {
-                idNum: null,
-                phone: null,
-                name: null
+                pageSize: 1
             },
             tableData: [
-                {
-                    idNum: 22222222222,
-                    phone: 13534625262,
-                    name: "张三",
-                    email: "101@qq.com",
-                    position: "经理",
-                    province: "广东省",
-                    city: "广州市",
-                    area: "番禺区",
-                    zone: "小谷围街道华南理工大学"
-                },
                 {
                     idNum: 22222222222,
                     phone: 13534625262,
@@ -153,8 +100,8 @@ export default {
                 }
             ],
             tableConfig: [
-                { prop: "idNum", label: "身份证号码", width: 200 },
-                { prop: "phone", label: "手机号码", width: 200 },
+                { prop: "idNum", label: "身份证号码" },
+                { prop: "phone", label: "手机号码" },
                 { prop: "name", label: "姓名" },
                 { prop: "email", label: "邮箱" },
                 { prop: "position", label: "职位" },
@@ -167,26 +114,16 @@ export default {
                     label: "操作",
                     slot: "oper",
                     fixed: "right",
-                    width: 100
+                    width: "220px"
                 }
             ],
-            tableAttr: {},
             loading: false,
-            buttonLoading: false,
-            dialogFormVisible: false,
-            formLabelWidth: "50",
-            fileList: []
+            dialogFlag: false,
+            history: {
+                idNum: null,
+                flag: false
+            }
         };
-    },
-    watch: {
-        currentPage() {
-            this.search();
-        },
-        dialogFormVisible() {
-            this.newStudent.idNum = null;
-            this.newStudent.name = null;
-            this.newStudent.phone = null;
-        }
     },
     mounted() {
         this.search();
@@ -194,79 +131,37 @@ export default {
     methods: {
         curChange(val) {
             this.form.curChange = val;
+            this.search();
         },
         async search() {
             try {
                 this.loading = true;
-                let t = this.form;
-                t.name = t.name == ""? null:t.name;
-                t.phone = t.phone == ""? null:t.phone;
-                t.idNum = t.idNum == ""? null:t.idNum;
                 let res = await relaApi.getStudentList(this.form);
                 this.tableData = res.data.list;
                 this.form.total = res.total;
-                this.loading = false;
             } catch (error) {
-                this.loading = false;
+                this.$message.error(error.message);
             }
+            this.loading = false;
         },
         async deleteRelation(row) {
             try {
-                this.buttonLoading = true;
+                this.loading = true;
                 let par = {
                     idNum: row.idNum,
                     phone: row.phone
                 };
                 let res = await relaApi.deleteOneStudent(par);
                 this.$message.success("解除挂靠关系成功");
-                this.buttonLoading = false;
                 this.search();
             } catch (e) {
-                this.buttonLoading = false;
+                this.$message.error(e.message);
             }
+            this.loading = false;
         },
-        async addSingleStudent() {
-            let t = this.newStudent;
-            if (t.idNum == null || t.name == null || t.phone == null) {
-                this.$message.error("身份证、手机号码及姓名必填");
-                return false;
-            }
-            try {
-                let res = await relaApi.addOneStudent(this.newStudent);
-                this.$message.success(res.msg);
-                this.dialogFormVisible = false;
-                this.search();
-            } catch (error) {}
-        },
-        //获取模板
-        async getListTemplate() {
-            try {
-                let res = await relaApi.getTemplate();
-                download(res);
-            } catch (error) {}
-        },
-        handleRemove(file) {
-            this.$message.warning(`移除文件：${file.name}`);
-        },
-        handleSuccess(response) {
-            this.$alert(response.msg, "上传文件成功", {
-                confirmButtonText: "确定"
-                // callback: action => {
-                //     this.$message({
-                //         type: "info",
-                //         message: `action: ${action}`
-                //     });
-                // }
-            });
-        },
-        handleExceed(){
-            this.$message.error("一次只能添加一个文件");
-        },
-        handleError(){
-            this.$message.error("上传文件失败，请重试");
-        },
-        submitUpload() {
-            this.$refs.upload.submit();
+        trainingHistory(row) {
+            this.history.idNum = row.idNum;
+            this.history.flag = true;
         }
     }
 };
@@ -286,9 +181,5 @@ export default {
         text-align: center;
         margin-bottom: 20px;
     }
-}
-.upload-container {
-    text-align: center;
-    margin-top: 20px;
 }
 </style>

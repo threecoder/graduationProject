@@ -16,7 +16,7 @@
     </div>
 </template>
 <script>
-import mTable from "@/components/mTable.vue";
+import mTable from "./mTable.vue";
 export default {
     components: {
         mTable

@@ -29,10 +29,17 @@ public class SystemParamManager {
         SystemParameterExample.Criteria criteria=systemParameterExample.createCriteria();
         criteria.andParaKeyEqualTo(key).andFlagEqualTo(true);
         SystemParameter systemParameter=systemParamManager.systemParameterMapper.selectByExample(systemParameterExample).get(0);
-        System.out.println(systemParameter);
         if(systemParameter==null){
             return null;
         }
         return systemParameter.getParaValue();
+    }
+
+    public static SystemParameter getSystemParameterByParaKey(String key){
+        SystemParameterExample systemParameterExample=new SystemParameterExample();
+        SystemParameterExample.Criteria criteria=systemParameterExample.createCriteria();
+        criteria.andParaKeyEqualTo(key).andFlagEqualTo(true);
+        SystemParameter systemParameter=systemParamManager.systemParameterMapper.selectByExample(systemParameterExample).get(0);
+        return systemParameter;
     }
 }

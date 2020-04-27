@@ -17,7 +17,8 @@ public class StudentController {
 
     @RequestMapping("/getUserInfo")
     @ResponseBody
-    public Object getUserInfo(@RequestParam("id") Integer studentId){
+    public Object getUserInfo(@RequestParam(value = "id",required = false) Integer studentId){
+        System.out.println(1111);
         return studentService.getUserInfo(studentId);
     }
 
@@ -30,7 +31,7 @@ public class StudentController {
     @RequestMapping("/setNewPassword")
     @ResponseBody
     public JSONObject setNewPassword(@RequestBody JSONObject jsonObject){
-        return null;
+        return studentService.setNewPassword(jsonObject);
     }
 
 }

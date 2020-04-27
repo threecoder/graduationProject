@@ -96,12 +96,20 @@
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label-position="top" label="会员开始时间">
-                            <el-date-picker type="datetime" v-model="info.vipBegin" :disabled="readOnly"></el-date-picker>
+                            <el-date-picker
+                                type="datetime"
+                                v-model="info.vipBegin"
+                                :disabled="readOnly"
+                            ></el-date-picker>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label-position="top" label="会员到期时间">
-                            <el-date-picker type="datetime" v-model="info.vipEnd" :disabled="readOnly"></el-date-picker>
+                            <el-date-picker
+                                type="datetime"
+                                v-model="info.vipEnd"
+                                :disabled="readOnly"
+                            ></el-date-picker>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -174,7 +182,7 @@
 <script>
 import adminStudentApi from "../../../api/admin/student";
 import adminMemberApi from "../../../api/admin/member.js";
-import { getLocalStorage,formatDateAndTime } from "../../../assets/js/util.js";
+import { getLocalStorage, formatDateAndTime } from "../../../assets/js/util.js";
 export default {
     props: {
         idType: {
@@ -217,6 +225,7 @@ export default {
     },
     methods: {
         async modifyInfo() {
+            this.confirmLoading = true;
             try {
                 this.confirmLoading = true;
                 let res = null;
@@ -225,17 +234,22 @@ export default {
                     this.$message.success("修改学员资料成功");
                 } else {
                     //处理参数
-                    let par = {...this.info};
-                    par.vipBegin = formatDateAndTime(par.vipBegin);
-                    par.vipEnd = formatDateAndTime(par.vipEnd);
+                    let par = { ...this.info };
+                    if (typeof par.vipBegin !== "string") {
+                        par.vipBegin = formatDateAndTime(par.vipBegin);
+                    }
+                    if (typeof par.vipEnd !== "string") {
+                        par.vipEnd = formatDateAndTime(par.vipEnd);
+                    }
                     res = await adminMemberApi.modifyInfo(par);
                     this.$message.success("修改会员资料成功");
                 }
                 this.readOnly = true;
                 this.confirmLoading = false;
             } catch (error) {
-                this.confirmLoading = false;
+                this.$message.error(error.message);
             }
+            this.confirmLoading = false;
         },
         changeProvince(val) {
             this.info.province = val.value;

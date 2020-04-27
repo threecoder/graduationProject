@@ -11,6 +11,26 @@ public class StudentExample {
 
     protected List<Criteria> oredCriteria;
 
+    //加入 offset 起始位置 和 limit 查询页数 用来分页
+    protected Integer offset;
+    protected Integer limit;
+
+    public Integer getOffset() {
+        return offset;
+    }
+
+    public void setOffset(Integer offset) {
+        this.offset = offset;
+    }
+
+    public Integer getLimit() {
+        return limit;
+    }
+
+    public void setLimit(Integer limit) {
+        this.limit = limit;
+    }
+
     public StudentExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
@@ -1062,6 +1082,66 @@ public class StudentExample {
 
         public Criteria andEnterTimeNotBetween(Date value1, Date value2) {
             addCriterion("enter_time not between", value1, value2, "enterTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andHasOrgIsNull() {
+            addCriterion("has_org is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHasOrgIsNotNull() {
+            addCriterion("has_org is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHasOrgEqualTo(Boolean value) {
+            addCriterion("has_org =", value, "hasOrg");
+            return (Criteria) this;
+        }
+
+        public Criteria andHasOrgNotEqualTo(Boolean value) {
+            addCriterion("has_org <>", value, "hasOrg");
+            return (Criteria) this;
+        }
+
+        public Criteria andHasOrgGreaterThan(Boolean value) {
+            addCriterion("has_org >", value, "hasOrg");
+            return (Criteria) this;
+        }
+
+        public Criteria andHasOrgGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("has_org >=", value, "hasOrg");
+            return (Criteria) this;
+        }
+
+        public Criteria andHasOrgLessThan(Boolean value) {
+            addCriterion("has_org <", value, "hasOrg");
+            return (Criteria) this;
+        }
+
+        public Criteria andHasOrgLessThanOrEqualTo(Boolean value) {
+            addCriterion("has_org <=", value, "hasOrg");
+            return (Criteria) this;
+        }
+
+        public Criteria andHasOrgIn(List<Boolean> values) {
+            addCriterion("has_org in", values, "hasOrg");
+            return (Criteria) this;
+        }
+
+        public Criteria andHasOrgNotIn(List<Boolean> values) {
+            addCriterion("has_org not in", values, "hasOrg");
+            return (Criteria) this;
+        }
+
+        public Criteria andHasOrgBetween(Boolean value1, Boolean value2) {
+            addCriterion("has_org between", value1, value2, "hasOrg");
+            return (Criteria) this;
+        }
+
+        public Criteria andHasOrgNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("has_org not between", value1, value2, "hasOrg");
             return (Criteria) this;
         }
     }

@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class TrainingOrder implements Serializable {
+    private Integer orderKeyId;
+
     private String trainingOrderId;
 
     private Integer trainingId;
@@ -23,7 +25,25 @@ public class TrainingOrder implements Serializable {
 
     private Boolean close;
 
+    private Date payTime;
+
+    private Boolean isDeleteUser;
+
+    private Boolean isDeleteAdmin;
+
+    private String opManName;
+
+    private String businessName;
+
     private static final long serialVersionUID = 1L;
+
+    public Integer getOrderKeyId() {
+        return orderKeyId;
+    }
+
+    public void setOrderKeyId(Integer orderKeyId) {
+        this.orderKeyId = orderKeyId;
+    }
 
     public String getTrainingOrderId() {
         return trainingOrderId;
@@ -95,5 +115,45 @@ public class TrainingOrder implements Serializable {
 
     public void setClose(Boolean close) {
         this.close = close;
+    }
+
+    public Date getPayTime() {
+        return payTime;
+    }
+
+    public void setPayTime(Date payTime) {
+        this.payTime = payTime;
+    }
+
+    public Boolean getIsDeleteUser() {
+        return isDeleteUser;
+    }
+
+    public void setIsDeleteUser(Boolean isDeleteUser) {
+        this.isDeleteUser = isDeleteUser;
+    }
+
+    public Boolean getIsDeleteAdmin() {
+        return isDeleteAdmin;
+    }
+
+    public void setIsDeleteAdmin(Boolean isDeleteAdmin) {
+        this.isDeleteAdmin = isDeleteAdmin;
+    }
+
+    public String getOpManName() {
+        return opManName;
+    }
+
+    public void setOpManName(String opManName) {
+        this.opManName = opManName;
+    }
+
+    public String getBusinessName() {
+        return businessName;
+    }
+
+    public void setBusinessName(String businessName) {
+        this.businessName = businessName;
     }
 }
