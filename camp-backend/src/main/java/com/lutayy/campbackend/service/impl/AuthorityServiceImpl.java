@@ -12,6 +12,7 @@ import com.lutayy.campbackend.service.SQLConn.SystemParamManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -121,6 +122,7 @@ public class AuthorityServiceImpl implements AuthorityService {
         data.put("activityOrderTime", SystemParamManager.getValueByKey("activity_order_length"));
         data.put("certificateOrderTime", SystemParamManager.getValueByKey("certificate_order_length"));
         data.put("memberOrderTime", SystemParamManager.getValueByKey("member_order_length"));
+        data.put("memberFee", SystemParamManager.getValueByKey("member_Fee"));
         result.put("data", data);
         return result;
     }
@@ -131,6 +133,7 @@ public class AuthorityServiceImpl implements AuthorityService {
         JSONObject result=new JSONObject();
         String studentTrainig;
         Integer trainingOrderTime, activityOrderTime, certificateOrderTime, memberOrderTime;
+        BigDecimal newMemberFee;
         try{
             studentTrainig=jsonObject.getString("studentTrainig");
             if(!studentTrainig.equals("是")&&!studentTrainig.equals("否")){
@@ -140,6 +143,7 @@ public class AuthorityServiceImpl implements AuthorityService {
             activityOrderTime=Integer.valueOf(jsonObject.getString("activityOrderTime"));
             certificateOrderTime=Integer.valueOf(jsonObject.getString("certificateOrderTime"));
             memberOrderTime=Integer.valueOf(jsonObject.getString("memberOrderTime"));
+            newMemberFee=BigDecimal.valueOf(Double.valueOf(jsonObject.getString("memberFee")));
         }catch (Exception e){
             e.printStackTrace();
             result.put("code", "fail");
@@ -166,6 +170,10 @@ public class AuthorityServiceImpl implements AuthorityService {
         SystemParameter memberOrderLength=SystemParamManager.getSystemParameterByParaKey("member_order_length");
         memberOrderLength.setParaValue(memberOrderTime.toString());
         systemParameterMapper.updateByPrimaryKeySelective(memberOrderLength);
+
+        SystemParameter memberFee=SystemParamManager.getSystemParameterByParaKey("member_fee");
+        memberFee.setParaValue(newMemberFee.toString());
+        systemParameterMapper.updateByPrimaryKeySelective(stuTranPermission);
 
         result.put("code", "success");
         result.put("msg", "修改成功！");

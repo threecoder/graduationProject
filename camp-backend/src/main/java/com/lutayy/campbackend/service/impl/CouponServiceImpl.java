@@ -215,4 +215,35 @@ public class CouponServiceImpl implements CouponService {
     public JSONObject couponGetMemberList(JSONObject jsonObject) {
         return null;
     }
+
+    //会员获取自己有的优惠券
+    @Override
+    public JSONObject memberGetCouponList(Integer memberId, Integer pageSize, Integer currentPage) {
+        JSONObject result=new JSONObject();
+        JSONObject data=new JSONObject();
+        JSONArray list=new JSONArray();
+        CouponMemberExample couponMemberExample=new CouponMemberExample();
+        couponMemberExample.createCriteria().andIsInvalidEqualTo(false).andMemberKeyIdEqualTo(memberId);
+        long total=couponMemberMapper.countByExample(couponMemberExample);
+        couponMemberExample.setOrderByClause("send_time DESC");
+        couponMemberExample.setOffset((currentPage-1)*pageSize);
+        couponMemberExample.setLimit(pageSize);
+        List<CouponMember> couponMembers=couponMemberMapper.selectByExample(couponMemberExample);
+        for(CouponMember couponMember:couponMembers){
+            JSONObject object=new JSONObject();
+            Coupon coupon=couponMapper.selectByPrimaryKey(couponMember.getCouponId());
+            object.put("code", couponMember.getCouponCode());
+            object.put("name", coupon.getCouponName());
+            object.put("startTime", coupon.getStartTime());
+            object.put("endTime", coupon.getEndTime());
+            object.put("value", coupon.getAmountDiscount());
+            list.add(object);
+        }
+        data.put("total", total);
+        data.put("data", list);
+        result.put("data", data);
+        result.put("code", "success");
+        result.put("msg", "获取优惠券列表成功！");
+        return result;
+    }
 }

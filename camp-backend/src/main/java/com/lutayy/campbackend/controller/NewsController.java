@@ -108,6 +108,39 @@ public class NewsController {
         return newsService.modifyDynamic(request, newsId, placeholder, title, desc, type, content, imgInfos, imgList);
     }
 
+    @RequestMapping("/admin/addNotice")
+    @ResponseBody
+    public JSONObject addNotice(@RequestParam("id") Integer adminId,
+                                @RequestParam("title") String title,
+                                @RequestParam("desc") String desc,
+                                @RequestParam("content") String content) {
+        return newsService.addNotice(adminId, title, desc, content);
+    }
+
+    @RequestMapping("/admin/getNewsAndNoticeList")
+    @ResponseBody
+    public Object getNewsAndNoticeList(@RequestParam("pageSize") Integer pageSize,
+                                        @RequestParam("currentPage") Integer currentPage,
+                                        @RequestParam(value = "title", required = false) String title,
+                                        @RequestParam(value = "date", required = false) String dateString) {
+        return newsService.getNewsAndNoticeList(pageSize, currentPage, title, dateString);
+    }
+
+    @RequestMapping("/admin/deleteNotice")
+    @ResponseBody
+    public JSONObject deleteNotice(@RequestBody JSONObject jsonObject) {
+        return newsService.deleteNotice(jsonObject);
+    }
+
+    @RequestMapping("/admin/modifyNotice")
+    @ResponseBody
+    public JSONObject modifyNotice(@RequestParam("noticeId") Integer newsId,
+                                    @RequestParam("title") String title,
+                                    @RequestParam("desc") String desc,
+                                    @RequestParam("content") String content) {
+        return newsService.modifyNotice(newsId, title, desc, content);
+    }
+
     @RequestMapping("/admin/addCarousel")
     @ResponseBody
     public JSONObject addCarousel(@RequestBody JSONObject jsonObject) {

@@ -21,43 +21,51 @@ public class CouponController {
 
     @RequestMapping("/admin/addCoupon")
     @ResponseBody
-    public JSONObject addCoupon(@RequestBody JSONObject jsonObject){
+    public JSONObject addCoupon(@RequestBody JSONObject jsonObject) {
         return couponService.addCoupon(jsonObject);
     }
 
     @RequestMapping("/admin/deleteCoupon")
     @ResponseBody
-    public JSONObject deleteCoupon(@RequestBody JSONObject jsonObject){
+    public JSONObject deleteCoupon(@RequestBody JSONObject jsonObject) {
         return couponService.deleteCoupon(jsonObject);
     }
 
     @RequestMapping("/admin/getCouponList")
     @ResponseBody
     public Object getCouponList(@RequestParam("pageSize") Integer pageSize,
-                                    @RequestParam("currentPage") Integer currentPage,
-                                    @RequestParam(value = "name",required = false) String name,
-                                    @RequestParam(value = "value",required = false) Double value,
-                                    @RequestParam(value = "startTime",required = false) String startTime,
-                                    @RequestParam(value = "endTime",required = false) String endTime){
+                                @RequestParam("currentPage") Integer currentPage,
+                                @RequestParam(value = "name", required = false) String name,
+                                @RequestParam(value = "value", required = false) Double value,
+                                @RequestParam(value = "startTime", required = false) String startTime,
+                                @RequestParam(value = "endTime", required = false) String endTime) {
         return couponService.getCouponList(pageSize, currentPage, name, value, startTime, endTime);
     }
 
     @RequestMapping("/admin/allGrantCoupon")
     @ResponseBody
-    public JSONObject allGrantCoupon(@RequestBody JSONObject jsonObject){
+    public JSONObject allGrantCoupon(@RequestBody JSONObject jsonObject) {
         return couponService.allGrantCoupon(jsonObject);
     }
 
     @RequestMapping("/admin/grantCoupon")
     @ResponseBody
-    public JSONObject grantCoupon(@RequestBody JSONObject jsonObject){
+    public JSONObject grantCoupon(@RequestBody JSONObject jsonObject) {
         return couponService.grantCoupon(jsonObject);
     }
 
     @RequestMapping("/admin/couponGetMemberList")
     @ResponseBody
-    public JSONObject couponGetMemberList(@RequestBody JSONObject jsonObject){
+    public JSONObject couponGetMemberList(@RequestBody JSONObject jsonObject) {
         return couponService.couponGetMemberList(jsonObject);
+    }
+
+    @RequestMapping("/member/getCouponList")
+    @ResponseBody
+    public Object memberGetCouponList(@RequestParam("id") Integer memberId,
+                                      @RequestParam("pageSize") Integer pageSize,
+                                      @RequestParam("currentPage") Integer currentPage) {
+        return couponService.memberGetCouponList(memberId, pageSize, currentPage);
     }
 
 }

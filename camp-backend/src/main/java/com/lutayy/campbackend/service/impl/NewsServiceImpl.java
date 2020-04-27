@@ -346,6 +346,114 @@ public class NewsServiceImpl implements NewsService {
         return result;
     }
 
+
+    //管理员新增一条公告
+    @Override
+    public JSONObject addNotice(Integer adminId, String title, String desc, String content) {
+        JSONObject result=new JSONObject();
+        News news=new News();
+        news.setAdminId(adminId);
+        news.setContent(content);
+        news.setDescription(desc);
+        news.setTitle(title);
+        news.setPostTime(new Date());
+        newsMapper.insertSelective(news);
+        result.put("code", "success");
+        result.put("msg", "新增公告\""+title+"\"成功");
+        return result;
+    }
+
+    //获取公告列表
+    @Override
+    public JSONObject getNewsAndNoticeList(Integer pageSize, Integer currentPage, String title, String dateString) {
+        JSONObject result = new JSONObject();
+        JSONObject data = new JSONObject();
+        result.put("code", "fail");
+        result.put("data", data);
+
+        NewsExample newsExample = new NewsExample();
+        NewsExample.Criteria criteria = newsExample.createCriteria();
+        criteria.andIsInvalidEqualTo(false).andTypeEqualTo("notice");
+        if (title != null) {
+            criteria.andTitleLike("%" + title + "%");
+        }
+        if (dateString != null) {
+            Date date;
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                date = simpleDateFormat.parse(dateString);
+            } catch (Exception e) {
+                e.printStackTrace();
+                result.put("msg", "日期格式错误");
+                return result;
+            }
+            Calendar nextDate = Calendar.getInstance();
+            nextDate.setTime(date);
+            nextDate.add(Calendar.DAY_OF_MONTH, 1);
+            criteria.andPostTimeGreaterThanOrEqualTo(date).andPostTimeLessThan(nextDate.getTime());
+        }
+        long total = newsMapper.countByExample(newsExample);
+        newsExample.setOffset(pageSize * (currentPage - 1));
+        newsExample.setLimit(pageSize);
+        List<News> newsList = newsMapper.selectByExample(newsExample);
+        JSONArray list = new JSONArray();
+        for (News news : newsList) {
+            JSONObject object = new JSONObject();
+            object.put("id", news.getNewsId());
+            object.put("title", news.getTitle());
+            object.put("desc", news.getDescription());
+            object.put("time", news.getPostTime());
+            list.add(object);
+        }
+        data.put("list", list);
+        data.put("total", total);
+        result.put("data", data);
+        result.put("code", "success");
+        result.put("msg", "列表获取成功！");
+        return result;
+    }
+
+    //删除一条公告
+    @Override
+    public JSONObject deleteNotice(JSONObject jsonObject) {
+        JSONObject result = new JSONObject();
+        result.put("code", "fail");
+
+        Integer newsId = jsonObject.getInteger("NoticeId");
+        News news = newsMapper.selectByPrimaryKey(newsId);
+        if (news == null) {
+            result.put("msg", "删除失败！系统中不存在该条公告！");
+            return result;
+        }
+        news.setIsInvalid(true);
+        newsMapper.updateByPrimaryKey(news);
+
+        result.put("code", "success");
+        result.put("msg", "成功删除动态");
+        return result;
+    }
+
+    //修改一条公告
+    @Override
+    public JSONObject modifyNotice(Integer newsId, String title, String desc, String content) {
+        JSONObject result = new JSONObject();
+        result.put("code", "fail");
+
+        News news = newsMapper.selectByPrimaryKey(newsId);
+        if (news == null) {
+            result.put("msg", "系统中找不到该公告！");
+            return result;
+        }
+        news.setTitle(title);
+        news.setDescription(desc);
+        news.setContent(content);
+        newsMapper.updateByPrimaryKey(news);
+
+        result.put("code", "success");
+        result.put("msg", "修改成功！");
+        return result;
+    }
+
     //管理员将一条动态加入到轮播图队列（在redis中）
     @Override
     public JSONObject addCarousel(JSONObject jsonObject) {

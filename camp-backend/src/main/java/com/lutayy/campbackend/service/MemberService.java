@@ -16,7 +16,7 @@ public interface MemberService {
 
     JSONObject setNewPassword(JSONObject jsonObject);
 
-    JSONObject rechargeVIP(Integer id);
+    JSONObject rechargeVIP(JSONObject jsonObject);
 
     JSONObject importSingleStudent(JSONObject jsonObject);
 

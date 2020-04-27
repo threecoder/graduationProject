@@ -4,11 +4,14 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.lutayy.campbackend.common.util.ExcelUtil;
 import com.lutayy.campbackend.common.util.JwtUtil;
+import com.lutayy.campbackend.common.util.OrderIdGenerator;
+import com.lutayy.campbackend.common.util.RedisUtil;
 import com.lutayy.campbackend.dao.*;
 import com.lutayy.campbackend.pojo.*;
 import com.lutayy.campbackend.pojo.request.TokenRequest;
 import com.lutayy.campbackend.service.MemberService;
 import com.lutayy.campbackend.service.SQLConn.MemberStudentSQLConn;
+import com.lutayy.campbackend.service.SQLConn.SystemParamManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -19,13 +22,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 
+import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.math.BigDecimal;
+import java.util.*;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -44,7 +46,11 @@ public class MemberServiceImpl implements MemberService {
     @Autowired
     TrainingMapper trainingMapper;
     @Autowired
+    MemberSubscriptionOrderMapper memberSubscriptionOrderMapper;
+    @Autowired
     GetObjectHelper getObjectHelper;
+    @Resource
+    private RedisUtil redisUtil;
 
 
     @Override
@@ -146,19 +152,38 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public JSONObject rechargeVIP(Integer id) {
+    public JSONObject rechargeVIP(JSONObject jsonObject) {
         JSONObject result = new JSONObject();
-        Member member = memberMapper.selectByPrimaryKey(id);
+        JSONObject data=new JSONObject();
+        result.put("code", "fail");
+
+        Integer memberId=jsonObject.getInteger("id");
+        Member member = memberMapper.selectByPrimaryKey(memberId);
         if (member == null) {
-            result.put("code", "fail");
             result.put("msg", "用户不存在!");
             return result;
         }
         if (!member.getIsVip()) {
-            result.put("code", "fail");
             result.put("msg", "当前用户非协会会员,如需办理会员,请联系工作人员");
             return result;
         }
+        MemberSubscriptionOrder memberSubscriptionOrder=new MemberSubscriptionOrder();
+        String fee=SystemParamManager.getValueByKey("member_fee");
+        memberSubscriptionOrder.setFee(BigDecimal.valueOf(Double.valueOf(fee==null?"9999999.99":fee)));
+        memberSubscriptionOrder.setMemberKeyId(memberId);
+        memberSubscriptionOrder.setCreateTime(new Date());
+        memberSubscriptionOrder.setOpManName(member.getMemberName());
+        memberSubscriptionOrder.setBusinessName(member.getMemberName()+"续费一年");
+        String orderId = OrderIdGenerator.getUniqueId();
+        while (!redisUtil.hset("order_no_map", orderId, "activity")) {
+            orderId = OrderIdGenerator.getUniqueId();
+        }
+        memberSubscriptionOrder.setSubscriptionOrderId(orderId);
+        memberSubscriptionOrderMapper.insertSelective(memberSubscriptionOrder);
+        data.put("orderNum", orderId);
+        result.put("data", data);
+        result.put("code", "success");
+        result.put("msg", "生成续费订单成功！");
         return result;
     }
 

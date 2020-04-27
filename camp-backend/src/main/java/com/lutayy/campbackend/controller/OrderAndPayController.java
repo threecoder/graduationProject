@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 public class OrderAndPayController {
 
@@ -28,15 +30,38 @@ public class OrderAndPayController {
 
     @RequestMapping("/admin/modifyOrderPrice")
     @ResponseBody
-    public JSONObject modifyOrderPrice(@RequestBody JSONObject jsonObject){
+    public JSONObject modifyOrderPrice(@RequestBody JSONObject jsonObject) {
         return orderAndPayService.modifyOrderPrice(jsonObject);
     }
 
 
     @RequestMapping("/admin/modifyTrainingOrderPrice")
     @ResponseBody
-    public JSONObject modifyTrainingOrderPrice(@RequestBody JSONObject jsonObject){
+    public JSONObject modifyTrainingOrderPrice(@RequestBody JSONObject jsonObject) {
         return orderAndPayService.modifyTrainingOrderPrice(jsonObject);
     }
 
+    @RequestMapping("/member/getOrderList")
+    @ResponseBody
+    public Object memberGetOrderList(@RequestParam("id") Integer memberId,
+                                     @RequestParam(value = "orderNum", required = false) String orderNum,
+                                     @RequestParam(value = "businessName", required = false) String businessName,
+                                     @RequestParam("currentPage") Integer currentPage,
+                                     @RequestParam("pageSize") Integer pageSize,
+                                     @RequestParam("type") String type) {
+        return orderAndPayService.memberGetOrderList(memberId, orderNum, businessName, type, currentPage, pageSize);
+    }
+
+
+    @RequestMapping(value = {"/student/aliPay", "/member/aliPay"})
+    @ResponseBody
+    public JSONObject aliPay(@RequestBody JSONObject jsonObject) {
+        return orderAndPayService.alipay(jsonObject);
+    }
+
+    @RequestMapping("/aliPayNotify")
+    @ResponseBody
+    public void aliPayNotify(HttpServletRequest request) {
+        orderAndPayService.aliPayNotify(request);
+    }
 }

@@ -296,6 +296,8 @@ public class GetObjectHelper {
     //检查活动订单是否过期
     public boolean checkActivityOrderOutOfTime(ActivityOrder activityOrder){
         Date endTime=getOrderEndTime("activity", activityOrder.getOrderBeginTime());
+        if(activityOrder.getClose())
+            return true;
         if(!activityOrder.getClose()){
             if(!activityOrder.getPaymentState()){
                 //查看未支付的订单是否过期，失效则置close为1
@@ -312,12 +314,69 @@ public class GetObjectHelper {
     //检查活动订单是否过期
     public boolean checkTrainingOrderOutOfTime(TrainingOrder trainingOrder){
         Date endTime=getOrderEndTime("training", trainingOrder.getOrderBeginTime());
+        if(trainingOrder.getClose())
+            return true;
         if(!trainingOrder.getClose()){
             if(!trainingOrder.getPaymentState()){
                 //查看未支付的订单是否过期，失效则置close为1
                 if(endTime.compareTo(new Date())<0){
                     trainingOrder.setClose(true);
                     trainingOrderMapper.updateByPrimaryKeySelective(trainingOrder);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    //
+    public boolean checkCerChangeOrderOutOfTime(CertificateChangeOrder certificateChangeOrder){
+        Date endTime=getOrderEndTime("cerRecheck", certificateChangeOrder.getOrderBeginTime());
+        if(certificateChangeOrder.getClose())
+            return true;
+        if(!certificateChangeOrder.getClose()){
+            if(!certificateChangeOrder.getPaymentState()){
+                //查看未支付的订单是否过期，失效则置close为1
+                if(endTime.compareTo(new Date())<0){
+                    certificateChangeOrder.setClose(true);
+                    changeOrderMapper.updateByPrimaryKeySelective(certificateChangeOrder);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    //
+    public boolean checkCerReCheckOrderOutOfTime(CertificateRecheckOrder certificateRecheckOrder){
+        Date endTime=getOrderEndTime("cerChange", certificateRecheckOrder.getOrderBeginTime());
+        if(certificateRecheckOrder.getClose())
+            return true;
+        if(!certificateRecheckOrder.getClose()){
+            if(!certificateRecheckOrder.getPaymentState()){
+                //查看未支付的订单是否过期，失效则置close为1
+                if(endTime.compareTo(new Date())<0){
+                    certificateRecheckOrder.setClose(true);
+                    recheckOrderMapper.updateByPrimaryKeySelective(certificateRecheckOrder);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    //
+    public boolean checkMemberSusOrderOutOfTime(MemberSubscriptionOrder memberSubscriptionOrder){
+        Date endTime=getOrderEndTime("cerChange", memberSubscriptionOrder.getCreateTime());
+        if(memberSubscriptionOrder.getClose())
+            return true;
+        if(!memberSubscriptionOrder.getClose()){
+            if(!memberSubscriptionOrder.getPaymentState()){
+                //查看未支付的订单是否过期，失效则置close为1
+                if(endTime.compareTo(new Date())<0){
+                    memberSubscriptionOrder.setClose(true);
+                    memberSubscriptionOrderMapper.updateByPrimaryKeySelective(memberSubscriptionOrder);
+                    return true;
                 }
             }
         }
