@@ -418,7 +418,7 @@ public class TrainingServiceImpl implements TrainingService {
 //            orderId=OrderIdGenerator.getUniqueId();
 //        }
         /**
-         * 由学员自行报名，对应的订单，无须插入“订单—学生”表
+         * 由学员自行报名，对应的订单，！！也要！！插入“订单—学生”表
          * **/
         TrainingOrder trainingOrder = new TrainingOrder();
         trainingOrder.setTrainingOrderId(orderId);
@@ -434,6 +434,11 @@ public class TrainingServiceImpl implements TrainingService {
         if (trainingOrderMapper.insert(trainingOrder) > 0) {
             result.put("code", "success");
             result.put("msg", "订单生成生成!待支付");
+            // TODO 插入“订单—学生”表
+            TrainingOrderStudent trainingOrderStudent=new TrainingOrderStudent();
+            trainingOrderStudent.setStudentId(studentId);
+            trainingOrderStudent.setOrderKeyId(trainingOrder.getOrderKeyId());
+            trainingOrderStudentMapper.insertSelective(trainingOrderStudent);
         } else {
             result.put("code", "fail");
             result.put("msg", "订单生成失败!");

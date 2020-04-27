@@ -316,7 +316,7 @@ public class ActivityServiceImpl implements ActivityService {
         //    orderId=OrderIdGenerator.getUniqueId();
         //}
         /**
-         * 由学员自行报名，对应的订单，无须插入“订单—学生”表
+         * 由学员自行报名，对应的订单，！！也要！！插入“订单—学生”表
          * **/
         ActivityOrder activityOrder = new ActivityOrder();
         activityOrder.setActivityOrderId(orderId);
@@ -332,6 +332,11 @@ public class ActivityServiceImpl implements ActivityService {
         if (activityOrderMapper.insert(activityOrder) > 0) {
             result.put("code", "success");
             result.put("msg", "订单生成成功!待支付");
+            // TODO 插入“订单—学生”表
+            ActivityOrderStudent activityOrderStudent=new ActivityOrderStudent();
+            activityOrderStudent.setStudentId(studentId);
+            activityOrderStudent.setOrderKeyId(activityOrder.getOrderKeyId());
+            activityOrderStudentMapper.insertSelective(activityOrderStudent);
         } else {
             result.put("code", "fail");
             result.put("msg", "订单生成失败!");
