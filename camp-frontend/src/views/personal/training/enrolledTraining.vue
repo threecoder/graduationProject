@@ -1,6 +1,17 @@
 <template>
     <div>
         <h2>已报名的培训</h2>
+        <div class="divider"></div>
+        <div class="form-container">
+            <el-form :model="form" inline>
+                <el-form-item label="活动名称">
+                    <el-input v-model="form.name" placeholder="请输入活动名称" clearable></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button @click="init" type="primary" size="medium">查询</el-button>
+                </el-form-item>
+            </el-form>
+        </div>
         <div class="table-container">
             <m-table
                 :data="trainingTable.tableData"
@@ -26,6 +37,12 @@
                     </div>
                 </el-table-column>
             </m-table>
+            <page
+                :currentPage="form.currentPage"
+                :total="form.total"
+                :pageSize="form.pageSize"
+                @curChange="curChange"
+            />
         </div>
 
         <training-detail
@@ -38,6 +55,7 @@
 </template>
 <script>
 import mTable from "../../../components/mTable.vue";
+import page from "../../../components/page.vue";
 import trainingDetail from "./components/trainingDetail.vue";
 import { getLocalStorage } from "../../../assets/js/util";
 import activityApi from "../../../api/modules/activity";
@@ -45,10 +63,17 @@ import trainingApi from "../../../api/modules/training";
 export default {
     components: {
         trainingDetail,
-        mTable
+        mTable,
+        page
     },
     data() {
         return {
+            form: {
+                pageSize: 10,
+                currentPage: 1,
+                total: 100,
+                name: ""
+            },
             trainingTable: {
                 tableConfig: [
                     { prop: "id", label: "培训序号", width: "100" },
@@ -142,134 +167,7 @@ export default {
                     { prop: "phone", label: "手机号码" },
                     { prop: "position", label: "职务" }
                 ],
-                list: [
-                    {
-                        name: "1",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "2",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "3",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "4",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "5",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "ss",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "ss",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "ss",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "ss",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "ss",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "ss",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "ss",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "ss",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "ss",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "ss",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "ss",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "ss",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "ss",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "ss",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "ss",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "ss",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    }
-                ]
+                list: []
             }
         };
     },
@@ -289,10 +187,18 @@ export default {
         this.init();
     },
     methods: {
+        curChange(newVal) {
+            this.form.currentPage = newVal;
+            this.getList();
+        },
         async init() {
             try {
-                let res = await trainingApi.getsignedTraining(this.idType);
-                this.trainingTable.tableData = res.data;
+                let res = await trainingApi.getsignedTraining(
+                    this.idType,
+                    this.form
+                );
+                this.trainingTable.tableData = res.data.list;
+                this.form.total = res.data.form;
             } catch (error) {
                 this.$message.error(error.message);
                 console.log(error);
@@ -303,7 +209,7 @@ export default {
             this.drawerInfoFlag = true;
         },
         toPay() {
-            this.$router.push("/order")
+            this.$router.push("/order");
         },
         selectChange(val) {
             this.studentList.data = val.map(val => val.idNum);
@@ -313,18 +219,17 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.table-container {
-    margin-top: 50px;
-    ::v-deep .el-table__header-wrapper {
-        thead {
-            .cell {
-                font-size: 16px;
-                font-weight: 100;
-                color: black;
-            }
-        }
-    }
-}
+// .table-container {
+//     ::v-deep .el-table__header-wrapper {
+//         thead {
+//             .cell {
+//                 font-size: 16px;
+//                 font-weight: 100;
+//                 color: black;
+//             }
+//         }
+//     }
+// }
 
 .list-container {
     padding: 20px;

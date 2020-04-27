@@ -1,6 +1,17 @@
 <template>
     <div>
         <h2>已经报名的活动</h2>
+        <div class="divider"></div>
+        <div class="form-container">
+            <el-form :model="form" inline>
+                <el-form-item label="活动名称">
+                    <el-input v-model="form.name" placeholder="请输入活动名称" clearable></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button @click="init" type="primary" size="medium">查询</el-button>
+                </el-form-item>
+            </el-form>
+        </div>
         <div class="table-container">
             <m-table
                 :data="activityTable.tableData"
@@ -32,6 +43,12 @@
                     </div>
                 </el-table-column>
             </m-table>
+            <page
+                :currentPage="form.currentPage"
+                :total="form.total"
+                :pageSize="form.pageSize"
+                @curChange="curChange"
+            />
         </div>
         <activity-detail
             :drawerInfo="drawerInfo"
@@ -46,7 +63,8 @@
     </div>
 </template>
 <script>
-import mTable from "@/components/mTable.vue";
+import mTable from "../../../components/mTable.vue";
+import page from "../../../components/page.vue";
 import activityDetail from "./components/activityDetail.vue";
 import seatDialog from "./components/seatNumTable.vue";
 import { getLocalStorage } from "../../../assets/js/util";
@@ -54,25 +72,31 @@ import activityApi from "../../../api/modules/activity";
 export default {
     components: {
         mTable,
+        page,
         activityDetail,
         seatDialog
     },
     data() {
         return {
             type: this.$route.params.id,
+            form: {
+                pageSize: 10,
+                currentPage: 1,
+                total: 100,
+                name: ""
+            },
             activityTable: {
                 tableConfig: [
-                    { prop: "id", label: "活动序号", width: "100" },
+                    { prop: "id", label: "活动序号", width: "100px" },
                     { prop: "name", label: "活动名称" },
                     { prop: "date", label: "举办时间" },
                     { prop: "address", label: "地点" },
                     { prop: "fee", label: "费用" },
                     { prop: "status", label: "状态" },
                     {
-                        prop: "opera",
                         label: "操作",
                         fixed: "right",
-                        width: 200,
+                        width: "200px",
                         slot: "oper"
                     }
                 ],
@@ -107,10 +131,18 @@ export default {
         }
     },
     methods: {
+        curChange(newVal) {
+            this.form.currentPage = newVal;
+            this.getList();
+        },
         async init() {
             try {
-                let res = await activityApi.getsignedActivities(this.idType);
-                this.activityTable.tableData = res.data;
+                let res = await activityApi.getsignedActivities(
+                    this.idType,
+                    this.form
+                );
+                this.activityTable.tableData = res.data.list;
+                this.form.total = res.data.total;
             } catch (error) {
                 this.$message.error(error.message);
                 console.log(error);
@@ -144,18 +176,17 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.table-container {
-    margin-top: 50px;
-    ::v-deep .el-table__header-wrapper {
-        thead {
-            .cell {
-                font-size: 16px;
-                font-weight: 100;
-                color: black;
-            }
-        }
-    }
-}
+// .table-container {
+//     ::v-deep .el-table__header-wrapper {
+//         thead {
+//             .cell {
+//                 font-size: 16px;
+//                 font-weight: 100;
+//                 color: black;
+//             }
+//         }
+//     }
+// }
 .drawer-container {
     .tac {
         h3 {

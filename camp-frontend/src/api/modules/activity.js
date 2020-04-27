@@ -1,19 +1,19 @@
 import { request } from '../request.js'
 import { studentPrefix, memberPrefix } from '../../const';
-const getJoinableActivities = idType => {
+const getJoinableActivities = (idType, par) => {
     if (idType == 0) {
-        return request(`${studentPrefix}/getJoinableActivities`, 'get');
+        return request(`${studentPrefix}/getJoinableActivities`, 'get', par);
     } else {
-        return request(`${memberPrefix}/getJoinableActivities`, 'get');
+        return request(`${memberPrefix}/getJoinableActivities`, 'get', par);
     }
 }
 const studentJoinActivties = activityId => request(`${studentPrefix}/joinActivity`, 'post', { activityId });
 
-const getsignedActivities = idType => {
+const getsignedActivities = (idType, par) => {
     if (idType == 0) {
-        return request(`${studentPrefix}/getSignedActivities`, 'get');
+        return request(`${studentPrefix}/getSignedActivities`, 'get', par);
     } else {
-        return request(`${memberPrefix}/getSignedActivities`, 'get');
+        return request(`${memberPrefix}/getSignedActivities`, 'get', par);
     }
 }
 const getSeatNum = (idType, activityId) => {

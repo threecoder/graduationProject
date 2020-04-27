@@ -70,7 +70,7 @@ import mTable from "../../../components/mTable.vue";
 import page from "../../../components/page.vue";
 import payment from "./components/payment.vue";
 import couponList from "./components/couponList.vue";
-import orderAPi from "../../../api/modules/order";
+import orderApi from "../../../api/modules/order";
 import { orderTypeList } from "../../../const";
 export default {
     components: {
@@ -94,13 +94,14 @@ export default {
                 currentPage: 1,
                 total: 100,
                 orderNum: null,
-                businessName: null
+                businessName: null,
+                type: "activity"
             },
             table: {
                 config: [
                     { prop: "orderNum", label: "订单号" },
                     { prop: "orderType", label: "订单类型" },
-                    { prop: "name", label: "培训/活动名称" },
+                    { prop: "businessName", label: "培训/活动名称" },
                     { prop: "builder", label: "下单人" },
                     { prop: "buildTime", label: "创建时间" },
                     { prop: "payTime", label: "支付时间" },
@@ -154,8 +155,8 @@ export default {
         async getOrderList() {
             this.table.loading = true;
             try {
-                let res = await orderAPi.getOrderList(this.idType, this.form);
-                this.table.data = res.data.data;
+                let res = await orderApi.getOrderList(this.idType, this.form);
+                this.table.data = res.data.list;
                 this.form.total = res.data.total;
             } catch (error) {
                 this.$message.error(error.message);
@@ -163,19 +164,30 @@ export default {
             this.table.loading = false;
         },
         async pay(row) {
-            this.payment.orderId = row.orderNum;
-            // this.payment.flag = true;
             let data = {
                 orderId: row.orderNum,
                 returnUrl: "/order",
                 serverPort: "8888"
             };
             try {
-                let res = await orderAPi.aliPay(data);
+                let res = await orderApi.aliPay(data);
+                this.$_putForm(res.data);
                 console.log("支付返回", res);
             } catch (error) {
                 this.$message.error(error.message);
             }
+        },
+        $_putForm(str) {
+            let div = document.createElement("form-container");
+            div.innerHTML = str;
+            let divs = document.getElementsByTagName("form-container");
+            if (divs.length != 0) {
+                document.body.removeChild(divs[0]);
+            }
+            document.body.appendChild(div);
+            let myForm = document.forms[document.forms.length - 1];
+            myForm.setAttribute("target", "_blank"); // 新开窗口跳转
+            myForm.submit();
         }
     }
 };

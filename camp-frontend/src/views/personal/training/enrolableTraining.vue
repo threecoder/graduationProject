@@ -1,6 +1,17 @@
 <template>
     <div>
         <h2>可报名的培训</h2>
+        <div class="divider"></div>
+        <div class="form-container">
+            <el-form :model="form" inline>
+                <el-form-item label="活动名称">
+                    <el-input v-model="form.name" placeholder="请输入活动名称" clearable></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button @click="init" type="primary" size="medium">查询</el-button>
+                </el-form-item>
+            </el-form>
+        </div>
         <div class="table-container">
             <m-table
                 :data="trainingTable.tableData"
@@ -33,6 +44,12 @@
                     </div>
                 </el-table-column>
             </m-table>
+            <page
+                :currentPage="form.currentPage"
+                :total="form.total"
+                :pageSize="form.pageSize"
+                @curChange="curChange"
+            />
         </div>
 
         <training-detail
@@ -63,6 +80,7 @@
 </template>
 <script>
 import mTable from "../../../components/mTable.vue";
+import page from "../../../components/page.vue";
 import list from "../../../components/studentList.vue";
 import trainingDetail from "./components/trainingDetail.vue";
 import { getLocalStorage } from "../../../assets/js/util";
@@ -71,11 +89,18 @@ import trainingApi from "../../../api/modules/training";
 export default {
     components: {
         mTable,
+        page,
         list,
         trainingDetail
     },
     data() {
         return {
+            form: {
+                pageSize: 10,
+                currentPage: 1,
+                total: 100,
+                name: ""
+            },
             dialogVisible: false,
             trainingTable: {
                 tableConfig: [
@@ -143,10 +168,18 @@ export default {
         }
     },
     methods: {
+        curChange(newVal) {
+            this.form.currentPage = newVal;
+            this.getList();
+        },
         async init() {
             try {
-                let res = await trainingApi.getJoinableTraining(this.idType);
-                this.trainingTable.tableData = res.data;
+                let res = await trainingApi.getJoinableTraining(
+                    this.idType,
+                    this.form
+                );
+                this.trainingTable.tableData = res.data.list;
+                this.form.total = res.data.total;
             } catch (error) {
                 this.$message.error(error.message);
                 console.log(error);
@@ -201,9 +234,9 @@ export default {
                         trainingId: this.studentList.id
                     };
                     let res = await trainingApi.memberJoinTraining(par);
-                    this.$message.success("报名成功");
+                    this.$alert(res.msg, "提示");
                 } catch (error) {
-                    this.$message.error(error.message);
+                    this.$alert(error.message, "提示");
                 }
             });
         },
@@ -218,18 +251,17 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.table-container {
-    margin-top: 50px;
-    ::v-deep .el-table__header-wrapper {
-        thead {
-            .cell {
-                font-size: 16px;
-                font-weight: 100;
-                color: black;
-            }
-        }
-    }
-}
+// .table-container {
+//     ::v-deep .el-table__header-wrapper {
+//         thead {
+//             .cell {
+//                 font-size: 16px;
+//                 font-weight: 100;
+//                 color: black;
+//             }
+//         }
+//     }
+// }
 .drawerInfoFlag-container {
     .tac {
         h3 {
