@@ -32,3 +32,11 @@ export const msgTypeList = [
     { path: "/cerOperHistory", label: "证书审核", key: "certificateExamine" },
     { path: "/certificate", label: "发放证书", key: "grantCertificate" }
 ]
+
+export const orderTypeList = [
+    { label: "活动", key: "activity" },
+    { label: "培训", key: "training" },
+    { label: "证书变更", key: "cerChange" },
+    { label: "证书复审", key: "cerRecheck" },
+    { label: "会员续费", key: "member" }
+]

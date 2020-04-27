@@ -7,7 +7,7 @@
             <p class="title">{{detail.title}}</p>
             <p class="date">{{detail.date}}</p>
         </div>
-        <!-- <div v-html="detail.content" class="content"></div> -->
+        <div v-html="detail.content" class="content"></div>
         <div id="content" class="content"></div>
     </div>
 </template>
@@ -42,8 +42,8 @@ export default {
     },
     mounted() {
         this.info = this.$route.query;
-        // this.getDetail();
-        this.$_handleData();
+        this.getDetail();
+        // this.$_handleData();
     },
     methods: {
         isImg(item) {
@@ -60,7 +60,7 @@ export default {
                 if (index == -1) {
                     break;
                 } else {
-                    let img = `<el-image :src="getSrc(${count})" :preview-src-list="urlList"></el-image>`;
+                    let img = `<el-image :src="getSrc(${count})" :preview-src-list="urlList" index="${count}"></el-image>`;
                     count++;
                     let str = this.detail.content.replace(
                         this.detail.placeholder,

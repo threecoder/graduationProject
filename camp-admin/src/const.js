@@ -39,3 +39,12 @@ export const msgTypeList = [
     { label: "证书审核", key: "certificateExamine" },
     { label: "发放证书", key: "grantCertificate" }
 ]
+
+//订单类别
+export const orderTypeList = [
+    { label: "活动", key: "activity" },
+    { label: "培训", key: "training" },
+    { label: "证书变更", key: "cerChange" },
+    { label: "证书复审", key: "cerRecheck" },
+    { label: "会员续费", key: "member" }
+]

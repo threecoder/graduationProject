@@ -7,8 +7,18 @@
                 <el-form-item label="订单号">
                     <el-input v-model="form.orderNum" placeholder="订单号" clearable></el-input>
                 </el-form-item>
-                <el-form-item label="活动/培训名称">
-                    <el-input v-model="form.businessName" placeholder="订单所属的培训/活动名称" clearable></el-input>
+                <el-form-item label="订单类别">
+                    <el-select v-model="form.type" placeholder="订单类别">
+                        <el-option
+                            v-for="(item,i) in orderTypeList"
+                            :key="i"
+                            :value="item.key"
+                            :label="item.label"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="关联名称">
+                    <el-input v-model="form.businessName" placeholder="订单所属的培训/活动/证书等名称" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="下单人/单位">
                     <el-input v-model="form.name" placeholder="下单人/单位" clearable></el-input>
@@ -57,6 +67,7 @@
 import mTable from "../../../components/mTable.vue";
 import page from "../../../components/page.vue";
 import orderAPi from "../../../api/admin/order";
+import { orderTypeList } from "../../../const";
 export default {
     components: {
         mTable,
@@ -70,13 +81,14 @@ export default {
                 total: 100,
                 businessName: null,
                 name: null,
-                orderNum: null
+                orderNum: null,
+                type: "activity"
             },
             table: {
                 config: [
                     { prop: "orderNum", label: "订单号" },
                     { prop: "orderType", label: "订单类型" },
-                    { prop: "businessName", label: "培训/活动名称" },
+                    { prop: "businessName", label: "关联名称" },
                     { prop: "businessType", label: "属培训/活动" },
                     { prop: "builder", label: "下单人" },
                     { prop: "buildTime", label: "创建时间" },
@@ -95,6 +107,7 @@ export default {
                     {
                         orderNum: "20191023111733112724",
                         orderType: "学员订单",
+                        type: "新闻",
                         businessName: "英语角",
                         businessType: "培训",
                         builder: "张三",
@@ -109,7 +122,8 @@ export default {
             payment: {
                 flag: false,
                 orderId: null
-            }
+            },
+            orderTypeList
         };
     },
     mounted() {

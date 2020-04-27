@@ -14,8 +14,18 @@
                 <el-form-item label="订单号">
                     <el-input v-model="form.orderNum" placeholder="订单号" clearable></el-input>
                 </el-form-item>
-                <el-form-item label="活动/培训名称">
-                    <el-input v-model="form.name" placeholder="订单所属的培训/活动名称" clearable></el-input>
+                <el-form-item label="订单类别">
+                    <el-select v-model="form.type" placeholder="订单类别">
+                        <el-option
+                            v-for="(item,i) in orderTypeList"
+                            :key="i"
+                            :value="item.key"
+                            :label="item.label"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="关联名称">
+                    <el-input v-model="form.businessName" placeholder="订单所属的培训/活动/证书名称" clearable></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="getOrderList" :loading="table.loading">搜索</el-button>
@@ -61,6 +71,7 @@ import page from "../../../components/page.vue";
 import payment from "./components/payment.vue";
 import couponList from "./components/couponList.vue";
 import orderAPi from "../../../api/modules/order";
+import { orderTypeList } from "../../../const";
 export default {
     components: {
         mTable,
@@ -69,23 +80,30 @@ export default {
         couponList
     },
     data() {
+        let tArr = [...orderTypeList];
+        if (this.$store.getters.idType == 0) {
+            tArr.forEach((val, i) => {
+                if (val.key == "member") {
+                    tArr.splice(i, 1);
+                }
+            });
+        }
         return {
             form: {
                 pageSize: 10,
                 currentPage: 1,
                 total: 100,
                 orderNum: null,
-                name: null
+                businessName: null
             },
             table: {
                 config: [
                     { prop: "orderNum", label: "订单号" },
                     { prop: "orderType", label: "订单类型" },
                     { prop: "name", label: "培训/活动名称" },
-                    { prop: "businessType", label: "属培训/活动" },
                     { prop: "builder", label: "下单人" },
                     { prop: "buildTime", label: "创建时间" },
-                    { prop: "startTime", label: "生效时间" },
+                    { prop: "payTime", label: "支付时间" },
                     { prop: "endTime", label: "失效时间" },
                     { prop: "status", label: "状态" },
                     { prop: "price", label: "订单金额" },
@@ -100,7 +118,6 @@ export default {
                         orderNum: "20191023111733112724",
                         orderType: "学员订单",
                         name: "英语角",
-                        businessType: "培训",
                         builder: "张三",
                         buildTime: "2020-02-02 20:20:30",
                         endTime: "2020-03-02 20:20:20",
@@ -114,7 +131,8 @@ export default {
                 flag: false,
                 orderId: null
             },
-            couponFlag: false
+            couponFlag: false,
+            orderTypeList: tArr
         };
     },
     computed: {
