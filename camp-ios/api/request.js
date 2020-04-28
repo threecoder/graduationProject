@@ -10,8 +10,6 @@ import {
 const SALT = "6e6s4xswqsD25WEWQ3sShLJOK";
 let cookie = null;
 
-// Axios.defaults.baseURL = 'http://112.126.67.240:3000';
-// Axios.defaults.baseURL = 'http://localhost:3000';
 
 /**
  * @url             请求地址
@@ -49,7 +47,7 @@ export function request(url, type, data = {}, responseType = "json") {
 				if (response.header['Content-Type'] == 'application/json;charset=UTF-8') {
 					if (response.data.code == 'success') {
 						resolve(response.data);
-					} else if (response.data.code = 'error') {
+					} else if (response.data.code == 'error') {
 						console.log(url, "未登录");
 						//处理未登录
 					} else if (response.data.code == 'fail') {

@@ -4,7 +4,7 @@
 			<seg :isFixed="isFixed" :current="contentIndex" :segItem="segItem" @clickItem="onClickItem"></seg>
 			<view class="content">
 				<view v-show="contentIndex === 0">
-					<single v-for="(item, i) in joinableList" :key="i" :item="item" status="vote" @refresh="refresh" @activityDetail="activityDetail(item)" />
+					<single v-for="(item, i) in joinableList" :key="i" :item="item" @refresh="refresh" @activityDetail="activityDetail(item)" />
 				</view>
 				<view v-show="contentIndex === 1"><single v-for="(item, i) in signedList" :key="i" :item="item" @refresh="refresh" @activityDetail="activityDetail(item)" /></view>
 				<load-more :status="hasMore" @clickLoadMore="loadMore"></load-more>
@@ -40,38 +40,12 @@ export default {
 			contentIndex: 0,
 			segItem: ['可报名活动', '已报名活动'],
 			isFixed: false,
-			joinableList: [
-				// {
-				// 	id: '111',
-				// 	name: '质量检测',
-				// 	date: '2020-02-02 14:00',
-				// 	phone: '15183650703',
-				// 	fee: 2222,
-				// 	contacts: '糖好酸',
-				// 	address: '广东省广州市番禺区小谷围街道华南理工大学广东省广州市番禺区小谷围街道华南理工大学',
-				// 	introduce: [
-				// 		'广东省广州市番禺区小谷围街道华南理工大学广东省广州市番禺区小谷围街道华南理工大学广东省广州市番禺区小谷围街道华南理工大学广东省广州市番禺区小谷围街道华南理工大学广东省广州市番禺区小谷围街道华南理工大学广东省广州市番禺区小谷围街道华南理工大学',
-				// 		'222'
-				// 	],
-				// 	status: '可报名'
-				// }
-			],
-			signedList: [
-				// {
-				// 	id: '111',
-				// 	name: '质量检测',
-				// 	date: '2020-02-02 14:00',
-				// 	phone: '15183650703',
-				// 	fee: 2222,
-				// 	contacts: '糖好酸',
-				// 	address: '广东省广州市番禺区小谷围街道华南理工大学',
-				// 	introduce: ['111', '222'],
-				// 	status: '已支付'
-				// }
-			],
+			joinableList: [],
+			signedList: [],
 			par: {
 				currentPage: 1,
-				pageSize: 10
+				pageSize: 10,
+				name: ''
 			},
 			hasMore: 'more',
 			introduce: []
@@ -99,12 +73,11 @@ export default {
 				if (type == 'add') {
 					this.par.currentPage++;
 					res = await activityApi.getsignedActivities(this.par);
-					console.log('已参加', res);
 					this.signedList.push(...res.data.list);
 				} else {
 					this.par.currentPage = 1;
 					res = await activityApi.getsignedActivities(this.par);
-					this.signedList = res.data ? res.data : [];
+					this.signedList = res.data ? res.data.list : [];
 				}
 				if (res.data.list.length == 0) {
 					this.hasMore = 'noMore';
@@ -125,7 +98,7 @@ export default {
 				} else {
 					this.par.currentPage = 1;
 					res = await activityApi.getJoinableActivities(this.par);
-					this.joinableList = res.data ? res.data : [];
+					this.joinableList = res.data ? res.data.list : [];
 				}
 				if (res.data.list.length == 0) {
 					this.hasMore = 'noMore';
@@ -145,7 +118,6 @@ export default {
 			} else {
 				await this.getSignedList('new');
 			}
-			this.hasMore = 'more';
 		},
 		activityDetail(item) {
 			this.introduce = item.introduce;

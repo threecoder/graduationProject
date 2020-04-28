@@ -2,33 +2,32 @@
     <view class="vote-container">
         <view class="vote">
             <view class="index">
-                <text class="gray">活动序号：</text>
-                <text>{{item.id}}</text>
-                <view class="type">
-                    <text>{{item.status}}</text>
+                <text class="gray">考试序号：</text>
+                <text>{{item.examId}}</text>
+                <view class="type" v-if="item.grade != null">
+                    <text>成绩：{{item.grade}}分</text>
                 </view>
             </view>
             <view class="name">
-                <text class="gray">活动名称：</text>
-                <text>{{item.name}}</text>
+                <text class="gray">考试名称：</text>
+                <text>{{item.examName}}</text>
             </view>
             <view class="other">
                 <view class="other-item">
-                    <text class="tip">活动时间：</text>
-                    <text class="tip-text">{{item.date}}</text>
+                    <text class="tip">开始时间：</text>
+                    <text class="tip-text">{{item.startTime}}</text>
                 </view>
+				<view class="other-item">
+				    <text class="tip">结束时间：</text>
+				    <text class="tip-text">{{item.endTime}}</text>
+				</view>
                 <view class="other-item">
-                    <text class="tip">活动地址：</text>
-                    <text class="tip-text">{{item.address}}</text>
+                    <text class="tip">时长(分钟)：</text>
+                    <text class="tip-text">{{item.min}}</text>
                 </view>
             </view>
         </view>
-        <view class="oper">
-            <button class="button-small" v-if="status=='可报名'" @click="join">报名</button>
-            <button class="button-small" v-if="status=='未支付'" @click="pay">支付</button>
-            <!-- <button class="button-small" v-if="status=='已支付'" @click="seatNum">座位</button> -->
-            <button class="button-small" @click="detail">详情</button>
-        </view>
+        
     </view>
 </template>
 

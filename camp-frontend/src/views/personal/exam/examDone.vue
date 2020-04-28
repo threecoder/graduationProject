@@ -3,7 +3,7 @@
         <h2>已完成的考试</h2>
         <div>
             <span class="panel-title">已经完成的试卷</span>
-            <div class="all-exam-container">
+            <div v-if="examList.length>0" class="all-exam-container">
                 <div class="single-exam-container" v-for="(item,i) in examList" :key="i">
                     <single-exam
                         isDone="done"
@@ -18,18 +18,36 @@
                     />
                 </div>
             </div>
+            <div v-else>
+                <h4 class="tac">暂无内容</h4>
+            </div>
+        </div>
+        <div class="page-container">
+            <page
+                :currentPage="form.currentPage"
+                :total="form.total"
+                :pageSize="form.pageSize"
+                @curChange="curChange"
+            />
         </div>
     </div>
 </template>
 <script>
-import examApi from '../../../api/modules/exam';
+import examApi from "../../../api/modules/exam";
 import singleExam from "./components/singleExam.vue";
+import page from "../../../components/page.vue";
 export default {
     components: {
-        singleExam
+        singleExam,
+        page
     },
     data() {
         return {
+            form: {
+                pageSize: 10,
+                currentPage: 1,
+                total: 100
+            },
             examList: [
                 {
                     examId: "1",
@@ -52,9 +70,8 @@ export default {
         async getExamList() {
             try {
                 let res = await examApi.getDoneExam();
-                if (res) {
-                    this.examList = res.data;
-                }
+                this.examList = res.data.list;
+                this.form.total = res.data.total;
             } catch (error) {
                 this.$message.error(error.message);
             }

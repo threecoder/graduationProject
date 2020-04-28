@@ -20,24 +20,24 @@ Vue.prototype.confirm = element.MessageBox.confirm;
 Vue.use(element);
 Vue.component('v-distpicker', Distpicker)
 // 配置路由拦截
-router.beforeEach((to, from, next) => {
-    store.commit("init");
-    let user = store.getters.user,
-        token = document.cookie.indexOf("token"),
-        canGoPath = getCanGoPath(),
-        time = new Date().getTime();
-    if ((token == -1 || user.expire < time) && canGoPath.indexOf(to.path) == -1) {
-        if (user.expire < time) {
-            element.Message.error("登录信息已过期，请重新登录");
-        }
-        let url = escape(to.fullPath);
-        next({
-            path: `/adminLogin?redirect=${url}`
-        })
-    } else {
-        next();
-    }
-})
+// router.beforeEach((to, from, next) => {
+//     store.commit("init");
+//     let user = store.getters.user,
+//         token = document.cookie.indexOf("token"),
+//         canGoPath = getCanGoPath(),
+//         time = new Date().getTime();
+//     if ((token == -1 || user.expire < time) && canGoPath.indexOf(to.path) == -1) {
+//         if (user.expire < time) {
+//             element.Message.error("登录信息已过期，请重新登录");
+//         }
+//         let url = escape(to.fullPath);
+//         next({
+//             path: `/adminLogin?redirect=${url}`
+//         })
+//     } else {
+//         next();
+//     }
+// })
 
 //http response 拦截器
 Axios.interceptors.response.use(

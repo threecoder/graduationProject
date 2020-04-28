@@ -6,14 +6,14 @@ import {
 	memberPrefix
 } from '../../const';
 //获取可以报名的培训
-const getJoinableTraining = () => request(`${studentPrefix}/getJoinableTraining`, 'get');
+const getJoinableTraining = par => request(`${studentPrefix}/getJoinableTraining`, 'get', par);
 
 const studentJoinTraining = trainingId => request(`${studentPrefix}/joinTraining`, 'post', {
 	trainingId
 });
 
 //获取已经报名的培训
-const getsignedTraining = () => request(`${studentPrefix}/getSignedTraining`, 'get');
+const getsignedTraining = par => request(`${studentPrefix}/getSignedTraining`, 'get', par);
 
 const getSeatNum = activityId => request(studentPrefix + '/getSeatNum', 'post', {
 	activityId

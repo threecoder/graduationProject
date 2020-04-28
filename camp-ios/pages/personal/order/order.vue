@@ -34,7 +34,7 @@ export default {
 	data() {
 		return {
 			contentIndex: 0,
-			segItem: ['活动订单', '培训订单', '证书变更订单', '证书复审订单'],
+			segItem: ['活动', '培训', '证书变更', '证书复审'],
 			isFixed: false,
 			orderList: [
 				{
@@ -84,8 +84,9 @@ export default {
 				} else {
 					this.par.currentPage = 1;
 					res = await orderApi.getOrderList(this.par);
-					this.orderList = res.data ? res.data : [];
+					this.orderList = res.data ? res.data.list : [];
 				}
+				console.log("订单",res);
 				if (res.data.list.length == 0) {
 					this.hasMore = 'more';
 				} else {

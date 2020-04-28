@@ -74,9 +74,13 @@ export default {
     background-color: #fff;
     z-index: 998;
     border-bottom: 1px solid #ccc;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
     .item {
         float: left;
-        padding: 0.1rem 0.2rem;
+        padding: 0.1rem;
         font-size: 0.14rem;
         color: #ccc;
     }

@@ -5,7 +5,7 @@ const getJoinableTraining = (idType, par) => {
     str += '/getJoinableTraining'
     return request(str, 'get', par);
 }
-const studentJoinTraining = activityId => request(studentPrefix + '/joinActivity', 'post', { activityId });
+const studentJoinTraining = trainingId => request(studentPrefix + '/joinTraining', 'post', { trainingId });
 
 const getsignedTraining = (idType, par) => {
     let str = idType == 0 ? studentPrefix : memberPrefix;

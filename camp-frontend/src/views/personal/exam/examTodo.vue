@@ -8,7 +8,7 @@
         <div>
             <span v-if="notFinishedFlag" class="panel-title">还未作答的试卷</span>
             <span v-else class="panel-title">已经作答过的试卷</span>
-            <div class="all-exam-container" :loading="loading">
+            <div v-if="examList.length>0" class="all-exam-container" :loading="loading">
                 <div class="single-exam-container" v-for="(item,i) in examList" :key="i">
                     <single-exam
                         :examName="item.examName"
@@ -22,18 +22,36 @@
                     />
                 </div>
             </div>
+            <div v-else>
+                <h4 class="tac">暂无内容</h4>
+            </div>
+        </div>
+        <div class="page-container">
+            <page
+                :currentPage="form.currentPage"
+                :total="form.total"
+                :pageSize="form.pageSize"
+                @curChange="curChange"
+            />
         </div>
     </div>
 </template>
 <script>
 import examApi from "../../../api/modules/exam";
 import singleExam from "./components/singleExam.vue";
+import page from "../../../components/page.vue";
 export default {
     components: {
-        singleExam
+        singleExam,
+        page
     },
     data() {
         return {
+            form: {
+                pageSize: 10,
+                currentPage: 1,
+                total: 100
+            },
             examList: [
                 {
                     examId: "1",
@@ -53,6 +71,8 @@ export default {
     watch: {
         notFinishedFlag() {
             this.examList = [];
+            this.form.currentPage = 1;
+            this.form.total = 0;
             this.getExamList();
         }
     },
@@ -60,18 +80,21 @@ export default {
         this.getExamList();
     },
     methods: {
+        curChange(newVal) {
+            this.form.currentPage = newVal;
+            this.getExamList();
+        },
         async getExamList() {
             this.loading = true;
             try {
                 let res = null;
                 if (this.notFinishedFlag) {
-                    res = await examApi.getTodoExam();
+                    res = await examApi.getTodoExam(this.form);
                 } else {
-                    res = await examApi.getHalfExam();
+                    res = await examApi.getHalfExam(this.form);
                 }
-                if (res) {
-                    this.examList = res.data;
-                }
+                this.examList = res.data.list;
+                this.form.total = res.data.total;
             } catch (error) {
                 this.$message.error(error.message);
             }

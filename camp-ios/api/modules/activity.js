@@ -1,12 +1,21 @@
-import { request } from '../request.js'
-import { studentPrefix, memberPrefix } from '../../const';
-const getJoinableActivities = () => request(`${studentPrefix}/getJoinableActivities`, 'get');
+import {
+	request
+} from '../request.js'
+import {
+	studentPrefix,
+	memberPrefix
+} from '../../const';
+const getJoinableActivities = par => request(`${studentPrefix}/getJoinableActivities`, 'get', par);
 
-const studentJoinActivties = activityId => request(`${studentPrefix}/joinActivity`, 'post', { activityId });
+const studentJoinActivties = activityId => request(`${studentPrefix}/joinActivity`, 'post', {
+	activityId
+});
 
-const getsignedActivities = () => request(`${studentPrefix}/getSignedActivities`, 'get');
+const getsignedActivities = par => request(`${studentPrefix}/getSignedActivities`, 'get', par);
 
-const getSeatNum = activityId => request(`${studentPrefix}/getSeatNum`, 'get', { activityId });
+const getSeatNum = activityId => request(`${studentPrefix}/getSeatNum`, 'get', {
+	activityId
+});
 
 //会员获取学生列表
 const getList = () => request(memberPrefix + "/getStudentList", 'get');
@@ -15,10 +24,10 @@ const getList = () => request(memberPrefix + "/getStudentList", 'get');
 const memberJoinActivity = data => request(memberPrefix + "/joinActivity", 'post', data);
 
 export default {
-    getJoinableActivities,
-    studentJoinActivties,
-    getsignedActivities,
-    getSeatNum,
-    getList,
-    memberJoinActivity
+	getJoinableActivities,
+	studentJoinActivties,
+	getsignedActivities,
+	getSeatNum,
+	getList,
+	memberJoinActivity
 }
