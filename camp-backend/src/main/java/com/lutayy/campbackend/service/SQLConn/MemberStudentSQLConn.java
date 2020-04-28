@@ -76,7 +76,7 @@ public class MemberStudentSQLConn {
             statement = conn.createStatement();
 
             String sql = "select count(*) c from member_re_student r inner join student s " +
-                    "where r.student_id=s.student_id and r.member_key_id=" + memberId;
+                    "on r.student_id=s.student_id where r.member_key_id=" + memberId;
             if (phone != null && !phone.equals("")) {
                 sql += " and s.student_phone like '%" + phone + "%'";
             }

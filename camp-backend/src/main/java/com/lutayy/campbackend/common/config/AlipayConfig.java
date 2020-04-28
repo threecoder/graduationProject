@@ -31,7 +31,7 @@ public class AlipayConfig {
     public static String alipay_public_key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmgs728+zsZtLCiYDLNCsGPN40IhCyqKBWZN4Ai1tbTG+/KEBP5FYHqaQbPKXaeoeN8G6fKdX3vaO/Z1gdqwl9CBrSv7HcEw/qhRJN0T4B/OJOBpAZQ19iTGBRoZgkzadfcXUojSPoC2rCy4fg+8xsxFQKXgzm036gJYzG8SxUD2ZMM9ujbkIjZj4uCOG0DFtsvK+s9hGa1C+DiguRxbdgYD59i1tSshH4tNJOt02kc0JxaFxt4pY8cf3B/+IT5dCQxohWK7QfKZdufG7pwdZtvM9b16Z6Go1azG0K79kdqB1nA5EH6Ne9EeMFYncTAqib46C+mABISWD5F7Ht8ud1QIDAQAB";
 
     // 服务器异步通知页面路径  需http://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问
-    public static String notify_url = "http://free.shenzhuo.vip:13934/aliPayNotify";
+    public static String notify_url = "http://112.126.67.240:3000/aliPayNotify";
 
     // 页面跳转同步通知页面路径 需http://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问
     //public static String return_url = "http://工程公网访问地址/alipay.trade.page.pay-JAVA-UTF-8/return_url.jsp";

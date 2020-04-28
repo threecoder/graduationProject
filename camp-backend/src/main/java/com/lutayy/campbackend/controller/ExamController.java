@@ -22,20 +22,26 @@ public class ExamController {
 
     @RequestMapping("/student/getHalfExamList")
     @ResponseBody
-    public Object getHalfExamList(@RequestParam("id") Integer studentId) {
-        return examService.getHalfExamList(studentId);
+    public Object getHalfExamList(@RequestParam("id") Integer studentId,
+                                  @RequestParam("pageSize") Integer pageSize,
+                                  @RequestParam("currentPage") Integer currentPage) {
+        return examService.getHalfExamList(studentId, pageSize, currentPage);
     }
 
     @RequestMapping("/student/getTodoExamList")
     @ResponseBody
-    public Object getTodoExamList(@RequestParam("id") Integer studentId) {
-        return examService.getTodoExamList(studentId);
+    public Object getTodoExamList(@RequestParam("id") Integer studentId,
+                                  @RequestParam("pageSize") Integer pageSize,
+                                  @RequestParam("currentPage") Integer currentPage) {
+        return examService.getTodoExamList(studentId, pageSize, currentPage);
     }
 
     @RequestMapping("/student/getDoneExamList")
     @ResponseBody
-    public Object getDoneExamList(@RequestParam("id") Integer studentId) {
-        return examService.getDoneExamList(studentId);
+    public Object getDoneExamList(@RequestParam("id") Integer studentId,
+                                  @RequestParam("pageSize") Integer pageSize,
+                                  @RequestParam("currentPage") Integer currentPage) {
+        return examService.getDoneExamList(studentId, pageSize, currentPage);
     }
 
     @RequestMapping("/student/getExamInfo")

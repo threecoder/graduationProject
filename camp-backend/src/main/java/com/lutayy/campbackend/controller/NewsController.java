@@ -110,14 +110,11 @@ public class NewsController {
 
     @RequestMapping("/admin/addNotice")
     @ResponseBody
-    public JSONObject addNotice(@RequestParam("id") Integer adminId,
-                                @RequestParam("title") String title,
-                                @RequestParam("desc") String desc,
-                                @RequestParam("content") String content) {
-        return newsService.addNotice(adminId, title, desc, content);
+    public JSONObject addNotice(@RequestBody JSONObject jsonObject) {
+        return newsService.addNotice(jsonObject);
     }
 
-    @RequestMapping("/admin/getNewsAndNoticeList")
+    @RequestMapping("/admin/getNoticeList")
     @ResponseBody
     public Object getNewsAndNoticeList(@RequestParam("pageSize") Integer pageSize,
                                         @RequestParam("currentPage") Integer currentPage,
@@ -134,11 +131,8 @@ public class NewsController {
 
     @RequestMapping("/admin/modifyNotice")
     @ResponseBody
-    public JSONObject modifyNotice(@RequestParam("noticeId") Integer newsId,
-                                    @RequestParam("title") String title,
-                                    @RequestParam("desc") String desc,
-                                    @RequestParam("content") String content) {
-        return newsService.modifyNotice(newsId, title, desc, content);
+    public JSONObject modifyNotice(@RequestBody JSONObject jsonObject) {
+        return newsService.modifyNotice(jsonObject);
     }
 
     @RequestMapping("/admin/addCarousel")

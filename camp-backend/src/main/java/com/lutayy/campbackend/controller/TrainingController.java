@@ -94,7 +94,7 @@ public class TrainingController {
         return trainingService.getStudentTrainingHistory(idCard, currentPage, pageSize);
     }
 
-    @RequestMapping(value = {"/student/getPublishedTraining"})
+    @RequestMapping(value = {"/admin/getPublishedTraining"})
     @ResponseBody
     public Object getPublishedTraining(@RequestParam("pageSize") Integer pageSize,
                                        @RequestParam("currentPage") Integer currentPage,

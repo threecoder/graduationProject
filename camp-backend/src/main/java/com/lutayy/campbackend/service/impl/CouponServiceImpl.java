@@ -9,6 +9,7 @@ import com.lutayy.campbackend.dao.CouponMemberMapper;
 import com.lutayy.campbackend.dao.MemberMapper;
 import com.lutayy.campbackend.pojo.*;
 import com.lutayy.campbackend.service.CouponService;
+import com.lutayy.campbackend.service.SQLConn.CouponMemberSQLConn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -213,7 +214,41 @@ public class CouponServiceImpl implements CouponService {
     //根据优惠券获取相关会员列表
     @Override
     public JSONObject couponGetMemberList(JSONObject jsonObject) {
-        return null;
+        JSONObject result=new JSONObject();
+        JSONObject data=new JSONObject();
+        result.put("data", data);
+        result.put("code", "fail");
+        Integer couponId=jsonObject.getInteger("couponId");
+        Integer pageSize=jsonObject.getInteger("pageSize");
+        Integer currentPage=jsonObject.getInteger("currentPage");
+        Integer memberKeyId=jsonObject.getInteger("memberId");
+        String memberName=jsonObject.getString("name");
+        Coupon coupon=couponMapper.selectByPrimaryKey(couponId);
+        if(coupon==null){
+            result.put("msg", "该优惠券不存在");
+            return result;
+        }
+        int total= CouponMemberSQLConn.countMembersByCouponId(couponId, memberKeyId, memberName);
+        List<Integer> memberKeyIds=CouponMemberSQLConn.getMemberKeyIdListByCouponId(couponId, memberKeyId, memberName, pageSize, currentPage);
+        JSONArray list=new JSONArray();
+        for(Integer id:memberKeyIds){
+            JSONObject object=new JSONObject();
+            Member member=memberMapper.selectByPrimaryKey(id);
+            object.put("id", id);
+            object.put("name", member.getMemberName());
+            object.put("phone", member.getMemberPhone());
+            object.put("email", member.getMemberEmail());
+            CouponMemberExample example=new CouponMemberExample();
+            example.createCriteria().andMemberKeyIdEqualTo(id).andCouponIdEqualTo(couponId).andIsInvalidEqualTo(false);
+            object.put("num", couponMemberMapper.countByExample(example));
+            list.add(object);
+        }
+        data.put("total", total);
+        data.put("data", list);
+        result.put("data", data);
+        result.put("code", "success");
+        result.put("msg", "获取会员列表成功！");
+        return result;
     }
 
     //会员获取自己有的优惠券

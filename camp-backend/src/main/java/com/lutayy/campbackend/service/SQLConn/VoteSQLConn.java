@@ -93,6 +93,9 @@ public class VoteSQLConn {
 //                vote.setOptionalSum(rs.getByte("optional_sum"));
                 vote.setVoteType(rs.getByte("vote_type"));
                 vote.setEndTime(rs.getTimestamp("end_time"));
+                vote.setOptionalSum(rs.getByte("optional_sum"));
+                vote.setOptionalNum(rs.getByte("optional_num"));
+                vote.setPostTime(rs.getTimestamp("post_time"));
                 voteList.add(vote);
             }
             return voteList;

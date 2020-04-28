@@ -24,13 +24,13 @@ public interface NewsService {
     JSONObject modifyDynamic(HttpServletRequest request, Integer newsId, String placeholder, String title, String desc, String type, String content, JSONArray imgInfos, MultipartFile[] imgList);
 
     //管理员新增一条公告
-    JSONObject addNotice(Integer adminId, String title, String desc, String content);
+    JSONObject addNotice(JSONObject jsonObject);
     //获取公告列表
     JSONObject getNewsAndNoticeList(Integer pageSize, Integer currentPage, String title, String dateString);
     //删除一条公告
     JSONObject deleteNotice(JSONObject jsonObject);
     //修改一条公告
-    JSONObject modifyNotice(Integer newsId, String title, String desc, String content);
+    JSONObject modifyNotice(JSONObject jsonObject);
 
     //管理员将一条动态加入到轮播图队列
     JSONObject addCarousel(JSONObject jsonObject);

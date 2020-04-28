@@ -237,6 +237,7 @@ public class VoteServiceImpl implements VoteService {
             object.put("id", vote.getVoteId());
             object.put("name", vote.getVoteContent());
             object.put("type", vote.getOptionalNum() !=null && vote.getOptionalNum() > 1 ? "多选" : "单选");
+            System.out.println(vote.getOptionalNum());
             object.put("time", vote.getEndTime());
             list.add(object);
         }

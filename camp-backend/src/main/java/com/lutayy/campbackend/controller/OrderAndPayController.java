@@ -28,10 +28,27 @@ public class OrderAndPayController {
         return orderAndPayService.getOrderList(name, orderNum, businessName, type, currentPage, pageSize);
     }
 
+    @RequestMapping("/admin/getTrainingOrderList")
+    @ResponseBody
+    public Object getTrainingOrderList(@RequestParam(value = "orderNum", required = false) String orderNum,
+                               @RequestParam(value = "userId", required = false) Integer userId,
+                               @RequestParam(value = "userName", required = false) String userName,
+                               @RequestParam("currentPage") Integer currentPage,
+                               @RequestParam("pageSize") Integer pageSize,
+                               @RequestParam("trainingId") Integer trainingId) {
+        return orderAndPayService.getTrainingOrderList(orderNum, userId, userName, trainingId, currentPage, pageSize);
+    }
+
     @RequestMapping("/admin/modifyOrderPrice")
     @ResponseBody
     public JSONObject modifyOrderPrice(@RequestBody JSONObject jsonObject) {
         return orderAndPayService.modifyOrderPrice(jsonObject);
+    }
+
+    @RequestMapping("/admin/confirmPay")
+    @ResponseBody
+    public JSONObject confirmPay(@RequestBody JSONObject jsonObject) {
+        return orderAndPayService.confirmPay(jsonObject);
     }
 
 

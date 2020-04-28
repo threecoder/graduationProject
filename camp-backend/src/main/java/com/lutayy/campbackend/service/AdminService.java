@@ -45,13 +45,19 @@ public interface AdminService {
 
     void getMemberTemplate(HttpServletResponse response);
 
+    JSONObject addSingleMember(JSONObject jsonObject);
+
     JSONObject importMemberByFile(MultipartFile file);
 
     JSONObject getMemberList(Integer type, Integer deadline, String name,
-                             Integer currentPage, Integer pageSize);
+                             Integer currentPage, Integer pageSize,
+                             String becomeTimeStart, String becomeTimeEnd,
+                             String endTimeStart, String endTimeEnd, String province, String city, String area);
 
     //管理员获取会员列表用于下拉框
     JSONObject getMemSelectList();
+
+    JSONObject modifyMemberInfo(JSONObject jsonObject);
 
     JSONObject getOneMemberStudentList(Integer memberId);
 }
