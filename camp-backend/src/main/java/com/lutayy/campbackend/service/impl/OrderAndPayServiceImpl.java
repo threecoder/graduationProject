@@ -5,12 +5,16 @@ import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.lutayy.campbackend.common.config.AlipayConfig;
 import com.lutayy.campbackend.common.util.RedisUtil;
+import com.lutayy.campbackend.common.util.UUIDUtil;
 import com.lutayy.campbackend.dao.*;
 import com.lutayy.campbackend.pojo.*;
 import com.lutayy.campbackend.service.OrderAndPayService;
+import com.lutayy.campbackend.service.SQLConn.ActivityStudentSQLConn;
+import com.lutayy.campbackend.service.SQLConn.TrainingStudentSQLConn;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,9 +37,21 @@ public class OrderAndPayServiceImpl implements OrderAndPayService {
     @Autowired
     TrainingOrderMapper trainingOrderMapper;
     @Autowired
+    TrainingOrderStudentMapper trainingOrderStudentMapper;
+    @Autowired
+    TrainingReStudentMapper trainingReStudentMapper;
+    @Autowired
+    ExamMapper examMapper;
+    @Autowired
+    ExamReStudentMapper examReStudentMapper;
+    @Autowired
     ActivityMapper activityMapper;
     @Autowired
     ActivityOrderMapper activityOrderMapper;
+    @Autowired
+    ActivityOrderStudentMapper activityOrderStudentMapper;
+    @Autowired
+    ActivityStudentMapper activityStudentMapper;
     @Autowired
     CertificateChangeOrderMapper changeOrderMapper;
     @Autowired
@@ -259,7 +275,7 @@ public class OrderAndPayServiceImpl implements OrderAndPayService {
                 criteria.andBusinessNameLike("%"+businessName+"%");
             }
             total=memberSubscriptionOrderMapper.countByExample(orderExample);
-            orderExample.setOrderByClause("order_begin_time DESC");
+            orderExample.setOrderByClause("create_time DESC");
             orderExample.setOffset((currentPage-1)*pageSize);
             orderExample.setLimit(pageSize);
             List<MemberSubscriptionOrder> orders=memberSubscriptionOrderMapper.selectByExample(orderExample);
@@ -564,7 +580,7 @@ public class OrderAndPayServiceImpl implements OrderAndPayService {
                 criteria.andBusinessNameLike("%"+businessName+"%");
             }
             total=memberSubscriptionOrderMapper.countByExample(orderExample);
-            orderExample.setOrderByClause("order_begin_time DESC");
+            orderExample.setOrderByClause("create_time DESC");
             orderExample.setOffset((currentPage-1)*pageSize);
             orderExample.setLimit(pageSize);
             List<MemberSubscriptionOrder> orders=memberSubscriptionOrderMapper.selectByExample(orderExample);
@@ -637,6 +653,20 @@ public class OrderAndPayServiceImpl implements OrderAndPayService {
                 result.put("msg", "订单已失效，无法进行支付");
                 return result;
             }
+            // TODO 学生支付订单前需要判断会员是不是已经帮自己报名了
+            if(activityOrder.getOrderType()){
+                Integer studentId=activityOrder.getStudentId();
+                Integer activityId=activityOrder.getActivityId();
+                ActivityStudentExample activityStudentExample=new ActivityStudentExample();
+                activityStudentExample.createCriteria().andIsInvalidEqualTo(false)
+                        .andActivityIdEqualTo(activityId).andStudentIdEqualTo(studentId);
+                if(ActivityStudentSQLConn.getActivityOrderByStudentId(studentId, activityId)!=null
+                                || activityStudentMapper.countByExample(activityStudentExample)>0){
+                    result.put("msg", "无法支付！所属会员已为您报名或有未支付订单");
+                    return result;
+                }
+            }
+
             fee=activityOrder.getOrderPrice();
             bussinessName=activityOrder.getOpManName()+"_"+activityOrder.getBusinessName();
 
@@ -649,6 +679,19 @@ public class OrderAndPayServiceImpl implements OrderAndPayService {
             if(getObjectHelper.checkTrainingOrderOutOfTime(trainingOrder)){
                 result.put("msg", "订单已失效，无法进行支付");
                 return result;
+            }
+            // TODO 学生支付订单前需要判断会员是不是已经帮自己报名了
+            if(trainingOrder.getOrderType()){
+                Integer studentId=trainingOrder.getStudentId();
+                Integer trainingId=trainingOrder.getTrainingId();
+                TrainingReStudentExample trainingReStudentExample=new TrainingReStudentExample();
+                trainingReStudentExample.createCriteria().andIsInvalidEqualTo(false)
+                        .andTrainingIdEqualTo(trainingId).andStudentIdEqualTo(studentId);
+                if(TrainingStudentSQLConn.getTrainingOrderByStudentId(studentId, trainingId)!=null
+                        || trainingReStudentMapper.countByExample(trainingReStudentExample)>0){
+                    result.put("msg", "无法支付！所属会员已为您报名或有未支付订单");
+                    return result;
+                }
             }
             fee=trainingOrder.getOrderPrice();
             bussinessName=trainingOrder.getOpManName()+"_"+trainingOrder.getBusinessName();
@@ -704,10 +747,13 @@ public class OrderAndPayServiceImpl implements OrderAndPayService {
         alipayRequest.setReturnUrl(SERVER_HOST+":"+serverPort+returnUrl);
         alipayRequest.setNotifyUrl(AlipayConfig.notify_url);
         alipayRequest.setBizContent( "{"  +
-                "\"out_trade_no\":\""+orderCode+"\","  +
-                "\"product_code\":\"FAST_INSTANT_TRADE_PAY\","  +
-                "\"total_amount\":"+fee+","  +
-                "\"subject\":\""+bussinessName+"\","  +
+                "    \"out_trade_no\":\""+orderCode+"\","  +
+                "    \"product_code\":\"FAST_INSTANT_TRADE_PAY\","  +
+                "    \"total_amount\":"+fee+","  +
+                "    \"subject\":\""+bussinessName+"\","  +
+                "    \"body\":\""+orderType+"\","  +
+                "    \"extend_params\":{"  +
+                "    }" +
                 "}" ); //填充业务参数
         String form= "" ;
         try  {
@@ -734,6 +780,114 @@ public class OrderAndPayServiceImpl implements OrderAndPayService {
             }
             map.put(name, valueStr);
         }
-        System.out.println(map);
+        //验证签名
+        boolean signVerified = false;
+        try {
+            signVerified = AlipaySignature.rsaCheckV1(map, AlipayConfig.alipay_public_key, AlipayConfig.charset, AlipayConfig.sign_type);
+        } catch (com.alipay.api.AlipayApiException e) {
+            e.printStackTrace();
+            return;
+        }
+        if (signVerified) {
+            // TODO 处理自己的业务逻辑
+            String orderCode=map.get("out_trade_no");
+            String orderType=map.get("orderType");
+            // 确认订单支付成功，同时更新数据库状态
+            confirmOrder(orderCode, orderType);
+            // TODO 插入支付业务流水表
+        }
+
+    }
+
+    private boolean confirmOrder(String orderCode, String orderType){
+        Object order = getObjectHelper.getOrderByOrderCode(orderCode, orderType);
+        Date nowTime=new Date();
+        if (orderType.equals("activity")) {
+            ActivityOrder activityOrder = (ActivityOrder) order;
+            activityOrder.setPaymentState(true); //更新订单状态
+            activityOrder.setPayTime(nowTime);
+            activityOrderMapper.updateByPrimaryKeySelective(activityOrder);
+            ActivityOrderStudentExample example=new ActivityOrderStudentExample();
+            example.createCriteria().andOrderKeyIdEqualTo(activityOrder.getOrderKeyId());
+            ActivityOrderStudent activityOrderStudentRecord=new ActivityOrderStudent();
+            activityOrderStudentRecord.setIsPaid(true);
+            // TODO 将订单内的学生和活动插入关联表
+            activityOrderStudentMapper.updateByExampleSelective(activityOrderStudentRecord, example);
+            List<ActivityOrderStudent> activityOrderStudents=activityOrderStudentMapper.selectByExample(example);
+            for(ActivityOrderStudent activityOrderStudent:activityOrderStudents){
+                ActivityStudent activityStudent=new ActivityStudent();
+                activityStudent.setApplyNumber(UUIDUtil.getActivityApplyNumber(activityOrder.getActivityId()));
+                activityStudent.setStudentId(activityOrderStudent.getStudentId());
+                activityStudent.setActivityId(activityOrder.getActivityId());
+                activityStudent.setApplyTime(nowTime);
+                activityStudentMapper.insertSelective(activityStudent);
+            }
+
+        } else if (orderType.equals("training")) {
+            TrainingOrder trainingOrder = (TrainingOrder) order;
+            trainingOrder.setPaymentState(true); //更新订单状态
+            trainingOrder.setPayTime(nowTime);
+            trainingOrderMapper.updateByPrimaryKeySelective(trainingOrder);
+            // TODO 找出该培训已经发布的考试
+            ExamExample examExample=new ExamExample();
+            ExamExample.Criteria criteria1=examExample.createCriteria();
+            criteria1.andTrainingIdEqualTo(trainingOrder.getTrainingId()).andIsPostedEqualTo(true);
+            List<Exam> exams=examMapper.selectByExample(examExample);
+
+            TrainingOrderStudentExample example=new TrainingOrderStudentExample();
+            example.createCriteria().andOrderKeyIdEqualTo(trainingOrder.getOrderKeyId());
+            TrainingOrderStudent trainingOrderStudentRecord=new TrainingOrderStudent();
+            trainingOrderStudentRecord.setIsPaid(true);
+            trainingOrderStudentMapper.updateByExampleSelective(trainingOrderStudentRecord, example);
+            // TODO 将订单内的学生插入关联表
+            List<TrainingOrderStudent> trainingOrderStudents=trainingOrderStudentMapper.selectByExample(example);
+            for(TrainingOrderStudent trainingOrderStudent:trainingOrderStudents){
+                TrainingReStudent trainingReStudent=new TrainingReStudent();
+                trainingReStudent.setApplyId(UUIDUtil.getTrainingApplyNumber(trainingOrder.getTrainingId()));
+                trainingReStudent.setBeginTime(nowTime);
+                trainingReStudent.setStudentId(trainingOrderStudent.getStudentId());
+                trainingReStudent.setTrainingId(trainingOrder.getTrainingId());
+                trainingReStudentMapper.insertSelective(trainingReStudent);
+                // TODO 将已发布的考试与学生建立联系
+                for(Exam exam:exams){
+                    ExamReStudent examReStudent=new ExamReStudent();
+                    examReStudent.setStudentId(trainingOrderStudent.getStudentId());
+                    examReStudent.setExamId(exam.getExamId());
+                    examReStudentMapper.insertSelective(examReStudent);
+                }
+            }
+
+        } else if (orderType.equals("cerChange")) {
+            CertificateChangeOrder certificateChangeOrder = (CertificateChangeOrder) order;
+            certificateChangeOrder.setPaymentState(true);
+            certificateChangeOrder.setPayTime(nowTime);
+            changeOrderMapper.updateByPrimaryKeySelective(certificateChangeOrder);
+            // TODO 证书修改
+
+        } else if (orderType.equals("cerRecheck")) {
+            CertificateRecheckOrder certificateRecheckOrder = (CertificateRecheckOrder) order;
+            certificateRecheckOrder.setPaymentState(true);
+            certificateRecheckOrder.setPayTime(nowTime);
+            recheckOrderMapper.updateByPrimaryKeySelective(certificateRecheckOrder);
+            // TODO 证书复审
+
+        } else if (orderType.equals("member")) {
+            MemberSubscriptionOrder memberSubscriptionOrder = (MemberSubscriptionOrder) order;
+            memberSubscriptionOrder.setPaymentState(true);
+            memberSubscriptionOrder.setPayTime(nowTime);
+            memberSubscriptionOrderMapper.updateByPrimaryKeySelective(memberSubscriptionOrder);
+            Member member=memberMapper.selectByPrimaryKey(memberSubscriptionOrder.getMemberKeyId());
+            // TODO 有效期延长一年
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(member.getVipEndDate());
+            cal.add(Calendar.YEAR, 1);
+            member.setVipEndDate(cal.getTime());
+            memberMapper.updateByPrimaryKeySelective(member);
+
+        } else {
+            System.out.println("订单类型错误!");
+            return false;
+        }
+        return true;
     }
 }
