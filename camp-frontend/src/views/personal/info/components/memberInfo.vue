@@ -1,6 +1,13 @@
 <template>
     <div class="my-container">
-        <h2>公司信息</h2>
+        <el-row>
+            <el-col :span="20">
+                <h3>公司信息</h3>
+            </el-col>
+            <el-col :span="4">
+                <el-button class="fr" type="primary" @click="recharge" v-if="info.memberFlag">续费会员</el-button>
+            </el-col>
+        </el-row>
         <div>
             <span class="panel-title">基本信息</span>
             <el-form :model="info" :loading="loading">
@@ -67,15 +74,15 @@
                 </el-row>
             </el-form>
             <div class="tac mt30">
-                <el-button v-if="readOnly" type="primary" round @click="readOnly=false">修改资料</el-button>
-                <el-button v-if="!readOnly" type="primary" round @click="setUserInfo">确定</el-button>
-                <el-button v-if="!readOnly" type="primary" round @click="readOnly=true">取消</el-button>
+                <el-button v-if="readOnly" type="primary" @click="readOnly=false">修改资料</el-button>
+                <el-button v-if="!readOnly" type="primary" @click="setUserInfo">确定</el-button>
+                <el-button v-if="!readOnly" type="primary" @click="readOnly=true">取消</el-button>
             </div>
         </div>
     </div>
 </template>
 <script>
-import infoApi from '../../../../api/modules/info';
+import infoApi from "../../../../api/modules/info";
 export default {
     data() {
         return {
@@ -125,6 +132,30 @@ export default {
                 this.$message.error(error.message);
             }
             this.confirmLoading = false;
+        },
+        recharge() {
+            this.$confirm("确定要续费吗？", "提示", {
+                cancelButtonText: "取消",
+                confirmButtonText: "确定",
+                type: "warning"
+            }).then(async () => {
+                try {
+                    let res = await infoApi.rechargeVIP();
+                    this.$alert(
+                        `你的续费订单号是：${res.data.orderNum}，请及时付款完成续费`,
+                        "提示",
+                        {
+                            cancelButtonText: "取消",
+                            confirmButtonText: "确定",
+                            type: "warning"
+                        }
+                    ).then(() => {
+                        this.$router.push("/order");
+                    });
+                } catch (error) {
+                    this.$message.error(error.message);
+                }
+            });
         },
         changeProvince(val) {
             this.info.province = val.value;

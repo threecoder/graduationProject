@@ -5,19 +5,22 @@
         <div class="params-container" v-loading="loading">
             <div class="single-param" v-for="(item,i) in params" :key="i">
                 <span>{{item.label}}</span>
-                <el-select size="medium" v-if="item.type=='bool'" v-model="valueObj[item.key]">
-                    <el-option value="是" label="是"></el-option>
-                    <el-option value="否" label="否"></el-option>
-                </el-select>
-                <el-input-number
-                    v-else
-                    size="small"
-                    :min="10"
-                    :max="120"
-                    :step="10"
-                    :step-strictly="true"
-                    v-model="valueObj[item.key]"
-                ></el-input-number>
+                <div>
+                    <el-select size="medium" v-if="item.type=='bool'" v-model="valueObj[item.key]">
+                        <el-option value="是" label="是"></el-option>
+                        <el-option value="否" label="否"></el-option>
+                    </el-select>
+                    <el-input-number
+                        v-if="item.type=='number'"
+                        size="small"
+                        :min="10"
+                        :max="120"
+                        :step="10"
+                        :step-strictly="true"
+                        v-model="valueObj[item.key]"
+                    ></el-input-number>
+                    <el-input v-if="item.type=='input'" v-model="valueObj[item.key]"></el-input>
+                </div>
             </div>
         </div>
         <div class="tac">
@@ -77,18 +80,20 @@ export default {
 </script>
 <style lang="scss" scoped>
 .params {
-    max-width: 100%;
+    width: 100%;
     overflow: hidden;
+    box-sizing: border-box;
     background-color: #fff;
     padding: 20px;
     margin: auto;
     .params-container {
         width: 100%;
         height: 100%;
-        padding: 20px;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
         .single-param {
-            display: inline-block;
-            margin: 20px 20px;
+            width: 50%;
             overflow: hidden;
             span {
                 margin-right: 15px;

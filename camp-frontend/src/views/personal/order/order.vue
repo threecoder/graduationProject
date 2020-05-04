@@ -166,7 +166,7 @@ export default {
         async pay(row) {
             let data = {
                 orderId: row.orderNum,
-                returnUrl: "/order",
+                returnUrl: "/#/order",
                 serverPort: "8888"
             };
             try {

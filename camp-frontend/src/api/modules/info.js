@@ -19,6 +19,7 @@ const setStudentPassword = data => request(studentPrefix + '/setNewPassword', 'p
 //修改会员密码
 const setMemberPassword = data => request(memberPrefix + '/setNewPassword', 'post', data);
 
+//修改密码
 const setPassword = (idType, data) => {
     if (idType == 0) {
         return setStudentPassword(data);
@@ -27,6 +28,9 @@ const setPassword = (idType, data) => {
     }
 }
 
+//会员续费
+const rechargeVIP = () => request(`${memberPrefix}/rechargeVIP`, 'post');
+
 export default {
     setStudentInfo,
     setMemberInfo,
@@ -34,5 +38,6 @@ export default {
     getMemberInfo,
     setStudentPassword,
     setMemberPassword,
-    setPassword
+    setPassword,
+    rechargeVIP
 }

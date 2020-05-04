@@ -23,7 +23,8 @@ export const systemParams = [
     { key: "trainingOrderTime", label: "培训订单超时时间(分钟)", type: "number" },
     { key: "activityOrderTime", label: "活动订单超时时间(分钟)", type: "number" },
     { key: "certificateOrderTime", label: "证书订单超时时间(分钟)", type: "number" },
-    { key: "memberOrderTime", label: "会费订单超时时间(分钟)", type: "number" }
+    { key: "memberOrderTime", label: "会费订单超时时间(分钟)", type: "number" },
+    { key: "memberFee", label: "会员年费", type: "input" }
 ]
 
 //图片占位符

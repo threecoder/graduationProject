@@ -32,7 +32,7 @@ export default {
     props: {
         voteId: {
             require: true,
-            type: String
+            type: String | Number
         }
     },
     data() {
