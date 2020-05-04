@@ -200,7 +200,7 @@ public class MessageServiceImpl implements MessageService {
             }
         } else if (role.equals("student")) {
             MessageToStudentExample example = new MessageToStudentExample();
-            example.createCriteria().andStudentIdEqualTo(roleId).andIsInvalidEqualTo(false).andStatusEqualTo(false);
+            example.createCriteria().andStudentIdEqualTo(roleId).andIsInvalidEqualTo(false);
             totalNum = messageToStudentMapper.countByExample(example);
             example.setOrderByClause("status ASC, send_time DESC");
             List<MessageToStudent> messageToStudentList = messageToStudentMapper.selectByExample(example);
@@ -218,7 +218,7 @@ public class MessageServiceImpl implements MessageService {
             }
         } else {
             MessageToAdminExample example = new MessageToAdminExample();
-            example.createCriteria().andReceiveAdminIdEqualTo(roleId).andIsInvalidEqualTo(false).andStatusEqualTo(false);
+            example.createCriteria().andReceiveAdminIdEqualTo(roleId).andIsInvalidEqualTo(false);
             totalNum = messageToAdminMapper.countByExample(example);
             example.setOrderByClause("status ASC, send_time DESC");
             List<MessageToAdmin> messageToAdminList = messageToAdminMapper.selectByExample(example);

@@ -42,7 +42,7 @@ public class TokenFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) resp;
         String url = request.getRequestURI();
         String contentType = request.getContentType();
-        if (url.contains("/register") || url.contains("/login") || url.contains("/index") || url.contains("/aliPayNotify") || url.contains(".") || url.equals("/") || contentType.contains("multipart/form-data")) {
+        if (url.contains("/register") || url.contains("/login") || url.contains("/index") || url.contains("/aliPayNotify") || url.contains(".") || url.equals("/") || (contentType!=null && contentType.contains("multipart/form-data"))) {
             chain.doFilter(request, response);
             return;
         }
@@ -139,7 +139,7 @@ public class TokenFilter implements Filter {
                 requestWrapper = new ParameterRequestWrapper(request, map);
                 request = requestWrapper;
             }
-            String token2 = JwtUtil.sign(tokenRequest, 30 * 60 * 1000, SECRET_KEY);
+            String token2 = JwtUtil.sign(tokenRequest, 60 * 60 * 1000, SECRET_KEY);
             Cookie cookie = new Cookie("token", token2);
             //cookie.setMaxAge(3600);
             cookie.setPath("/");

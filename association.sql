@@ -157,11 +157,11 @@ CREATE TABLE `admin` (
   `is_locked` tinyint(1) DEFAULT '0' COMMENT '状态：0正常，1锁定',
   `admin_name` varchar(10) DEFAULT NULL COMMENT '管理员名',
   PRIMARY KEY (`admin_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 /*Data for the table `admin` */
 
-insert  into `admin`(`admin_id`,`admin_account`,`admin_password`,`permission_value`,`is_locked`,`admin_name`) values (1,'admin','admin',1,0,NULL),(2,'admin22','123456',0,0,'李逵');
+insert  into `admin`(`admin_id`,`admin_account`,`admin_password`,`permission_value`,`is_locked`,`admin_name`) values (1,'admin','admin',1,0,NULL),(2,'admin22','123456',0,0,'李逵'),(3,'admin888','123456',0,0,'aa');
 
 /*Table structure for table `admin_log` */
 
@@ -239,12 +239,12 @@ DROP TABLE IF EXISTS `certificate`;
 
 CREATE TABLE `certificate` (
   `certificate_id` int(11) NOT NULL AUTO_INCREMENT,
+  `student_id` int(11) DEFAULT NULL COMMENT '所属学员',
   `training_id` int(11) DEFAULT NULL COMMENT '证书所属培训',
-  `certificate_length_day` tinyint(4) DEFAULT NULL COMMENT '证书有效时长(天)',
-  `certificate_module` varchar(200) DEFAULT NULL COMMENT '证书模板url',
-  `certificate_name` varchar(100) DEFAULT NULL COMMENT '证书名',
-  `certificate_content` varchar(300) DEFAULT NULL COMMENT '证书内容',
-  `recheck_fee` decimal(10,2) DEFAULT NULL COMMENT '证书复审费用',
+  `create_time` datetime DEFAULT NULL COMMENT '颁发时间',
+  `end_time` datetime DEFAULT NULL COMMENT '过期时间',
+  `certificate_path` varchar(200) DEFAULT NULL COMMENT '证书所在路径',
+  `is_invalid` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`certificate_id`),
   KEY `training_id` (`training_id`),
   CONSTRAINT `certificate_ibfk_1` FOREIGN KEY (`training_id`) REFERENCES `training` (`training_id`)
@@ -320,6 +320,21 @@ CREATE TABLE `certificate_change_queue` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `certificate_change_queue` */
+
+/*Table structure for table `certificate_image` */
+
+DROP TABLE IF EXISTS `certificate_image`;
+
+CREATE TABLE `certificate_image` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '存放证书背景图路径',
+  `img_path` varchar(500) DEFAULT NULL,
+  `is_invalid` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+/*Data for the table `certificate_image` */
+
+insert  into `certificate_image`(`id`,`img_path`,`is_invalid`) values (1,'\\certificate\\certificate_background\\background-mktr08.jpg',0),(2,'\\certificate\\certificate_background\\background--P2abUc.jpg',0);
 
 /*Table structure for table `certificate_re_student` */
 
@@ -466,7 +481,7 @@ CREATE TABLE `exam` (
 
 /*Data for the table `exam` */
 
-insert  into `exam`(`exam_id`,`exam_name`,`training_id`,`exam_num`,`exam_pass`,`exam_length_min`,`exam_start_time`,`exam_end_time`,`is_posted`,`have_questions`,`create_time`) values (8,'网络工程考试1',4,20,60,120,'2019-10-01 00:00:00','2019-10-31 00:00:00',1,1,NULL),(9,'网络工程考试2',4,10,40,40,'2019-10-01 00:00:00','2019-11-05 00:00:00',1,1,NULL),(10,'我',1,10,55,34,'1970-01-01 08:00:00','1970-01-01 08:00:00',0,0,NULL),(11,'444',2,34,34,55,NULL,NULL,0,1,NULL),(12,'测试考试',3,10,60,5,'2020-04-18 00:00:00','2020-05-13 00:00:00',1,1,NULL);
+insert  into `exam`(`exam_id`,`exam_name`,`training_id`,`exam_num`,`exam_pass`,`exam_length_min`,`exam_start_time`,`exam_end_time`,`is_posted`,`have_questions`,`create_time`) values (8,'网络工程考试1',4,20,60,120,'2019-10-01 00:00:00','2019-10-31 00:00:00',1,1,NULL),(9,'网络工程考试2',4,10,40,40,'2019-10-01 00:00:00','2019-11-05 00:00:00',1,1,NULL),(10,'我',1,10,55,34,'1970-01-01 08:00:00','1970-01-01 08:00:00',0,0,NULL),(11,'444',2,34,34,55,NULL,NULL,0,1,NULL),(12,'测试考试',3,10,60,5,'2020-04-18 00:00:00','2020-05-01 00:00:00',1,1,NULL);
 
 /*Table structure for table `exam_question_student_answer` */
 
@@ -532,11 +547,11 @@ CREATE TABLE `exam_re_student` (
   KEY `exam_id` (`exam_id`),
   CONSTRAINT `exam_re_student_ibfk_1` FOREIGN KEY (`exam_id`) REFERENCES `exam` (`exam_id`),
   CONSTRAINT `exam_re_student_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
 
 /*Data for the table `exam_re_student` */
 
-insert  into `exam_re_student`(`report_id`,`exam_id`,`student_id`,`score`,`remaining_times`,`is_invalid`,`is_verify`,`in_line`,`not_pass_reason`,`not_pass_times`) values (22,8,1,60,2,0,2,0,NULL,NULL),(23,9,1,30,1,0,2,0,NULL,NULL),(24,8,38,2,2,0,0,0,NULL,NULL),(25,12,1,30,-1,0,0,0,NULL,NULL);
+insert  into `exam_re_student`(`report_id`,`exam_id`,`student_id`,`score`,`remaining_times`,`is_invalid`,`is_verify`,`in_line`,`not_pass_reason`,`not_pass_times`) values (22,8,1,60,2,0,2,0,NULL,NULL),(23,9,1,30,1,0,2,0,NULL,NULL),(24,8,38,2,2,0,0,0,NULL,NULL),(25,12,1,99,2,0,2,0,NULL,NULL);
 
 /*Table structure for table `exam_report_op_log` */
 
@@ -558,11 +573,11 @@ CREATE TABLE `exam_report_op_log` (
   KEY `exam_report_op_log_ibfk_2` (`exam_id`),
   CONSTRAINT `exam_report_op_log_ibfk_1` FOREIGN KEY (`report_id`) REFERENCES `exam_re_student` (`report_id`),
   CONSTRAINT `exam_report_op_log_ibfk_2` FOREIGN KEY (`exam_id`) REFERENCES `exam` (`exam_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 /*Data for the table `exam_report_op_log` */
 
-insert  into `exam_report_op_log`(`log_id`,`report_id`,`exam_id`,`admin_id`,`op_description`,`op_time`,`is_success`,`admin_name`,`student_name`,`is_pass`) values (9,22,8,1,'将成绩单22放入管理员ID:1的审核队列中','2020-04-13 22:18:43',1,NULL,'张三',NULL),(10,23,9,1,'将成绩单23放入管理员ID:1的审核队列中','2020-04-13 22:18:44',1,NULL,'张三',NULL),(11,22,8,1,'通过成绩单22，并移出队列','2020-04-14 15:40:29',1,NULL,'张三',NULL),(12,23,9,1,'通过成绩单23，并移出队列','2020-04-14 15:40:33',1,NULL,'张三',NULL);
+insert  into `exam_report_op_log`(`log_id`,`report_id`,`exam_id`,`admin_id`,`op_description`,`op_time`,`is_success`,`admin_name`,`student_name`,`is_pass`) values (9,22,8,1,'将成绩单22放入管理员ID:1的审核队列中','2020-04-13 22:18:43',1,NULL,'张三',NULL),(10,23,9,1,'将成绩单23放入管理员ID:1的审核队列中','2020-04-13 22:18:44',1,NULL,'张三',NULL),(11,22,8,1,'通过成绩单22，并移出队列','2020-04-14 15:40:29',1,NULL,'张三',NULL),(12,23,9,1,'通过成绩单23，并移出队列','2020-04-14 15:40:33',1,NULL,'张三',NULL),(13,25,12,1,'将成绩单25放入管理员ID:1的审核队列中','2020-05-04 21:14:26',1,NULL,'张三',NULL),(14,25,12,1,'通过成绩单25，并移出队列','2020-05-04 21:18:35',1,NULL,'张三',1);
 
 /*Table structure for table `member` */
 
@@ -646,11 +661,11 @@ CREATE TABLE `message_text` (
   `type` varchar(20) DEFAULT NULL COMMENT '类别',
   `title` varchar(200) DEFAULT NULL COMMENT '标题',
   PRIMARY KEY (`message_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 /*Data for the table `message_text` */
 
-insert  into `message_text`(`message_id`,`message`,`send_time`,`type`,`title`) values (1,'站内信测试','2020-04-26 02:53:03','signedActivity','站内信测试');
+insert  into `message_text`(`message_id`,`message`,`send_time`,`type`,`title`) values (1,'站内信测试','2020-04-26 02:53:03','signedActivity','站内信测试'),(2,'审核队列更新，新增1条审核请求！','2020-05-04 21:14:27',NULL,'审核队列更新，新增1条审核请求！分别是：25');
 
 /*Table structure for table `message_to_admin` */
 
@@ -678,9 +693,11 @@ CREATE TABLE `message_to_admin` (
   CONSTRAINT `message_to_admin_ibfk_3` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`),
   CONSTRAINT `message_to_admin_ibfk_4` FOREIGN KEY (`message_id`) REFERENCES `message_text` (`message_id`),
   CONSTRAINT `message_to_admin_ibfk_5` FOREIGN KEY (`receive_admin_id`) REFERENCES `admin` (`admin_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 /*Data for the table `message_to_admin` */
+
+insert  into `message_to_admin`(`id`,`receive_admin_id`,`admin_id`,`member_id`,`student_id`,`who_send`,`message_id`,`send_time`,`is_invalid`,`status`) values (1,1,1,NULL,NULL,0,2,'2020-05-04 21:14:27',0,0);
 
 /*Table structure for table `message_to_member` */
 
@@ -885,12 +902,13 @@ CREATE TABLE `training` (
   `training_address` varchar(200) DEFAULT NULL COMMENT '培训地点',
   `contact_name` varchar(10) DEFAULT NULL COMMENT '联系人',
   `contact_phone` varchar(20) DEFAULT NULL COMMENT '联系方式',
+  `cer_tem_path` varchar(500) DEFAULT NULL COMMENT '证书模板所在路径',
   PRIMARY KEY (`training_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 
 /*Data for the table `training` */
 
-insert  into `training`(`training_id`,`training_name`,`training_introduce`,`training_fee_normal`,`training_fee_vip`,`training_end_time`,`training_start_time`,`post_time`,`level`,`training_pic`,`training_address`,`contact_name`,`contact_phone`) values (1,'质量检测','示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n示例范文示例范文示例范文示例范文','199.99','199.00','2019-11-02 16:13:03','2019-09-13 16:12:30','2019-10-31 00:41:14',1,NULL,NULL,NULL,NULL),(2,'食品安全','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','888.01','699.01','2019-11-01 12:00:00','2019-10-01 12:00:00','2019-07-15 00:41:19',2,NULL,NULL,NULL,NULL),(3,'食品监督','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','2000.00','1899.11','2020-11-12 16:14:32','2019-09-05 16:14:25','2021-01-08 00:41:22',1,NULL,NULL,NULL,NULL),(4,'网络工程','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','800.90','700.00','2019-11-22 16:14:40','2019-09-11 16:14:36','2019-11-01 00:41:27',3,NULL,NULL,NULL,NULL),(5,'产品规范','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','99.99','98.99','2019-11-08 16:14:56','2019-09-29 16:14:44','2019-10-17 00:41:35',1,NULL,NULL,NULL,NULL);
+insert  into `training`(`training_id`,`training_name`,`training_introduce`,`training_fee_normal`,`training_fee_vip`,`training_end_time`,`training_start_time`,`post_time`,`level`,`training_pic`,`training_address`,`contact_name`,`contact_phone`,`cer_tem_path`) values (1,'质量检测','示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n示例范文示例范文示例范文示例范文','199.99','199.00','2019-11-02 16:13:03','2019-09-13 16:12:30','2019-10-31 00:41:14',1,NULL,NULL,NULL,NULL,NULL),(2,'食品安全','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','888.01','699.01','2019-11-01 12:00:00','2019-10-01 12:00:00','2019-07-15 00:41:19',2,NULL,NULL,NULL,NULL,NULL),(3,'食品监督','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','2000.00','1899.11','2020-11-12 16:14:32','2019-09-05 16:14:25','2021-01-08 00:41:22',1,NULL,NULL,NULL,NULL,NULL),(4,'网络工程','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','800.90','700.00','2019-11-22 16:14:40','2019-09-11 16:14:36','2019-11-01 00:41:27',3,NULL,NULL,NULL,NULL,NULL),(5,'产品规范','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','99.99','98.99','2019-11-08 16:14:56','2019-09-29 16:14:44','2019-10-17 00:41:35',1,NULL,NULL,NULL,NULL,NULL);
 
 /*Table structure for table `training_order` */
 

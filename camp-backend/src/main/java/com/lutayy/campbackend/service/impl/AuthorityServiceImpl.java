@@ -34,6 +34,10 @@ public class AuthorityServiceImpl implements AuthorityService {
 
         String account = jsonObject.getString("account");
         Admin admin = getObjectHelper.getAdminFromAccount(account);
+        if(admin.getPermissionValue()){
+            result.put("msg", "无法修改root管理员权限！");
+            return result;
+        }
         if (admin == null) {
             result.put("msg", "对应的账号不存在，请检查输入是否正确");
             return result;

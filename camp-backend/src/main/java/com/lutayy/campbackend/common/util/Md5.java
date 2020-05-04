@@ -11,7 +11,6 @@ public class Md5 {
         return md5word.toUpperCase();
     }
     public static void main(String[] args){
-        Date time=new Date();
-        System.out.println(time.toString());
+        System.out.println(digest("123456"));
     }
 }

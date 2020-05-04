@@ -52,7 +52,6 @@ public class StudentServiceImpI implements StudentService {
         result.put("code","success");
         result.put("msg", "查询成功！");
         result.put("data", data);
-        System.out.println(result);
         return result;
     }
 

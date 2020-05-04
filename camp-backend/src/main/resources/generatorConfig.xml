@@ -59,21 +59,10 @@
 
 
 
-        <table tableName="activity_order">
-            <generatedKey  column="order_key_id"  sqlStatement="Mysql"  identity="TRUE"/>
+        <table tableName="training">
+            <generatedKey  column="training_id"  sqlStatement="Mysql"  identity="TRUE"/>
         </table>
-        <table tableName="member_subscription_order">
-            <generatedKey  column="order_key_id"  sqlStatement="Mysql"  identity="TRUE"/>
-        </table>
-        <table tableName="certificate_recheck_order">
-            <generatedKey  column="order_key_id"  sqlStatement="Mysql"  identity="TRUE"/>
-        </table>
-        <table tableName="certificate_change_order">
-            <generatedKey  column="order_key_id"  sqlStatement="Mysql"  identity="TRUE"/>
-        </table>
-        <table tableName="training_order">
-            <generatedKey  column="order_key_id"  sqlStatement="Mysql"  identity="TRUE"/>
-        </table>
+
 
 
 

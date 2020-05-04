@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.lutayy.campbackend.common.util.OrderIdGenerator;
+import com.lutayy.campbackend.common.util.PdfUtil;
 import com.lutayy.campbackend.common.util.RedisUtil;
 import com.lutayy.campbackend.common.util.UUIDUtil;
 import com.lutayy.campbackend.dao.*;
@@ -47,6 +48,11 @@ public class TrainingServiceImpl implements TrainingService {
     ExamMapper examMapper;
     @Autowired
     ExamReStudentMapper examReStudentMapper;
+    @Autowired
+    CertificateMapper certificateMapper;
+    @Autowired
+    CertificateImageMapper certificateImageMapper;
+
     @Autowired
     GetObjectHelper getObjectHelper;
     @Resource
@@ -758,7 +764,23 @@ public class TrainingServiceImpl implements TrainingService {
         training.setTrainingEndTime(endTime);
         if(trainingMapper.insert(training)>0){
             result.put("code", "success");
-            result.put("msg", "新建培训成功！");
+
+            // TODO 设置默认的证书模板
+            String mainPath = "./src/main/resources/templates";
+            String temPath = mainPath + "/certificate/certificate_template.pdf";
+            String outPath = "/certificate/training_cer_templates/"+training.getTrainingId()+"_training_cer_template.pdf";
+            CertificateImageExample certificateImageExample = new CertificateImageExample();
+            String backImgPath = mainPath +
+                    certificateImageMapper.selectByExample(certificateImageExample).get(0).getImgPath();
+            Map<String, String> contentMap=new HashMap<>();
+            contentMap.put("traning_name", "\""+training.getTrainingName()+"\"");
+            if(PdfUtil.writePdf(contentMap, temPath, mainPath + outPath, backImgPath)){
+                result.put("msg", "新建培训成功！初始化培训证书模板成功！");
+                training.setCerTemPath(outPath);
+                trainingMapper.updateByPrimaryKeySelective(training);
+            }else {
+                result.put("msg", "新建培训成功！初始化培训证书模板失败！");
+            }
         }else{
             result.put("code", "fail");
             result.put("msg", "新建培训失败！请重试");

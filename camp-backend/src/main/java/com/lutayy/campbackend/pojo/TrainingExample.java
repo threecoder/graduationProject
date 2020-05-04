@@ -965,6 +965,76 @@ public class TrainingExample {
             addCriterion("contact_phone not between", value1, value2, "contactPhone");
             return (Criteria) this;
         }
+
+        public Criteria andCerTemPathIsNull() {
+            addCriterion("cer_tem_path is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCerTemPathIsNotNull() {
+            addCriterion("cer_tem_path is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCerTemPathEqualTo(String value) {
+            addCriterion("cer_tem_path =", value, "cerTemPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andCerTemPathNotEqualTo(String value) {
+            addCriterion("cer_tem_path <>", value, "cerTemPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andCerTemPathGreaterThan(String value) {
+            addCriterion("cer_tem_path >", value, "cerTemPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andCerTemPathGreaterThanOrEqualTo(String value) {
+            addCriterion("cer_tem_path >=", value, "cerTemPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andCerTemPathLessThan(String value) {
+            addCriterion("cer_tem_path <", value, "cerTemPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andCerTemPathLessThanOrEqualTo(String value) {
+            addCriterion("cer_tem_path <=", value, "cerTemPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andCerTemPathLike(String value) {
+            addCriterion("cer_tem_path like", value, "cerTemPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andCerTemPathNotLike(String value) {
+            addCriterion("cer_tem_path not like", value, "cerTemPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andCerTemPathIn(List<String> values) {
+            addCriterion("cer_tem_path in", values, "cerTemPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andCerTemPathNotIn(List<String> values) {
+            addCriterion("cer_tem_path not in", values, "cerTemPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andCerTemPathBetween(String value1, String value2) {
+            addCriterion("cer_tem_path between", value1, value2, "cerTemPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andCerTemPathNotBetween(String value1, String value2) {
+            addCriterion("cer_tem_path not between", value1, value2, "cerTemPath");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

@@ -31,6 +31,8 @@ public class Training implements Serializable {
 
     private String contactPhone;
 
+    private String cerTemPath;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getTrainingId() {
@@ -135,5 +137,13 @@ public class Training implements Serializable {
 
     public void setContactPhone(String contactPhone) {
         this.contactPhone = contactPhone;
+    }
+
+    public String getCerTemPath() {
+        return cerTemPath;
+    }
+
+    public void setCerTemPath(String cerTemPath) {
+        this.cerTemPath = cerTemPath;
     }
 }
