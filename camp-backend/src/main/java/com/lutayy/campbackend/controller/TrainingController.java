@@ -103,4 +103,16 @@ public class TrainingController {
                                        @RequestParam(value = "name", required = false) String name) {
         return trainingService.getPublishedTraining(pageSize, currentPage, startDateStr, endDateStr, name);
     }
+
+    @RequestMapping(value = {"/admin/getEnrolledStudentList"})
+    @ResponseBody
+    public Object getEnrolledStudentList(@RequestParam("pageSize") Integer pageSize,
+                                       @RequestParam("currentPage") Integer currentPage,
+                                       @RequestParam("trainingId") Integer trainingId,
+                                       @RequestParam(value = "name", required = false) String studentName,
+                                       @RequestParam(value = "idNum", required = false) String idCard,
+                                       @RequestParam(value = "company", required = false) String company) {
+        return trainingService.getEnrolledStudentList(pageSize, currentPage, trainingId, studentName, idCard, company);
+    }
+
 }

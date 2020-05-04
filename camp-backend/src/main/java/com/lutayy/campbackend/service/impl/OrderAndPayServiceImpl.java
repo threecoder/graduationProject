@@ -8,6 +8,7 @@ import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.lutayy.campbackend.common.config.AlipayConfig;
+import com.lutayy.campbackend.common.config.AuthorityParam;
 import com.lutayy.campbackend.common.util.RedisUtil;
 import com.lutayy.campbackend.common.util.UUIDUtil;
 import com.lutayy.campbackend.dao.*;
@@ -388,6 +389,13 @@ public class OrderAndPayServiceImpl implements OrderAndPayService {
     public JSONObject modifyOrderPrice(JSONObject jsonObject) {
         JSONObject result=new JSONObject();
         result.put("code", "fail");
+        //权限检查
+        Integer opAdminId=jsonObject.getInteger("id");
+        if(!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.ORDER)){
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
+
         String orderCode=jsonObject.getString("orderNum");
         Object orderTypeObject=redisUtil.hget("order_no_map", orderCode);
         BigDecimal newPrice=jsonObject.getBigDecimal("price");
@@ -437,6 +445,13 @@ public class OrderAndPayServiceImpl implements OrderAndPayService {
     public JSONObject modifyTrainingOrderPrice(JSONObject jsonObject) {
         JSONObject result=new JSONObject();
         result.put("code", "fail");
+        //权限检查
+        Integer opAdminId=jsonObject.getInteger("id");
+        if(!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.ORDER)){
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
+
         String orderCode=jsonObject.getString("orderNum");
         BigDecimal newPrice=jsonObject.getBigDecimal("price");
 
@@ -461,6 +476,13 @@ public class OrderAndPayServiceImpl implements OrderAndPayService {
     public JSONObject confirmPay(JSONObject jsonObject) {
         JSONObject result=new JSONObject();
         result.put("code", "fail");
+        //权限检查
+        Integer opAdminId=jsonObject.getInteger("id");
+        if(!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.ORDER)){
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
+
         String orderCode=jsonObject.getString("orderNum");
         Object orderTypeObject=redisUtil.hget("order_no_map", orderCode);
         if(orderTypeObject==null){

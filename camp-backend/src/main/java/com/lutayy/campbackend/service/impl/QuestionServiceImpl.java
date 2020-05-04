@@ -2,6 +2,7 @@ package com.lutayy.campbackend.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.lutayy.campbackend.common.config.AuthorityParam;
 import com.lutayy.campbackend.common.util.ExcelUtil;
 import com.lutayy.campbackend.dao.QuestionMapper;
 import com.lutayy.campbackend.dao.TrainingMapper;
@@ -30,10 +31,19 @@ public class QuestionServiceImpl implements QuestionService {
     QuestionMapper questionMapper;
     @Autowired
     TrainingMapper trainingMapper;
+    @Autowired
+    GetObjectHelper getObjectHelper;
 
     @Override
     public JSONObject modifyQuestion(JSONObject jsonObject) {
         JSONObject result = new JSONObject();
+        result.put("code", "fail");
+        //权限检查
+        Integer opAdminId=jsonObject.getInteger("id");
+        if(!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.EXAM)){
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
 
         int questionId = jsonObject.getInteger("questionId");
         String state = jsonObject.getString("state");

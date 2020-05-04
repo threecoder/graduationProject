@@ -2,6 +2,7 @@ package com.lutayy.campbackend.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.lutayy.campbackend.common.config.AuthorityParam;
 import com.lutayy.campbackend.dao.VoteMapper;
 import com.lutayy.campbackend.dao.VoteOptionMapper;
 import com.lutayy.campbackend.dao.VoteOptionMemberMapper;
@@ -26,6 +27,8 @@ public class VoteServiceImpl implements VoteService {
     VoteOptionMemberMapper voteOptionMemberMapper;
     @Autowired
     VoteOptionStudentMapper voteOptionStudentMapper;
+    @Autowired
+    GetObjectHelper getObjectHelper;
 
     //管理员
     @Override
@@ -36,6 +39,13 @@ public class VoteServiceImpl implements VoteService {
         JSONArray options = jsonObject.getJSONArray("options");
         Date endTime = jsonObject.getDate("time");
         JSONObject result = new JSONObject();
+        //权限检查
+        Integer opAdminId=jsonObject.getInteger("id");
+        if(!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.VOTE)){
+            result.put("code", "fail");
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
 
         VoteExample voteExample = new VoteExample();
         VoteExample.Criteria criteria = voteExample.createCriteria();
@@ -73,6 +83,14 @@ public class VoteServiceImpl implements VoteService {
     @Override
     public JSONObject deleteVote(JSONObject jsonObject) {
         JSONObject result = new JSONObject();
+        //权限检查
+        Integer opAdminId=jsonObject.getInteger("id");
+        if(!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.VOTE)){
+            result.put("code", "fail");
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
+
         Integer voteId = jsonObject.getInteger("voteId");
         if (voteMapper.selectByPrimaryKey(voteId) == null) {
             result.put("code", "fail");

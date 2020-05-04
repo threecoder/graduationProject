@@ -26,6 +26,8 @@ public class StudentServiceImpI implements StudentService {
 
     @Autowired
     StudentMapper studentMapper;
+    @Autowired
+    GetObjectHelper getObjectHelper;
 
 
     @Override
@@ -69,17 +71,13 @@ public class StudentServiceImpI implements StudentService {
 
         JSONObject result=new JSONObject();
 
-        String idcard=jsonObject.getString("id");
-        StudentExample studentExample=new StudentExample();
-        StudentExample.Criteria criteria=studentExample.createCriteria();
-        criteria.andStudentIdcardEqualTo(idcard);
-        List<Student> students=studentMapper.selectByExample(studentExample);
-        if(students.size()==0){
+        Integer studentId=jsonObject.getInteger("id");
+        Student student=studentMapper.selectByPrimaryKey(studentId);
+        if(student==null){
             result.put("code", "fail");
             result.put("msg","用户不存在！");
             return result;
         }
-        Student student=students.get(0);
 
         StudentExample studentExample0=new StudentExample();
         StudentExample.Criteria criteria0=studentExample0.createCriteria();

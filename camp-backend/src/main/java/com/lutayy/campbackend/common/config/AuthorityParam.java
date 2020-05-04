@@ -1,9 +1,14 @@
 package com.lutayy.campbackend.common.config;
 
+import com.lutayy.campbackend.dao.AdminReAuthorityMapper;
+import com.lutayy.campbackend.pojo.AdminReAuthority;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.Arrays;
 import java.util.List;
 
 public class AuthorityParam {
+
 
     public static final int MEMBER = 1;
 
@@ -33,4 +38,5 @@ public class AuthorityParam {
             = Arrays.asList("", "member", "student", "training",
             "exam", "grade", "certificate", "activity", "vote",
             "index", "system", "order", "coupon");
+
 }

@@ -88,6 +88,12 @@ public class AdminServiceImpl implements AdminService {
         JSONObject result=new JSONObject();
         result.put("code", "fail");
 
+        Integer opAdminId=jsonObject.getInteger("id");
+        if(!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.SYSTEM)){
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
+
         String account=jsonObject.getString("account");
         String name=jsonObject.getString("name");
         AdminExample adminExample=new AdminExample();
@@ -112,6 +118,11 @@ public class AdminServiceImpl implements AdminService {
     public JSONObject lockOrUnlockAccount(JSONObject jsonObject, boolean lock) {
         JSONObject result = new JSONObject();
         result.put("code", "fail");
+        Integer opAdminId=jsonObject.getInteger("id");
+        if(!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.SYSTEM)){
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
         String account = jsonObject.getString("account");
         Admin admin = getObjectHelper.getAdminFromAccount(account);
         if (admin == null) {
@@ -194,6 +205,11 @@ public class AdminServiceImpl implements AdminService {
     public JSONObject addSingleStudent(JSONObject jsonObject) {
         JSONObject result = new JSONObject();
         result.put("code", "fail");
+        Integer opAdminId=jsonObject.getInteger("id");
+        if(!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.STUDENT)){
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
 
         String idCard = jsonObject.getString("idNum");
         String phone = jsonObject.getString("phone");
@@ -415,10 +431,17 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public JSONObject deleteOneStudentFromMember(JSONObject jsonObject) {
         JSONObject result = new JSONObject();
+        result.put("code", "fail");
+        //权限检查
+        Integer opAdminId=jsonObject.getInteger("id");
+        if(!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.STUDENT)){
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
 
         Integer memberId = jsonObject.getInteger("memberId");
         String studentIdcard = jsonObject.getString("idNum");
-        result.put("code", "fail");
+
         Member member = memberMapper.selectByPrimaryKey(memberId);
         if (member == null) {
             result.put("msg", "系统中不存在该会员用户");
@@ -454,6 +477,13 @@ public class AdminServiceImpl implements AdminService {
     public JSONObject modifyRely(JSONObject jsonObject) {
         JSONObject result = new JSONObject();
         result.put("code", "fail");
+        //权限检查
+        Integer opAdminId=jsonObject.getInteger("id");
+        if(!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.STUDENT)){
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
+
         Student student = getObjectHelper.getStudentFromIdCard(jsonObject.getString("idNum"));
         if (student == null) {
             result.put("msg", "系统中无该学员信息！");
@@ -500,6 +530,12 @@ public class AdminServiceImpl implements AdminService {
     public JSONObject modifyStudentInfo(JSONObject jsonObject) {
         JSONObject result=new JSONObject();
         result.put("code", "fail");
+        //权限检查
+        Integer opAdminId=jsonObject.getInteger("id");
+        if(!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.STUDENT)){
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
 
         String idCard=jsonObject.getString("idNum");
         Student student=getObjectHelper.getStudentFromIdCard(idCard);
@@ -538,6 +574,13 @@ public class AdminServiceImpl implements AdminService {
     public JSONObject resetPassword(JSONObject jsonObject) {
         JSONObject result=new JSONObject();
         result.put("code", "fail");
+        //权限检查
+        Integer opAdminId=jsonObject.getInteger("id");
+        if(!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.STUDENT)){
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
+
         Student student=getObjectHelper.getStudentFromIdCard(jsonObject.getString("idNum"));
         if(student==null){
             result.put("msg", "系统中无该学员");
@@ -600,6 +643,13 @@ public class AdminServiceImpl implements AdminService {
     public JSONObject addSingleMember(JSONObject jsonObject) {
         JSONObject result=new JSONObject();
         result.put("code", "fail");
+        //权限检查
+        Integer opAdminId=jsonObject.getInteger("id");
+        if(!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.MEMBER)){
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
+
         String phone=jsonObject.getString("phone");
         String name=jsonObject.getString("name");
         String email=jsonObject.getString("email");
@@ -864,6 +914,13 @@ public class AdminServiceImpl implements AdminService {
     public JSONObject modifyMemberInfo(JSONObject jsonObject) {
         JSONObject result=new JSONObject();
         result.put("code", "fail");
+        //权限检查
+        Integer opAdminId=jsonObject.getInteger("id");
+        if(!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.MEMBER)){
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
+
         Integer memberId=jsonObject.getInteger("memberId");
         Member member=memberMapper.selectByPrimaryKey(memberId);
         if(member==null){

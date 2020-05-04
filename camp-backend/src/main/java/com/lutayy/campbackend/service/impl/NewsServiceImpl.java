@@ -2,6 +2,7 @@ package com.lutayy.campbackend.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.lutayy.campbackend.common.config.AuthorityParam;
 import com.lutayy.campbackend.common.util.RedisUtil;
 import com.lutayy.campbackend.common.util.StrUtil;
 import com.lutayy.campbackend.dao.AssociationTextMapper;
@@ -50,6 +51,13 @@ public class NewsServiceImpl implements NewsService {
     public JSONObject modifyAssociationItem(JSONObject jsonObject, String item) {
         JSONObject result=new JSONObject();
         result.put("code", "fail");
+        //权限检查
+        Integer opAdminId=jsonObject.getInteger("id");
+        if(!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.SYSTEM)){
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
+
         AssociationTextExample associationTextExample=new AssociationTextExample();
         associationTextExample.createCriteria().andItemNameEqualTo(item);
         AssociationText associationText=associationTextMapper.selectByExample(associationTextExample).get(0);
@@ -98,6 +106,12 @@ public class NewsServiceImpl implements NewsService {
             result.put("msg", "未登录！");
             return result;
         }
+        //权限检查
+        if(!getObjectHelper.checkAdminIfHasAuthority(adminId, AuthorityParam.INDEX)){
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
+
         news.setAdminId(adminId);
         news.setContent(content);
         news.setDescription(desc);
@@ -147,6 +161,12 @@ public class NewsServiceImpl implements NewsService {
     public JSONObject deleteDynamic(JSONObject jsonObject) {
         JSONObject result = new JSONObject();
         result.put("code", "fail");
+        //权限检查
+        Integer opAdminId=jsonObject.getInteger("id");
+        if(!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.SYSTEM)){
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
 
         Integer newsId = jsonObject.getInteger("dynamicId");
         News news = newsMapper.selectByPrimaryKey(newsId);
@@ -279,6 +299,11 @@ public class NewsServiceImpl implements NewsService {
             result.put("msg", "未登录！");
             return result;
         }
+        //权限检查
+        if(!getObjectHelper.checkAdminIfHasAuthority(adminId, AuthorityParam.SYSTEM)){
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
 
         News news = newsMapper.selectByPrimaryKey(newsId);
         if (news == null) {
@@ -355,6 +380,14 @@ public class NewsServiceImpl implements NewsService {
         String desc=jsonObject.getString("desc");
         String title=jsonObject.getString("title");
         JSONObject result=new JSONObject();
+        //权限检查
+        Integer opAdminId=jsonObject.getInteger("id");
+        if(!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.SYSTEM)){
+            result.put("code", "fail");
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
+
         News news=new News();
         news.setAdminId(adminId);
         news.setContent(content);
@@ -422,6 +455,12 @@ public class NewsServiceImpl implements NewsService {
     public JSONObject deleteNotice(JSONObject jsonObject) {
         JSONObject result = new JSONObject();
         result.put("code", "fail");
+        //权限检查
+        Integer opAdminId=jsonObject.getInteger("id");
+        if(!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.SYSTEM)){
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
 
         Integer newsId = jsonObject.getInteger("NoticeId");
         News news = newsMapper.selectByPrimaryKey(newsId);
@@ -442,6 +481,13 @@ public class NewsServiceImpl implements NewsService {
     public JSONObject modifyNotice(JSONObject jsonObject) {
         JSONObject result = new JSONObject();
         result.put("code", "fail");
+        //权限检查
+        Integer opAdminId=jsonObject.getInteger("id");
+        if(!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.SYSTEM)){
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
+
         Integer newsId=jsonObject.getInteger("noticeId");
         String content=jsonObject.getString("content");
         String desc=jsonObject.getString("desc");
@@ -466,6 +512,13 @@ public class NewsServiceImpl implements NewsService {
     public JSONObject addCarousel(JSONObject jsonObject) {
         JSONObject result = new JSONObject();
         result.put("code", "fail");
+        //权限检查
+        Integer opAdminId=jsonObject.getInteger("id");
+        if(!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.SYSTEM)){
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
+
         Integer newsId = jsonObject.getInteger("dynamicId");
         News news = newsMapper.selectByPrimaryKey(newsId);
         if (news == null) {
@@ -515,6 +568,13 @@ public class NewsServiceImpl implements NewsService {
     public JSONObject removeCarousel(JSONObject jsonObject) {
         JSONObject result = new JSONObject();
         result.put("code", "fail");
+        //权限检查
+        Integer opAdminId=jsonObject.getInteger("id");
+        if(!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.SYSTEM)){
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
+
         Integer newsId = jsonObject.getInteger("dynamicId");
         News news = newsMapper.selectByPrimaryKey(newsId);
         if (news == null) {

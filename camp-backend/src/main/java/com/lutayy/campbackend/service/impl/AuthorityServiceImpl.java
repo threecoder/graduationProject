@@ -31,6 +31,12 @@ public class AuthorityServiceImpl implements AuthorityService {
     public JSONObject modifyAuthority(JSONObject jsonObject) {
         JSONObject result = new JSONObject();
         result.put("code", "fail");
+        //权限检查
+        Integer opAdminId=jsonObject.getInteger("id");
+        if(!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.SYSTEM)){
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
 
         String account = jsonObject.getString("account");
         Admin admin = getObjectHelper.getAdminFromAccount(account);
@@ -127,6 +133,8 @@ public class AuthorityServiceImpl implements AuthorityService {
         data.put("certificateOrderTime", SystemParamManager.getValueByKey("certificate_order_length"));
         data.put("memberOrderTime", SystemParamManager.getValueByKey("member_order_length"));
         data.put("memberFee", SystemParamManager.getValueByKey("member_Fee"));
+        data.put("certificateChage", SystemParamManager.getValueByKey("certificate_change_fee"));
+        data.put("certificateRecheck", SystemParamManager.getValueByKey("certificate_recheck_fee"));
         result.put("data", data);
         return result;
     }
@@ -135,9 +143,17 @@ public class AuthorityServiceImpl implements AuthorityService {
     @Override
     public JSONObject modifySystemParams(JSONObject jsonObject) {
         JSONObject result=new JSONObject();
+        result.put("code", "fail");
+        //权限检查
+        Integer opAdminId=jsonObject.getInteger("id");
+        if(!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.SYSTEM)){
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
+
         String studentTrainig;
         Integer trainingOrderTime, activityOrderTime, certificateOrderTime, memberOrderTime;
-        BigDecimal newMemberFee;
+        BigDecimal newMemberFee, newCerChangeFee, newCerReCheckFee;
         try{
             studentTrainig=jsonObject.getString("studentTrainig");
             if(!studentTrainig.equals("是")&&!studentTrainig.equals("否")){
@@ -148,6 +164,8 @@ public class AuthorityServiceImpl implements AuthorityService {
             certificateOrderTime=Integer.valueOf(jsonObject.getString("certificateOrderTime"));
             memberOrderTime=Integer.valueOf(jsonObject.getString("memberOrderTime"));
             newMemberFee=BigDecimal.valueOf(Double.valueOf(jsonObject.getString("memberFee")));
+            newCerChangeFee=BigDecimal.valueOf(Double.valueOf(jsonObject.getString("certificateChage")));
+            newCerReCheckFee=BigDecimal.valueOf(Double.valueOf(jsonObject.getString("certificateRecheck")));
         }catch (Exception e){
             e.printStackTrace();
             result.put("code", "fail");
@@ -177,7 +195,15 @@ public class AuthorityServiceImpl implements AuthorityService {
 
         SystemParameter memberFee=SystemParamManager.getSystemParameterByParaKey("member_fee");
         memberFee.setParaValue(newMemberFee.toString());
-        systemParameterMapper.updateByPrimaryKeySelective(stuTranPermission);
+        systemParameterMapper.updateByPrimaryKeySelective(memberFee);
+
+        SystemParameter changeFee=SystemParamManager.getSystemParameterByParaKey("certificate_change_fee");
+        changeFee.setParaValue(newCerChangeFee.toString());
+        systemParameterMapper.updateByPrimaryKeySelective(changeFee);
+
+        SystemParameter reCheckFee=SystemParamManager.getSystemParameterByParaKey("certificate_recheck_fee");
+        reCheckFee.setParaValue(newCerReCheckFee.toString());
+        systemParameterMapper.updateByPrimaryKeySelective(reCheckFee);
 
         result.put("code", "success");
         result.put("msg", "修改成功！");

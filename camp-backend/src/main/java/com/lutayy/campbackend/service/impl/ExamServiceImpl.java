@@ -3,6 +3,7 @@ package com.lutayy.campbackend.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.lutayy.campbackend.common.config.AuthorityParam;
 import com.lutayy.campbackend.common.util.ExcelUtil;
 import com.lutayy.campbackend.common.util.RedisUtil;
 import com.lutayy.campbackend.dao.*;
@@ -60,7 +61,7 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public JSONObject getHalfExamList(Integer studentId, Integer pageSize, Integer currentPage) {
         JSONObject result = new JSONObject();
-        JSONObject data=new JSONObject();
+        JSONObject data = new JSONObject();
 
         Student student = studentMapper.selectByPrimaryKey(studentId);
         if (student == null) {
@@ -78,7 +79,7 @@ public class ExamServiceImpl implements ExamService {
             return result;
         }
         data.put("total", exams.size());
-        data.put("list", exams.subList((currentPage-1)*pageSize, currentPage*pageSize));
+        data.put("list", exams.subList((currentPage - 1) * pageSize, currentPage * pageSize));
         result.put("code", "success");
         result.put("data", data);
         result.put("msg", "查询成功");
@@ -88,7 +89,7 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public JSONObject getTodoExamList(Integer studentId, Integer pageSize, Integer currentPage) {
         JSONObject result = new JSONObject();
-        JSONObject data=new JSONObject();
+        JSONObject data = new JSONObject();
         Student student = studentMapper.selectByPrimaryKey(studentId);
         if (student == null) {
             result.put("code", "fail");
@@ -131,7 +132,7 @@ public class ExamServiceImpl implements ExamService {
             exams.getJSONObject(i).put("grade", null);
         }
         data.put("total", exams.size());
-        data.put("list", exams.subList((currentPage-1)*pageSize, currentPage*pageSize));
+        data.put("list", exams.subList((currentPage - 1) * pageSize, currentPage * pageSize));
         result.put("code", "success");
         result.put("data", data);
         result.put("msg", "查询成功");
@@ -141,7 +142,7 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public JSONObject getDoneExamList(Integer studentId, Integer pageSize, Integer currentPage) {
         JSONObject result = new JSONObject();
-        JSONObject data=new JSONObject();
+        JSONObject data = new JSONObject();
         Student student = studentMapper.selectByPrimaryKey(studentId);
         if (student == null) {
             result.put("code", "fail");
@@ -158,7 +159,7 @@ public class ExamServiceImpl implements ExamService {
             return result;
         }
         data.put("total", exams.size());
-        data.put("list", exams.subList((currentPage-1)*pageSize, currentPage*pageSize));
+        data.put("list", exams.subList((currentPage - 1) * pageSize, currentPage * pageSize));
         result.put("code", "success");
         result.put("data", data);
         result.put("msg", "查询成功");
@@ -430,7 +431,7 @@ public class ExamServiceImpl implements ExamService {
                     System.out.println("第" + (i + 1) + "题选了" + answer.get(i) + "错误,正确答案是" + rightAnswer);
                 }
                 //保存做题记录
-                if(((JSONArray) answer.get(i)).size() > 0) {
+                if (((JSONArray) answer.get(i)).size() > 0) {
                     examQuestionStudentAnswer.setAnswerOne(((JSONArray) answer.get(i)).getByte(0));
                     if (((JSONArray) answer.get(i)).size() > 1) {
                         examQuestionStudentAnswer.setAnswerTwo(((JSONArray) answer.get(i)).getByte(1));
@@ -523,7 +524,7 @@ public class ExamServiceImpl implements ExamService {
             result.put("msg", "当前考试正在审核队列中，请耐心等待审核");
             return result;
         }
-        if (examReStudent.getIsVerify().equals((byte)2)) {
+        if (examReStudent.getIsVerify().equals((byte) 2)) {
             result.put("msg", "当前考试已审核通过，无须重考");
             return result;
         }
@@ -540,6 +541,13 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public JSONObject addNewExam(JSONObject jsonObject) {
         JSONObject result = new JSONObject();
+        result.put("code", "fail");
+        //权限检查
+        Integer opAdminId = jsonObject.getInteger("id");
+        if (!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.EXAM)) {
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
 
         String name = jsonObject.getString("name");
         Short num = jsonObject.getShort("num");
@@ -754,6 +762,14 @@ public class ExamServiceImpl implements ExamService {
     @Override  //随机出题
     public JSONObject randomFillExam(JSONObject jsonObject) {
         JSONObject result = new JSONObject();
+        result.put("code", "fail");
+        //权限检查
+        Integer opAdminId = jsonObject.getInteger("id");
+        if (!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.EXAM)) {
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
+
         Integer examId = jsonObject.getInteger("examId");
         /**
          * 暂时是从考试对应的培训下的题库随机出题，每道题目的分数=总分(100)/题目数目
@@ -821,6 +837,12 @@ public class ExamServiceImpl implements ExamService {
     public JSONObject saveQuestionForExam(JSONObject jsonObject) {
         JSONObject result = new JSONObject();
         result.put("code", "fail");
+        //权限检查
+        Integer opAdminId = jsonObject.getInteger("id");
+        if (!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.EXAM)) {
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
 
         Integer examId = jsonObject.getInteger("examId");
         JSONArray queList = jsonObject.getJSONArray("queList");
@@ -863,6 +885,14 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public JSONObject publishExam(JSONObject jsonObject) {
         JSONObject result = new JSONObject();
+        result.put("code", "fail");
+        //权限检查
+        Integer opAdminId = jsonObject.getInteger("id");
+        if (!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.EXAM)) {
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
+
         Integer examId = jsonObject.getInteger("examId");
         Exam exam = examMapper.selectByPrimaryKey(examId);
         if (exam == null) {
@@ -885,6 +915,14 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public JSONObject closeExam(JSONObject jsonObject) {
         JSONObject result = new JSONObject();
+        //权限检查
+        Integer opAdminId = jsonObject.getInteger("id");
+        if (!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.EXAM)) {
+            result.put("code", "fail");
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
+
         Integer examId = jsonObject.getInteger("examId");
         Exam exam = examMapper.selectByPrimaryKey(examId);
         if (exam == null) {
@@ -959,6 +997,14 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public JSONObject modifyExamInfo(JSONObject jsonObject) {
         JSONObject result = new JSONObject();
+        result.put("code", "fail");
+        //权限检查
+        Integer opAdminId = jsonObject.getInteger("id");
+        if (!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.EXAM)) {
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
+
         Integer examId = jsonObject.getInteger("examId");
 //        Integer trainingId=jsonObject.getInteger("training");
         String examName = jsonObject.getString("name");
@@ -1069,7 +1115,14 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public JSONObject submitGradeList(JSONObject jsonObject) {
         JSONObject result = new JSONObject();
+        result.put("code", "fail");
+        //权限检查
         Integer opAdminId = jsonObject.getInteger("id");
+        if (!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.EXAM)) {
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
+
         Admin opAdmin = adminMapper.selectByPrimaryKey(opAdminId);
         result.put("code", "fail");
 
@@ -1527,6 +1580,12 @@ public class ExamServiceImpl implements ExamService {
     public JSONObject modifyGrade(JSONObject jsonObject) {
         JSONObject result = new JSONObject();
         result.put("code", "fail");
+        //权限检查
+        Integer opAdminId = jsonObject.getInteger("id");
+        if (!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.GRADE)) {
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
 
         Integer examId = jsonObject.getInteger("examId");
         String idNum = jsonObject.getString("idNum");

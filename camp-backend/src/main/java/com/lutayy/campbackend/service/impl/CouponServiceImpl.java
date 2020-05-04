@@ -2,6 +2,7 @@ package com.lutayy.campbackend.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.lutayy.campbackend.common.config.AuthorityParam;
 import com.lutayy.campbackend.common.util.RedisUtil;
 import com.lutayy.campbackend.common.util.UUIDUtil;
 import com.lutayy.campbackend.dao.CouponMapper;
@@ -29,6 +30,8 @@ public class CouponServiceImpl implements CouponService {
     CouponMapper couponMapper;
     @Autowired
     CouponMemberMapper couponMemberMapper;
+    @Autowired
+    GetObjectHelper getObjectHelper;
     @Resource
     private RedisUtil redisUtil;
 
@@ -36,6 +39,13 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public JSONObject addCoupon(JSONObject jsonObject) {
         JSONObject result=new JSONObject();
+        result.put("code", "fail");
+        //权限检查
+        Integer opAdminId=jsonObject.getInteger("id");
+        if(!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.COUPON)){
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
 
         String name=jsonObject.getString("name");
         BigDecimal value=jsonObject.getBigDecimal("value");
@@ -61,6 +71,13 @@ public class CouponServiceImpl implements CouponService {
     public JSONObject deleteCoupon(JSONObject jsonObject) {
         JSONObject result=new JSONObject();
         result.put("code", "fail");
+        //权限检查
+        Integer opAdminId=jsonObject.getInteger("id");
+        if(!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.COUPON)){
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
+
         Integer couponId=jsonObject.getInteger("couponId");
         Coupon coupon=couponMapper.selectByPrimaryKey(couponId);
         if(coupon==null || coupon.getIsInvalid()){
@@ -152,6 +169,13 @@ public class CouponServiceImpl implements CouponService {
     public JSONObject allGrantCoupon(JSONObject jsonObject) {
         JSONObject result=new JSONObject();
         result.put("code", "fail");
+        //权限检查
+        Integer opAdminId=jsonObject.getInteger("id");
+        if(!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.COUPON)){
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
+
         Integer couponId=jsonObject.getInteger("couponId");
         Coupon coupon=couponMapper.selectByPrimaryKey(couponId);
         if(coupon==null || coupon.getIsInvalid()){
@@ -183,6 +207,13 @@ public class CouponServiceImpl implements CouponService {
     public JSONObject grantCoupon(JSONObject jsonObject) {
         JSONObject result=new JSONObject();
         result.put("code", "fail");
+        //权限检查
+        Integer opAdminId=jsonObject.getInteger("id");
+        if(!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.COUPON)){
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
+
         Integer couponId=jsonObject.getInteger("couponId");
         Coupon coupon=couponMapper.selectByPrimaryKey(couponId);
         if(coupon==null || coupon.getIsInvalid()){

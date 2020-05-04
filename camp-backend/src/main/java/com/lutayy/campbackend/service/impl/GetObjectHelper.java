@@ -382,4 +382,15 @@ public class GetObjectHelper {
         }
         return false;
     }
+
+
+    //检查管理员权限
+    public boolean checkAdminIfHasAuthority(Integer adminId, Integer authorityId){
+        AdminReAuthorityExample example=new AdminReAuthorityExample();
+        example.createCriteria().andAdminIdEqualTo(adminId)
+                .andAuthorityIdEqualTo(authorityId).andHasOrNotEqualTo(true);
+        if(adminReAuthorityMapper.countByExample(example)>0)
+            return true;
+        return false;
+    }
 }
