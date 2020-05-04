@@ -109,14 +109,19 @@ export default {
             this.table.loading = true;
             try {
                 let par = { ...this.form };
-                par.becomeTimeStart = formatDate(this.form.becomeTime[0]);
-                par.becomeTimeEnd = formatDate(this.form.becomeTime[1]);
-                par.endTimeStart = formatDate(this.form.endTime[0]);
-                par.endTimeEnd = formatDate(this.form.endTime[1]);
+                if (this.form.becomeTime) {
+                    par.becomeTimeStart = formatDate(this.form.becomeTime[0]);
+                    par.becomeTimeEnd = formatDate(this.form.becomeTime[1]);
+                }
+                if (this.form.endTime) {
+                    par.endTimeStart = formatDate(this.form.endTime[0]);
+                    par.endTimeEnd = formatDate(this.form.endTime[1]);
+                }
+
                 delete par.becomeTime;
                 delete par.endTime;
                 let res = await memberApi.getMemberList(par);
-                this.table.data = res.data.data;
+                this.table.data = res.data.list;
                 this.form.total = res.data.total;
                 this.tip = true;
             } catch (error) {
@@ -127,12 +132,15 @@ export default {
         getTimeText(dateArr) {
             let time1 = "未限制",
                 time2 = "未限制";
-            if (dateArr[0]) {
-                time1 = formatDate(dateArr[0]);
+            if (dateArr) {
+                if (dateArr[0]) {
+                    time1 = formatDate(dateArr[0]);
+                }
+                if (dateArr[1]) {
+                    time2 = formatDate(dateArr[1]);
+                }
             }
-            if (dateArr[1]) {
-                time2 = formatDate(dateArr[1]);
-            }
+
             return ` ${time1} 到 ${time2} `;
         }
     }

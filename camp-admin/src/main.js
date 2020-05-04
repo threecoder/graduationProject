@@ -6,7 +6,6 @@ import store from './store'
 import element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import { getCanGoPath } from './assets/js/util';
-import Distpicker from 'v-distpicker'
 
 // import 'vue-fabric/dist/vue-fabric.min.css';
 // import { Fabric } from 'vue-fabric';
@@ -18,7 +17,6 @@ Vue.prototype.$msbox = element.MessageBox;
 Vue.prototype.confirm = element.MessageBox.confirm;
 
 Vue.use(element);
-Vue.component('v-distpicker', Distpicker)
 // 配置路由拦截
 router.beforeEach((to, from, next) => {
     store.commit("init");
@@ -42,6 +40,10 @@ router.beforeEach((to, from, next) => {
 //http response 拦截器
 Axios.interceptors.response.use(
     response => {
+        let user = store.getters.user;
+        let time = new Date().getTime() + 20 * 60 * 1000;
+        user.expire = time;
+        store.commit("setUser", user);
         if (response.headers[ "content-type" ] == 'application/json;charset=UTF-8') {
             if (response.data.code == 'success') {
                 return response.data;

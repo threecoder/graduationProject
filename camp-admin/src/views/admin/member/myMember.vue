@@ -64,7 +64,7 @@
             :visible.sync="memberTable.flag"
             width="70%"
         >
-            <info :idType="1" :infor="temRow" />
+            <info :idType="1" :infor="temRow" @modify="search" />
         </el-dialog>
 
         <!-- 添加会员弹窗 -->
@@ -284,13 +284,8 @@ export default {
         handleSuccess(response) {
             this.$alert(response.msg, "上传文件成功", {
                 confirmButtonText: "确定"
-                // callback: action => {
-                //     this.$message({
-                //         type: "info",
-                //         message: `action: ${action}`
-                //     });
-                // }
             });
+            this.search();
         }
     }
 };

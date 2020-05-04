@@ -211,6 +211,9 @@ export default {
             return this.$store.getters.idType;
         }
     },
+    mounted() {
+        this.getMessageNum();
+    },
     methods: {
         toHomePage() {
             this.$router.push("/");

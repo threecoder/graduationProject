@@ -5,7 +5,6 @@ import Axios from 'axios'
 import store from './store'
 import element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-import Distpicker from 'v-distpicker'
 
 import { canGoPath } from './const';
 
@@ -15,7 +14,6 @@ Vue.prototype.$msbox = element.MessageBox;
 Vue.prototype.confirm = element.MessageBox.confirm;
 
 Vue.use(element);
-Vue.component('v-distpicker', Distpicker)
 
 import "./assets/css/quill.core.css";
 import "./assets/css/quill.snow.css";

@@ -25,7 +25,7 @@
 
         <!-- 修改学员信息 -->
         <el-dialog title="修改信息" v-if="infoFlag" :visible.sync="infoFlag">
-            <info :idType="0" :infor="temRow" />
+            <info :idType="0" :infor="temRow" @modify="refreshList" />
         </el-dialog>
 
         <el-dialog title="修改学员挂靠公司" v-if="comFlag" :visible.sync="comFlag">
@@ -116,6 +116,9 @@ export default {
         modifyInfo(row) {
             this.temRow = row;
             this.infoFlag = true;
+        },
+        refreshList() {
+            event.$emit("refreshStudent");
         },
         resetPass(row) {
             this.$confirm("此操作将重置密码为123456，确定重置吗？", "提示", {

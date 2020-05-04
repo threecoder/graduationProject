@@ -137,9 +137,20 @@ export default {
         async getOrderList() {
             this.table.loading = true;
             try {
-                let res = await orderAPi.getOrderList();
-                this.table.data = res.data.data;
+                let res = await orderAPi.getOrderList(this.form);
+
+                this.table.data = res.data.list;
                 this.form.total = res.data.total;
+                let typeLabel = "活动";
+                for (let i = 0; i < this.orderTypeList.length; i++) {
+                    if (this.orderTypeList[i].key == this.form.type) {
+                        typeLabel = this.orderTypeList[i].label;
+                        break;
+                    }
+                }
+                this.table.data.forEach(val => {
+                    val.orderType = typeLabel;
+                });
             } catch (error) {
                 this.$message.error(error.message);
             }

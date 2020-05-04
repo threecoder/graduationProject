@@ -10,65 +10,57 @@
         </el-row>
         <div>
             <span class="panel-title">基本信息</span>
-            <el-form :model="info" :loading="loading">
+            <el-form :model="info" :loading="loading" label-position="top">
                 <el-row :gutter="40">
                     <el-col :span="8">
                         <el-form-item label-position="top" label="公司名字">
-                            <el-input v-model="info.name" :readonly="readOnly"></el-input>
+                            <el-input v-model="info.name" :disabled="readOnly"></el-input>
                         </el-form-item>
                     </el-col>
 
                     <el-col :span="8">
                         <el-form-item label-position="top" label="号码">
-                            <el-input v-model="info.phone" :readonly="readOnly"></el-input>
+                            <el-input v-model="info.phone" :disabled="readOnly"></el-input>
                         </el-form-item>
                     </el-col>
 
                     <el-col :span="8">
                         <el-form-item label-position="top" label="邮箱">
-                            <el-input v-model="info.email" :readonly="readOnly"></el-input>
+                            <el-input v-model="info.email" :disabled="readOnly"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row :gutter="40">
                     <el-col :span="4">
                         <el-form-item label-position="top" label="是否是会员">
-                            <el-input v-model="info.memberFlag" :readonly="true"></el-input>
+                            <el-input v-model="info.memberFlag" :disabled="true"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label-position="top" label="会员开始时间">
-                            <el-input v-model="info.memberBeginDate" :readonly="true"></el-input>
+                            <el-input v-model="info.memberBeginDate" :disabled="true"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label-position="top" label="会员到期时间">
-                            <el-input v-model="info.memberEndDate" :readonly="true"></el-input>
+                            <el-input v-model="info.memberEndDate" :disabled="true"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row :gutter="40">
                     <el-col :span="12">
                         <el-form-item label-position="top" label="地址">
-                            <el-input
-                                id="zone-input"
-                                v-model="info.zone"
-                                class="input-with-select"
-                                placeholder="请输入具体地址"
-                                :readonly="readOnly"
-                            >
-                                <v-distpicker
-                                    style="width:50%"
-                                    v-on:province="changeProvince"
-                                    v-on:city="changeCity"
-                                    v-on:area="changeArea"
-                                    :disabled="readOnly"
-                                    :province="info.province"
-                                    :city="info.city"
-                                    :area="info.area"
-                                    slot="prepend"
-                                ></v-distpicker>
-                            </el-input>
+                            <my-address
+                                :province="info.province"
+                                :area="info.area"
+                                :city="info.city"
+                                :zone="info.zone"
+                                :disabled="readOnly"
+                                @provinceChange="changeProvince"
+                                @cityChange="changeCity"
+                                @areaChange="changeArea"
+                                @zoneChange="changeZone"
+                            />
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -82,8 +74,12 @@
     </div>
 </template>
 <script>
+import myAddress from "../../../../components/address.vue";
 import infoApi from "../../../../api/modules/info";
 export default {
+    components: {
+        myAddress
+    },
     data() {
         return {
             info: {
@@ -158,13 +154,16 @@ export default {
             });
         },
         changeProvince(val) {
-            this.info.province = val.value;
+            this.info.province = val;
         },
         changeCity(val) {
-            this.info.city = val.value;
+            this.info.city = val;
         },
         changeArea(val) {
-            this.info.area = val.value;
+            this.info.area = val;
+        },
+        changeZone(val) {
+            this.info.zone = val;
         }
     }
 };

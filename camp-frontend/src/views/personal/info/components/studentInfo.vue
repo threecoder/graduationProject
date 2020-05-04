@@ -7,77 +7,74 @@
                 <el-row :gutter="40">
                     <el-col :span="8">
                         <el-form-item label-position="top" label="身份证号码">
-                            <el-input v-model="info.idNum" :readonly="readOnly"></el-input>
+                            <el-input v-model="info.idNum" :disabled="readOnly"></el-input>
                         </el-form-item>
                     </el-col>
 
                     <el-col :span="8">
                         <el-form-item label-position="top" label="手机号码">
-                            <el-input v-model="info.phone" :readonly="readOnly"></el-input>
+                            <el-input v-model="info.phone" :disabled="readOnly"></el-input>
                         </el-form-item>
                     </el-col>
 
                     <el-col :span="8">
                         <el-form-item label-position="top" label="名字">
-                            <el-input v-model="info.name" :readonly="readOnly"></el-input>
+                            <el-input v-model="info.name" :disabled="readOnly"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row :gutter="40">
                     <el-col :span="8">
                         <el-form-item label-position="top" label="邮箱">
-                            <el-input v-model="info.email" :readonly="readOnly"></el-input>
+                            <el-input v-model="info.email" :disabled="readOnly"></el-input>
                         </el-form-item>
                     </el-col>
 
                     <el-col :span="8">
                         <el-form-item label-position="top" label="所属公司">
-                            <el-input v-model="info.company" :readonly="readOnly"></el-input>
+                            <el-input v-model="info.company" :disabled="readOnly"></el-input>
                         </el-form-item>
                     </el-col>
 
                     <el-col :span="8">
                         <el-form-item label-position="top" label="职务">
-                            <el-input v-model="info.position" :readonly="readOnly"></el-input>
+                            <el-input v-model="info.position" :disabled="readOnly"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row :gutter="40">
                     <el-col :span="12">
                         <el-form-item label-position="top" label="地址">
-                            <el-input
-                                id="zone-input"
-                                v-model="info.zone"
-                                class="input-with-select"
-                                placeholder="请输入具体地址"
-                                :readonly="readOnly"
-                            >
-                                <v-distpicker
-                                    v-on:province="changeProvince"
-                                    v-on:city="changeCity"
-                                    v-on:area="changeArea"
-                                    :disabled="readOnly"
-                                    :province="info.province"
-                                    :city="info.city"
-                                    :area="info.area"
-                                    slot="prepend"
-                                ></v-distpicker>
-                            </el-input>
+                            <my-address
+                                :province="info.province"
+                                :area="info.area"
+                                :city="info.city"
+                                :zone="info.zone"
+                                :disabled="readOnly"
+                                @provinceChange="changeProvince"
+                                @cityChange="changeCity"
+                                @areaChange="changeArea"
+                                @zoneChange="changeZone"
+                            />
                         </el-form-item>
                     </el-col>
                 </el-row>
             </el-form>
             <div class="tac mt30">
-                <el-button v-if="readOnly" type="primary" round @click="readOnly=false">修改资料</el-button>
-                <el-button v-if="!readOnly" type="primary" round @click="setUserInfo">确定</el-button>
-                <el-button v-if="!readOnly" type="primary" round @click="readOnly=true">取消</el-button>
+                <el-button v-if="readOnly" type="primary" @click="readOnly=false">修改资料</el-button>
+                <el-button v-if="!readOnly" type="primary" @click="setUserInfo">确定</el-button>
+                <el-button v-if="!readOnly" type="primary" @click="readOnly=true">取消</el-button>
             </div>
         </div>
     </div>
 </template>
 <script>
-import infoApi from '../../../../api/modules/info';
+import myAddress from "../../../../components/address.vue";
+import infoApi from "../../../../api/modules/info";
 export default {
+    components: {
+        myAddress
+    },
     data() {
         return {
             idType: null,
@@ -127,13 +124,16 @@ export default {
             this.confirmLoading = false;
         },
         changeProvince(val) {
-            this.info.province = val.value;
+            this.info.province = val;
         },
         changeCity(val) {
-            this.info.city = val.value;
+            this.info.city = val;
         },
         changeArea(val) {
-            this.info.area = val.value;
+            this.info.area = val;
+        },
+        changeZone(val) {
+            this.info.zone = val;
         }
     }
 };

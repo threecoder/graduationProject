@@ -75,7 +75,7 @@ export default {
             this.table.loading = true;
             try {
                 let res = await memberApi.getMemberList(this.form);
-                this.table.data = res.data.data;
+                this.table.data = res.data.list;
                 this.form.total = res.data.total;
                 this.tip = true;
             } catch (error) {

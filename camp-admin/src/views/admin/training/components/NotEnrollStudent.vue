@@ -87,13 +87,13 @@ export default {
                 ],
                 data: [
                     {
-                        idNum: "111",
+                        idNum: "445281199308310056",
                         name: "模拟数据",
                         phone: "123456",
                         company: "公司"
                     },
                     {
-                        idNum: "2222",
+                        idNum: "445281199308310037",
                         name: "模拟数据",
                         phone: "123456",
                         company: "公司"

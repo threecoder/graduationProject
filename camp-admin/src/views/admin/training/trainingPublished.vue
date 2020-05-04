@@ -131,7 +131,7 @@ export default {
             this.table.loading = true;
             try {
                 let res = await trainingApi.getPublishedTraining(par);
-                this.table.data = res.data.data;
+                this.table.data = res.data.list;
                 this.searchForm.total = res.data.total;
             } catch (error) {
                 this.$message.error(error.message);

@@ -72,15 +72,15 @@ export default {
                     { prop: "name", label: "公司名称", width: "150px" },
                     { prop: "phone", label: "联系电话", width: "150px" },
                     { prop: "email", label: "邮箱", width: "150px" },
+                    { prop: "province", label: "省份" },
+                    { prop: "city", label: "城市" },
+                    { prop: "area", label: "区/县" },
+                    { prop: "zone", label: "详细地址" },
                     { prop: "enterData", label: "加入时间" },
                     { prop: "vip", label: "是否会员" },
                     { prop: "vipBegin", label: "会员开始时间", width: "150px" },
                     { prop: "vipEnd", label: "会员结束时间", width: "150px" },
                     { prop: "deadline", label: "会员是否快到期" },
-                    { prop: "province", label: "省份" },
-                    { prop: "city", label: "城市" },
-                    { prop: "area", label: "区/县" },
-                    { prop: "zone", label: "详细地址" }
                 ],
                 data: [],
                 loading: false
@@ -128,7 +128,7 @@ export default {
             this.table.loading = true;
             try {
                 let res = await memberApi.getMemberList(this.form);
-                this.table.data = res.data.data;
+                this.table.data = res.data.list;
                 this.form.total = res.data.total;
                 this.tip = true;
             } catch (error) {

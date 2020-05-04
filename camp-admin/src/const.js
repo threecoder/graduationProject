@@ -20,11 +20,13 @@ export const authorityList = [
 //系统参数列表
 export const systemParams = [
     { key: "studentTrainig", label: "允许学员报名培训", type: "bool" },
+    { key: "memberFee", label: "会员年费", type: "input" },
+    { key: "certificateRecheck", label: "证书复审费用", type: "input" },
+    { key: "certificateChage", label: "证书修改费用", type: "input" },
     { key: "trainingOrderTime", label: "培训订单超时时间(分钟)", type: "number" },
     { key: "activityOrderTime", label: "活动订单超时时间(分钟)", type: "number" },
     { key: "certificateOrderTime", label: "证书订单超时时间(分钟)", type: "number" },
-    { key: "memberOrderTime", label: "会费订单超时时间(分钟)", type: "number" },
-    { key: "memberFee", label: "会员年费", type: "input" }
+    { key: "memberOrderTime", label: "会费订单超时时间(分钟)", type: "number" }
 ]
 
 //图片占位符

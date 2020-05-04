@@ -41,31 +41,24 @@
                     </el-col>
                 </el-row>
                 <el-row :gutter="40">
-                    <el-col :span="12">
+                    <el-col :span="20">
                         <el-form-item label-position="top" label="地址">
-                            <el-input
-                                id="zone-input"
-                                v-model="info.zone"
-                                class="input-with-select"
-                                placeholder="请输入具体地址"
-                                :readonly="readOnly"
-                            >
-                                <v-distpicker
-                                    v-on:province="changeProvince"
-                                    v-on:city="changeCity"
-                                    v-on:area="changeArea"
-                                    :disabled="readOnly"
-                                    :province="info.province"
-                                    :city="info.city"
-                                    :area="info.area"
-                                    slot="prepend"
-                                ></v-distpicker>
-                            </el-input>
+                            <my-address
+                                :province="info.province"
+                                :area="info.area"
+                                :city="info.city"
+                                :zone="info.zone"
+                                :disabled="readOnly"
+                                @provinceChange="changeProvince"
+                                @cityChange="changeCity"
+                                @areaChange="changeArea"
+                                @zoneChange="changeZone"
+                            />
                         </el-form-item>
                     </el-col>
                 </el-row>
             </el-form>
-            <el-form v-else :model="info" :loading="loading">
+            <el-form v-else :model="info" :loading="loading" label-position="top">
                 <el-row :gutter="40">
                     <el-col :span="8">
                         <el-form-item label-position="top" label="公司名字">
@@ -114,40 +107,32 @@
                     </el-col>
                 </el-row>
                 <el-row :gutter="40">
-                    <el-col :span="12">
+                    <el-col :span="20">
                         <el-form-item label-position="top" label="地址">
-                            <el-input
-                                id="zone-input"
-                                v-model="info.zone"
-                                class="input-with-select"
-                                placeholder="请输入具体地址"
+                            <my-address
+                                :province="info.province"
+                                :area="info.area"
+                                :city="info.city"
+                                :zone="info.zone"
                                 :disabled="readOnly"
-                            >
-                                <v-distpicker
-                                    v-on:province="changeProvince"
-                                    v-on:city="changeCity"
-                                    v-on:area="changeArea"
-                                    :disabled="readOnly"
-                                    :province="info.province"
-                                    :city="info.city"
-                                    :area="info.area"
-                                    slot="prepend"
-                                ></v-distpicker>
-                            </el-input>
+                                @provinceChange="changeProvince"
+                                @cityChange="changeCity"
+                                @areaChange="changeArea"
+                                @zoneChange="changeZone"
+                            />
                         </el-form-item>
                     </el-col>
                 </el-row>
             </el-form>
             <div class="tac mt30">
-                <el-button v-if="readOnly" type="primary" round @click="readOnly=false">修改资料</el-button>
+                <el-button v-if="readOnly" type="primary" @click="readOnly=false">修改资料</el-button>
                 <el-button
                     v-if="!readOnly"
                     type="primary"
-                    round
                     @click="modifyInfo"
                     :loading="confirmLoading"
                 >确定</el-button>
-                <el-button v-if="!readOnly" type="primary" round @click="readOnly=true">取消</el-button>
+                <el-button v-if="!readOnly" type="primary" @click="cancel">取消</el-button>
             </div>
         </div>
         <!-- <div class="modifyButton">
@@ -180,9 +165,10 @@
     </div>
 </template>
 <script>
+import myAddress from "../../../components/address";
 import adminStudentApi from "../../../api/admin/student";
-import adminMemberApi from "../../../api/admin/member.js";
-import { getLocalStorage, formatDateAndTime } from "../../../assets/js/util.js";
+import adminMemberApi from "../../../api/admin/member";
+import { getLocalStorage, formatDateAndTime } from "../../../assets/js/util";
 export default {
     props: {
         idType: {
@@ -195,6 +181,9 @@ export default {
                 return {};
             }
         }
+    },
+    components: {
+        myAddress
     },
     data() {
         return {
@@ -221,7 +210,7 @@ export default {
         };
     },
     mounted() {
-        this.info = this.infor;
+        this.info = { ...this.infor };
     },
     methods: {
         async modifyInfo() {
@@ -235,15 +224,21 @@ export default {
                 } else {
                     //处理参数
                     let par = { ...this.info };
+                    par.memberId = par.id;
+                    delete par.id;
                     if (typeof par.vipBegin !== "string") {
                         par.vipBegin = formatDateAndTime(par.vipBegin);
                     }
                     if (typeof par.vipEnd !== "string") {
                         par.vipEnd = formatDateAndTime(par.vipEnd);
                     }
+                    if (typeof par.vip === "string") {
+                        par.vip = par.vip == "是" ? 1 : 0;
+                    }
                     res = await adminMemberApi.modifyInfo(par);
                     this.$message.success("修改会员资料成功");
                 }
+                this.$emit("modify");
                 this.readOnly = true;
                 this.confirmLoading = false;
             } catch (error) {
@@ -251,14 +246,21 @@ export default {
             }
             this.confirmLoading = false;
         },
+        cancel() {
+            this.readOnly = true;
+            this.info = this.infor;
+        },
         changeProvince(val) {
-            this.info.province = val.value;
+            this.info.province = val;
         },
         changeCity(val) {
-            this.info.city = val.value;
+            this.info.city = val;
         },
         changeArea(val) {
-            this.info.area = val.value;
+            this.info.area = val;
+        },
+        changeZone(val) {
+            this.info.zone = val;
         }
     }
 };

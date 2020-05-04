@@ -5,7 +5,7 @@
         <div class="form-container">
             <el-form inline :model="form">
                 <el-form-item label="学员ID">
-                    <el-input v-model="form.id" clearable></el-input>
+                    <el-input v-model="form.idNum" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="学员名字">
                     <el-input v-model="form.name" clearable></el-input>
@@ -37,7 +37,7 @@
                     <div slot-scope="{row}">
                         <el-button size="small" type="primary" @click="prompt(row)">提示支付</el-button>
                     </div>
-                </el-table-column> -->
+                </el-table-column>-->
             </m-table>
         </div>
         <div class="page-container">
@@ -48,10 +48,20 @@
                 @curChange="curChange"
             />
         </div>
-        <el-dialog :visible.sync="studentDialog.flag" v-if="studentDialog.flag" title="未报名学员" width="60%">
+        <el-dialog
+            :visible.sync="studentDialog.flag"
+            v-if="studentDialog.flag"
+            title="未报名学员"
+            width="60%"
+        >
             <student :trainingId="studentDialog.trainingId" />
         </el-dialog>
-        <el-dialog :visible.sync="memberDialog.flag" v-if="memberDialog.flag" title="所有会员" width="60%">
+        <el-dialog
+            :visible.sync="memberDialog.flag"
+            v-if="memberDialog.flag"
+            title="所有会员"
+            width="60%"
+        >
             <member :trainingId="memberDialog.trainingId" />
         </el-dialog>
     </div>
@@ -61,6 +71,7 @@ import page from "../../../components/page.vue";
 import mTable from "../../../components/mTable.vue";
 import student from "./components/NotEnrollStudent.vue";
 import member from "./components/NotEnrollMember.vue";
+import trainingApi from "../../../api/admin/training";
 export default {
     components: {
         page,
@@ -73,7 +84,7 @@ export default {
             trainingId: this.$route.query.trainingId,
             loading: true,
             form: {
-                id: null,
+                idNum: null,
                 name: null,
                 isEnrolled: null,
                 pageSize: 10,
@@ -86,7 +97,7 @@ export default {
                     { prop: "name", label: "名字" },
                     { prop: "phone", label: "联系电话" },
                     { prop: "company", label: "所属公司" },
-                    { prop: "status", label: "是否支付" },
+                    { prop: "status", label: "是否支付" }
                     // { slot: "oper", label: "操作" }
                 ],
                 data: [
@@ -101,7 +112,7 @@ export default {
             memberList: [
                 {
                     name: "bb公司",
-                    id: 1,
+                    idNum: 1,
                     phone: "2121"
                 }
             ],
@@ -121,12 +132,19 @@ export default {
             this.getSituation();
         }
     },
+    mounted() {
+        this.getSituation();
+    },
     methods: {
         async getSituation() {
             try {
-                let res
+                let par = { ...this.form };
+                par.trainingId = this.trainingId;
+                let res = await trainingApi.getEnrolledStudentList(par);
+                this.table.data = res.data.list;
+                this.form.total = res.data.total;
             } catch (error) {
-                
+                this.$message.error(error.message);
             }
             console.log(this.trainingId);
         },

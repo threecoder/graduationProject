@@ -85,18 +85,19 @@ export default {
     box-sizing: border-box;
     background-color: #fff;
     padding: 20px;
-    margin: auto;
     .params-container {
         width: 100%;
         height: 100%;
         display: flex;
-        flex-direction: row;
         justify-content: flex-start;
+        align-items: center;
+        box-sizing: content-box;
+        flex-wrap: wrap;
         .single-param {
-            width: 50%;
-            overflow: hidden;
+            width: 20%;
+            margin: 20px;
             span {
-                margin-right: 15px;
+                line-height: 20px;
                 color: rgb(96, 98, 102);
             }
         }

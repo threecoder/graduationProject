@@ -93,9 +93,7 @@ export default {
     methods: {
         async getOrderList() {
             try {
-                let res = await trainingApi.getTrainingOrderList({
-                    trainingId: this.form.trainingId
-                });
+                let res = await trainingApi.getTrainingOrderList(this.form);
                 this.table.data = res.data.data;
                 this.form.total = res.data.total;
             } catch (error) {
@@ -122,6 +120,7 @@ export default {
                     console.log(value);
                     let res = await trainingApi.modifyTrainingOrderPrice(data);
                     this.$message.success("修改金额成功！");
+                    this.getOrderList();
                 } catch (error) {
                     this.$message.error(error.message);
                 }
