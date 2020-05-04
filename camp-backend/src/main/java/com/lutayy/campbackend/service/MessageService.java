@@ -13,8 +13,11 @@ public interface MessageService {
     JSONObject deleteMsg(JSONObject jsonObject, String role);
     //获取本账号消息列表
     JSONObject getMsgList(Integer pageSize, Integer currentPage, Integer roleId, String role);
+
     //管理员发送站内信
     JSONObject sendMsg(JSONObject jsonObject);
+    //管理员提醒会员续费
+    JSONObject remindRenew(JSONObject jsonObject);
     //管理员提醒所有会员报名指定培训
     JSONObject promptAllMemberEnrollTraining(JSONObject jsonObject);
     //管理员提醒所有未报名学员报名培训

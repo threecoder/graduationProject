@@ -177,7 +177,7 @@ public class NewsServiceImpl implements NewsService {
 
         NewsExample newsExample = new NewsExample();
         NewsExample.Criteria criteria = newsExample.createCriteria();
-        criteria.andIsInvalidEqualTo(false);
+        criteria.andIsInvalidEqualTo(false).andTypeNotEqualTo("notice");
         if (title != null) {
             criteria.andTitleLike("%" + title + "%");
         }
@@ -349,7 +349,11 @@ public class NewsServiceImpl implements NewsService {
 
     //管理员新增一条公告
     @Override
-    public JSONObject addNotice(Integer adminId, String title, String desc, String content) {
+    public JSONObject addNotice(JSONObject jsonObject) {
+        Integer adminId=jsonObject.getInteger("id");
+        String content=jsonObject.getString("content");
+        String desc=jsonObject.getString("desc");
+        String title=jsonObject.getString("title");
         JSONObject result=new JSONObject();
         News news=new News();
         news.setAdminId(adminId);
@@ -435,10 +439,13 @@ public class NewsServiceImpl implements NewsService {
 
     //修改一条公告
     @Override
-    public JSONObject modifyNotice(Integer newsId, String title, String desc, String content) {
+    public JSONObject modifyNotice(JSONObject jsonObject) {
         JSONObject result = new JSONObject();
         result.put("code", "fail");
-
+        Integer newsId=jsonObject.getInteger("noticeId");
+        String content=jsonObject.getString("content");
+        String desc=jsonObject.getString("desc");
+        String title=jsonObject.getString("title");
         News news = newsMapper.selectByPrimaryKey(newsId);
         if (news == null) {
             result.put("msg", "系统中找不到该公告！");

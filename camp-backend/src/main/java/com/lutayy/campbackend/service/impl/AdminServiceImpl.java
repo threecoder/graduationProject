@@ -593,6 +593,35 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    public JSONObject addSingleMember(JSONObject jsonObject) {
+        JSONObject result=new JSONObject();
+        result.put("code", "fail");
+        String phone=jsonObject.getString("phone");
+        String name=jsonObject.getString("name");
+        String email=jsonObject.getString("email");
+        String province=jsonObject.getString("province");
+        String city=jsonObject.getString("city");
+        String area=jsonObject.getString("area");
+        String address=jsonObject.getString("zone");
+        if(getObjectHelper.getMemberFromMemberName(name)!=null){
+            result.put("msg", "该会员在系统中已注册！");
+            return result;
+        }
+        Member member=new Member();
+        member.setMemberName(name);
+        member.setMemberPhone(phone);
+        member.setMemberEmail(email);
+        member.setMemberProvince(province);
+        member.setMemberCity(city);
+        member.setMemberArea(area);
+        member.setMemberAddress(address);
+        memberMapper.insertSelective(member);
+        result.put("code", "success");
+        result.put("msg", "添加会员成功！");
+        return result;
+    }
+
+    @Override
     public JSONObject importMemberByFile(MultipartFile file) {
         JSONObject result = new JSONObject();
         result.put("code", "fail");
@@ -676,10 +705,13 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public JSONObject getMemberList(Integer type, Integer deadline, String name,
-                                    Integer currentPage, Integer pageSize) {
+                                    Integer currentPage, Integer pageSize,
+                                    String becomeTimeStart, String becomeTimeEnd,
+                                    String endTimeStart, String endTimeEnd, String province, String city, String area) {
         JSONObject result = new JSONObject();
         JSONObject data = new JSONObject();
-
+        result.put("code", "fail");
+        result.put("data", data);
         if (pageSize <= 0) {
             pageSize = 10;
         }
@@ -720,8 +752,45 @@ public class AdminServiceImpl implements AdminService {
                 }
             }
         }
+        if (endTimeStart != null && endTimeEnd!=null) {
+            Date endVipStart, endVipEnd;
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                endVipStart = simpleDateFormat.parse(endTimeStart);
+                endVipEnd = simpleDateFormat.parse(endTimeEnd);
+                criteria.andVipEndDateBetween(endVipStart, endVipEnd);
+            } catch (Exception e) {
+                e.printStackTrace();
+                result.put("msg", "日期格式错误");
+                return result;
+            }
+        }
+        if (becomeTimeStart != null && becomeTimeEnd!=null) {
+            Date becomeVipStart, becomeVipEnd;
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                becomeVipStart = simpleDateFormat.parse(becomeTimeStart);
+                becomeVipEnd = simpleDateFormat.parse(becomeTimeEnd);
+                criteria.andVipBeginDateBetween(becomeVipStart, becomeVipEnd);
+            } catch (Exception e) {
+                e.printStackTrace();
+                result.put("msg", "日期格式错误");
+                return result;
+            }
+        }
+        if(province!=null && !province.equals("")){
+            criteria.andMemberProvinceLike("%"+province+"%");
+        }
+        if(city!=null && !city.equals("")){
+            criteria.andMemberCityLike("%"+city+"%");
+        }
+        if(area!=null && !area.equals("")){
+            criteria.andMemberAreaLike("%"+area+"%");
+        }
+
         memberExample.setOrderByClause("enter_date DESC");
         List<Member> members = memberMapper.selectByExample(memberExample);
+        data.put("total", members.size());
         JSONArray list = new JSONArray();
         int i = 1;//计数
         int sum = 0;//每页数目;
@@ -742,7 +811,7 @@ public class AdminServiceImpl implements AdminService {
             }
             object.put("vipBegin", member.getVipBeginDate());
             object.put("vipEnd", member.getVipEndDate());
-            if (member.getVipEndDate().compareTo(new Date()) >= 0 && member.getVipEndDate().compareTo(c.getTime()) <= 0) {
+            if (member.getVipEndDate()!=null && member.getVipEndDate().compareTo(new Date()) >= 0 && member.getVipEndDate().compareTo(c.getTime()) <= 0) {
                 object.put("deadline", 1);
             } else {
                 object.put("deadline", 0);
@@ -785,6 +854,42 @@ public class AdminServiceImpl implements AdminService {
         result.put("msg", "列表获取成功！");
         result.put("data", data);
         return result;
+    }
+
+    @Override
+    public JSONObject modifyMemberInfo(JSONObject jsonObject) {
+        JSONObject result=new JSONObject();
+        result.put("code", "fail");
+        Integer memberId=jsonObject.getInteger("memberId");
+        Member member=memberMapper.selectByPrimaryKey(memberId);
+        if(member==null){
+            result.put("msg", "修改失败！查询不到该会员信息");
+            return result;
+        }
+        String phone=jsonObject.getString("phone");
+        String name=jsonObject.getString("name");
+        String email=jsonObject.getString("email");
+        String province=jsonObject.getString("province");
+        String city=jsonObject.getString("city");
+        String area=jsonObject.getString("area");
+        String address=jsonObject.getString("zone");
+        Integer vip=jsonObject.getInteger("vip");
+        Date vipEnd=jsonObject.getDate("vipEnd");
+
+        member.setVipEndDate(vipEnd);
+        member.setIsVip(vip.equals(1));
+        member.setMemberProvince(province);
+        member.setMemberCity(city);
+        member.setMemberArea(area);
+        member.setMemberAddress(address);
+        member.setMemberEmail(email);
+        member.setMemberName(name);
+        member.setMemberPhone(phone);
+        memberMapper.updateByPrimaryKeySelective(member);
+        result.put("code", "success");
+        result.put("msg", "修改成功！");
+        return result;
+
     }
 
     @Override

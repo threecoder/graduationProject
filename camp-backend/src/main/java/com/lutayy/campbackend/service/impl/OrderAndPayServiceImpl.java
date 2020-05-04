@@ -321,6 +321,68 @@ public class OrderAndPayServiceImpl implements OrderAndPayService {
         return result;
     }
 
+    @Override
+    public JSONObject getTrainingOrderList(String orderNum, Integer userId, String userName, Integer trainingId, Integer currentPage, Integer pageSize) {
+        JSONObject result=new JSONObject();
+        JSONObject data=new JSONObject();
+        result.put("code", "fail");
+        result.put("data", data);
+        Training training=trainingMapper.selectByPrimaryKey(trainingId);
+        if(training==null){
+            result.put("msg", "该培训不存在！");
+            return result;
+        }
+        TrainingOrderExample example=new TrainingOrderExample();
+        TrainingOrderExample.Criteria criteria=example.createCriteria();
+        TrainingOrderExample.Criteria criteria0=example.createCriteria();
+        criteria.andTrainingIdEqualTo(trainingId);
+        criteria0.andTrainingIdEqualTo(trainingId);
+        if(orderNum!=null && !orderNum.equals("")){
+            criteria.andTrainingOrderIdEqualTo(orderNum);
+            criteria0.andTrainingOrderIdEqualTo(orderNum);
+        }
+        if(userName!=null && !userName.equals("")){
+            criteria.andOpManNameLike("%"+userName+"%");
+            criteria0.andOpManNameLike("%"+userName+"%");
+        }
+        if(userId!=null){
+            criteria.andStudentIdEqualTo(userId);
+            criteria0.andMemberKeyIdEqualTo(userId);
+        }
+        example.or(criteria0);
+        long total=trainingOrderMapper.countByExample(example);
+        example.setOffset((currentPage-1)*pageSize);
+        example.setLimit(pageSize);
+        example.setOrderByClause("order_begin_time DESC");
+        List<TrainingOrder> trainingOrders=trainingOrderMapper.selectByExample(example);
+        data.put("total", total);
+        JSONArray list=new JSONArray();
+        for(TrainingOrder trainingOrder:trainingOrders){
+            JSONObject object=new JSONObject();
+            object.put("orderNum", trainingOrder.getTrainingOrderId());
+            object.put("orderType", trainingOrder.getOrderType()?"学员订单":"会员订单");
+            object.put("builderId", trainingOrder.getOrderType()?trainingOrder.getStudentId():trainingOrder.getMemberKeyId());
+            object.put("buildTime", trainingOrder.getOrderBeginTime());
+            object.put("builderName", trainingOrder.getOpManName());
+            object.put("price", trainingOrder.getOrderPrice());
+            getObjectHelper.checkTrainingOrderOutOfTime(trainingOrder);
+            if(trainingOrder.getClose()){
+                object.put("status", "订单关闭");
+            }else {
+                if(trainingOrder.getPaymentState())
+                    object.put("status", "已支付");
+                else
+                    object.put("status", "未支付");
+            }
+            list.add(object);
+        }
+        data.put("data", list);
+        result.put("data", data);
+        result.put("code", "success");
+        result.put("msg", "获取培训订单成功！");
+        return result;
+    }
+
     //修改订单金额
     @Override
     public JSONObject modifyOrderPrice(JSONObject jsonObject) {
@@ -391,6 +453,27 @@ public class OrderAndPayServiceImpl implements OrderAndPayService {
         trainingOrderMapper.updateByPrimaryKeySelective(trainingOrder);
         result.put("code", "success");
         result.put("msg", "修改成功！");
+        return result;
+    }
+
+    //管理员修改订单状态为已支付
+    @Override
+    public JSONObject confirmPay(JSONObject jsonObject) {
+        JSONObject result=new JSONObject();
+        result.put("code", "fail");
+        String orderCode=jsonObject.getString("orderNum");
+        Object orderTypeObject=redisUtil.hget("order_no_map", orderCode);
+        if(orderTypeObject==null){
+            result.put("msg", "订单不存在，或已过期！");
+            return result;
+        }
+        String orderType = (String) orderTypeObject;
+        if(confirmOrder(orderCode, orderType)){
+            result.put("code", "success");
+            result.put("msg", "修改订单支付状态成功！同时相关数据已更新！");
+        }else {
+            result.put("msg", "订单更新过程发生错误");
+        }
         return result;
     }
 
@@ -802,92 +885,97 @@ public class OrderAndPayServiceImpl implements OrderAndPayService {
     private boolean confirmOrder(String orderCode, String orderType){
         Object order = getObjectHelper.getOrderByOrderCode(orderCode, orderType);
         Date nowTime=new Date();
-        if (orderType.equals("activity")) {
-            ActivityOrder activityOrder = (ActivityOrder) order;
-            activityOrder.setPaymentState(true); //更新订单状态
-            activityOrder.setPayTime(nowTime);
-            activityOrderMapper.updateByPrimaryKeySelective(activityOrder);
-            ActivityOrderStudentExample example=new ActivityOrderStudentExample();
-            example.createCriteria().andOrderKeyIdEqualTo(activityOrder.getOrderKeyId());
-            ActivityOrderStudent activityOrderStudentRecord=new ActivityOrderStudent();
-            activityOrderStudentRecord.setIsPaid(true);
-            // TODO 将订单内的学生和活动插入关联表
-            activityOrderStudentMapper.updateByExampleSelective(activityOrderStudentRecord, example);
-            List<ActivityOrderStudent> activityOrderStudents=activityOrderStudentMapper.selectByExample(example);
-            for(ActivityOrderStudent activityOrderStudent:activityOrderStudents){
-                ActivityStudent activityStudent=new ActivityStudent();
-                activityStudent.setApplyNumber(UUIDUtil.getActivityApplyNumber(activityOrder.getActivityId()));
-                activityStudent.setStudentId(activityOrderStudent.getStudentId());
-                activityStudent.setActivityId(activityOrder.getActivityId());
-                activityStudent.setApplyTime(nowTime);
-                activityStudentMapper.insertSelective(activityStudent);
-            }
-
-        } else if (orderType.equals("training")) {
-            TrainingOrder trainingOrder = (TrainingOrder) order;
-            trainingOrder.setPaymentState(true); //更新订单状态
-            trainingOrder.setPayTime(nowTime);
-            trainingOrderMapper.updateByPrimaryKeySelective(trainingOrder);
-            // TODO 找出该培训已经发布的考试
-            ExamExample examExample=new ExamExample();
-            ExamExample.Criteria criteria1=examExample.createCriteria();
-            criteria1.andTrainingIdEqualTo(trainingOrder.getTrainingId()).andIsPostedEqualTo(true);
-            List<Exam> exams=examMapper.selectByExample(examExample);
-
-            TrainingOrderStudentExample example=new TrainingOrderStudentExample();
-            example.createCriteria().andOrderKeyIdEqualTo(trainingOrder.getOrderKeyId());
-            TrainingOrderStudent trainingOrderStudentRecord=new TrainingOrderStudent();
-            trainingOrderStudentRecord.setIsPaid(true);
-            trainingOrderStudentMapper.updateByExampleSelective(trainingOrderStudentRecord, example);
-            // TODO 将订单内的学生插入关联表
-            List<TrainingOrderStudent> trainingOrderStudents=trainingOrderStudentMapper.selectByExample(example);
-            for(TrainingOrderStudent trainingOrderStudent:trainingOrderStudents){
-                TrainingReStudent trainingReStudent=new TrainingReStudent();
-                trainingReStudent.setApplyId(UUIDUtil.getTrainingApplyNumber(trainingOrder.getTrainingId()));
-                trainingReStudent.setBeginTime(nowTime);
-                trainingReStudent.setStudentId(trainingOrderStudent.getStudentId());
-                trainingReStudent.setTrainingId(trainingOrder.getTrainingId());
-                trainingReStudentMapper.insertSelective(trainingReStudent);
-                // TODO 将已发布的考试与学生建立联系
-                for(Exam exam:exams){
-                    ExamReStudent examReStudent=new ExamReStudent();
-                    examReStudent.setStudentId(trainingOrderStudent.getStudentId());
-                    examReStudent.setExamId(exam.getExamId());
-                    examReStudentMapper.insertSelective(examReStudent);
+        try {
+            if (orderType.equals("activity")) {
+                ActivityOrder activityOrder = (ActivityOrder) order;
+                activityOrder.setPaymentState(true); //更新订单状态
+                activityOrder.setPayTime(nowTime);
+                activityOrderMapper.updateByPrimaryKeySelective(activityOrder);
+                ActivityOrderStudentExample example = new ActivityOrderStudentExample();
+                example.createCriteria().andOrderKeyIdEqualTo(activityOrder.getOrderKeyId());
+                ActivityOrderStudent activityOrderStudentRecord = new ActivityOrderStudent();
+                activityOrderStudentRecord.setIsPaid(true);
+                // TODO 将订单内的学生和活动插入关联表
+                activityOrderStudentMapper.updateByExampleSelective(activityOrderStudentRecord, example);
+                List<ActivityOrderStudent> activityOrderStudents = activityOrderStudentMapper.selectByExample(example);
+                for (ActivityOrderStudent activityOrderStudent : activityOrderStudents) {
+                    ActivityStudent activityStudent = new ActivityStudent();
+                    activityStudent.setApplyNumber(UUIDUtil.getActivityApplyNumber(activityOrder.getActivityId()));
+                    activityStudent.setStudentId(activityOrderStudent.getStudentId());
+                    activityStudent.setActivityId(activityOrder.getActivityId());
+                    activityStudent.setApplyTime(nowTime);
+                    activityStudentMapper.insertSelective(activityStudent);
                 }
+
+            } else if (orderType.equals("training")) {
+                TrainingOrder trainingOrder = (TrainingOrder) order;
+                trainingOrder.setPaymentState(true); //更新订单状态
+                trainingOrder.setPayTime(nowTime);
+                trainingOrderMapper.updateByPrimaryKeySelective(trainingOrder);
+                // TODO 找出该培训已经发布的考试
+                ExamExample examExample = new ExamExample();
+                ExamExample.Criteria criteria1 = examExample.createCriteria();
+                criteria1.andTrainingIdEqualTo(trainingOrder.getTrainingId()).andIsPostedEqualTo(true);
+                List<Exam> exams = examMapper.selectByExample(examExample);
+
+                TrainingOrderStudentExample example = new TrainingOrderStudentExample();
+                example.createCriteria().andOrderKeyIdEqualTo(trainingOrder.getOrderKeyId());
+                TrainingOrderStudent trainingOrderStudentRecord = new TrainingOrderStudent();
+                trainingOrderStudentRecord.setIsPaid(true);
+                trainingOrderStudentMapper.updateByExampleSelective(trainingOrderStudentRecord, example);
+                // TODO 将订单内的学生插入关联表
+                List<TrainingOrderStudent> trainingOrderStudents = trainingOrderStudentMapper.selectByExample(example);
+                for (TrainingOrderStudent trainingOrderStudent : trainingOrderStudents) {
+                    TrainingReStudent trainingReStudent = new TrainingReStudent();
+                    trainingReStudent.setApplyId(UUIDUtil.getTrainingApplyNumber(trainingOrder.getTrainingId()));
+                    trainingReStudent.setBeginTime(nowTime);
+                    trainingReStudent.setStudentId(trainingOrderStudent.getStudentId());
+                    trainingReStudent.setTrainingId(trainingOrder.getTrainingId());
+                    trainingReStudentMapper.insertSelective(trainingReStudent);
+                    // TODO 将已发布的考试与学生建立联系
+                    for (Exam exam : exams) {
+                        ExamReStudent examReStudent = new ExamReStudent();
+                        examReStudent.setStudentId(trainingOrderStudent.getStudentId());
+                        examReStudent.setExamId(exam.getExamId());
+                        examReStudentMapper.insertSelective(examReStudent);
+                    }
+                }
+
+            } else if (orderType.equals("cerChange")) {
+                CertificateChangeOrder certificateChangeOrder = (CertificateChangeOrder) order;
+                certificateChangeOrder.setPaymentState(true);
+                certificateChangeOrder.setPayTime(nowTime);
+                changeOrderMapper.updateByPrimaryKeySelective(certificateChangeOrder);
+                // TODO 证书修改
+
+            } else if (orderType.equals("cerRecheck")) {
+                CertificateRecheckOrder certificateRecheckOrder = (CertificateRecheckOrder) order;
+                certificateRecheckOrder.setPaymentState(true);
+                certificateRecheckOrder.setPayTime(nowTime);
+                recheckOrderMapper.updateByPrimaryKeySelective(certificateRecheckOrder);
+                // TODO 证书复审
+
+            } else if (orderType.equals("member")) {
+                MemberSubscriptionOrder memberSubscriptionOrder = (MemberSubscriptionOrder) order;
+                memberSubscriptionOrder.setPaymentState(true);
+                memberSubscriptionOrder.setPayTime(nowTime);
+                memberSubscriptionOrderMapper.updateByPrimaryKeySelective(memberSubscriptionOrder);
+                Member member = memberMapper.selectByPrimaryKey(memberSubscriptionOrder.getMemberKeyId());
+                // TODO 有效期延长一年
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(member.getVipEndDate());
+                cal.add(Calendar.YEAR, 1);
+                member.setVipEndDate(cal.getTime());
+                memberMapper.updateByPrimaryKeySelective(member);
+
+            } else {
+                System.out.println("订单类型错误!");
+                return false;
             }
-
-        } else if (orderType.equals("cerChange")) {
-            CertificateChangeOrder certificateChangeOrder = (CertificateChangeOrder) order;
-            certificateChangeOrder.setPaymentState(true);
-            certificateChangeOrder.setPayTime(nowTime);
-            changeOrderMapper.updateByPrimaryKeySelective(certificateChangeOrder);
-            // TODO 证书修改
-
-        } else if (orderType.equals("cerRecheck")) {
-            CertificateRecheckOrder certificateRecheckOrder = (CertificateRecheckOrder) order;
-            certificateRecheckOrder.setPaymentState(true);
-            certificateRecheckOrder.setPayTime(nowTime);
-            recheckOrderMapper.updateByPrimaryKeySelective(certificateRecheckOrder);
-            // TODO 证书复审
-
-        } else if (orderType.equals("member")) {
-            MemberSubscriptionOrder memberSubscriptionOrder = (MemberSubscriptionOrder) order;
-            memberSubscriptionOrder.setPaymentState(true);
-            memberSubscriptionOrder.setPayTime(nowTime);
-            memberSubscriptionOrderMapper.updateByPrimaryKeySelective(memberSubscriptionOrder);
-            Member member=memberMapper.selectByPrimaryKey(memberSubscriptionOrder.getMemberKeyId());
-            // TODO 有效期延长一年
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(member.getVipEndDate());
-            cal.add(Calendar.YEAR, 1);
-            member.setVipEndDate(cal.getTime());
-            memberMapper.updateByPrimaryKeySelective(member);
-
-        } else {
-            System.out.println("订单类型错误!");
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
             return false;
         }
-        return true;
     }
 }

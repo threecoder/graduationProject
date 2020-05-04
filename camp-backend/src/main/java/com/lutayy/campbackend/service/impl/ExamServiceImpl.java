@@ -58,8 +58,9 @@ public class ExamServiceImpl implements ExamService {
 
 
     @Override
-    public JSONObject getHalfExamList(Integer studentId) {
+    public JSONObject getHalfExamList(Integer studentId, Integer pageSize, Integer currentPage) {
         JSONObject result = new JSONObject();
+        JSONObject data=new JSONObject();
 
         Student student = studentMapper.selectByPrimaryKey(studentId);
         if (student == null) {
@@ -76,15 +77,18 @@ public class ExamServiceImpl implements ExamService {
             result.put("msg", "查询无结果");
             return result;
         }
+        data.put("total", exams.size());
+        data.put("list", exams.subList((currentPage-1)*pageSize, currentPage*pageSize));
         result.put("code", "success");
-        result.put("data", exams);
+        result.put("data", data);
         result.put("msg", "查询成功");
         return result;
     }
 
     @Override
-    public JSONObject getTodoExamList(Integer studentId) {
+    public JSONObject getTodoExamList(Integer studentId, Integer pageSize, Integer currentPage) {
         JSONObject result = new JSONObject();
+        JSONObject data=new JSONObject();
         Student student = studentMapper.selectByPrimaryKey(studentId);
         if (student == null) {
             result.put("code", "fail");
@@ -126,15 +130,18 @@ public class ExamServiceImpl implements ExamService {
         for (int i = 0; i < exams.size(); i++) {
             exams.getJSONObject(i).put("grade", null);
         }
+        data.put("total", exams.size());
+        data.put("list", exams.subList((currentPage-1)*pageSize, currentPage*pageSize));
         result.put("code", "success");
-        result.put("data", exams);
+        result.put("data", data);
         result.put("msg", "查询成功");
         return result;
     }
 
     @Override
-    public JSONObject getDoneExamList(Integer studentId) {
+    public JSONObject getDoneExamList(Integer studentId, Integer pageSize, Integer currentPage) {
         JSONObject result = new JSONObject();
+        JSONObject data=new JSONObject();
         Student student = studentMapper.selectByPrimaryKey(studentId);
         if (student == null) {
             result.put("code", "fail");
@@ -150,8 +157,10 @@ public class ExamServiceImpl implements ExamService {
             result.put("msg", "查询无结果");
             return result;
         }
+        data.put("total", exams.size());
+        data.put("list", exams.subList((currentPage-1)*pageSize, currentPage*pageSize));
         result.put("code", "success");
-        result.put("data", exams);
+        result.put("data", data);
         result.put("msg", "查询成功");
         return result;
     }

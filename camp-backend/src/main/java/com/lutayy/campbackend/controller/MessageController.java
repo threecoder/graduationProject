@@ -104,6 +104,12 @@ public class MessageController {
         return messageService.sendMsg(jsonObject);
     }
 
+    @RequestMapping("/admin/remindRenew")
+    @ResponseBody
+    public JSONObject remindRenew(@RequestBody JSONObject jsonObject) {
+        return messageService.remindRenew(jsonObject);
+    }
+
 
     @RequestMapping("/admin/promptAllMemberEnrollTraining")
     @ResponseBody

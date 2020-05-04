@@ -133,6 +133,12 @@ public class AdminController {
         return;
     }
 
+    @RequestMapping("/addSingleMember")
+    @ResponseBody
+    public JSONObject addSingleMember(@RequestBody JSONObject jsonObject) {
+        return adminService.addSingleMember(jsonObject);
+    }
+
     @RequestMapping("/importMemberByFile")
     @ResponseBody
     public JSONObject importMemberByFile(@RequestParam("file") MultipartFile file) {
@@ -145,8 +151,22 @@ public class AdminController {
                                 @RequestParam(value = "deadline", required = false) Integer deadline,
                                 @RequestParam(value = "name", required = false) String name,
                                 @RequestParam("currentPage") Integer currentPage,
-                                @RequestParam("pageSize") Integer pageSize) {
-        return adminService.getMemberList(type, deadline, name, currentPage, pageSize);
+                                @RequestParam("pageSize") Integer pageSize,
+                                @RequestParam(value = "becomeTimeStart", required = false) String becomeTimeStart,
+                                @RequestParam(value = "becomeTimeEnd", required = false) String becomeTimeEnd,
+                                @RequestParam(value = "endTimeStart", required = false) String endTimeStart,
+                                @RequestParam(value = "endTimeEnd", required = false) String endTimeEnd,
+                                @RequestParam(value = "province", required = false) String province,
+                                @RequestParam(value = "city", required = false) String city,
+                                @RequestParam(value = "area", required = false) String area) {
+        return adminService.getMemberList(type, deadline, name, currentPage, pageSize, becomeTimeStart, becomeTimeEnd,
+                endTimeStart, endTimeEnd, province, city, area);
+    }
+
+    @RequestMapping("/modifyMemberInfo")
+    @ResponseBody
+    public JSONObject modifyMemberInfo(@RequestBody JSONObject jsonObject) {
+        return adminService.modifyMemberInfo(jsonObject);
     }
 
     @RequestMapping("/getMemSelectList")

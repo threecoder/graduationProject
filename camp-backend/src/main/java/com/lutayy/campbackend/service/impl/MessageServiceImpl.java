@@ -317,6 +317,35 @@ public class MessageServiceImpl implements MessageService {
         return result;
     }
 
+    //管理员提醒会员续费
+    @Override
+    public JSONObject remindRenew(JSONObject jsonObject) {
+        JSONObject result=new JSONObject();
+        result.put("code", "fail");
+        Integer memberId=jsonObject.getInteger("memberId");
+        Member member=memberMapper.selectByPrimaryKey(memberId);
+        if(member==null){
+            result.put("msg", "系统中找不到该会员");
+            return result;
+        }
+        Date nowTime = new Date();
+        MessageText messageText=new MessageText();
+        messageText.setTitle("***续费提醒***");
+        messageText.setSendTime(nowTime);
+        messageText.setMessage("您的会员将于"+member.getVipEndDate()+"过期，请及时续费。");
+        messageText.setType("memberSubscription");
+        messageTextMapper.insertSelective(messageText);
+        MessageToMember messageToMember=new MessageToMember();
+        messageToMember.setMemberId(memberId);
+        messageToMember.setMessageId(messageText.getMessageId());
+        messageToMember.setSendTime(nowTime);
+        messageToMember.setAdminId(jsonObject.getInteger("id"));
+        messageToMemberMapper.insertSelective(messageToMember);
+        result.put("code", "success");
+        result.put("msg", "成功发送续费通知！");
+        return result;
+    }
+
     //管理员提醒所有会员报名指定培训
     @Override
     public JSONObject promptAllMemberEnrollTraining(JSONObject jsonObject) {

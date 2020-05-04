@@ -72,11 +72,11 @@ CREATE TABLE `activity_order` (
   CONSTRAINT `activity_order_ibfk_1` FOREIGN KEY (`activity_id`) REFERENCES `activity` (`activity_id`),
   CONSTRAINT `activity_order_ibfk_3` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`),
   CONSTRAINT `activity_order_ibfk_4` FOREIGN KEY (`member_key_id`) REFERENCES `member` (`member_key_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 /*Data for the table `activity_order` */
 
-insert  into `activity_order`(`order_key_id`,`activity_order_id`,`activity_id`,`order_type`,`member_key_id`,`student_id`,`order_price`,`order_begin_time`,`payment_state`,`close`,`pay_time`,`is_delete_user`,`is_delete_admin`,`op_man_name`,`business_name`) values (1,'20191001145853382363',1,1,NULL,1,'188.88','2019-10-01 14:58:54',1,0,NULL,0,0,NULL,NULL),(2,'20191009163126575245',4,0,1,NULL,'426.44','2019-10-09 16:31:27',1,0,NULL,0,0,NULL,NULL),(3,'20191009163703148065',4,0,1,NULL,'213.22','2019-10-09 16:37:04',0,1,NULL,0,0,NULL,NULL),(4,'20191010164121915078',4,0,1,NULL,'426.44','2019-10-10 16:41:22',0,1,NULL,0,0,NULL,NULL),(5,'20200313145643717849',3,0,1,NULL,'399.98','2020-03-13 14:56:44',0,1,NULL,0,0,NULL,NULL),(8,'20200313150507599301',3,0,1,NULL,'199.99','2020-03-13 15:05:08',0,1,NULL,0,0,NULL,NULL);
+insert  into `activity_order`(`order_key_id`,`activity_order_id`,`activity_id`,`order_type`,`member_key_id`,`student_id`,`order_price`,`order_begin_time`,`payment_state`,`close`,`pay_time`,`is_delete_user`,`is_delete_admin`,`op_man_name`,`business_name`) values (1,'20191001145853382363',1,1,NULL,1,'188.88','2019-10-01 14:58:54',1,0,NULL,0,0,NULL,NULL),(2,'20191009163126575245',4,0,1,NULL,'426.44','2019-10-09 16:31:27',1,0,NULL,0,0,NULL,NULL),(3,'20191009163703148065',4,0,1,NULL,'213.22','2019-10-09 16:37:04',0,1,NULL,0,0,NULL,NULL),(4,'20191010164121915078',4,0,1,NULL,'426.44','2019-10-10 16:41:22',0,1,NULL,0,0,NULL,NULL),(5,'20200313145643717849',3,0,1,NULL,'399.98','2020-03-13 14:56:44',0,1,NULL,0,0,NULL,NULL),(8,'20200313150507599301',3,0,1,NULL,'199.99','2020-03-13 15:05:08',0,1,NULL,0,0,NULL,NULL),(11,'20191023111733112722',1,0,1,NULL,'11.22','2020-04-28 00:46:50',0,1,NULL,0,0,'11','活动报名');
 
 /*Table structure for table `activity_order_student` */
 
@@ -588,11 +588,11 @@ CREATE TABLE `member` (
   PRIMARY KEY (`member_key_id`),
   UNIQUE KEY `member_id` (`member_id`),
   UNIQUE KEY `Phone` (`member_phone`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 /*Data for the table `member` */
 
-insert  into `member`(`member_key_id`,`member_id`,`member_phone`,`member_email`,`member_password`,`member_tel`,`member_name`,`is_vip`,`enter_date`,`vip_end_date`,`vip_begin_date`,`member_country`,`member_province`,`member_city`,`member_area`,`member_address`) values (1,'mb_ca33eae307ae4','15521065463','12345@163.com','123456','222102312','AA股份有限公司',1,'2019-09-19','2019-12-22','2019-09-20','中国','江苏省','南京市','鼓楼区','南京大学');
+insert  into `member`(`member_key_id`,`member_id`,`member_phone`,`member_email`,`member_password`,`member_tel`,`member_name`,`is_vip`,`enter_date`,`vip_end_date`,`vip_begin_date`,`member_country`,`member_province`,`member_city`,`member_area`,`member_address`) values (1,'mb_ca33eae307ae4','15521065463','12345@163.com','123456','222102312','AA股份有限公司',1,'2019-09-19','2019-12-22','2019-09-20','中国','江苏省','南京市','鼓楼区','南京大学'),(2,'mb_f1dec1667d6a4','13112114758','11@163.com','123456',NULL,'李时',0,'2020-04-28',NULL,NULL,NULL,'广东','广州','番禺','大学城'),(3,'mb_73940f5b6e924','13112231234','22@163.com','123456',NULL,'周时',0,'2020-04-28',NULL,NULL,NULL,'广东','广州','番禺','大学城');
 
 /*Table structure for table `member_re_student` */
 
@@ -694,7 +694,13 @@ CREATE TABLE `message_to_member` (
   `status` tinyint(1) DEFAULT '0' COMMENT '1为已读',
   `send_time` datetime DEFAULT NULL COMMENT '发送时间',
   `is_invalid` tinyint(1) DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `member_id` (`member_id`),
+  KEY `message_id` (`message_id`),
+  KEY `admin_id` (`admin_id`),
+  CONSTRAINT `message_to_member_ibfk_1` FOREIGN KEY (`member_id`) REFERENCES `member` (`member_key_id`),
+  CONSTRAINT `message_to_member_ibfk_2` FOREIGN KEY (`message_id`) REFERENCES `message_text` (`message_id`),
+  CONSTRAINT `message_to_member_ibfk_3` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`admin_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 /*Data for the table `message_to_member` */
@@ -855,11 +861,11 @@ CREATE TABLE `system_parameter` (
   `modify_time` datetime DEFAULT NULL COMMENT '最后一次修改时间',
   PRIMARY KEY (`para_id`),
   UNIQUE KEY `key` (`para_key`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 /*Data for the table `system_parameter` */
 
-insert  into `system_parameter`(`para_id`,`para_key`,`para_value`,`value_type`,`flag`,`description`,`modify_time`) values (1,'stu_tran_permission','1','Integer',1,'学员培训权限 0:关闭 1:开放',NULL),(2,'activity_order_length','60','Integer',1,'活动报名订单有效时长 单位:min',NULL),(3,'training_order_length','60','Integer',1,'培训报名订单有效时长 单位:min',NULL),(4,'certificate_order_length','60','Integer',1,'证书修改订单有效时长 单位:min',NULL),(5,'member_order_length','60','Integer',1,'会员续费订单有效时长 单位:min',NULL);
+insert  into `system_parameter`(`para_id`,`para_key`,`para_value`,`value_type`,`flag`,`description`,`modify_time`) values (1,'stu_tran_permission','1','Integer',1,'学员培训权限 0:关闭 1:开放',NULL),(2,'activity_order_length','60','Integer',1,'活动报名订单有效时长 单位:min',NULL),(3,'training_order_length','60','Integer',1,'培训报名订单有效时长 单位:min',NULL),(4,'certificate_order_length','60','Integer',1,'证书修改订单有效时长 单位:min',NULL),(5,'member_order_length','60','Integer',1,'会员续费订单有效时长 单位:min',NULL),(6,'member_fee','299.99','BigDecimal',1,'会费',NULL);
 
 /*Table structure for table `training` */
 

@@ -11,11 +11,11 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface ExamService {
 
-    JSONObject getHalfExamList(Integer studentId);
+    JSONObject getHalfExamList(Integer studentId, Integer pageSize, Integer currentPage);
 
-    JSONObject getTodoExamList(Integer studentId);
+    JSONObject getTodoExamList(Integer studentId, Integer pageSize, Integer currentPage);
 
-    JSONObject getDoneExamList(Integer studentId);
+    JSONObject getDoneExamList(Integer studentId, Integer pageSize, Integer currentPage);
 
     JSONObject getExamInfo(Integer studentId, Integer examId);
 
