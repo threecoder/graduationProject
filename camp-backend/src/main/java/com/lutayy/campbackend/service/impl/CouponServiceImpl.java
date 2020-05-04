@@ -213,16 +213,12 @@ public class CouponServiceImpl implements CouponService {
 
     //根据优惠券获取相关会员列表
     @Override
-    public JSONObject couponGetMemberList(JSONObject jsonObject) {
+    public JSONObject couponGetMemberList(Integer couponId, Integer pageSize, Integer currentPage, Integer memberKeyId, String memberName) {
         JSONObject result=new JSONObject();
         JSONObject data=new JSONObject();
         result.put("data", data);
         result.put("code", "fail");
-        Integer couponId=jsonObject.getInteger("couponId");
-        Integer pageSize=jsonObject.getInteger("pageSize");
-        Integer currentPage=jsonObject.getInteger("currentPage");
-        Integer memberKeyId=jsonObject.getInteger("memberId");
-        String memberName=jsonObject.getString("name");
+
         Coupon coupon=couponMapper.selectByPrimaryKey(couponId);
         if(coupon==null){
             result.put("msg", "该优惠券不存在");

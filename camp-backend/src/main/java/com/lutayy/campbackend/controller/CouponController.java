@@ -56,8 +56,12 @@ public class CouponController {
 
     @RequestMapping("/admin/couponGetMemberList")
     @ResponseBody
-    public JSONObject couponGetMemberList(@RequestBody JSONObject jsonObject) {
-        return couponService.couponGetMemberList(jsonObject);
+    public JSONObject couponGetMemberList(@RequestParam("couponId") Integer couponId,
+                                          @RequestParam("pageSize") Integer pageSize,
+                                          @RequestParam("currentPage") Integer currentPage,
+                                          @RequestParam(value = "memberId", required = false) Integer memberKeyId,
+                                          @RequestParam(value = "name", required = false) String memberName) {
+        return couponService.couponGetMemberList(couponId, pageSize, currentPage, memberKeyId, memberName);
     }
 
     @RequestMapping("/member/getCouponList")

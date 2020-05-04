@@ -75,6 +75,12 @@
             <artifactId>jodd-core</artifactId>
             <version>3.4.10</version>
         </dependency>
+        <!--pdf-->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.4.3</version>
+        </dependency>
 
         <!--POI包-->
         <dependency>

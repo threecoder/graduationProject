@@ -292,6 +292,7 @@ public class ExamServiceImpl implements ExamService {
         ExamReQuestionExample examReQuestionExample = new ExamReQuestionExample();
         ExamReQuestionExample.Criteria criteria0 = examReQuestionExample.createCriteria();
         criteria0.andExamIdEqualTo(examId);
+        examReQuestionExample.setOrderByClause("question_index ASC");
         List<ExamReQuestion> examReQuestions = examReQuestionMapper.selectByExample(examReQuestionExample);
         if (examReQuestions.size() == 0) {
             result.put("code", "fail");
@@ -943,6 +944,7 @@ public class ExamServiceImpl implements ExamService {
         JSONArray list = new JSONArray();
         ExamReQuestionExample examReQuestionExample = new ExamReQuestionExample();
         examReQuestionExample.createCriteria().andExamIdEqualTo(examId);
+        examReQuestionExample.setOrderByClause("question_index ASC");
         List<ExamReQuestion> examReQuestions = examReQuestionMapper.selectByExample(examReQuestionExample);
         for (ExamReQuestion examReQuestion : examReQuestions) {
             list.add(examReQuestion.getQuestionId());
@@ -1071,13 +1073,12 @@ public class ExamServiceImpl implements ExamService {
         Admin opAdmin = adminMapper.selectByPrimaryKey(opAdminId);
         result.put("code", "fail");
 
-        String account = jsonObject.getString("checker");
-        Admin admin = getObjectHelper.getAdminFromAccount(account);
+        Integer adminId = jsonObject.getInteger("checker");
+        Admin admin = adminMapper.selectByPrimaryKey(adminId);
         if (admin == null) {
             result.put("msg", "对应的账号不存在，请检查输入是否正确");
             return result;
         }
-        int adminId = admin.getAdminId();
         JSONArray reportIds = jsonObject.getJSONArray("ids");
         int totalNum = 0;
         String sendReportStr = "";

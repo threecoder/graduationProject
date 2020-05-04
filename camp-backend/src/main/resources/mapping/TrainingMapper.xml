@@ -15,6 +15,7 @@
     <result column="training_address" jdbcType="VARCHAR" property="trainingAddress" />
     <result column="contact_name" jdbcType="VARCHAR" property="contactName" />
     <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone" />
+    <result column="cer_tem_path" jdbcType="VARCHAR" property="cerTemPath" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -77,7 +78,7 @@
   <sql id="Base_Column_List">
     training_id, training_name, training_introduce, training_fee_normal, training_fee_vip, 
     training_end_time, training_start_time, post_time, level, training_pic, training_address, 
-    contact_name, contact_phone
+    contact_name, contact_phone, cer_tem_path
   </sql>
   <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.TrainingExample" resultMap="BaseResultMap">
     select
@@ -120,12 +121,12 @@
       training_fee_normal, training_fee_vip, training_end_time, 
       training_start_time, post_time, level, 
       training_pic, training_address, contact_name, 
-      contact_phone)
+      contact_phone, cer_tem_path)
     values (#{trainingName,jdbcType=VARCHAR}, #{trainingIntroduce,jdbcType=VARCHAR}, 
       #{trainingFeeNormal,jdbcType=DECIMAL}, #{trainingFeeVip,jdbcType=DECIMAL}, #{trainingEndTime,jdbcType=TIMESTAMP}, 
       #{trainingStartTime,jdbcType=TIMESTAMP}, #{postTime,jdbcType=TIMESTAMP}, #{level,jdbcType=TINYINT}, 
       #{trainingPic,jdbcType=VARCHAR}, #{trainingAddress,jdbcType=VARCHAR}, #{contactName,jdbcType=VARCHAR}, 
-      #{contactPhone,jdbcType=VARCHAR})
+      #{contactPhone,jdbcType=VARCHAR}, #{cerTemPath,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.Training">
     <selectKey keyProperty="trainingId" order="AFTER" resultType="java.lang.Integer">
@@ -169,6 +170,9 @@
       <if test="contactPhone != null">
         contact_phone,
       </if>
+      <if test="cerTemPath != null">
+        cer_tem_path,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="trainingName != null">
@@ -206,6 +210,9 @@
       </if>
       <if test="contactPhone != null">
         #{contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="cerTemPath != null">
+        #{cerTemPath,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -257,6 +264,9 @@
       <if test="record.contactPhone != null">
         contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
       </if>
+      <if test="record.cerTemPath != null">
+        cer_tem_path = #{record.cerTemPath,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -276,7 +286,8 @@
       training_pic = #{record.trainingPic,jdbcType=VARCHAR},
       training_address = #{record.trainingAddress,jdbcType=VARCHAR},
       contact_name = #{record.contactName,jdbcType=VARCHAR},
-      contact_phone = #{record.contactPhone,jdbcType=VARCHAR}
+      contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
+      cer_tem_path = #{record.cerTemPath,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -320,6 +331,9 @@
       <if test="contactPhone != null">
         contact_phone = #{contactPhone,jdbcType=VARCHAR},
       </if>
+      <if test="cerTemPath != null">
+        cer_tem_path = #{cerTemPath,jdbcType=VARCHAR},
+      </if>
     </set>
     where training_id = #{trainingId,jdbcType=INTEGER}
   </update>
@@ -336,7 +350,8 @@
       training_pic = #{trainingPic,jdbcType=VARCHAR},
       training_address = #{trainingAddress,jdbcType=VARCHAR},
       contact_name = #{contactName,jdbcType=VARCHAR},
-      contact_phone = #{contactPhone,jdbcType=VARCHAR}
+      contact_phone = #{contactPhone,jdbcType=VARCHAR},
+      cer_tem_path = #{cerTemPath,jdbcType=VARCHAR}
     where training_id = #{trainingId,jdbcType=INTEGER}
   </update>
 </mapper>

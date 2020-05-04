@@ -118,6 +118,10 @@ public class AdminServiceImpl implements AdminService {
             result.put("msg", "对应的账号不存在，请检查输入是否正确");
             return result;
         }
+        if(admin.getAdminId().equals(jsonObject.getInteger("id"))){
+            result.put("msg", "无法对自身账号进行操作！");
+            return result;
+        }
         admin.setIsLocked(lock);
         if (adminMapper.updateByPrimaryKeySelective(admin) > 0) {
             result.put("code", "success");
@@ -165,7 +169,7 @@ public class AdminServiceImpl implements AdminService {
         JSONObject result=new JSONObject();
 
         AdminReAuthorityExample adminReAuthorityExample=new AdminReAuthorityExample();
-        adminReAuthorityExample.createCriteria().andAuthorityIdEqualTo(AuthorityParam.GRADE);
+        adminReAuthorityExample.createCriteria().andAuthorityIdEqualTo(AuthorityParam.GRADE).andHasOrNotEqualTo(true);
         List<AdminReAuthority> adminReAuthorities=adminReAuthorityMapper.selectByExample(adminReAuthorityExample);
         JSONArray data=new JSONArray();
         for(AdminReAuthority adminReAuthority:adminReAuthorities){

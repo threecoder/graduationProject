@@ -18,7 +18,7 @@ public interface CouponService {
     //发放优惠券给指定会员（多个）
     JSONObject grantCoupon(JSONObject jsonObject);
     //根据优惠券获取相关会员列表
-    JSONObject couponGetMemberList(JSONObject jsonObject);
+    JSONObject couponGetMemberList(Integer couponId, Integer pageSize, Integer currentPage, Integer memberKeyId, String memberName);
 
 
     //会员获取自己有的优惠券

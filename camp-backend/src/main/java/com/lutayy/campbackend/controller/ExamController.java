@@ -1,6 +1,7 @@
 package com.lutayy.campbackend.controller;
 
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.lutayy.campbackend.service.ExamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -174,6 +175,15 @@ public class ExamController {
                                         @RequestParam(value = "idNum", required = false) String idNum,
                                         @RequestParam(value = "studentName", required = false) String studentName) {
         return examService.getWaitingGradeList(adminId, pageSize, currentPage, trainingName, idNum, studentName);
+    }
+
+    @RequestMapping("/admin/approvalSingleRecord")
+    @ResponseBody
+    public JSONObject approvalSingleRecord(@RequestBody JSONObject jsonObject) {
+        JSONArray ids=new JSONArray();
+        ids.add(jsonObject.getInteger("recordId"));
+        jsonObject.put("ids", ids);
+        return examService.approvalManyRecords(jsonObject);
     }
 
     @RequestMapping("/admin/approvalManyRecords")
