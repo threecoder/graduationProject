@@ -323,7 +323,8 @@ public class OrderAndPayServiceImpl implements OrderAndPayService {
     }
 
     @Override
-    public JSONObject getTrainingOrderList(String orderNum, Integer userId, String userName, Integer trainingId, Integer currentPage, Integer pageSize) {
+    public JSONObject getTrainingOrderList(String orderNum, Integer userId, String userName, Integer trainingId,
+                                           Integer currentPage, Integer pageSize) {
         JSONObject result=new JSONObject();
         JSONObject data=new JSONObject();
         result.put("code", "fail");
@@ -339,8 +340,8 @@ public class OrderAndPayServiceImpl implements OrderAndPayService {
         criteria.andTrainingIdEqualTo(trainingId);
         criteria0.andTrainingIdEqualTo(trainingId);
         if(orderNum!=null && !orderNum.equals("")){
-            criteria.andTrainingOrderIdEqualTo(orderNum);
-            criteria0.andTrainingOrderIdEqualTo(orderNum);
+            criteria.andTrainingOrderIdLike("%"+orderNum+"%");
+            criteria0.andTrainingOrderIdLike("%"+orderNum+"%");
         }
         if(userName!=null && !userName.equals("")){
             criteria.andOpManNameLike("%"+userName+"%");
@@ -720,6 +721,192 @@ public class OrderAndPayServiceImpl implements OrderAndPayService {
                 list.add(object);
             }
         }else {
+            result.put("msg", "订单类别参数type有误");
+            return result;
+        }
+        data.put("list", list);
+        data.put("total", total);
+        result.put("data", data);
+        result.put("code", "success");
+        result.put("msg", "获取"+type+"类订单列表成功！");
+        return result;
+    }
+
+    //学员获取订单列表
+    @Override
+    public JSONObject studentGetOrderList(Integer studentId, String orderNum, String businessName, String type, Integer currentPage, Integer pageSize) {
+        JSONObject result=new JSONObject();
+        JSONObject data=new JSONObject();
+        result.put("code", "fail");
+        result.put("data", data);
+        JSONArray list=new JSONArray();
+        long total;
+        // TODO
+        if(type.equals("activity")){
+            ActivityOrderExample activityOrderExample=new ActivityOrderExample();
+            ActivityOrderExample.Criteria criteria=activityOrderExample.createCriteria();
+            if(orderNum!=null && orderNum.equals("")){
+                criteria.andActivityOrderIdEqualTo(orderNum);
+            }
+            criteria.andIsDeleteUserEqualTo(false).andOrderTypeEqualTo(true).andStudentIdEqualTo(studentId);
+            if(businessName!=null && businessName.equals("")){
+                criteria.andBusinessNameLike("%"+businessName+"%");
+            }
+            total=activityOrderMapper.countByExample(activityOrderExample);
+            activityOrderExample.setOrderByClause("order_begin_time DESC");
+            activityOrderExample.setOffset((currentPage-1)*pageSize);
+            activityOrderExample.setLimit(pageSize);
+            List<ActivityOrder> activityOrders=activityOrderMapper.selectByExample(activityOrderExample);
+            for(ActivityOrder activityOrder:activityOrders){
+                JSONObject object=new JSONObject();
+                object.put("orderNum", activityOrder.getActivityOrderId());
+                object.put("orderType", type);
+                object.put("businessName", activityOrder.getBusinessName());
+                object.put("builder", activityOrder.getOpManName());
+                object.put("price", activityOrder.getOrderPrice());
+                object.put("buildTime", activityOrder.getOrderBeginTime());
+                Date endTime=getObjectHelper.getOrderEndTime(type, activityOrder.getOrderBeginTime());
+                object.put("endTime", endTime);
+                object.put("payTime", activityOrder.getPayTime());
+                //检查订单是否失效
+                getObjectHelper.checkActivityOrderOutOfTime(activityOrder);
+                if(activityOrder.getClose()){
+                    object.put("status", "订单关闭");
+                }else {
+                    if(activityOrder.getPaymentState())
+                        object.put("status", "已支付");
+                    else
+                        object.put("status", "未支付");
+                }
+                list.add(object);
+            }
+        }
+        // TODO
+        else if(type.equals("training")){
+            TrainingOrderExample trainingOrderExample=new TrainingOrderExample();
+            TrainingOrderExample.Criteria criteria=trainingOrderExample.createCriteria();
+            if(orderNum!=null && orderNum.equals("")){
+                criteria.andTrainingOrderIdEqualTo(orderNum);
+            }
+            criteria.andIsDeleteUserEqualTo(false).andOrderTypeEqualTo(true).andStudentIdEqualTo(studentId);
+            if(businessName!=null && businessName.equals("")){
+                criteria.andBusinessNameLike("%"+businessName+"%");
+            }
+            total=trainingOrderMapper.countByExample(trainingOrderExample);
+            trainingOrderExample.setOrderByClause("order_begin_time DESC");
+            trainingOrderExample.setOffset((currentPage-1)*pageSize);
+            trainingOrderExample.setLimit(pageSize);
+            List<TrainingOrder> trainingOrders=trainingOrderMapper.selectByExample(trainingOrderExample);
+            for(TrainingOrder trainingOrder:trainingOrders){
+                JSONObject object=new JSONObject();
+                object.put("orderNum", trainingOrder.getTrainingOrderId());
+                object.put("orderType", type);
+                object.put("businessName", trainingOrder.getBusinessName());
+                object.put("builder", trainingOrder.getOpManName());
+                object.put("price", trainingOrder.getOrderPrice());
+                object.put("buildTime", trainingOrder.getOrderBeginTime());
+                Date endTime=getObjectHelper.getOrderEndTime(type, trainingOrder.getOrderBeginTime());
+                object.put("endTime", endTime);
+                object.put("payTime", trainingOrder.getPayTime());
+                getObjectHelper.checkTrainingOrderOutOfTime(trainingOrder);
+                if(trainingOrder.getClose()){
+                    object.put("status", "订单关闭");
+                }else {
+                    if(trainingOrder.getPaymentState())
+                        object.put("status", "已支付");
+                    else
+                        object.put("status", "未支付");
+                }
+                list.add(object);
+            }
+        }
+        // TODO
+        else if(type.equals("cerChange")){
+            CertificateChangeOrderExample orderExample=new CertificateChangeOrderExample();
+            CertificateChangeOrderExample.Criteria criteria=orderExample.createCriteria();
+            if(orderNum!=null && orderNum.equals("")){
+                criteria.andCertificateChangeOrderIdEqualTo(orderNum);
+            }
+            criteria.andIsDeleteUserEqualTo(false).andOrderTypeEqualTo(true).andStudentIdEqualTo(studentId);
+            if(businessName!=null && businessName.equals("")){
+                criteria.andBusinessNameLike("%"+businessName+"%");
+            }
+            total=changeOrderMapper.countByExample(orderExample);
+            orderExample.setOrderByClause("order_begin_time DESC");
+            orderExample.setOffset((currentPage-1)*pageSize);
+            orderExample.setLimit(pageSize);
+            List<CertificateChangeOrder> orders=changeOrderMapper.selectByExample(orderExample);
+            for(CertificateChangeOrder order:orders){
+                JSONObject object=new JSONObject();
+                object.put("orderNum", order.getCertificateChangeOrderId());
+                object.put("orderType", type);
+                object.put("businessName", order.getBusinessName());
+                object.put("builder", order.getOpManName());
+                object.put("price", order.getOrderPrice());
+                object.put("buildTime", order.getOrderBeginTime());
+                Date endTime=getObjectHelper.getOrderEndTime(type, order.getOrderBeginTime());
+                object.put("endTime", endTime);
+                object.put("payTime", order.getPayTime());
+                getObjectHelper.checkCerChangeOrderOutOfTime(order);
+                if(order.getClose()){
+                    object.put("status", "订单关闭");
+                }else {
+                    if(order.getPaymentState())
+                        object.put("status", "已支付");
+                    else
+                        object.put("status", "未支付");
+                }
+                list.add(object);
+            }
+        }
+        // TODO
+        else if(type.equals("cerRecheck")){
+            CertificateRecheckOrderExample orderExample=new CertificateRecheckOrderExample();
+            CertificateRecheckOrderExample.Criteria criteria=orderExample.createCriteria();
+            if(orderNum!=null && orderNum.equals("")){
+                criteria.andCertificateRecheckOrderIdEqualTo(orderNum);
+            }
+            criteria.andIsDeleteUserEqualTo(false).andStudentIdEqualTo(studentId);
+            if(businessName!=null && businessName.equals("")){
+                criteria.andBusinessNameLike("%"+businessName+"%");
+            }
+            total=recheckOrderMapper.countByExample(orderExample);
+            orderExample.setOrderByClause("order_begin_time DESC");
+            orderExample.setOffset((currentPage-1)*pageSize);
+            orderExample.setLimit(pageSize);
+            List<CertificateRecheckOrder> orders=recheckOrderMapper.selectByExample(orderExample);
+            for(CertificateRecheckOrder order:orders){
+                JSONObject object=new JSONObject();
+                object.put("orderNum", order.getCertificateRecheckOrderId());
+                object.put("orderType", type);
+                object.put("businessName", order.getBusinessName());
+                object.put("builder", order.getOpManName());
+                object.put("price", order.getOrderPrice());
+                object.put("buildTime", order.getOrderBeginTime());
+                Date endTime=getObjectHelper.getOrderEndTime(type, order.getOrderBeginTime());
+                object.put("endTime", endTime);
+                object.put("payTime", order.getPayTime());
+                if(!order.getClose()){
+                    if(!order.getPaymentState()){
+                        //查看未支付的订单是否过期，失效则置close为1
+                        if(endTime.compareTo(new Date())<0){
+                            order.setClose(true);
+                            recheckOrderMapper.updateByPrimaryKeySelective(order);
+                        }
+                    }
+                }
+                if(order.getClose()){
+                    object.put("status", "订单关闭");
+                }else {
+                    if(order.getPaymentState())
+                        object.put("status", "已支付");
+                    else
+                        object.put("status", "未支付");
+                }
+                list.add(object);
+            }
+        }
+        else {
             result.put("msg", "订单类别参数type有误");
             return result;
         }

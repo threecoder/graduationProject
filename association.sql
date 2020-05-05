@@ -72,11 +72,11 @@ CREATE TABLE `activity_order` (
   CONSTRAINT `activity_order_ibfk_1` FOREIGN KEY (`activity_id`) REFERENCES `activity` (`activity_id`),
   CONSTRAINT `activity_order_ibfk_3` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`),
   CONSTRAINT `activity_order_ibfk_4` FOREIGN KEY (`member_key_id`) REFERENCES `member` (`member_key_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 /*Data for the table `activity_order` */
 
-insert  into `activity_order`(`order_key_id`,`activity_order_id`,`activity_id`,`order_type`,`member_key_id`,`student_id`,`order_price`,`order_begin_time`,`payment_state`,`close`,`pay_time`,`is_delete_user`,`is_delete_admin`,`op_man_name`,`business_name`) values (1,'20191001145853382363',1,1,NULL,1,'188.88','2019-10-01 14:58:54',1,0,NULL,0,0,NULL,NULL),(2,'20191009163126575245',4,0,1,NULL,'426.44','2019-10-09 16:31:27',1,0,NULL,0,0,NULL,NULL),(3,'20191009163703148065',4,0,1,NULL,'213.22','2019-10-09 16:37:04',0,1,NULL,0,0,NULL,NULL),(4,'20191010164121915078',4,0,1,NULL,'426.44','2019-10-10 16:41:22',0,1,NULL,0,0,NULL,NULL),(5,'20200313145643717849',3,0,1,NULL,'399.98','2020-03-13 14:56:44',0,1,NULL,0,0,NULL,NULL),(8,'20200313150507599301',3,0,1,NULL,'199.99','2020-03-13 15:05:08',0,1,NULL,0,0,NULL,NULL),(11,'20191023111733112722',1,0,1,NULL,'11.22','2020-04-28 00:46:50',0,1,NULL,0,0,'11','活动报名');
+insert  into `activity_order`(`order_key_id`,`activity_order_id`,`activity_id`,`order_type`,`member_key_id`,`student_id`,`order_price`,`order_begin_time`,`payment_state`,`close`,`pay_time`,`is_delete_user`,`is_delete_admin`,`op_man_name`,`business_name`) values (1,'20191001145853382363',1,1,NULL,1,'188.88','2019-10-01 14:58:54',1,0,NULL,0,0,NULL,NULL),(2,'20191009163126575245',4,0,1,NULL,'426.44','2019-10-09 16:31:27',1,0,NULL,0,0,NULL,NULL),(3,'20191009163703148065',4,0,1,NULL,'213.22','2019-10-09 16:37:04',0,1,NULL,0,0,NULL,NULL),(4,'20191010164121915078',4,0,1,NULL,'426.44','2019-10-10 16:41:22',0,1,NULL,0,0,NULL,NULL),(5,'20200313145643717849',3,0,1,NULL,'399.98','2020-03-13 14:56:44',0,1,NULL,0,0,NULL,NULL),(8,'20200313150507599301',3,0,1,NULL,'199.99','2020-03-13 15:05:08',0,1,NULL,0,0,NULL,NULL),(11,'20191023111733112722',1,0,1,NULL,'11.22','2020-04-28 00:46:50',0,1,NULL,0,0,'11','活动报名'),(12,'3344434',NULL,0,1,NULL,'299.99','2020-05-05 15:22:30',0,0,NULL,0,0,NULL,NULL);
 
 /*Table structure for table `activity_order_student` */
 
@@ -243,7 +243,7 @@ CREATE TABLE `certificate` (
   `training_id` int(11) DEFAULT NULL COMMENT '证书所属培训',
   `create_time` datetime DEFAULT NULL COMMENT '颁发时间',
   `end_time` datetime DEFAULT NULL COMMENT '过期时间',
-  `certificate_path` varchar(200) DEFAULT NULL COMMENT '证书所在路径',
+  `certificate_path` varchar(200) DEFAULT NULL COMMENT '(没用到、保留)证书所在路径',
   `is_invalid` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`certificate_id`),
   KEY `training_id` (`training_id`),
@@ -306,15 +306,16 @@ CREATE TABLE `certificate_change_order` (
 DROP TABLE IF EXISTS `certificate_image`;
 
 CREATE TABLE `certificate_image` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '存放证书背景图路径',
+  `image_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '存放证书背景图路径',
+  `img_name` varchar(50) DEFAULT NULL,
   `img_path` varchar(500) DEFAULT NULL,
   `is_invalid` tinyint(1) DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`image_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 /*Data for the table `certificate_image` */
 
-insert  into `certificate_image`(`id`,`img_path`,`is_invalid`) values (1,'\\certificate\\certificate_background\\background-mktr08.jpg',0),(2,'\\certificate\\certificate_background\\background--P2abUc.jpg',0);
+insert  into `certificate_image`(`image_id`,`img_name`,`img_path`,`is_invalid`) values (1,'背景1','\\certificate\\certificate_background\\background-mktr08.jpg',0),(2,'背景2','\\certificate\\certificate_background\\background--P2abUc.jpg',0);
 
 /*Table structure for table `certificate_recheck_log` */
 
@@ -593,9 +594,11 @@ CREATE TABLE `member_subscription_order` (
   PRIMARY KEY (`order_key_id`),
   KEY `member_key_id` (`member_key_id`),
   CONSTRAINT `member_subscription_order_ibfk_1` FOREIGN KEY (`member_key_id`) REFERENCES `member` (`member_key_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 /*Data for the table `member_subscription_order` */
+
+insert  into `member_subscription_order`(`order_key_id`,`subscription_order_id`,`member_key_id`,`create_time`,`fee`,`payment_state`,`close`,`pay_time`,`is_delete_user`,`is_delete_admin`,`op_man_name`,`business_name`) values (1,'20200505151559818299',1,'2020-05-05 15:15:59','199.99',0,0,NULL,0,0,'AA股份有限公司','AA股份有限公司续费一年');
 
 /*Table structure for table `message_text` */
 
@@ -849,13 +852,15 @@ CREATE TABLE `training` (
   `training_address` varchar(200) DEFAULT NULL COMMENT '培训地点',
   `contact_name` varchar(10) DEFAULT NULL COMMENT '联系人',
   `contact_phone` varchar(20) DEFAULT NULL COMMENT '联系方式',
-  `cer_tem_path` varchar(500) DEFAULT NULL COMMENT '证书模板所在路径',
-  PRIMARY KEY (`training_id`)
+  `cer_img_id` int(11) DEFAULT NULL COMMENT '证书模板背景id',
+  PRIMARY KEY (`training_id`),
+  KEY `cer_img_id` (`cer_img_id`),
+  CONSTRAINT `training_ibfk_1` FOREIGN KEY (`cer_img_id`) REFERENCES `certificate_image` (`image_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
 
 /*Data for the table `training` */
 
-insert  into `training`(`training_id`,`training_name`,`training_introduce`,`training_fee_normal`,`training_fee_vip`,`training_end_time`,`training_start_time`,`post_time`,`level`,`training_pic`,`training_address`,`contact_name`,`contact_phone`,`cer_tem_path`) values (1,'质量检测','示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n示例范文示例范文示例范文示例范文','199.99','199.00','2019-11-02 16:13:03','2019-09-13 16:12:30','2019-10-31 00:41:14',1,NULL,NULL,NULL,NULL,NULL),(2,'食品安全','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','888.01','699.01','2019-11-01 12:00:00','2019-10-01 12:00:00','2019-07-15 00:41:19',2,NULL,NULL,NULL,NULL,NULL),(3,'食品监督','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','2000.00','1899.11','2020-11-12 16:14:32','2019-09-05 16:14:25','2021-01-08 00:41:22',1,NULL,NULL,NULL,NULL,NULL),(4,'网络工程','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','800.90','700.00','2019-11-22 16:14:40','2019-09-11 16:14:36','2019-11-01 00:41:27',3,NULL,NULL,NULL,NULL,NULL),(5,'产品规范','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','99.99','98.99','2019-11-08 16:14:56','2019-09-29 16:14:44','2019-10-17 00:41:35',1,NULL,NULL,NULL,NULL,NULL),(34,'证书初始化测试','2','1.00','1.00','2020-05-30 00:00:00','2020-05-01 00:00:00','2020-05-04 23:34:51',1,NULL,'2','1','1','/certificate/training_cer_templates/34_training_cer_template.pdf');
+insert  into `training`(`training_id`,`training_name`,`training_introduce`,`training_fee_normal`,`training_fee_vip`,`training_end_time`,`training_start_time`,`post_time`,`level`,`training_pic`,`training_address`,`contact_name`,`contact_phone`,`cer_img_id`) values (1,'质量检测','示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n示例范文示例范文示例范文示例范文','199.99','199.00','2019-11-02 16:13:03','2019-09-13 16:12:30','2019-10-31 00:41:14',1,NULL,NULL,NULL,NULL,NULL),(2,'食品安全','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','888.01','699.01','2019-11-01 12:00:00','2019-10-01 12:00:00','2019-07-15 00:41:19',2,NULL,NULL,NULL,NULL,NULL),(3,'食品监督','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','2000.00','1899.11','2020-11-12 16:14:32','2019-09-05 16:14:25','2021-01-08 00:41:22',1,NULL,NULL,NULL,NULL,NULL),(4,'网络工程','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','800.90','700.00','2019-11-22 16:14:40','2019-09-11 16:14:36','2019-11-01 00:41:27',3,NULL,NULL,NULL,NULL,NULL),(5,'产品规范','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','99.99','98.99','2019-11-08 16:14:56','2019-09-29 16:14:44','2019-10-17 00:41:35',1,NULL,NULL,NULL,NULL,NULL);
 
 /*Table structure for table `training_order` */
 

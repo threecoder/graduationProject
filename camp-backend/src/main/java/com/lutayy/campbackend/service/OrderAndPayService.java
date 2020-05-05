@@ -15,6 +15,8 @@ public interface OrderAndPayService {
     JSONObject modifyTrainingOrderPrice(JSONObject jsonObject);
     //会员获取订单列表（增加必选字段type）
     JSONObject memberGetOrderList(Integer memberId, String orderNum, String businessName, String type, Integer currentPage, Integer pageSize);
+    //学员获取订单列表
+    JSONObject studentGetOrderList(Integer studentId, String orderNum, String businessName, String type, Integer currentPage, Integer pageSize);
 
     JSONObject getTrainingOrderList(String orderNum, Integer userId, String userName, Integer trainingId, Integer currentPage, Integer pageSize);
 

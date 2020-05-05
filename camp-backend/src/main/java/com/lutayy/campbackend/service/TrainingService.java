@@ -23,6 +23,8 @@ public interface TrainingService {
 
     JSONObject addNewTraining(JSONObject jsonObject);
 
+    JSONObject modifyTraining(JSONObject jsonObject);
+
     JSONObject adminGetTrainingList();
     //管理员获取学员参加过的培训记录
     JSONObject getStudentTrainingHistory(String idCard, Integer currentPage, Integer pageSize);
@@ -30,4 +32,6 @@ public interface TrainingService {
     JSONObject getPublishedTraining(Integer pageSize, Integer currentPage, String startDateStr, String endDateStr, String name);
     //管理员根据id获取已报名培训学员列表
     JSONObject getEnrolledStudentList(Integer pageSize, Integer currentPage, Integer trainingId, String studentName, String idCard, String company);
+    //管理员获取未报名培训的学员名单
+    JSONObject getNotEnrollStudentList(Integer pageSize, Integer currentPage, Integer trainingId, String studentName, String idCard, String company);
 }

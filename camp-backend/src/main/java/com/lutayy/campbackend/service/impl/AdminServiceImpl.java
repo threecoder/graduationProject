@@ -361,7 +361,7 @@ public class AdminServiceImpl implements AdminService {
         if (hasOrg != null && hasOrg.equals(0) && memberId!=null) {
             total=0;
             students=new ArrayList<>();
-        }else if(hasOrg != null && hasOrg.equals(1)){
+        }else if(hasOrg==null || hasOrg.equals(1)){
             total=MemberStudentSQLConn.countStudentsFromMemberReStudent(memberId, phone, idNum, name);
             students= MemberStudentSQLConn.getStudentsFromMemberReStudent(memberId, phone, idNum, name, currentPage, pageSize);
         }else {
@@ -669,9 +669,14 @@ public class AdminServiceImpl implements AdminService {
         member.setMemberCity(city);
         member.setMemberArea(area);
         member.setMemberAddress(address);
-        memberMapper.insertSelective(member);
-        result.put("code", "success");
-        result.put("msg", "添加会员成功！");
+        member.setMemberId(UUIDUtil.getMemberUUID());
+        if(memberMapper.insertSelective(member)>0){
+            result.put("code", "success");
+            result.put("msg", "添加会员成功！");
+        }else {
+            result.put("code", "fail");
+            result.put("msg", "添加会员失败！请重试");
+        }
         return result;
     }
 

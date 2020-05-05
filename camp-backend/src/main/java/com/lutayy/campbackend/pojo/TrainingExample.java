@@ -966,73 +966,63 @@ public class TrainingExample {
             return (Criteria) this;
         }
 
-        public Criteria andCerTemPathIsNull() {
-            addCriterion("cer_tem_path is null");
+        public Criteria andCerImgIdIsNull() {
+            addCriterion("cer_img_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andCerTemPathIsNotNull() {
-            addCriterion("cer_tem_path is not null");
+        public Criteria andCerImgIdIsNotNull() {
+            addCriterion("cer_img_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCerTemPathEqualTo(String value) {
-            addCriterion("cer_tem_path =", value, "cerTemPath");
+        public Criteria andCerImgIdEqualTo(Integer value) {
+            addCriterion("cer_img_id =", value, "cerImgId");
             return (Criteria) this;
         }
 
-        public Criteria andCerTemPathNotEqualTo(String value) {
-            addCriterion("cer_tem_path <>", value, "cerTemPath");
+        public Criteria andCerImgIdNotEqualTo(Integer value) {
+            addCriterion("cer_img_id <>", value, "cerImgId");
             return (Criteria) this;
         }
 
-        public Criteria andCerTemPathGreaterThan(String value) {
-            addCriterion("cer_tem_path >", value, "cerTemPath");
+        public Criteria andCerImgIdGreaterThan(Integer value) {
+            addCriterion("cer_img_id >", value, "cerImgId");
             return (Criteria) this;
         }
 
-        public Criteria andCerTemPathGreaterThanOrEqualTo(String value) {
-            addCriterion("cer_tem_path >=", value, "cerTemPath");
+        public Criteria andCerImgIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("cer_img_id >=", value, "cerImgId");
             return (Criteria) this;
         }
 
-        public Criteria andCerTemPathLessThan(String value) {
-            addCriterion("cer_tem_path <", value, "cerTemPath");
+        public Criteria andCerImgIdLessThan(Integer value) {
+            addCriterion("cer_img_id <", value, "cerImgId");
             return (Criteria) this;
         }
 
-        public Criteria andCerTemPathLessThanOrEqualTo(String value) {
-            addCriterion("cer_tem_path <=", value, "cerTemPath");
+        public Criteria andCerImgIdLessThanOrEqualTo(Integer value) {
+            addCriterion("cer_img_id <=", value, "cerImgId");
             return (Criteria) this;
         }
 
-        public Criteria andCerTemPathLike(String value) {
-            addCriterion("cer_tem_path like", value, "cerTemPath");
+        public Criteria andCerImgIdIn(List<Integer> values) {
+            addCriterion("cer_img_id in", values, "cerImgId");
             return (Criteria) this;
         }
 
-        public Criteria andCerTemPathNotLike(String value) {
-            addCriterion("cer_tem_path not like", value, "cerTemPath");
+        public Criteria andCerImgIdNotIn(List<Integer> values) {
+            addCriterion("cer_img_id not in", values, "cerImgId");
             return (Criteria) this;
         }
 
-        public Criteria andCerTemPathIn(List<String> values) {
-            addCriterion("cer_tem_path in", values, "cerTemPath");
+        public Criteria andCerImgIdBetween(Integer value1, Integer value2) {
+            addCriterion("cer_img_id between", value1, value2, "cerImgId");
             return (Criteria) this;
         }
 
-        public Criteria andCerTemPathNotIn(List<String> values) {
-            addCriterion("cer_tem_path not in", values, "cerTemPath");
-            return (Criteria) this;
-        }
-
-        public Criteria andCerTemPathBetween(String value1, String value2) {
-            addCriterion("cer_tem_path between", value1, value2, "cerTemPath");
-            return (Criteria) this;
-        }
-
-        public Criteria andCerTemPathNotBetween(String value1, String value2) {
-            addCriterion("cer_tem_path not between", value1, value2, "cerTemPath");
+        public Criteria andCerImgIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("cer_img_id not between", value1, value2, "cerImgId");
             return (Criteria) this;
         }
     }

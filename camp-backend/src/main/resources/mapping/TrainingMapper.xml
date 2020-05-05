@@ -15,7 +15,7 @@
     <result column="training_address" jdbcType="VARCHAR" property="trainingAddress" />
     <result column="contact_name" jdbcType="VARCHAR" property="contactName" />
     <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone" />
-    <result column="cer_tem_path" jdbcType="VARCHAR" property="cerTemPath" />
+    <result column="cer_img_id" jdbcType="INTEGER" property="cerImgId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -78,7 +78,7 @@
   <sql id="Base_Column_List">
     training_id, training_name, training_introduce, training_fee_normal, training_fee_vip, 
     training_end_time, training_start_time, post_time, level, training_pic, training_address, 
-    contact_name, contact_phone, cer_tem_path
+    contact_name, contact_phone, cer_img_id
   </sql>
   <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.TrainingExample" resultMap="BaseResultMap">
     select
@@ -121,12 +121,12 @@
       training_fee_normal, training_fee_vip, training_end_time, 
       training_start_time, post_time, level, 
       training_pic, training_address, contact_name, 
-      contact_phone, cer_tem_path)
+      contact_phone, cer_img_id)
     values (#{trainingName,jdbcType=VARCHAR}, #{trainingIntroduce,jdbcType=VARCHAR}, 
       #{trainingFeeNormal,jdbcType=DECIMAL}, #{trainingFeeVip,jdbcType=DECIMAL}, #{trainingEndTime,jdbcType=TIMESTAMP}, 
       #{trainingStartTime,jdbcType=TIMESTAMP}, #{postTime,jdbcType=TIMESTAMP}, #{level,jdbcType=TINYINT}, 
       #{trainingPic,jdbcType=VARCHAR}, #{trainingAddress,jdbcType=VARCHAR}, #{contactName,jdbcType=VARCHAR}, 
-      #{contactPhone,jdbcType=VARCHAR}, #{cerTemPath,jdbcType=VARCHAR})
+      #{contactPhone,jdbcType=VARCHAR}, #{cerImgId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.Training">
     <selectKey keyProperty="trainingId" order="AFTER" resultType="java.lang.Integer">
@@ -170,8 +170,8 @@
       <if test="contactPhone != null">
         contact_phone,
       </if>
-      <if test="cerTemPath != null">
-        cer_tem_path,
+      <if test="cerImgId != null">
+        cer_img_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -211,8 +211,8 @@
       <if test="contactPhone != null">
         #{contactPhone,jdbcType=VARCHAR},
       </if>
-      <if test="cerTemPath != null">
-        #{cerTemPath,jdbcType=VARCHAR},
+      <if test="cerImgId != null">
+        #{cerImgId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -264,8 +264,8 @@
       <if test="record.contactPhone != null">
         contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
       </if>
-      <if test="record.cerTemPath != null">
-        cer_tem_path = #{record.cerTemPath,jdbcType=VARCHAR},
+      <if test="record.cerImgId != null">
+        cer_img_id = #{record.cerImgId,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null">
@@ -287,7 +287,7 @@
       training_address = #{record.trainingAddress,jdbcType=VARCHAR},
       contact_name = #{record.contactName,jdbcType=VARCHAR},
       contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
-      cer_tem_path = #{record.cerTemPath,jdbcType=VARCHAR}
+      cer_img_id = #{record.cerImgId,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -331,8 +331,8 @@
       <if test="contactPhone != null">
         contact_phone = #{contactPhone,jdbcType=VARCHAR},
       </if>
-      <if test="cerTemPath != null">
-        cer_tem_path = #{cerTemPath,jdbcType=VARCHAR},
+      <if test="cerImgId != null">
+        cer_img_id = #{cerImgId,jdbcType=INTEGER},
       </if>
     </set>
     where training_id = #{trainingId,jdbcType=INTEGER}
@@ -351,7 +351,7 @@
       training_address = #{trainingAddress,jdbcType=VARCHAR},
       contact_name = #{contactName,jdbcType=VARCHAR},
       contact_phone = #{contactPhone,jdbcType=VARCHAR},
-      cer_tem_path = #{cerTemPath,jdbcType=VARCHAR}
+      cer_img_id = #{cerImgId,jdbcType=INTEGER}
     where training_id = #{trainingId,jdbcType=INTEGER}
   </update>
 </mapper>

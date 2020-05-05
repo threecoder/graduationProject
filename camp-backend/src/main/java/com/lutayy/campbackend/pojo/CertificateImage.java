@@ -3,7 +3,9 @@ package com.lutayy.campbackend.pojo;
 import java.io.Serializable;
 
 public class CertificateImage implements Serializable {
-    private Integer id;
+    private Integer imageId;
+
+    private String imgName;
 
     private String imgPath;
 
@@ -11,12 +13,20 @@ public class CertificateImage implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getId() {
-        return id;
+    public Integer getImageId() {
+        return imageId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setImageId(Integer imageId) {
+        this.imageId = imageId;
+    }
+
+    public String getImgName() {
+        return imgName;
+    }
+
+    public void setImgName(String imgName) {
+        this.imgName = imgName;
     }
 
     public String getImgPath() {

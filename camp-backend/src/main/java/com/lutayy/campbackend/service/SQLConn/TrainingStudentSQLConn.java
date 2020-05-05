@@ -141,4 +141,28 @@ public class TrainingStudentSQLConn {
             return sum;
         }
     }
+
+    //由培训id获取没报名培训的学员（包含检索条件：姓名，身份证，公司名称）
+    public static List<Integer> getStudentListInTraining(Integer trainingId) {
+        List<Integer> studentList=new ArrayList<>();
+        Connection conn = null;
+        Statement statement = null;
+        try {
+            conn = DriverManager.getConnection(URL, Name, Pwd);
+            statement = conn.createStatement();
+            String sql = "select s.student_id from student s inner join training_re_student r on s.student_id=r.student_id " +
+                    "where r.is_invalid=0 and r.training_id="+trainingId;
+
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()) {
+                studentList.add(rs.getInt("student_id"));
+            }
+            return studentList;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return studentList;
+        }
+    }
+
 }

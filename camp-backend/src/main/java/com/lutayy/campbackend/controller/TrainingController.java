@@ -80,6 +80,12 @@ public class TrainingController {
         return trainingService.addNewTraining(jsonObject);
     }
 
+    @RequestMapping("/admin/modifyTraining")
+    @ResponseBody
+    public JSONObject modifyTraining(@RequestBody JSONObject jsonObject) {
+        return trainingService.modifyTraining(jsonObject);
+    }
+
     @RequestMapping("/admin/getTrainingList")
     @ResponseBody
     public Object adminGetTrainingList() {
@@ -113,6 +119,17 @@ public class TrainingController {
                                        @RequestParam(value = "idNum", required = false) String idCard,
                                        @RequestParam(value = "company", required = false) String company) {
         return trainingService.getEnrolledStudentList(pageSize, currentPage, trainingId, studentName, idCard, company);
+    }
+
+    @RequestMapping(value = {"/admin/getNotEnrollStudentList"})
+    @ResponseBody
+    public Object getNotEnrollStudentList(@RequestParam("pageSize") Integer pageSize,
+                                         @RequestParam("currentPage") Integer currentPage,
+                                         @RequestParam("trainingId") Integer trainingId,
+                                         @RequestParam(value = "name", required = false) String studentName,
+                                         @RequestParam(value = "idNum", required = false) String idCard,
+                                         @RequestParam(value = "company", required = false) String company) {
+        return trainingService.getNotEnrollStudentList(pageSize, currentPage, trainingId, studentName, idCard, company);
     }
 
 }

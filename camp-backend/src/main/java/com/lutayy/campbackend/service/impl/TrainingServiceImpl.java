@@ -780,32 +780,78 @@ public class TrainingServiceImpl implements TrainingService {
         training.setTrainingEndTime(endTime);
         if (trainingMapper.insert(training) > 0) {
             result.put("code", "success");
-
-            // TODO 设置默认的证书模板
-            String mainPath = "./src/main/resources/templates";
-            String temPath = mainPath + "/certificate/certificate_template.pdf";
-            String outPath = "/certificate/training_cer_templates/" + training.getTrainingId() + "_training_cer_template.pdf";
+//            // TODO 设置默认的证书模板
+//            String mainPath = "./src/main/resources/templates";
+//            String temPath = mainPath + "/certificate/certificate_template.pdf";
+//            String outPath = "/certificate/training_cer_templates/" + training.getTrainingId() + "_training_cer_template.pdf";
             CertificateImageExample certificateImageExample = new CertificateImageExample();
-            String backImgPath = mainPath +
-                    certificateImageMapper.selectByExample(certificateImageExample).get(0).getImgPath();
-            Map<String, String> contentMap = new HashMap<>();
-            contentMap.put("training_name", "\"" + training.getTrainingName() + "\"");
-            AssociationTextExample associationTextExample = new AssociationTextExample();
-            associationTextExample.createCriteria().andItemNameEqualTo("association_name");
-            AssociationText associationText = associationTextMapper.selectByExample(associationTextExample).get(0);
-            contentMap.put("association_name", associationText.getItemContext());
-
-            if (PdfUtil.writePdf(contentMap, temPath, mainPath + outPath, backImgPath)) {
-                result.put("msg", "新建培训成功！初始化培训证书模板成功！");
-                training.setCerTemPath(outPath);
-                trainingMapper.updateByPrimaryKeySelective(training);
-            } else {
-                result.put("msg", "新建培训成功！初始化培训证书模板失败！");
-            }
+//            String backImgPath = mainPath +
+//                    certificateImageMapper.selectByExample(certificateImageExample).get(0).getImgPath();
+//            Map<String, String> contentMap = new HashMap<>();
+//            contentMap.put("training_name", "\"" + training.getTrainingName() + "\"");
+//            AssociationTextExample associationTextExample = new AssociationTextExample();
+//            associationTextExample.createCriteria().andItemNameEqualTo("association_name");
+//            AssociationText associationText = associationTextMapper.selectByExample(associationTextExample).get(0);
+//            contentMap.put("association_name", associationText.getItemContext());
+            result.put("msg", "新建培训成功！初始化培训证书模板成功！");
+            training.setCerImgId(certificateImageMapper.selectByExample(certificateImageExample).get(0).getImageId());
+            trainingMapper.updateByPrimaryKeySelective(training);
         } else {
-            result.put("code", "fail");
+            result.put("code", "error");
             result.put("msg", "新建培训失败！请重试");
         }
+        return result;
+    }
+
+    @Override
+    public JSONObject modifyTraining(JSONObject jsonObject) {
+        JSONObject result = new JSONObject();
+        result.put("code", "fail");
+        //权限检查
+        Integer opAdminId = jsonObject.getInteger("id");
+        if (!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.TRAINING)) {
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
+        String trainingName = jsonObject.getString("name");
+        BigDecimal fee = jsonObject.getBigDecimal("fee");
+        BigDecimal vipFee = jsonObject.getBigDecimal("vipFee");
+        String contactName = jsonObject.getString("contacts");
+        String contactPhone = jsonObject.getString("phone");
+        Date startTime = jsonObject.getDate("openTime");
+        Date endTime = jsonObject.getDate("closeTime");
+        Byte level = jsonObject.getByte("level");
+        String address = jsonObject.getString("address");
+        JSONArray trainingIntro = jsonObject.getJSONArray("desc");
+        StringBuilder intro = new StringBuilder();
+        for (int i = 0; i < trainingIntro.size() - 1; i++) {
+            intro.append(trainingIntro.get(i));
+            intro.append("|");
+        }
+        intro.append(trainingIntro.get(trainingIntro.size() - 1));
+
+        //培训名称查重
+        TrainingExample trainingExample = new TrainingExample();
+        TrainingExample.Criteria criteria = trainingExample.createCriteria();
+        criteria.andTrainingNameEqualTo(trainingName);
+        if (trainingMapper.selectByExample(trainingExample).size() > 0) {
+            result.put("msg", "已有同名的培训,修改失败！");
+            return result;
+        }
+        Training training = trainingMapper.selectByPrimaryKey(jsonObject.getInteger("trainingId"));
+        training.setContactName(contactName);
+        training.setContactPhone(contactPhone);
+        training.setLevel(level);
+        training.setTrainingAddress(address);
+        training.setTrainingFeeNormal(fee);
+        training.setTrainingFeeVip(vipFee);
+        training.setTrainingIntroduce(intro.toString());
+        training.setTrainingName(trainingName);
+        training.setTrainingStartTime(startTime);
+        training.setTrainingEndTime(endTime);
+        trainingMapper.updateByPrimaryKeySelective(training);
+        result.put("code", "success");
+        result.put("msg", "修改培训成功！");
         return result;
     }
 
@@ -984,6 +1030,44 @@ public class TrainingServiceImpl implements TrainingService {
         result.put("data", data);
         result.put("code", "success");
         result.put("msg", "获取已报名培训的学员列表成功！");
+        return result;
+    }
+
+    //管理员获取未报名培训的学员名单
+    @Override
+    public JSONObject getNotEnrollStudentList(Integer pageSize, Integer currentPage, Integer trainingId, String studentName, String idCard, String company) {
+        JSONObject result=new JSONObject();
+        JSONObject data=new JSONObject();
+        List<Integer> studentInTrainingList=TrainingStudentSQLConn.getStudentListInTraining(trainingId);
+        StudentExample studentExample=new StudentExample();
+        StudentExample.Criteria criteria=studentExample.createCriteria();
+        criteria.andStudentIdNotIn(studentInTrainingList);
+        if(studentName!=null && !studentName.equals("")){
+            criteria.andStudentNameLike("%"+studentName+"%");
+        }
+        if(idCard!=null && !idCard.equals("")){
+            criteria.andStudentIdcardEqualTo(idCard);
+        }
+        if(company!=null && !company.equals("")){
+            criteria.andCompanyLike("%"+company+"%");
+        }
+        data.put("total", studentMapper.countByExample(studentExample));
+        studentExample.setOffset((currentPage-1)*pageSize);
+        studentExample.setLimit(pageSize);
+        List<Student> students=studentMapper.selectByExample(studentExample);
+        JSONArray list=new JSONArray();
+        for(Student student:students){
+            JSONObject object=new JSONObject();
+            object.put("idNum", student.getStudentIdcard());
+            object.put("name", student.getStudentName());
+            object.put("phone", student.getStudentPhone());
+            object.put("company", student.getCompany());
+            list.add(object);
+        }
+        data.put("list", list);
+        result.put("data", data);
+        result.put("code", "success");
+        result.put("msg", "获取未报名培训的学员列表成功！");
         return result;
     }
 }
