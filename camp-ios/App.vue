@@ -35,17 +35,18 @@ export default {
 	onShow: function() {
 		console.log('App Show');
 		let data = {
-			username: '15521054785',
+			username: '15521064789',
 			password: Encrypt('123456')
 		};
-		request('/login', 'post', data)
-			.then(res => {
-				this.res = res;
-				console.log('登录', res);
-			})
-			.catch(e => {
-				
-			});
+		uni.removeStorageSync('user');
+		// request('/login', 'post', data)
+		// 	.then(res => {
+		// 		this.res = res;
+		// 		console.log('登录', res);
+		// 	})
+		// 	.catch(e => {
+
+		// 	});
 	},
 	onHide: function() {
 		console.log('App Hide');

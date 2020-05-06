@@ -5,10 +5,10 @@ import md5 from 'js-md5';
 import {
 	baseUrl
 } from '../const';
+import app from "../main.js";
 
 
 const SALT = "6e6s4xswqsD25WEWQ3sShLJOK";
-let cookie = null;
 
 
 /**
@@ -31,7 +31,7 @@ export function request(url, type, data = {}, responseType = "json") {
 			data, //报文主体中携带的数据
 			// params: type == 'get' ? data : {}, //使用get时，携带在路径的请求参数
 			header: {
-				...getHeaders(),
+				...getHeaders(url),
 				'Content-Type': 'application/json;charset=UTF-8'
 			},
 			responseType //浏览器返回的数据类型
@@ -42,7 +42,10 @@ export function request(url, type, data = {}, responseType = "json") {
 				let cook = response.header['Set-Cookie'];
 				if (cook) {
 					let start = cook.indexOf("; Path=/");
-					cookie = cook.substring(0, start);
+					let cookie = cook.substring(0, start);
+					app.$store.commit("setCookie", {
+						cookie
+					});
 				}
 				if (response.header['Content-Type'] == 'application/json;charset=UTF-8') {
 					if (response.data.code == 'success') {
@@ -50,6 +53,10 @@ export function request(url, type, data = {}, responseType = "json") {
 					} else if (response.data.code == 'error') {
 						console.log(url, "未登录");
 						//处理未登录
+						app.$Router.push({
+							name: "login"
+						})
+						throw new Error("你的登录信息已过期，请重新登录");
 					} else if (response.data.code == 'fail') {
 						throw new Error(response.data.msg);
 					} else {
@@ -68,11 +75,12 @@ export function request(url, type, data = {}, responseType = "json") {
 	});
 }
 
-export function getHeaders() {
+export function getHeaders(url) {
 	let randomNum = getRandomNum(); //获得随机数
 	const time = new Date().getTime(); //时间戳
 	const sign = `#${time}#${randomNum}#${SALT}`;
 	const signature = md5.hex(sign).toUpperCase(); //加密后大写
+	let cookie = app.$store.getters.cookie;
 	let headers = {
 		time,
 		signature,

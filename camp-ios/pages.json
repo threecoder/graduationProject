@@ -98,6 +98,20 @@
 				"enablePullDownRefresh":true
 			}
         }
+        ,{
+            "path" : "pages/login/login",
+            "style" : {
+				"navigationBarTitleText": "登录"
+			}
+        }
+        ,{
+            "path" : "pages/personal/certificate/certificate",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/personal/setting/setting",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "#fff",

@@ -4,10 +4,10 @@
 			<seg :isFixed="isFixed" :current="contentIndex" :segItem="segItem" @clickItem="onClickItem"></seg>
 			<view class="content" :class="{ mt: isFixed }">
 				<view v-show="contentIndex === 0">
-					<single v-for="(item, i) in joinableList" :key="i" :item="item" status="可报名" @refresh="refresh" trainingDetail="trainingDetail(item)" />
+					<single v-for="(item, i) in joinableList" :key="i" :item="item" status="可报名" @refresh="refresh" @trainingDetail="trainingDetail(item)" />
 				</view>
 				<view v-show="contentIndex === 1">
-					<single v-for="(item, i) in signedList" :key="i" :item="item" status="已报名" @refresh="refresh" trainingDetail="trainingDetail(item)" />
+					<single v-for="(item, i) in signedList" :key="i" :item="item" status="已报名" @refresh="refresh" @trainingDetail="trainingDetail(item)" />
 				</view>
 				<load-more :status="hasMore" @clickLoadMore="loadMore"></load-more>
 			</view>

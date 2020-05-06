@@ -38,7 +38,7 @@
 import list from "./components/list.vue";
 import page from "../../../components/page.vue";
 import coursesMenu from "./components/coursesMenu.vue";
-import coursesApi from "../../../api/modules/courses.js";
+import coursesApi from "../../../api/index/courses.js";
 export default {
     components: {
         list,

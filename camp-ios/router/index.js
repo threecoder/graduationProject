@@ -2,6 +2,12 @@ import modules from "./modules/index";
 import Vue from "vue";
 import Router from "uni-simple-router";
 
+import {
+	canGoModule
+} from '../const.js';
+import app from "../main.js";
+import accountApi from "../api/modules/account.js";
+
 Vue.use(Router);
 
 const router = new Router({
@@ -20,8 +26,42 @@ const router = new Router({
 	routes: [...modules]
 });
 
-router.beforeEach((to, from, next) => {
-	next();
+router.beforeEach(async (to, from, next) => {
+	console.log("拦截")
+	app.$store.commit("init");
+	console.log(to.name, canGoModule.indexOf(to.name));
+	if (canGoModule.indexOf(to.name) !== -1) {
+		next();
+	} else {
+		//验证cookie是否到期，到期重新登录，否则直接跳转
+		let expire = app.$store.getters.expire;
+		let time = new Date().getTime();
+		if (time > expire) {
+			console.log("cookie过期")
+			let account = app.$store.getters.account;
+			if (account.userName) {
+				console.log("有账号")
+				let res = await accountApi.login(account);
+				let user = {
+					userName: res.data.name,
+					expire: res.data.expire,
+					userAccount: account
+				}
+				app.$store.commit("setUser", user);
+				next();
+			} else {
+				console.log("没账号")
+				app.$Router.push({
+					name: "login",
+					query: {
+						name: to.name
+					}
+				});
+			}
+		} else {
+			next();
+		}
+	}
 });
 
 export default router;
