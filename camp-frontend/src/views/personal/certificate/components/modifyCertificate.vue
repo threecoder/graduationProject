@@ -1,7 +1,19 @@
 <template>
     <div>
         <div class="form-container">
-            <el-form :model="form"></el-form>
+            <el-form :model="form">
+                <el-form-item label="所属公司">
+                    <el-select v-model="form.memberId">
+                        <el-option label="无公司" :value="0"></el-option>
+                        <el-option
+                            v-for="(item,i) in memberList"
+                            :key="i"
+                            :label="item.name"
+                            :value="item.id"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+            </el-form>
         </div>
         <div class="tac">
             <el-button size="medium" @click="cancel">取消</el-button>
@@ -15,7 +27,10 @@ export default {
     props: ["idNum", "cerId"],
     data() {
         return {
-            form: {}
+            form: {
+                memberId: null
+            },
+            memberList: []
         };
     },
     computed: {
@@ -65,4 +80,10 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.form-container {
+    .el-form {
+        width: 300px;
+        margin: 0 auto;
+    }
+}
 </style>

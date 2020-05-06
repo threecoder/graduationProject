@@ -7,19 +7,18 @@
                 <el-row :gutter="40">
                     <el-col :span="8">
                         <el-form-item label-position="top" label="身份证号码">
-                            <el-input v-model="info.idNum" :disabled="readOnly"></el-input>
-                        </el-form-item>
-                    </el-col>
-
-                    <el-col :span="8">
-                        <el-form-item label-position="top" label="手机号码">
-                            <el-input v-model="info.phone" :disabled="readOnly"></el-input>
+                            <el-input v-model="info.idNum" disabled></el-input>
                         </el-form-item>
                     </el-col>
 
                     <el-col :span="8">
                         <el-form-item label-position="top" label="名字">
-                            <el-input v-model="info.name" :disabled="readOnly"></el-input>
+                            <el-input v-model="info.name" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label-position="top" label="手机号码">
+                            <el-input v-model="info.phone" :disabled="readOnly"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>

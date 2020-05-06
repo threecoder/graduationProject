@@ -40,6 +40,9 @@ const getOperList = (idType, par) => {
     }
 }
 
+//获取证书文件
+const getCerFile = cerId => request(`${studentPrefix}/getCerFile`, 'get', { cerId });
+
 export default {
     getCertificateList,
     examineCertificate,
@@ -47,5 +50,6 @@ export default {
     getCerInfo,
     modifyCer,
     getOperList,
-    getOverdueCerList
+    getOverdueCerList,
+    getCerFile
 }

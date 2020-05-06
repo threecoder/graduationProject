@@ -10,6 +10,12 @@
                 <el-form-item label="操作人名字">
                     <el-input v-model="form.userName" placeholder="操作人的名字" clearable></el-input>
                 </el-form-item>
+                <el-form-item label="操作类型">
+                    <el-select v-model="form.type" placeholder="复审或者修改操作">
+                        <el-option label="复审" value="recheck"></el-option>
+                        <el-option label="修改" value="modify"></el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item>
                     <el-button @click="getOperList" type="primary" size="medium">查询</el-button>
                 </el-form-item>
@@ -50,7 +56,8 @@ export default {
                 currentPage: 1,
                 total: 100,
                 cerName: null,
-                userName: null
+                userName: null,
+                type: "recheck"
             },
             table: {
                 config: [

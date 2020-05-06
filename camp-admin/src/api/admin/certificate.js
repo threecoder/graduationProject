@@ -22,6 +22,12 @@ const getPassGradeCheckLIst = par => request(`${apiPrefix}/getPassGradeCheckLIst
 //针对某个记录发放证书
 const grantCer = data => request(`${apiPrefix}/grantCer`, 'post', data);
 
+//获取证书背景图信息
+const getCerBackgroundImg = () => request(`${apiPrefix}/getCerBackgroundImg`, 'get');
+
+//上传证书背景图片
+const uploadCerBackground = data => request(`${apiPrefix}/uploadCerBackground`, 'post', data);
+
 export default {
     getOperLogList,
     passOperLog,
@@ -29,5 +35,7 @@ export default {
     getCerInfo,
     modifyCerInfo,
     getPassGradeCheckLIst,
-    grantCer
+    grantCer,
+    getCerBackgroundImg,
+    uploadCerBackground
 }

@@ -39,7 +39,7 @@
             <m-table :tableConfig="table.config" :data="table.data" :loading="table.loading">
                 <el-table-column slot="oper" slot-scope="{params}" v-bind="params" align="center">
                     <div slot-scope="{row}">
-                        <el-button size="small" type="primary" @click="setCer(row)">设置证书</el-button>
+                        <el-button size="small" type="primary" @click="setCer(row)">修改证书</el-button>
                     </div>
                 </el-table-column>
             </m-table>
@@ -59,7 +59,7 @@
         </el-dialog>
 
         <!-- 设置模板弹窗 -->
-        <el-dialog :visible.sync="setDia.flag" v-if="setDia.flag" title="设置证书">
+        <el-dialog :visible.sync="setDia.flag" v-if="setDia.flag" title="修改证书" width="30%">
             <set-cer :trainingId="setDia.trainingId" @cancel="setDia.flag=false" />
         </el-dialog>
     </div>
@@ -137,7 +137,7 @@ export default {
             this.table.loading = true;
             try {
                 let res = await trainingApi.getPublishedTraining(par);
-                this.table.data = res.data.data;
+                this.table.data = res.data.list;
                 this.searchForm.total = res.data.total;
             } catch (error) {
                 this.$message.error(error.message);
@@ -156,4 +156,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+::v-deep .el-dialog__body {
+    padding: 15px 20px;
+}
 </style>

@@ -107,7 +107,10 @@ export default {
             }).then(async () => {
                 this.table.loading = true;
                 try {
-                    let res = await cerApi.passOperLog({ operId: row.operId });
+                    let res = await cerApi.passOperLog({
+                        operId: row.operId,
+                        type: row.operType
+                    });
                     this.$message.success("通过申请成功");
                     await this.getExamineLog();
                 } catch (error) {
@@ -125,7 +128,8 @@ export default {
                 this.table.loading = true;
                 try {
                     let res = await cerApi.rejectOperLog({
-                        operId: row.operId
+                        operId: row.operId,
+                        type: row.operType
                     });
                     this.$message.success("拒绝申请成功");
                     await this.getExamineLog();

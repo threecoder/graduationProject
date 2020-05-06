@@ -239,7 +239,7 @@ export default {
                 let res = await adminMemberApi.getStudentList(
                     this.dialogInfo.id
                 );
-                this.studentTable.tableData = res.data;
+                this.studentTable.tableData = res.data ? res.data : [];
             } catch (error) {
                 this.$message.error(error.message);
             }

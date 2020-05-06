@@ -21,13 +21,12 @@
                     <div slot-scope="{row}" v-if="type">
                         <el-button size="mini" type="primary" @click="show(row)">查看</el-button>
                         <el-button size="mini" type="primary" @click="DLCer(row)">下载</el-button>
-                        <el-button size="mini" type="primary" @click="modify(row)">修改</el-button>
                         <el-button
-                            v-if="row.isEndding"
+                            v-if="hasCompany"
                             size="mini"
                             type="primary"
-                            @click="examine(row)"
-                        >复审</el-button>
+                            @click="modify(row)"
+                        >修改</el-button>
                     </div>
                     <div slot-scope="{row}" v-else>
                         <el-button
@@ -60,6 +59,8 @@ import mTable from "../../../components/mTable.vue";
 import page from "../../../components/page.vue";
 import modifyCer from "./components/modifyCertificate.vue";
 import cerApi from "../../../api/modules/certificate";
+import infoApi from "../../../api/modules/info";
+import { download } from "../../../api/request";
 export default {
     props: ["type"],
     components: {
@@ -99,7 +100,7 @@ export default {
                         effectiveLength: "365天",
                         beginTime: "2020-02-02 20:02",
                         endTime: "2021-02-02 20:20",
-                        isEndding: false
+                        canRecheck: true
                     }
                 ],
                 loading: false
@@ -108,13 +109,23 @@ export default {
                 flag: false,
                 idNum: this.idNum,
                 cerId: null
-            }
+            },
+            hasCompany: false
         };
     },
     mounted() {
+        this.init();
         this.getCertificateList();
     },
     methods: {
+        async init() {
+            try {
+                let res = await infoApi.getStudentInfo();
+                this.hasCompany = res.data.company ? true : false;
+            } catch (error) {
+                this.$message.error(error.message);
+            }
+        },
         curChange(newVal) {
             this.form.currentPage = newVal;
             this.getCertificateList();
@@ -133,17 +144,31 @@ export default {
                 this.$message.error(error.message);
             }
         },
-        show(row) {
-            window.open("/", "", "", false);
+        async show(row) {
+            try {
+                let res = await cerApi.getCerFile(row.cerId);
+                let blob = new Blob([res.data], { type: "application/pdf" });
+                let url = URL.createObjectURL(blob);
+                window.open(url);
+            } catch (error) {
+                this.$message.error(error.message);
+            }
         },
-        DLCer(row) {},
+        async DLCer(row) {
+            try {
+                let res = await cerApi.getCerFile(row.cerId);
+                download(res);
+            } catch (error) {
+                this.$message.error(error.message);
+            }
+        },
         modify(row) {
             this.cerInfo.cerId = row.cerId;
             this.cerInfo.flag = true;
         },
         examine(row) {
             this.$confirm(
-                "确定要发起证书复审吗？需要进行缴费并等待管理员审核",
+                "确定要发起证书复审吗？需要等待管理员审核后进行缴费",
                 "提示",
                 {
                     cancelButtonText: "取消",
@@ -154,7 +179,7 @@ export default {
                 try {
                     let res = await cerApi.examineCertificate(row.cerId);
                     this.$alert(
-                        "已创建复审订单，请到订单页面中进行支付，付款后管理员才能进行审核",
+                        "已提交申请，待管理员审核通过后支付即可完成操作",
                         "提示",
                         {
                             type: "warning",
