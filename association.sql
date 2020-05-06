@@ -200,7 +200,7 @@ CREATE TABLE `admin_re_authority` (
 
 /*Data for the table `admin_re_authority` */
 
-insert  into `admin_re_authority`(`id`,`admin_id`,`authority_id`,`authority_name`,`has_or_not`) values (1,1,1,NULL,1),(2,1,2,NULL,1),(3,1,3,NULL,1),(4,1,4,NULL,1),(5,1,5,NULL,0),(6,1,6,NULL,0),(7,1,7,NULL,0),(8,1,8,NULL,0),(9,1,9,NULL,0),(10,1,10,NULL,1),(11,1,11,NULL,0),(12,1,12,NULL,0),(13,2,1,'member',0),(14,2,2,'student',0),(15,2,3,'training',0),(16,2,4,'exam',1),(17,2,5,'grade',1),(18,2,6,'certificate',1),(19,2,7,'activity',0),(20,2,8,'vote',0),(21,2,9,'index',0),(22,2,10,'system',0),(23,2,11,'order',0),(24,2,12,'coupon',0);
+insert  into `admin_re_authority`(`id`,`admin_id`,`authority_id`,`authority_name`,`has_or_not`) values (1,1,1,NULL,1),(2,1,2,NULL,1),(3,1,3,NULL,1),(4,1,4,NULL,1),(5,1,5,NULL,1),(6,1,6,NULL,1),(7,1,7,NULL,1),(8,1,8,NULL,1),(9,1,9,NULL,1),(10,1,10,NULL,1),(11,1,11,NULL,1),(12,1,12,NULL,1),(13,2,1,'member',0),(14,2,2,'student',0),(15,2,3,'training',0),(16,2,4,'exam',1),(17,2,5,'grade',1),(18,2,6,'certificate',1),(19,2,7,'activity',0),(20,2,8,'vote',0),(21,2,9,'index',0),(22,2,10,'system',0),(23,2,11,'order',0),(24,2,12,'coupon',0);
 
 /*Table structure for table `association_text` */
 
@@ -239,16 +239,23 @@ DROP TABLE IF EXISTS `certificate`;
 
 CREATE TABLE `certificate` (
   `certificate_id` int(11) NOT NULL AUTO_INCREMENT,
+  `certificate_name` varchar(50) DEFAULT NULL COMMENT '证书名',
   `student_id` int(11) DEFAULT NULL COMMENT '所属学员',
   `training_id` int(11) DEFAULT NULL COMMENT '证书所属培训',
   `create_time` datetime DEFAULT NULL COMMENT '颁发时间',
   `end_time` datetime DEFAULT NULL COMMENT '过期时间',
   `certificate_path` varchar(200) DEFAULT NULL COMMENT '(没用到、保留)证书所在路径',
+  `in_change_line` tinyint(1) DEFAULT '0',
+  `in_recheck_line` tinyint(1) DEFAULT '0',
+  `student_name` varchar(50) DEFAULT NULL COMMENT '证书上的学员名',
+  `member_name` varchar(50) DEFAULT NULL COMMENT '证书上的会员名',
   `is_invalid` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`certificate_id`),
   KEY `training_id` (`training_id`),
-  CONSTRAINT `certificate_ibfk_1` FOREIGN KEY (`training_id`) REFERENCES `training` (`training_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  KEY `student_id` (`student_id`),
+  CONSTRAINT `certificate_ibfk_1` FOREIGN KEY (`training_id`) REFERENCES `training` (`training_id`),
+  CONSTRAINT `certificate_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 /*Data for the table `certificate` */
 
@@ -258,13 +265,19 @@ DROP TABLE IF EXISTS `certificate_change_log`;
 
 CREATE TABLE `certificate_change_log` (
   `log_id` int(11) NOT NULL AUTO_INCREMENT,
-  `re_id` int(11) DEFAULT NULL COMMENT '证书——学生 唯一id',
+  `certificate_id` int(11) DEFAULT NULL COMMENT '证书id',
+  `certificate_name` varchar(50) DEFAULT NULL,
+  `cer_student_id` int(11) DEFAULT NULL COMMENT '证书所属的学生id',
   `op_description` varchar(50) DEFAULT NULL COMMENT '操作描述',
-  `op_time` datetime DEFAULT NULL COMMENT '操作时间',
-  `is_success` tinyint(1) DEFAULT NULL COMMENT '1:操作成功 0操作失败',
   `op_user_type` varchar(20) DEFAULT NULL COMMENT '操作人类型(student/member/admin)',
-  `op_user_id` varchar(20) DEFAULT NULL COMMENT '操作人id',
-  PRIMARY KEY (`log_id`)
+  `op_user_id` int(11) DEFAULT NULL COMMENT '操作人id',
+  `op_user_name` varchar(30) DEFAULT NULL COMMENT '操作人名',
+  `op_time` datetime DEFAULT NULL COMMENT '操作时间',
+  `is_success` varchar(10) DEFAULT NULL COMMENT 'success/fail/wait',
+  `new_member_name` varchar(50) DEFAULT NULL COMMENT '要更改的新会员名',
+  PRIMARY KEY (`log_id`),
+  KEY `cer_student_id` (`cer_student_id`),
+  CONSTRAINT `certificate_change_log_ibfk_1` FOREIGN KEY (`cer_student_id`) REFERENCES `student` (`student_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `certificate_change_log` */
@@ -301,6 +314,21 @@ CREATE TABLE `certificate_change_order` (
 
 /*Data for the table `certificate_change_order` */
 
+/*Table structure for table `certificate_change_order_new_member_name` */
+
+DROP TABLE IF EXISTS `certificate_change_order_new_member_name`;
+
+CREATE TABLE `certificate_change_order_new_member_name` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '支付订单后把证书会员名更新',
+  `change_order_key_id` int(11) DEFAULT NULL,
+  `new_member_name` varchar(50) DEFAULT NULL COMMENT '新的用户名',
+  PRIMARY KEY (`id`),
+  KEY `change_order_key_id` (`change_order_key_id`),
+  CONSTRAINT `certificate_change_order_new_member_name_ibfk_1` FOREIGN KEY (`change_order_key_id`) REFERENCES `certificate_change_order` (`order_key_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `certificate_change_order_new_member_name` */
+
 /*Table structure for table `certificate_image` */
 
 DROP TABLE IF EXISTS `certificate_image`;
@@ -311,11 +339,11 @@ CREATE TABLE `certificate_image` (
   `img_path` varchar(500) DEFAULT NULL,
   `is_invalid` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`image_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 /*Data for the table `certificate_image` */
 
-insert  into `certificate_image`(`image_id`,`img_name`,`img_path`,`is_invalid`) values (1,'背景1','\\certificate\\certificate_background\\background-mktr08.jpg',0),(2,'背景2','\\certificate\\certificate_background\\background--P2abUc.jpg',0);
+insert  into `certificate_image`(`image_id`,`img_name`,`img_path`,`is_invalid`) values (10,'background-mktr08.jpg','/image/certificate_background/792501b779a641588791179222.jpg',0),(11,'background--P2abUc.jpg','/image/certificate_background/98e9739e220641588791219304.jpg',0);
 
 /*Table structure for table `certificate_recheck_log` */
 
@@ -324,11 +352,14 @@ DROP TABLE IF EXISTS `certificate_recheck_log`;
 CREATE TABLE `certificate_recheck_log` (
   `log_id` int(11) NOT NULL AUTO_INCREMENT,
   `certificate_id` int(11) DEFAULT NULL COMMENT '证书——学生 唯一id',
+  `certificate_name` varchar(50) DEFAULT NULL COMMENT '证书名',
+  `cer_student_id` int(11) DEFAULT NULL COMMENT '证书所属的学生id',
   `op_description` varchar(50) DEFAULT NULL COMMENT '操作描述',
-  `op_time` datetime DEFAULT NULL COMMENT '操作时间',
-  `is_success` tinyint(1) DEFAULT NULL COMMENT '1:操作成功 0操作失败',
   `op_user_type` varchar(20) DEFAULT NULL COMMENT '操作人类型(student/admin)',
-  `op_user_id` varchar(20) DEFAULT NULL COMMENT '操作人id',
+  `op_user_id` int(20) DEFAULT NULL COMMENT '操作人id',
+  `op_user_name` varchar(30) DEFAULT NULL COMMENT '操作人名',
+  `op_time` datetime DEFAULT NULL COMMENT '操作时间',
+  `is_success` varchar(10) DEFAULT NULL COMMENT 'success/fail/wait',
   PRIMARY KEY (`log_id`),
   KEY `certificate_id` (`certificate_id`),
   CONSTRAINT `certificate_recheck_log_ibfk_1` FOREIGN KEY (`certificate_id`) REFERENCES `certificate` (`certificate_id`)
@@ -812,7 +843,7 @@ CREATE TABLE `student` (
 
 /*Data for the table `student` */
 
-insert  into `student`(`student_id`,`student_password`,`student_idcard`,`student_phone`,`student_name`,`student_sex`,`student_email`,`student_position`,`student_country`,`student_province`,`student_city`,`student_area`,`student_address`,`company`,`enter_time`,`has_org`) values (1,'123456','445281199308310056','15521054789','张三',NULL,'11@qq.com','经理','中国','广东省','广州市','番禺区','大学城华南理工大学','AA股份有限公司',NULL,1),(2,'123456','445281199308310037','15521064789','李四',NULL,'22@qq.com',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(8,'123456','445281199707774569','13112114587','王建国',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1),(38,'123456','4342323432','15521065436','张英语',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL,1),(39,'123456','134455','15521065326','李数学',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL,1),(40,'123456','445281199302210226','15521065416','陈政治',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL,1);
+insert  into `student`(`student_id`,`student_password`,`student_idcard`,`student_phone`,`student_name`,`student_sex`,`student_email`,`student_position`,`student_country`,`student_province`,`student_city`,`student_area`,`student_address`,`company`,`enter_time`,`has_org`) values (1,'123456','445281199308310056','15521054789','张三','女','881@qq.com','经理','中国','广东省','广州市','番禺区','大学城华南理工大学','AA股份有限公司',NULL,1),(2,'123456','445281199308310037','15521064789','李四','女','22@qq.com',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(8,'123456','445281199707774569','13112114587','王建国','男',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1),(38,'123456','4342323432','15521065436','张英语','男',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL,1),(39,'123456','134455','15521065326','李数学','男',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL,1),(40,'123456','445281199302210226','15521065416','陈政治','女',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL,1);
 
 /*Table structure for table `system_parameter` */
 
@@ -860,7 +891,7 @@ CREATE TABLE `training` (
 
 /*Data for the table `training` */
 
-insert  into `training`(`training_id`,`training_name`,`training_introduce`,`training_fee_normal`,`training_fee_vip`,`training_end_time`,`training_start_time`,`post_time`,`level`,`training_pic`,`training_address`,`contact_name`,`contact_phone`,`cer_img_id`) values (1,'质量检测','示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n示例范文示例范文示例范文示例范文','199.99','199.00','2019-11-02 16:13:03','2019-09-13 16:12:30','2019-10-31 00:41:14',1,NULL,NULL,NULL,NULL,NULL),(2,'食品安全','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','888.01','699.01','2019-11-01 12:00:00','2019-10-01 12:00:00','2019-07-15 00:41:19',2,NULL,NULL,NULL,NULL,NULL),(3,'食品监督','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','2000.00','1899.11','2020-11-12 16:14:32','2019-09-05 16:14:25','2021-01-08 00:41:22',1,NULL,NULL,NULL,NULL,NULL),(4,'网络工程','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','800.90','700.00','2019-11-22 16:14:40','2019-09-11 16:14:36','2019-11-01 00:41:27',3,NULL,NULL,NULL,NULL,NULL),(5,'产品规范','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','99.99','98.99','2019-11-08 16:14:56','2019-09-29 16:14:44','2019-10-17 00:41:35',1,NULL,NULL,NULL,NULL,NULL);
+insert  into `training`(`training_id`,`training_name`,`training_introduce`,`training_fee_normal`,`training_fee_vip`,`training_end_time`,`training_start_time`,`post_time`,`level`,`training_pic`,`training_address`,`contact_name`,`contact_phone`,`cer_img_id`) values (1,'质量检测','示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n示例范文示例范文示例范文示例范文','199.99','199.00','2019-11-02 16:13:03','2019-09-13 16:12:30','2019-10-31 00:41:14',1,NULL,NULL,NULL,NULL,10),(2,'食品安全','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','888.01','699.01','2019-11-01 12:00:00','2019-10-01 12:00:00','2019-07-15 00:41:19',2,NULL,NULL,NULL,NULL,10),(3,'食品监督','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','2000.00','1899.11','2020-11-12 16:14:32','2019-09-05 16:14:25','2021-01-08 00:41:22',1,NULL,NULL,NULL,NULL,10),(4,'网络工程','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','800.90','700.00','2019-11-22 16:14:40','2019-09-11 16:14:36','2019-11-01 00:41:27',3,NULL,NULL,NULL,NULL,10),(5,'产品规范','    示例范文示例范文示例范文示例范文示例范文示例范文示例范文示例范文\r\n    示例范文示例范文示例范文示例范文','99.99','98.99','2019-11-08 16:14:56','2019-09-29 16:14:44','2019-10-17 00:41:35',1,NULL,NULL,NULL,NULL,10);
 
 /*Table structure for table `training_order` */
 

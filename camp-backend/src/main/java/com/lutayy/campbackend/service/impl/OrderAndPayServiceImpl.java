@@ -60,6 +60,10 @@ public class OrderAndPayServiceImpl implements OrderAndPayService {
     @Autowired
     MemberSubscriptionOrderMapper memberSubscriptionOrderMapper;
     @Autowired
+    CertificateMapper certificateMapper;
+    @Autowired
+    CertificateChangeOrderNewMemberNameMapper certificateChangeOrderNewMemberNameMapper;
+    @Autowired
     GetObjectHelper getObjectHelper;
     @Resource
     private RedisUtil redisUtil;
@@ -1156,6 +1160,12 @@ public class OrderAndPayServiceImpl implements OrderAndPayService {
                 certificateChangeOrder.setPayTime(nowTime);
                 changeOrderMapper.updateByPrimaryKeySelective(certificateChangeOrder);
                 // TODO 证书修改
+                CertificateChangeOrderNewMemberNameExample example=new CertificateChangeOrderNewMemberNameExample();
+                example.createCriteria().andChangeOrderKeyIdEqualTo(certificateChangeOrder.getOrderKeyId());
+                String newMemberName=certificateChangeOrderNewMemberNameMapper.selectByExample(example).get(0).getNewMemberName();
+                Certificate certificate=certificateMapper.selectByPrimaryKey(certificateChangeOrder.getCertificateId());
+                certificate.setMemberName(newMemberName);
+                certificateMapper.updateByPrimaryKeySelective(certificate);
 
             } else if (orderType.equals("cerRecheck")) {
                 CertificateRecheckOrder certificateRecheckOrder = (CertificateRecheckOrder) order;
@@ -1163,6 +1173,13 @@ public class OrderAndPayServiceImpl implements OrderAndPayService {
                 certificateRecheckOrder.setPayTime(nowTime);
                 recheckOrderMapper.updateByPrimaryKeySelective(certificateRecheckOrder);
                 // TODO 证书复审
+                Certificate certificate=certificateMapper.selectByPrimaryKey(certificateRecheckOrder.getCertificateId());
+                //有效期延长一年
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(certificate.getEndTime());
+                cal.add(Calendar.YEAR, 1);
+                certificate.setEndTime(cal.getTime());
+                certificateMapper.updateByPrimaryKeySelective(certificate);
 
             } else if (orderType.equals("member")) {
                 MemberSubscriptionOrder memberSubscriptionOrder = (MemberSubscriptionOrder) order;

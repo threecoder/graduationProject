@@ -14,6 +14,8 @@ public class Student implements Serializable {
 
     private String studentName;
 
+    private String studentSex;
+
     private String studentEmail;
 
     private String studentPosition;
@@ -74,6 +76,14 @@ public class Student implements Serializable {
 
     public void setStudentName(String studentName) {
         this.studentName = studentName;
+    }
+
+    public String getStudentSex() {
+        return studentSex;
+    }
+
+    public void setStudentSex(String studentSex) {
+        this.studentSex = studentSex;
     }
 
     public String getStudentEmail() {

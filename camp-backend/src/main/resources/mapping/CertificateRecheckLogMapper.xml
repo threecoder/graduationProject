@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lutayy.campbackend.dao.CertificateRecheckLogMapper">
+  <resultMap id="BaseResultMap" type="com.lutayy.campbackend.pojo.CertificateRecheckLog">
+    <id column="log_id" jdbcType="INTEGER" property="logId" />
+    <result column="certificate_id" jdbcType="INTEGER" property="certificateId" />
+    <result column="certificate_name" jdbcType="VARCHAR" property="certificateName" />
+    <result column="cer_student_id" jdbcType="INTEGER" property="cerStudentId" />
+    <result column="op_description" jdbcType="VARCHAR" property="opDescription" />
+    <result column="op_user_type" jdbcType="VARCHAR" property="opUserType" />
+    <result column="op_user_id" jdbcType="INTEGER" property="opUserId" />
+    <result column="op_user_name" jdbcType="VARCHAR" property="opUserName" />
+    <result column="op_time" jdbcType="TIMESTAMP" property="opTime" />
+    <result column="is_success" jdbcType="VARCHAR" property="isSuccess" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    log_id, certificate_id, certificate_name, cer_student_id, op_description, op_user_type, 
+    op_user_id, op_user_name, op_time, is_success
+  </sql>
+  <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.CertificateRecheckLogExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from certificate_recheck_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="offset != null and limit != null">
+      limit ${offset},${limit}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from certificate_recheck_log
+    where log_id = #{logId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from certificate_recheck_log
+    where log_id = #{logId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.lutayy.campbackend.pojo.CertificateRecheckLogExample">
+    delete from certificate_recheck_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lutayy.campbackend.pojo.CertificateRecheckLog">
+    <selectKey keyProperty="logId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into certificate_recheck_log (certificate_id, certificate_name, cer_student_id, 
+      op_description, op_user_type, op_user_id, 
+      op_user_name, op_time, is_success
+      )
+    values (#{certificateId,jdbcType=INTEGER}, #{certificateName,jdbcType=VARCHAR}, #{cerStudentId,jdbcType=INTEGER}, 
+      #{opDescription,jdbcType=VARCHAR}, #{opUserType,jdbcType=VARCHAR}, #{opUserId,jdbcType=INTEGER}, 
+      #{opUserName,jdbcType=VARCHAR}, #{opTime,jdbcType=TIMESTAMP}, #{isSuccess,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.CertificateRecheckLog">
+    <selectKey keyProperty="logId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into certificate_recheck_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="certificateId != null">
+        certificate_id,
+      </if>
+      <if test="certificateName != null">
+        certificate_name,
+      </if>
+      <if test="cerStudentId != null">
+        cer_student_id,
+      </if>
+      <if test="opDescription != null">
+        op_description,
+      </if>
+      <if test="opUserType != null">
+        op_user_type,
+      </if>
+      <if test="opUserId != null">
+        op_user_id,
+      </if>
+      <if test="opUserName != null">
+        op_user_name,
+      </if>
+      <if test="opTime != null">
+        op_time,
+      </if>
+      <if test="isSuccess != null">
+        is_success,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="certificateId != null">
+        #{certificateId,jdbcType=INTEGER},
+      </if>
+      <if test="certificateName != null">
+        #{certificateName,jdbcType=VARCHAR},
+      </if>
+      <if test="cerStudentId != null">
+        #{cerStudentId,jdbcType=INTEGER},
+      </if>
+      <if test="opDescription != null">
+        #{opDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="opUserType != null">
+        #{opUserType,jdbcType=VARCHAR},
+      </if>
+      <if test="opUserId != null">
+        #{opUserId,jdbcType=INTEGER},
+      </if>
+      <if test="opUserName != null">
+        #{opUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="opTime != null">
+        #{opTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isSuccess != null">
+        #{isSuccess,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lutayy.campbackend.pojo.CertificateRecheckLogExample" resultType="java.lang.Long">
+    select count(*) from certificate_recheck_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update certificate_recheck_log
+    <set>
+      <if test="record.logId != null">
+        log_id = #{record.logId,jdbcType=INTEGER},
+      </if>
+      <if test="record.certificateId != null">
+        certificate_id = #{record.certificateId,jdbcType=INTEGER},
+      </if>
+      <if test="record.certificateName != null">
+        certificate_name = #{record.certificateName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cerStudentId != null">
+        cer_student_id = #{record.cerStudentId,jdbcType=INTEGER},
+      </if>
+      <if test="record.opDescription != null">
+        op_description = #{record.opDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="record.opUserType != null">
+        op_user_type = #{record.opUserType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.opUserId != null">
+        op_user_id = #{record.opUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.opUserName != null">
+        op_user_name = #{record.opUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.opTime != null">
+        op_time = #{record.opTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isSuccess != null">
+        is_success = #{record.isSuccess,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update certificate_recheck_log
+    set log_id = #{record.logId,jdbcType=INTEGER},
+      certificate_id = #{record.certificateId,jdbcType=INTEGER},
+      certificate_name = #{record.certificateName,jdbcType=VARCHAR},
+      cer_student_id = #{record.cerStudentId,jdbcType=INTEGER},
+      op_description = #{record.opDescription,jdbcType=VARCHAR},
+      op_user_type = #{record.opUserType,jdbcType=VARCHAR},
+      op_user_id = #{record.opUserId,jdbcType=INTEGER},
+      op_user_name = #{record.opUserName,jdbcType=VARCHAR},
+      op_time = #{record.opTime,jdbcType=TIMESTAMP},
+      is_success = #{record.isSuccess,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lutayy.campbackend.pojo.CertificateRecheckLog">
+    update certificate_recheck_log
+    <set>
+      <if test="certificateId != null">
+        certificate_id = #{certificateId,jdbcType=INTEGER},
+      </if>
+      <if test="certificateName != null">
+        certificate_name = #{certificateName,jdbcType=VARCHAR},
+      </if>
+      <if test="cerStudentId != null">
+        cer_student_id = #{cerStudentId,jdbcType=INTEGER},
+      </if>
+      <if test="opDescription != null">
+        op_description = #{opDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="opUserType != null">
+        op_user_type = #{opUserType,jdbcType=VARCHAR},
+      </if>
+      <if test="opUserId != null">
+        op_user_id = #{opUserId,jdbcType=INTEGER},
+      </if>
+      <if test="opUserName != null">
+        op_user_name = #{opUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="opTime != null">
+        op_time = #{opTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isSuccess != null">
+        is_success = #{isSuccess,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where log_id = #{logId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lutayy.campbackend.pojo.CertificateRecheckLog">
+    update certificate_recheck_log
+    set certificate_id = #{certificateId,jdbcType=INTEGER},
+      certificate_name = #{certificateName,jdbcType=VARCHAR},
+      cer_student_id = #{cerStudentId,jdbcType=INTEGER},
+      op_description = #{opDescription,jdbcType=VARCHAR},
+      op_user_type = #{opUserType,jdbcType=VARCHAR},
+      op_user_id = #{opUserId,jdbcType=INTEGER},
+      op_user_name = #{opUserName,jdbcType=VARCHAR},
+      op_time = #{opTime,jdbcType=TIMESTAMP},
+      is_success = #{isSuccess,jdbcType=VARCHAR}
+    where log_id = #{logId,jdbcType=INTEGER}
+  </update>
+</mapper>

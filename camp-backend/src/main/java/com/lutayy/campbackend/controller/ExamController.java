@@ -232,4 +232,14 @@ public class ExamController {
     public JSONObject modifyGrade(@RequestBody JSONObject jsonObject) {
         return examService.modifyGrade(jsonObject);
     }
+
+//    @RequestMapping("/admin/getPassGradeCheckLIst")
+//    @ResponseBody
+//    public Object getPassGradeCheckLIst(@RequestParam("pageSize") Integer pageSize,
+//                                     @RequestParam("currentPage") Integer currentPage,
+//                                     @RequestParam(value = "userName",required = false) String userName,
+//                                     @RequestParam(value = "trainingName",required = false) String trainingName,
+//                                     @RequestParam(value = "examName",required = false) Integer examName) {
+//        return examService.getPassGradeCheckLIst(pageSize, currentPage, userName, trainingName, examName);
+//    }
 }

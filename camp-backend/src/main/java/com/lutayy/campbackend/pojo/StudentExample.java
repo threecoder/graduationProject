@@ -465,6 +465,76 @@ public class StudentExample {
             return (Criteria) this;
         }
 
+        public Criteria andStudentSexIsNull() {
+            addCriterion("student_sex is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentSexIsNotNull() {
+            addCriterion("student_sex is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentSexEqualTo(String value) {
+            addCriterion("student_sex =", value, "studentSex");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentSexNotEqualTo(String value) {
+            addCriterion("student_sex <>", value, "studentSex");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentSexGreaterThan(String value) {
+            addCriterion("student_sex >", value, "studentSex");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentSexGreaterThanOrEqualTo(String value) {
+            addCriterion("student_sex >=", value, "studentSex");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentSexLessThan(String value) {
+            addCriterion("student_sex <", value, "studentSex");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentSexLessThanOrEqualTo(String value) {
+            addCriterion("student_sex <=", value, "studentSex");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentSexLike(String value) {
+            addCriterion("student_sex like", value, "studentSex");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentSexNotLike(String value) {
+            addCriterion("student_sex not like", value, "studentSex");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentSexIn(List<String> values) {
+            addCriterion("student_sex in", values, "studentSex");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentSexNotIn(List<String> values) {
+            addCriterion("student_sex not in", values, "studentSex");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentSexBetween(String value1, String value2) {
+            addCriterion("student_sex between", value1, value2, "studentSex");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentSexNotBetween(String value1, String value2) {
+            addCriterion("student_sex not between", value1, value2, "studentSex");
+            return (Criteria) this;
+        }
+
         public Criteria andStudentEmailIsNull() {
             addCriterion("student_email is null");
             return (Criteria) this;

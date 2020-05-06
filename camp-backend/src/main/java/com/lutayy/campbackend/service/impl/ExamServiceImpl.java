@@ -30,6 +30,10 @@ public class ExamServiceImpl implements ExamService {
     @Autowired
     StudentMapper studentMapper;
     @Autowired
+    MemberMapper memberMapper;
+    @Autowired
+    MemberReStudentMapper memberReStudentMapper;
+    @Autowired
     ExamMapper examMapper;
     @Autowired
     TrainingMapper trainingMapper;
@@ -51,6 +55,8 @@ public class ExamServiceImpl implements ExamService {
     MessageToAdminMapper messageToAdminMapper;
     @Autowired
     MessageTextMapper messageTextMapper;
+    @Autowired
+    CertificateMapper certificateMapper;
     @Autowired
     GetObjectHelper getObjectHelper;
 
@@ -1270,10 +1276,34 @@ public class ExamServiceImpl implements ExamService {
                 redisUtil.hdel("admin" + adminId + "_OpList", report.getReportId().toString());
             }
             examReportOpLogMapper.insert(reportOpLog);
-            //颁发证书
-            ///////////////////
+            // TODO 更新培训完成状态
+            Exam exam=examMapper.selectByPrimaryKey(report.getExamId());
+            TrainingReStudent trainingReStudent=getObjectHelper.getTrainingReStudentByIds(exam.getTrainingId(), report.getStudentId());
+            trainingReStudent.setIsDone(true);
+            trainingReStudent.setFinishTime(new Date());
+            trainingReStudentMapper.updateByPrimaryKeySelective(trainingReStudent);
+            // TODO 颁发证书（往证书表插入数据）
+            Date nowDate=new Date();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(nowDate);
+            cal.add(Calendar.YEAR, 1); //证书有效期为一年
+            Certificate certificate=new Certificate();
+            certificate.setCreateTime(nowDate);
+            certificate.setEndTime(cal.getTime());
+            certificate.setStudentId(student.getStudentId());
+            Training training=trainingMapper.selectByPrimaryKey(exam.getTrainingId());
+            certificate.setCertificateName(training.getTrainingName()+"培训证书_"+student.getStudentName());
+            certificate.setTrainingId(exam.getTrainingId());
+            certificate.setStudentName(student.getStudentName());
+            //检查学员是否有挂靠会员
+            MemberReStudentExample example=new MemberReStudentExample();
+            example.createCriteria().andStudentIdEqualTo(student.getStudentId());
+            List<MemberReStudent> memberReStudents=memberReStudentMapper.selectByExample(example);
+            if(memberReStudents.size()>0)
+                certificate.setMemberName(memberMapper.selectByPrimaryKey(memberReStudents.get(0).getMemberKeyId()).getMemberName());
+            certificateMapper.insertSelective(certificate);
         }
-        String msg = "操作成功！";
+        String msg = "通过目标成绩单！同时颁发证书成功";
         if (flag) {
             msg += (noticeMsg + "的记录不存在");
         }
@@ -1609,4 +1639,5 @@ public class ExamServiceImpl implements ExamService {
         }
         return result;
     }
+
 }

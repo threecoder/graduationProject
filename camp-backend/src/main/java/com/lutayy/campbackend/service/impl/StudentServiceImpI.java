@@ -51,6 +51,8 @@ public class StudentServiceImpI implements StudentService {
         data.put("city", student.getStudentCity());
         data.put("area", student.getStudentArea());
         data.put("zone", student.getStudentAddress());
+        data.put("sex", student.getStudentSex());
+        data.put("company", student.getCompany());
         result.put("code","success");
         result.put("msg", "查询成功！");
         result.put("data", data);
@@ -68,6 +70,7 @@ public class StudentServiceImpI implements StudentService {
         String city=jsonObject.getString("city");
         String area=jsonObject.getString("area");
         String address=jsonObject.getString("zone");
+        String sex=jsonObject.getString("sex");
 
         JSONObject result=new JSONObject();
 
@@ -109,6 +112,8 @@ public class StudentServiceImpI implements StudentService {
         student.setStudentName(name);
         student.setStudentPosition(position);
         student.setStudentPhone(phone);
+        if(sex!=null)
+            student.setStudentSex(sex);
         if(!idNum.equals(student.getStudentIdcard())){
             student.setStudentIdcard(idNum);
             Cookie cookie=new Cookie("token", null);

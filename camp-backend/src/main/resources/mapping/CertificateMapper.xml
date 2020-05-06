@@ -3,11 +3,16 @@
 <mapper namespace="com.lutayy.campbackend.dao.CertificateMapper">
   <resultMap id="BaseResultMap" type="com.lutayy.campbackend.pojo.Certificate">
     <id column="certificate_id" jdbcType="INTEGER" property="certificateId" />
+    <result column="certificate_name" jdbcType="VARCHAR" property="certificateName" />
     <result column="student_id" jdbcType="INTEGER" property="studentId" />
     <result column="training_id" jdbcType="INTEGER" property="trainingId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
     <result column="certificate_path" jdbcType="VARCHAR" property="certificatePath" />
+    <result column="in_change_line" jdbcType="BIT" property="inChangeLine" />
+    <result column="in_recheck_line" jdbcType="BIT" property="inRecheckLine" />
+    <result column="student_name" jdbcType="VARCHAR" property="studentName" />
+    <result column="member_name" jdbcType="VARCHAR" property="memberName" />
     <result column="is_invalid" jdbcType="BIT" property="isInvalid" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -69,8 +74,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    certificate_id, student_id, training_id, create_time, end_time, certificate_path, 
-    is_invalid
+    certificate_id, certificate_name, student_id, training_id, create_time, end_time, 
+    certificate_path, in_change_line, in_recheck_line, student_name, member_name, is_invalid
   </sql>
   <select id="selectByExample" parameterType="com.lutayy.campbackend.pojo.CertificateExample" resultMap="BaseResultMap">
     select
@@ -106,12 +111,14 @@
     <selectKey keyProperty="certificateId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into certificate (student_id, training_id, create_time, 
-      end_time, certificate_path, is_invalid
-      )
-    values (#{studentId,jdbcType=INTEGER}, #{trainingId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{endTime,jdbcType=TIMESTAMP}, #{certificatePath,jdbcType=VARCHAR}, #{isInvalid,jdbcType=BIT}
-      )
+    insert into certificate (certificate_name, student_id, training_id, 
+      create_time, end_time, certificate_path, 
+      in_change_line, in_recheck_line, student_name, 
+      member_name, is_invalid)
+    values (#{certificateName,jdbcType=VARCHAR}, #{studentId,jdbcType=INTEGER}, #{trainingId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{certificatePath,jdbcType=VARCHAR}, 
+      #{inChangeLine,jdbcType=BIT}, #{inRecheckLine,jdbcType=BIT}, #{studentName,jdbcType=VARCHAR}, 
+      #{memberName,jdbcType=VARCHAR}, #{isInvalid,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.lutayy.campbackend.pojo.Certificate">
     <selectKey keyProperty="certificateId" order="AFTER" resultType="java.lang.Integer">
@@ -119,6 +126,9 @@
     </selectKey>
     insert into certificate
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="certificateName != null">
+        certificate_name,
+      </if>
       <if test="studentId != null">
         student_id,
       </if>
@@ -134,11 +144,26 @@
       <if test="certificatePath != null">
         certificate_path,
       </if>
+      <if test="inChangeLine != null">
+        in_change_line,
+      </if>
+      <if test="inRecheckLine != null">
+        in_recheck_line,
+      </if>
+      <if test="studentName != null">
+        student_name,
+      </if>
+      <if test="memberName != null">
+        member_name,
+      </if>
       <if test="isInvalid != null">
         is_invalid,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="certificateName != null">
+        #{certificateName,jdbcType=VARCHAR},
+      </if>
       <if test="studentId != null">
         #{studentId,jdbcType=INTEGER},
       </if>
@@ -153,6 +178,18 @@
       </if>
       <if test="certificatePath != null">
         #{certificatePath,jdbcType=VARCHAR},
+      </if>
+      <if test="inChangeLine != null">
+        #{inChangeLine,jdbcType=BIT},
+      </if>
+      <if test="inRecheckLine != null">
+        #{inRecheckLine,jdbcType=BIT},
+      </if>
+      <if test="studentName != null">
+        #{studentName,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null">
+        #{memberName,jdbcType=VARCHAR},
       </if>
       <if test="isInvalid != null">
         #{isInvalid,jdbcType=BIT},
@@ -171,6 +208,9 @@
       <if test="record.certificateId != null">
         certificate_id = #{record.certificateId,jdbcType=INTEGER},
       </if>
+      <if test="record.certificateName != null">
+        certificate_name = #{record.certificateName,jdbcType=VARCHAR},
+      </if>
       <if test="record.studentId != null">
         student_id = #{record.studentId,jdbcType=INTEGER},
       </if>
@@ -186,6 +226,18 @@
       <if test="record.certificatePath != null">
         certificate_path = #{record.certificatePath,jdbcType=VARCHAR},
       </if>
+      <if test="record.inChangeLine != null">
+        in_change_line = #{record.inChangeLine,jdbcType=BIT},
+      </if>
+      <if test="record.inRecheckLine != null">
+        in_recheck_line = #{record.inRecheckLine,jdbcType=BIT},
+      </if>
+      <if test="record.studentName != null">
+        student_name = #{record.studentName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.memberName != null">
+        member_name = #{record.memberName,jdbcType=VARCHAR},
+      </if>
       <if test="record.isInvalid != null">
         is_invalid = #{record.isInvalid,jdbcType=BIT},
       </if>
@@ -197,11 +249,16 @@
   <update id="updateByExample" parameterType="map">
     update certificate
     set certificate_id = #{record.certificateId,jdbcType=INTEGER},
+      certificate_name = #{record.certificateName,jdbcType=VARCHAR},
       student_id = #{record.studentId,jdbcType=INTEGER},
       training_id = #{record.trainingId,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       end_time = #{record.endTime,jdbcType=TIMESTAMP},
       certificate_path = #{record.certificatePath,jdbcType=VARCHAR},
+      in_change_line = #{record.inChangeLine,jdbcType=BIT},
+      in_recheck_line = #{record.inRecheckLine,jdbcType=BIT},
+      student_name = #{record.studentName,jdbcType=VARCHAR},
+      member_name = #{record.memberName,jdbcType=VARCHAR},
       is_invalid = #{record.isInvalid,jdbcType=BIT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -210,6 +267,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.lutayy.campbackend.pojo.Certificate">
     update certificate
     <set>
+      <if test="certificateName != null">
+        certificate_name = #{certificateName,jdbcType=VARCHAR},
+      </if>
       <if test="studentId != null">
         student_id = #{studentId,jdbcType=INTEGER},
       </if>
@@ -225,6 +285,18 @@
       <if test="certificatePath != null">
         certificate_path = #{certificatePath,jdbcType=VARCHAR},
       </if>
+      <if test="inChangeLine != null">
+        in_change_line = #{inChangeLine,jdbcType=BIT},
+      </if>
+      <if test="inRecheckLine != null">
+        in_recheck_line = #{inRecheckLine,jdbcType=BIT},
+      </if>
+      <if test="studentName != null">
+        student_name = #{studentName,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null">
+        member_name = #{memberName,jdbcType=VARCHAR},
+      </if>
       <if test="isInvalid != null">
         is_invalid = #{isInvalid,jdbcType=BIT},
       </if>
@@ -233,11 +305,16 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.lutayy.campbackend.pojo.Certificate">
     update certificate
-    set student_id = #{studentId,jdbcType=INTEGER},
+    set certificate_name = #{certificateName,jdbcType=VARCHAR},
+      student_id = #{studentId,jdbcType=INTEGER},
       training_id = #{trainingId,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
       certificate_path = #{certificatePath,jdbcType=VARCHAR},
+      in_change_line = #{inChangeLine,jdbcType=BIT},
+      in_recheck_line = #{inRecheckLine,jdbcType=BIT},
+      student_name = #{studentName,jdbcType=VARCHAR},
+      member_name = #{memberName,jdbcType=VARCHAR},
       is_invalid = #{isInvalid,jdbcType=BIT}
     where certificate_id = #{certificateId,jdbcType=INTEGER}
   </update>

@@ -83,7 +83,7 @@ public class VoteSQLConn {
                 subsql = "and not exists (select * from vote_option_student where vote_id=vote.vote_id and student_id=" + id + ")";
             }
             sql += subsql;
-            sql += (" limit " + (currentPage - 1) + "," + pageSize);
+            sql += (" limit " + (currentPage - 1)*pageSize + "," + pageSize);
             ResultSet rs = statement.executeQuery(sql);
             while (rs.next()) {
                 Vote vote = new Vote();
