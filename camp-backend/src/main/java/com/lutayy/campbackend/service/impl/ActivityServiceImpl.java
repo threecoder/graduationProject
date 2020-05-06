@@ -3,6 +3,7 @@ package com.lutayy.campbackend.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.lutayy.campbackend.common.config.AuthorityParam;
 import com.lutayy.campbackend.common.util.ExcelUtil;
 import com.lutayy.campbackend.common.util.OrderIdGenerator;
 import com.lutayy.campbackend.common.util.RedisUtil;
@@ -571,6 +572,13 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public JSONObject addNewActivity(JSONObject jsonObject) {
         JSONObject result = new JSONObject();
+        result.put("code", "fail");
+        //权限检查
+        Integer opAdminId=jsonObject.getInteger("id");
+        if(!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.ACTIVITY)){
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
 
         String name = jsonObject.getString("name");
         BigDecimal fee = jsonObject.getBigDecimal("fee");
@@ -734,6 +742,12 @@ public class ActivityServiceImpl implements ActivityService {
     public JSONObject setSEATInfo(JSONObject jsonObject) {
         JSONObject result = new JSONObject();
         result.put("code", "fail");
+        //权限检查
+        Integer opAdminId=jsonObject.getInteger("id");
+        if(!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.ACTIVITY)){
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
 
         Integer activityId = jsonObject.getInteger("activityId");
         Activity activity = activityMapper.selectByPrimaryKey(activityId);

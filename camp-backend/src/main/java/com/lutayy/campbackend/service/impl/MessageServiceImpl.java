@@ -2,6 +2,7 @@ package com.lutayy.campbackend.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.lutayy.campbackend.common.config.AuthorityParam;
 import com.lutayy.campbackend.dao.*;
 import com.lutayy.campbackend.pojo.*;
 import com.lutayy.campbackend.service.MessageService;
@@ -185,6 +186,8 @@ public class MessageServiceImpl implements MessageService {
             example.createCriteria().andMemberIdEqualTo(roleId).andIsInvalidEqualTo(false);
             totalNum = messageToMemberMapper.countByExample(example);
             example.setOrderByClause("status ASC, send_time DESC");
+            example.setOffset((currentPage-1)*pageSize);
+            example.setLimit(pageSize);
             List<MessageToMember> messageToMemberList = messageToMemberMapper.selectByExample(example);
             for (MessageToMember messageToMember : messageToMemberList) {
                 JSONObject object = new JSONObject();
@@ -203,6 +206,8 @@ public class MessageServiceImpl implements MessageService {
             example.createCriteria().andStudentIdEqualTo(roleId).andIsInvalidEqualTo(false);
             totalNum = messageToStudentMapper.countByExample(example);
             example.setOrderByClause("status ASC, send_time DESC");
+            example.setOffset((currentPage-1)*pageSize);
+            example.setLimit(pageSize);
             List<MessageToStudent> messageToStudentList = messageToStudentMapper.selectByExample(example);
             for (MessageToStudent messageToStudent : messageToStudentList) {
                 JSONObject object = new JSONObject();
@@ -221,6 +226,8 @@ public class MessageServiceImpl implements MessageService {
             example.createCriteria().andReceiveAdminIdEqualTo(roleId).andIsInvalidEqualTo(false);
             totalNum = messageToAdminMapper.countByExample(example);
             example.setOrderByClause("status ASC, send_time DESC");
+            example.setOffset((currentPage-1)*pageSize);
+            example.setLimit(pageSize);
             List<MessageToAdmin> messageToAdminList = messageToAdminMapper.selectByExample(example);
             for (MessageToAdmin messageToAdmin : messageToAdminList) {
                 JSONObject object = new JSONObject();

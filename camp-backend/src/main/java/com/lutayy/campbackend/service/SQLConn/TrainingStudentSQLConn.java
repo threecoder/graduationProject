@@ -1,6 +1,8 @@
 package com.lutayy.campbackend.service.SQLConn;
 
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
@@ -68,4 +70,99 @@ public class TrainingStudentSQLConn {
             return orderId;
         }
     }
+
+    //由培训id获取报名了培训的学员（包含检索条件：姓名，身份证，公司名称）
+    public static JSONArray getStudentByTrainingId(Integer pageSize, Integer currentPage,
+                                                   Integer trainingId, String studentName, String idCard, String company) {
+        JSONArray array = new JSONArray();
+        Connection conn = null;
+        Statement statement = null;
+        try {
+            conn = DriverManager.getConnection(URL, Name, Pwd);
+            statement = conn.createStatement();
+            String sql = "select s.student_idcard, s.student_name, s.student_phone, s.company from student s inner join training_re_student r on s.student_id=r.student_id " +
+                    "where r.is_invalid=0 and r.training_id="+trainingId;
+            if(studentName!=null && !studentName.equals("")){
+                sql+=" and s.student_name like '%" + studentName + "%'";
+            }
+            if(idCard!=null && !idCard.equals("")){
+                sql+=" and s.student_idcard="+idCard;
+            }
+            if(company!=null && !company.equals("")){
+                sql+=" and s.company like '%" + company + "%'";
+            }
+            sql += " order by r.begin_time DESC limit " + (currentPage - 1) * pageSize + "," + pageSize;
+
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()) {
+                JSONObject object=new JSONObject();
+                object.put("idNum", rs.getString("student_idcard"));
+                object.put("name", rs.getString("student_name"));
+                object.put("phone", rs.getString("student_phone"));
+                object.put("company", rs.getString("company"));
+                array.add(object);
+            }
+            return array;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return array;
+        }
+    }
+
+    //由培训id获取报名了培训的学员（包含检索条件：姓名，身份证，公司名称）
+    public static int countStudentByTrainingId(Integer trainingId, String studentName, String idCard, String company) {
+        int sum=0;
+        Connection conn = null;
+        Statement statement = null;
+        try {
+            conn = DriverManager.getConnection(URL, Name, Pwd);
+            statement = conn.createStatement();
+            String sql = "select count(s.student_id) c from student s inner join training_re_student r on s.student_id=r.student_id " +
+                    "where r.is_invalid=0 and r.training_id="+trainingId;
+            if(studentName!=null && !studentName.equals("")){
+                sql+=" and s.student_name like '%" + studentName + "%'";
+            }
+            if(idCard!=null && !idCard.equals("")){
+                sql+=" and s.student_idcard="+idCard;
+            }
+            if(company!=null && !company.equals("")){
+                sql+=" and s.company like '%" + company + "%'";
+            }
+
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()) {
+                sum = rs.getInt("c");
+            }
+            return sum;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return sum;
+        }
+    }
+
+    //由培训id获取没报名培训的学员（包含检索条件：姓名，身份证，公司名称）
+    public static List<Integer> getStudentListInTraining(Integer trainingId) {
+        List<Integer> studentList=new ArrayList<>();
+        Connection conn = null;
+        Statement statement = null;
+        try {
+            conn = DriverManager.getConnection(URL, Name, Pwd);
+            statement = conn.createStatement();
+            String sql = "select s.student_id from student s inner join training_re_student r on s.student_id=r.student_id " +
+                    "where r.is_invalid=0 and r.training_id="+trainingId;
+
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()) {
+                studentList.add(rs.getInt("student_id"));
+            }
+            return studentList;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return studentList;
+        }
+    }
+
 }

@@ -69,6 +69,16 @@ public class OrderAndPayController {
         return orderAndPayService.memberGetOrderList(memberId, orderNum, businessName, type, currentPage, pageSize);
     }
 
+    @RequestMapping("/student/getOrderList")
+    @ResponseBody
+    public Object getOrderList(@RequestParam("id") Integer studentId,
+                                     @RequestParam(value = "orderNum", required = false) String orderNum,
+                                     @RequestParam(value = "businessName", required = false) String businessName,
+                                     @RequestParam("currentPage") Integer currentPage,
+                                     @RequestParam("pageSize") Integer pageSize,
+                                     @RequestParam("type") String type) {
+        return orderAndPayService.studentGetOrderList(studentId, orderNum, businessName, type, currentPage, pageSize);
+    }
 
     @RequestMapping(value = {"/student/aliPay", "/member/aliPay"})
     @ResponseBody

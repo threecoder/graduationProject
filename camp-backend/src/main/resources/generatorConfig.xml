@@ -62,6 +62,12 @@
         <table tableName="training">
             <generatedKey  column="training_id"  sqlStatement="Mysql"  identity="TRUE"/>
         </table>
+        <table tableName="certificate">
+            <generatedKey  column="certificate_id"  sqlStatement="Mysql"  identity="TRUE"/>
+        </table>
+        <table tableName="certificate_image">
+            <generatedKey  column="image_id"  sqlStatement="Mysql"  identity="TRUE"/>
+        </table>
 
 
 
