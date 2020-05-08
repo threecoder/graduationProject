@@ -101,6 +101,10 @@ export default {
                 this.table.data = res.data.list;
                 this.form.total = res.data.data;
                 this.table.data.forEach(val => {
+                    val.operType =
+                        this.form.type == "modify"
+                            ? "证书信息变更"
+                            : "证书复审";
                     val.userType = val.userType == "student" ? "学员" : "会员";
                     val.success =
                         val.success == "success"
@@ -124,7 +128,7 @@ export default {
                 try {
                     let res = await cerApi.passOperLog({
                         operId: row.operId,
-                        type: row.operType
+                        type: row.operType == "证书复审" ? "recheck" : "modify"
                     });
                     this.$message.success("通过申请成功");
                     await this.getExamineLog();
@@ -144,7 +148,7 @@ export default {
                 try {
                     let res = await cerApi.rejectOperLog({
                         operId: row.operId,
-                        type: row.operType
+                        type: row.operType == "证书复审" ? "recheck" : "modify"
                     });
                     this.$message.success("拒绝申请成功");
                     await this.getExamineLog();
