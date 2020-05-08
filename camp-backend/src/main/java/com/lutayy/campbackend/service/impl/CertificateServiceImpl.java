@@ -189,6 +189,7 @@ public class CertificateServiceImpl implements CertificateService {
             List<CertificateChangeLog> changeLogs=changeLogMapper.selectByExample(changeLogExample);
             for(CertificateChangeLog changeLog:changeLogs){
                 JSONObject object=new JSONObject();
+                object.put("operId", changeLog.getLogId());
                 object.put("userName", changeLog.getOpUserName());
                 object.put("userType", changeLog.getOpUserType());
                 object.put("cerName", changeLog.getCertificateName());
@@ -551,8 +552,8 @@ public class CertificateServiceImpl implements CertificateService {
         AssociationText associationText = associationTextMapper.selectByExample(associationTextExample).get(0);
         contentMap.put("association_name", associationText.getItemContext());
         contentMap.put("issue_year", String.format("%tY",certificate.getCreateTime()));
-        contentMap.put("issue_month", String.format("%tY",certificate.getCreateTime()));
-        contentMap.put("issue_date", String.format("%tY",certificate.getCreateTime()));
+        contentMap.put("issue_month", String.format("%tm",certificate.getCreateTime()));
+        contentMap.put("issue_date", String.format("%td",certificate.getCreateTime()));
         if(certificate.getMemberName()!=null){
             temPath = mainPath + "/certificate/certificate_template_with_member.pdf";
             contentMap.put("member_name", certificate.getMemberName());
@@ -698,6 +699,10 @@ public class CertificateServiceImpl implements CertificateService {
             result.put("msg", "系统中找不到该证书");
             return result;
         }
+        if(certificate.getInChangeLine()){
+            result.put("msg", "该证书修改正在等待管理员审核，请勿重复申请");
+            return result;
+        }
         CertificateChangeLog log=new CertificateChangeLog();//新的修改申请纪录
         log.setCertificateName(certificate.getCertificateName());
         log.setOpUserName(studentMapper.selectByPrimaryKey(studentId).getStudentName());
@@ -750,6 +755,10 @@ public class CertificateServiceImpl implements CertificateService {
         }
         if(!certificate.getStudentId().equals(studentId)){
             result.put("msg", "该证书不属于当前用户！");
+            return result;
+        }
+        if(certificate.getInRecheckLine()){
+            result.put("msg", "该证书复审正在等待管理员审核，请勿重复申请");
             return result;
         }
         CertificateRecheckLog log=new CertificateRecheckLog();//新纪录
