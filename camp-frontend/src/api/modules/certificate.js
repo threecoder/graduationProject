@@ -41,7 +41,7 @@ const getOperList = (idType, par) => {
 }
 
 //获取证书文件
-const getCerFile = cerId => request(`${studentPrefix}/getCerFile`, 'get', { cerId });
+const getCerFile = cerId => request(`${studentPrefix}/getCerFile`, 'get', { cerId }, 'blob');
 
 export default {
     getCertificateList,

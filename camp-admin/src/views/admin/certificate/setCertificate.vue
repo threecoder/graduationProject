@@ -149,7 +149,7 @@ export default {
             this.getPublishedTraining();
         },
         setCer(row) {
-            this.setDia.trainingId = row.trainingId;
+            this.setDia.trainingId = row.id;
             this.setDia.flag = true;
         }
     }

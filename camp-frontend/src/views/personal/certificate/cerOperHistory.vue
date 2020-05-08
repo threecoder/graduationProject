@@ -89,8 +89,17 @@ export default {
         async getOperList() {
             try {
                 let res = await cerApi.getOperList(this.idType, this.form);
-                this.table.data = res.data.data;
-                this.form.total = res.data.total;
+                this.table.data = res.data.list;
+                this.form.total = res.data.data;
+                this.table.data.forEach(val => {
+                    val.userType = val.userType == "student" ? "学员" : "会员";
+                    val.success =
+                        val.success == "success"
+                            ? "通过"
+                            : val.success == "fail"
+                            ? "失败"
+                            : "未处理";
+                });
             } catch (error) {
                 this.$message.error(error.message);
             }

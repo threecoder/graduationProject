@@ -29,8 +29,6 @@
     </div>
 </template>
 <script>
-import jpg1 from "../../../../assets/images/module1.jpg";
-import jpg2 from "../../../../assets/images/module2.png";
 import upload from "../../../../components/upload.vue";
 import cerApi from "../../../../api/admin/certificate";
 export default {
@@ -41,16 +39,7 @@ export default {
         return {
             img: null,
             file: null,
-            cerList: [
-                {
-                    url: jpg1,
-                    name: "222"
-                },
-                {
-                    url: jpg2,
-                    name: "222"
-                }
-            ]
+            cerList: []
         };
     },
     mounted() {
@@ -133,7 +122,9 @@ export default {
     flex-wrap: wrap;
     justify-content: flex-start;
     align-items: center;
+    overflow: hidden;
     .single-container {
+        text-align: center;
         width: 30%;
         margin-right: 20px;
         p {

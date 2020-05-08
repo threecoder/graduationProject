@@ -11,8 +11,8 @@
                     <el-input v-model="form.userName" clearable placeholder="操作人名称"></el-input>
                 </el-form-item>
                 <el-form-item label="操作类型">
-                    <el-select v-model="form.type" clearable placeholder="证书操作的类型">
-                        <el-option label="证书变更" value="change"></el-option>
+                    <el-select v-model="form.type" placeholder="证书操作的类型">
+                        <el-option label="证书变更" value="modify"></el-option>
                         <el-option label="证书复审" value="recheck"></el-option>
                     </el-select>
                 </el-form-item>
@@ -24,7 +24,7 @@
         <div class="table-container">
             <m-table :tableConfig="table.config" :data="table.data" :loading="table.loading">
                 <el-table-column slot="oper" slot-scope="{params}" v-bind="params" align="center">
-                    <div slot-scope="{row}">
+                    <div slot-scope="{row}" v-if="row.success=='未处理'">
                         <el-button size="small" type="primary" @click="pass(row)">通过</el-button>
                         <el-button size="small" type="primary" @click="reject(row)">拒绝</el-button>
                     </div>
@@ -57,7 +57,8 @@ export default {
                 userName: null,
                 pageSize: 10,
                 currentPage: 1,
-                total: 100
+                total: 100,
+                type: "modify"
             },
             table: {
                 config: [
@@ -85,6 +86,9 @@ export default {
             }
         };
     },
+    mounted() {
+        this.getExamineLog();
+    },
     methods: {
         curChange(val) {
             this.form.currentPage = val;
@@ -93,7 +97,18 @@ export default {
         async getExamineLog() {
             this.table.loading = true;
             try {
-                let res = cerApi.getOperLogList(this.form);
+                let res = await cerApi.getOperLogList(this.form);
+                this.table.data = res.data.list;
+                this.form.total = res.data.data;
+                this.table.data.forEach(val => {
+                    val.userType = val.userType == "student" ? "学员" : "会员";
+                    val.success =
+                        val.success == "success"
+                            ? "通过"
+                            : val.success == "fail"
+                            ? "失败"
+                            : "未处理";
+                });
             } catch (error) {
                 this.$message.error(error.message);
             }

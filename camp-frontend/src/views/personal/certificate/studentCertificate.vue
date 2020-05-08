@@ -21,12 +21,7 @@
                     <div slot-scope="{row}" v-if="type">
                         <el-button size="mini" type="primary" @click="show(row)">查看</el-button>
                         <el-button size="mini" type="primary" @click="DLCer(row)">下载</el-button>
-                        <el-button
-                            v-if="hasCompany"
-                            size="mini"
-                            type="primary"
-                            @click="modify(row)"
-                        >修改</el-button>
+                        <el-button size="mini" type="primary" @click="modify(row)">校正</el-button>
                     </div>
                     <div slot-scope="{row}" v-else>
                         <el-button
@@ -62,7 +57,7 @@ import cerApi from "../../../api/modules/certificate";
 import infoApi from "../../../api/modules/info";
 import { download } from "../../../api/request";
 export default {
-    props: ["type"],
+    props: ["type"], //true-现有证书，false-过期证书
     components: {
         mTable,
         page,
@@ -93,15 +88,15 @@ export default {
                     }
                 ],
                 data: [
-                    {
-                        cerId: "111",
-                        name: "模拟证书",
-                        trainingName: "模拟培训",
-                        effectiveLength: "365天",
-                        beginTime: "2020-02-02 20:02",
-                        endTime: "2021-02-02 20:20",
-                        canRecheck: true
-                    }
+                    // {
+                    //     cerId: "111",
+                    //     name: "模拟证书",
+                    //     trainingName: "模拟培训",
+                    //     effectiveLength: "365天",
+                    //     beginTime: "2020-02-02 20:02",
+                    //     endTime: "2021-02-02 20:20",
+                    //     canRecheck: true
+                    // }
                 ],
                 loading: false
             },
@@ -147,6 +142,7 @@ export default {
         async show(row) {
             try {
                 let res = await cerApi.getCerFile(row.cerId);
+                console.log(res);
                 let blob = new Blob([res.data], { type: "application/pdf" });
                 let url = URL.createObjectURL(blob);
                 window.open(url);
@@ -163,8 +159,25 @@ export default {
             }
         },
         modify(row) {
-            this.cerInfo.cerId = row.cerId;
-            this.cerInfo.flag = true;
+            this.$confirm(
+                "确定要发起证书校正吗？如有需要校正的地方才会进行后续流程",
+                "提示",
+                {
+                    cancelButtonText: "取消",
+                    confirmButtonText: "确定",
+                    type: "warning"
+                }
+            ).then(async () => {
+                try {
+                    let res = await cerApi.modifyCer(0, { cerId: row.cerId });
+                    this.$alert(res.msg, "提示", {
+                        type: "warning",
+                        confirmButtonText: "我知道了"
+                    });
+                } catch (error) {
+                    this.$message.error(error.message);
+                }
+            });
         },
         examine(row) {
             this.$confirm(
