@@ -156,6 +156,7 @@ public class TrainingServiceImpl implements TrainingService {
             data0.put("viewers", studentNums);
             data0.put("url", training.getTrainingPic());
             data0.put("level", training.getLevel());
+            data0.put("postTime", training.getPostTime());
             list.add(data0);
             sum++;
             if (sum == pageSize) {
