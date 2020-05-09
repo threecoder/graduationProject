@@ -118,15 +118,15 @@ export default {
         return {
             // 表单的内容必须初始化
             info: {
-                idNum: "111111",
-                name: "京津冀",
-                email: "101@qq.com",
-                position: "职务",
+                idNum: "",
+                name: "",
+                email: "",
+                position: "",
                 province: 0,
                 city: 0,
                 area: 0,
-                zone: "哈哈哈哈",
-                phone: "1571111",
+                zone: "",
+                phone: "",
                 sex: 0
             },
             rules: {
@@ -202,7 +202,6 @@ export default {
             areaList: ["请选择"]
         };
     },
-    beforeMount() {},
     mounted() {
         // 这里必须放在mounted中，不然h5，支付宝小程序等会找不到this.$refs.form
         this.$refs.form.setRules(this.rules);
@@ -229,7 +228,6 @@ export default {
                 data.province = this.provinceList.indexOf(data.province);
                 data.city = this.cityList.indexOf(data.city);
                 data.area = this.areaList.indexOf(data.area);
-                data.sex = 1;
                 this.info = { ...data };
             } catch (error) {
                 console.log(error);

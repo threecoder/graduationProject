@@ -231,11 +231,9 @@ export default {
             try {
                 request("/campback/logout", "get").then(res => {
                     this.$message.success("注销成功");
-                    this.$router.push("/login");
                 });
-            } catch (error) {
-                this.$router.push("/login");
-            }
+            } catch (error) {}
+            this.$router.push("/login");
             this.$store.commit("removeState");
         },
         toMessage() {

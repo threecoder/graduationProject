@@ -100,7 +100,8 @@ export default {
 					res = await activityApi.getJoinableActivities(this.par);
 					this.joinableList = res.data ? res.data.list : [];
 				}
-				if (res.data.list.length == 0) {
+				console.log("活动",res)
+				if (!res.data || res.data.list.length == 0) {
 					this.hasMore = 'noMore';
 				} else {
 					this.hasMore = 'more';

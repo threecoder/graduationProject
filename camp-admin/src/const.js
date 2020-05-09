@@ -38,9 +38,11 @@ export const msgTypeList = [
     { label: "活动报名", key: "signedActivity" },
     { label: "培训发布", key: "newTraining" },
     { label: "培训报名", key: "signedTraining" },
+    { label: "考试发布", key: "examPublish" },
     { label: "成绩审核", key: "gradeExamine" },
-    { label: "证书审核", key: "certificateExamine" },
-    { label: "发放证书", key: "grantCertificate" }
+    { label: "证书复审", key: "cerRecheck" },
+    { label: "证书校正", key: "cerChange" },
+    { label: '会员续费', key: 'memberSubscription' }
 ]
 
 //订单类别

@@ -18,12 +18,16 @@ const SALT = "6e6s4xswqsD25WEWQ3sShLJOK";
  * @responseType    返回类型
  */
 export function request(url, type, data = {}, responseType = "json") {
-	// if()
+	
 	return new Promise((resolve, reject) => {
 		let networkStatus = getApp().globalData.network;
 		if (networkStatus == "none") {
 			throw new Error("当前网络异常，请重试");
 		}
+		uni.showLoading({
+			title: '加载中',
+			mask: true
+		});
 		uni.request({
 			method: type.toUpperCase(), //请求类型
 			url: baseUrl + url, //接收请求的接口
@@ -36,8 +40,10 @@ export function request(url, type, data = {}, responseType = "json") {
 			},
 			responseType //浏览器返回的数据类型
 		}).then(res => {
-			console.log(url, res);
+			console.log(url);
+			console.log(res);
 			let response = res[1];
+			uni.hideLoading();
 			if (response) {
 				let cook = response.header['Set-Cookie'];
 				if (cook) {
@@ -66,10 +72,10 @@ export function request(url, type, data = {}, responseType = "json") {
 					resolve(response);
 				}
 			} else {
-				console.log("出错啦", url);
 				throw new Error("请求数据超时");
 			}
 		}).catch(e => {
+			uni.hideLoading();
 			reject(e);
 		})
 	});

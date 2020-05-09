@@ -106,12 +106,28 @@
         }
         ,{
             "path" : "pages/personal/certificate/certificate",
-            "style" : {}
+            "style" : {
+				"navigationBarTitleText": "我的证书"
+			}
         }
         ,{
-            "path" : "pages/personal/setting/setting",
-            "style" : {}
+            "path" : "pages/personal/setting/password",
+            "style" : {
+				"navigationBarTitleText": "修改密码"
+			}
         }
+        ,{
+            "path" : "pages/personal/message/message",
+            "style" : {
+				"navigationBarTitleText": "我的消息"
+			}
+        },
+		{
+			"path":"pages/personal/message/msgDetail",
+			"style": {
+				"navigationBarTitleText":"消息详情"
+			}
+		}
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "#fff",

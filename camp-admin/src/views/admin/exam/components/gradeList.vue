@@ -160,6 +160,7 @@ export default {
                 data.ids = this.form.selected.map(val => val.id);
                 let res = await adminExamApi.submitGradeList(data);
                 this.$message.success("提交审核成功");
+                this.getGradeList();
             } catch (error) {
                 this.$message.error(error.message);
             }

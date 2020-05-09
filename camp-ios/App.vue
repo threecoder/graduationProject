@@ -7,7 +7,6 @@ import { request, Encrypt } from './api/request.js';
 export default {
 	data() {
 		return {
-			res: null
 		};
 	},
 	globalData: {
@@ -34,19 +33,7 @@ export default {
 	},
 	onShow: function() {
 		console.log('App Show');
-		let data = {
-			username: '15521064789',
-			password: Encrypt('123456')
-		};
-		uni.removeStorageSync('user');
-		// request('/login', 'post', data)
-		// 	.then(res => {
-		// 		this.res = res;
-		// 		console.log('登录', res);
-		// 	})
-		// 	.catch(e => {
-
-		// 	});
+		this.$store.commit('init');
 	},
 	onHide: function() {
 		console.log('App Hide');

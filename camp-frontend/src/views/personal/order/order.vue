@@ -170,7 +170,7 @@ export default {
                 serverPort: "8888"
             };
             try {
-                let res = await orderApi.aliPay(data);
+                let res = await orderApi.aliPay(this.idType, data);
                 this.$_putForm(res.data);
                 console.log("支付返回", res);
             } catch (error) {

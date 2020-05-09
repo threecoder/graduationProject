@@ -53,7 +53,7 @@ import page from "../../../../components/page.vue";
 import couponApi from "../../../../api/admin/coupon";
 export default {
     props: {
-        couponId: String
+        couponId: String | Number
     },
     components: {
         mTable,

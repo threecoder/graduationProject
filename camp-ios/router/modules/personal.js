@@ -1,9 +1,9 @@
 //功能页面
 const funPath = [
-	//设置
+	//修改密码
 	{
-		"path" : "/pages/personal/setting/setting",
-		"name": 'setting'
+		"path": "/pages/personal/setting/password",
+		"name": 'password'
 	},
 	//登录
 	{
@@ -52,6 +52,15 @@ const funPath = [
 	{
 		path: '/pages/personal/certificate/certificate',
 		name: 'certificate'
+	},
+	//我的消息
+	{
+		path: '/pages/personal/message/message',
+		name: 'message'
+	},
+	{
+		path: '/pages/personal/message/msgDetail',
+		name: 'msgDetail'
 	}
 ]
 

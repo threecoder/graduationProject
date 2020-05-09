@@ -28,9 +28,11 @@ export const msgTypeList = [
     { path: "/enrolledActivities", label: "活动报名", key: "signedActivity" },
     { path: "/enrolableTraining", label: "培训发布", key: "newTraining" },
     { path: "/enrolledTraining", label: "培训报名", key: "signedTraining" },
-    { path: "/", label: "成绩审核", key: "gradeExamine" },
-    { path: "/cerOperHistory", label: "证书审核", key: "certificateExamine" },
-    { path: "/certificate", label: "发放证书", key: "grantCertificate" }
+    { path: "/examTodo", label: "考试发布", key: "examPublish" },
+    { path: "/examDone", label: "成绩审核", key: "gradeExamine" },
+    { path: "/cerOperHistory", label: "证书复审", key: "cerRecheck" },
+    { path: "/cerOperHistory", label: "证书校正", key: "cerChange" },
+    { path: "/order", label: '会员续费', key: 'memberSubscription' }
 ]
 
 export const orderTypeList = [

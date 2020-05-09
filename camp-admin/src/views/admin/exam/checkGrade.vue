@@ -145,7 +145,7 @@ export default {
                 this.table.loading = true;
                 try {
                     let res = await examApi.approvalSingleRecord(row.id);
-                    this.$message.success("审批成功！");
+                    this.$message.success(res.msg);
                     this.getCheckList();
                 } catch (e) {
                     this.$message.error(e.message);
@@ -161,7 +161,7 @@ export default {
             }).then(async ({ value }) => {
                 try {
                     let data = {
-                        id: row.id,
+                        reportId: row.id,
                         tip: value
                     };
                     let res = await examApi.refuseSingleRecord(data);
@@ -186,7 +186,7 @@ export default {
                 try {
                     let ids = this.selected.map(val => val.id);
                     let res = await examApi.approvalManyRecords(ids);
-                    this.$message.success("审批成功！");
+                    this.$message.success(res.msg);
                     this.getCheckList();
                 } catch (e) {
                     this.$message.error(e.message);

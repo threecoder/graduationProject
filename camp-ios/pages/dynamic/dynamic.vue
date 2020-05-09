@@ -7,12 +7,9 @@
 					<swiper class="swiper" indicator-dots autoplay circular :interval="2000" :duration="500">
 						<swiper-item v-for="(item, i) in swiperList" :key="i" @click="toDetail(item)">
 							<text>{{ item.title }}</text>
-							<image src="../../assets/images/index1.jpg" mode="aspectFill"></image>
-							<!-- <image :src="item.url" mode="aspectFill"></image> -->
+							<!-- <image src="../../assets/images/index1.jpg" mode="aspectFill"></image> -->
+							<image :src="item.url" mode="aspectFill"></image>
 						</swiper-item>
-						<swiper-item><image src="../../assets/images/index1.jpg" mode="aspectFill"></image></swiper-item>
-						<swiper-item><image src="../../assets/images/index2.jpg" mode="aspectFill"></image></swiper-item>
-						<swiper-item><image src="../../assets/images/index3.jpg" mode="aspectFill"></image></swiper-item>
 					</swiper>
 				</view>
 				<view v-show="contentIndex === 0"><single v-for="(item, i) in newsList" :key="i" :item="item" /></view>
@@ -24,7 +21,6 @@
 </template>
 
 <script>
-import uniNavBar from '../../components/uni-nav-bar/uni-nav-bar.vue';
 import seg from '../../components/seg/seg.vue';
 import single from './components/singleDynamic.vue';
 import loadMore from '../../components/load-more/load-more.vue';
@@ -36,7 +32,6 @@ import { getNetwork } from '../../network.js';
 import { baseUrl } from '../../const';
 export default {
 	components: {
-		uniNavBar,
 		seg,
 		single,
 		loadMore
@@ -48,13 +43,13 @@ export default {
 			segItem: ['新闻', '动态'],
 			isFixed: false,
 			swiperList: [
-				{
-					id: '111',
-					title: '去年今日韦德生涯最后一舞，香蕉船兄弟场边庆祝韦德三双',
-					date: '2016-10-10',
-					url: '',
-					type: 'news'
-				}
+				// {
+				// 	id: '111',
+				// 	title: '去年今日韦德生涯最后一舞，香蕉船兄弟场边庆祝韦德三双',
+				// 	date: '2016-10-10',
+				// 	url: '',
+				// 	type: 'news'
+				// }
 			],
 			newsList: [
 				// {
@@ -94,6 +89,7 @@ export default {
 	},
 	mounted() {
 		getNetwork();
+		this.getSwiperList();
 		this.getNewsList('new');
 	},
 	async onPullDownRefresh() {
@@ -161,7 +157,9 @@ export default {
 		async getSwiperList() {
 			try {
 				let res = await indexApi.getCarouselList();
-				this.newsList = res.data;
+				console.log('轮播图', res);
+				this.$_replaceSrc(res.data);
+				this.swiperList = res.data;
 			} catch (e) {
 				toast(e.message);
 			}
