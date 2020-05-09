@@ -636,11 +636,11 @@ public class NewsServiceImpl implements NewsService {
             result.put("msg", "系统中找不到该动态！");
             return result;
         }
-        JSONObject info = new JSONObject();
-        JSONArray ids = new JSONArray();
-        info.put("title", news.getTitle());
-        info.put("date", news.getPostTime());
-        info.put("desc", news.getDescription());
+
+        JSONArray urlList = new JSONArray();
+        data.put("title", news.getTitle());
+        data.put("date", news.getPostTime());
+        data.put("desc", news.getDescription());
         NewsImgExample newsImgExample = new NewsImgExample();
         newsImgExample.createCriteria().andNewsIdEqualTo(newsId).andIsInvalidEqualTo(false);
         newsImgExample.setOrderByClause("img_news_index ASC");
@@ -652,15 +652,15 @@ public class NewsServiceImpl implements NewsService {
         for (int i = 0; i < contentArray.size() - 1; i++) {
             content.append(contentArray.get(i));
             if (newsImgs.get(i) != null) {
-                content.append("<img class=\"my-img\" src=\"" + IMG_HOST + newsImgs.get(i).getImgPath() + "\">");
-                ids.add(newsImgs.get(i).getImgId());
+                urlList.add(newsImgs.get(i).getImgPath());
             }
         }
         content.append(contentArray.get(contentArray.size() - 1));
 
-        info.put("content", content.toString());
-        data.put("info", info);
-        data.put("ids", ids);
+        data.put("content", content.toString());
+        data.put("type", type);
+        data.put("placeholder", news.getImgPlaceholder());
+        data.put("urlList", urlList);
         result.put("data", data);
         result.put("code", "success");
         result.put("msg", "内容获取成功！");
