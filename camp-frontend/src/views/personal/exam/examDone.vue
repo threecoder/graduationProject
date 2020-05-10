@@ -69,7 +69,7 @@ export default {
     methods: {
         async getExamList() {
             try {
-                let res = await examApi.getDoneExam();
+                let res = await examApi.getDoneExam(this.form);
                 this.examList = res.data.list;
                 this.form.total = res.data.total;
             } catch (error) {

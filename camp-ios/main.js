@@ -4,7 +4,6 @@ import router from './router/index';
 import store from "./store.js";
 
 Vue.config.productionTip = false
-console.log(App);
 App.mpType = 'app'
 
 const app = new Vue({

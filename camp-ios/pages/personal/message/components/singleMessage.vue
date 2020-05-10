@@ -1,31 +1,25 @@
 <template>
 	<view class="vote-container">
-		<view class="vote">
+		<view class="vote" @click="detail">
 			<view class="index">
 				<view class="type">
-					<text>难度：{{ item.level }}</text>
+					<text>{{ item.read }}</text>
 				</view>
 			</view>
 			<view class="name">
-				<text class="gray">培训名称：</text>
 				<text>{{ item.title }}</text>
 			</view>
 			<view class="other">
 				<view class="other-item">
-					<text class="tip">培训描述：</text>
-					<text class="tip-text">{{ item.abstract }}</text>
+					<text class="tip">内容：</text>
+					<text class="tip-text">{{ item.shortMsg }}</text>
 				</view>
 				<view class="other-item">
-					<text class="tip">参与人数：</text>
-					<text class="tip-text">{{ item.viewers }}</text>
-				</view>
-				<view class="other-item">
-					<text class="tip">发布时间：</text>
-					<text class="tip-text">{{ item.postTime }}</text>
+					<text class="tip">时间：</text>
+					<text class="tip-text">{{ item.time }}</text>
 				</view>
 			</view>
 		</view>
-		<view class="oper"><button class="button-small" @click="detail">详情</button></view>
 	</view>
 </template>
 
@@ -34,15 +28,15 @@
 // import { toast } from '../.././../../assets/js/commom';
 export default {
 	props: {
-		item: Object,
-		status: String
+		item: Object
 	},
 	mounted() {
 		console.log(this.item);
 	},
 	methods: {
 		detail() {
-			this.$Router.push({ name: 'training' });
+			let { id, type } = this.item;
+			this.$Router.push({ name: 'msgDetail', query: { id, type } });
 		}
 	}
 };

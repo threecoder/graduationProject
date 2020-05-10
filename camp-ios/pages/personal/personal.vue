@@ -1,8 +1,8 @@
 <template>
 	<view>
 		<view class="my-top"></view>
-		<view class="person-info" hover-class="person-info--hover">
-			<view class="item" @click="settingOrLogin">
+		<view class="person-info" hover-class="person-info--hover" @click="settingOrLogin">
+			<view class="item">
 				<text v-if="name">
 					<text class="name">{{ name }}</text>
 					<text class="type">{{ type }}</text>
@@ -12,14 +12,10 @@
 			<view class="item item-arrow"><uni-icons :size="20" class="my-arrow" color="#bbb" type="arrowright" /></view>
 		</view>
 		<uni-list>
-			<uni-list-item
-				v-for="(item, i) in list"
-				:key="i"
-				:title="item.title"
-				@click="to(item)"
-				:show-extra-icon="true"
-				:extra-icon="{ color: '#4cd964', size: '16', type: 'info' }"
-			></uni-list-item>
+			<template v-for="(item, i) in list">
+				<uni-list-item v-if="item.title != '我的消息'" :key="i" :title="item.title" @click="to(item)"></uni-list-item>
+				<uni-list-item v-else :key="list.length" :badgeText="numString" title="我的消息" :showBadge="true" badgeType="warning" @click="to(item)"></uni-list-item>
+			</template>
 		</uni-list>
 	</view>
 </template>
@@ -28,6 +24,9 @@
 import uniIcons from '../../components/uni-icons/uni-icons.vue';
 import uniList from '../../components/uni-list/uni-list.vue';
 import uniListItem from '../../components/uni-list-item/uni-list-item.vue';
+import msgApi from '../../api/modules/message.js';
+import accountApi from '../../api/modules/account.js';
+import { toast } from '../../assets/js/commom.js';
 export default {
 	components: {
 		uniIcons,
@@ -64,15 +63,34 @@ export default {
 				{
 					title: '我的订单',
 					name: 'order'
+				},
+				{
+					title: '我的消息',
+					name: 'message'
 				}
 			],
 			type: '学员'
 		};
 	},
+	watch: {
+		'$Router.path'(val) {
+			console.log('personal', val);
+			this.getUnreadNum();
+		}
+	},
+	onShow() {
+		console.log('展示');
+		if (this.$store.getters.isLogin) {
+			this.getUnreadNum();
+		}
+	},
 	computed: {
 		name: function() {
-			console.log(this.$store.getters.userName);
+			console.log('baneeeee', this.$store.state);
 			return this.$store.getters.userName;
+		},
+		numString: function() {
+			return this.$store.getters.msgNum.toString();
 		}
 	},
 
@@ -81,10 +99,48 @@ export default {
 			this.$Router.push({ name: item.name });
 		},
 		settingOrLogin() {
-			if (this.name) {
+			if (!this.name) {
 				this.$Router.push({ name: 'login' });
 			} else {
-				this.$Router.push({ name: 'setting' });
+				// this.$Router.push({ name: 'setting' });
+				uni.showActionSheet({
+					itemList: ['修改密码', '退出登录'],
+					itemColor: '#409EFF',
+					success: res => {
+						if (res.tapIndex == 0) {
+							this.$Router.push({ name: 'password' });
+						} else {
+							this.logout();
+						}
+					},
+					fail: function(res) {
+						console.log(res.errMsg);
+					}
+				});
+			}
+		},
+		async logout() {
+			try {
+				let res = await accountApi.logout();
+			} catch (e) {
+				//TODO handle the exception
+			}
+			toast('退出账号成功');
+			this.$store.commit('removeUser');
+			this.$Router.push({ name: 'login' });
+		},
+		async getUnreadNum() {
+			try {
+				let time = this.$store.getters.msgTime;
+				let newTime = new Date().getTime();
+				if (newTime - time > 20000) {
+					this.$store.commit('setMsgTime', { time: newTime });
+					let res = await msgApi.getUnReadMsgNum();
+					this.$store.commit('setMsgNum', { msgNum: res.data });
+				}
+			} catch (e) {
+				toast(e.message);
+				//TODO handle the exception
 			}
 		}
 	}

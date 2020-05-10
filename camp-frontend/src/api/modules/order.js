@@ -14,8 +14,13 @@ const getOrderList = (idType, par) => {
 const getCouponList = par => request(`${memberPrefix}/getCouponList`, 'get', par);
 
 //会员支付宝支付
-const aliPay = data => request(`${memberPrefix}/aliPay`, 'post', data);
-
+const aliPay = (idType, data) => {
+    if (idType == 0) {
+        return request(`${studentPrefix}/aliPay`, 'post', data);
+    } else {
+        return request(`${memberPrefix}/aliPay`, 'post', data);
+    }
+}
 export default {
     getOrderList,
     getCouponList,

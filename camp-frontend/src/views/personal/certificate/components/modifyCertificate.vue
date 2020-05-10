@@ -57,7 +57,7 @@ export default {
             }
         },
         cancel() {
-            this.$emit("cacel");
+            this.$emit("cancel");
         },
         async modify() {
             try {

@@ -79,17 +79,6 @@ export default {
             }
             this.loading = true;
             try {
-                // this.$_handleContent();
-                // let data = new FormData();
-                // data.append("placeholder", imgStr);
-                // data.append("title", this.form.title);
-                // data.append("desc", this.form.desc);
-                // data.append("content", this.form.content);
-                // data.append("type", this.form.type);
-                // this.imgList.forEach(val => {
-                //     data.append("imgList", val, val.name);
-                // });
-
                 if (this.noticeId) {
                     form.noticeId = this.noticeId;
                     await indexApi.modifyNotice(form);
@@ -97,7 +86,7 @@ export default {
                     await indexApi.addNotice(form);
                 }
                 this.$message.success("编辑公告成功");
-                this.$router.push("/notice");
+                this.$emit("refresh");
             } catch (error) {
                 this.$message.error(error.message);
             }

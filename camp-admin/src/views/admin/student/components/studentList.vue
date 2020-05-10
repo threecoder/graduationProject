@@ -13,7 +13,6 @@
                 </el-form-item>
                 <el-form-item label="公司" label-position="top">
                     <el-select v-model="form.company" clearable>
-                        <el-option :value="0" label="无挂靠"></el-option>
                         <el-option
                             v-for="(item,i) in companyList"
                             :value="item.id"

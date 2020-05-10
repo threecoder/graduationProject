@@ -49,7 +49,7 @@
             :close-on-press-escape="false"
             :before-close="beforeClose"
         >
-            <notice-edit :noticeId="dia.noticeId" @cancel="beforeClose" />
+            <notice-edit :noticeId="dia.noticeId" @cancel="beforeClose" @refresh="getList" />
         </el-dialog>
     </div>
 </template>
@@ -58,6 +58,7 @@ import mTable from "../../../components/mTable.vue";
 import page from "../../../components/page.vue";
 import noticeEdit from "./components/noticeEdit.vue";
 import indexApi from "../../../api/admin/index";
+import { formatDateAndTime } from '../../../assets/js/util';
 export default {
     components: {
         mTable,
@@ -115,7 +116,9 @@ export default {
         async getList() {
             this.table.loading = true;
             try {
-                let res = await indexApi.getNoticeList(this.form);
+                let par = {...this.form};
+                par.date = formatDateAndTime(par.date);
+                let res = await indexApi.getNoticeList(par);
                 this.table.data = res.data.list;
                 // this.table.data.forEach(val => {
                 //     val.type = val.type == "dynamic" ? "动态" : "新闻";

@@ -27,19 +27,15 @@ const router = new Router({
 });
 
 router.beforeEach(async (to, from, next) => {
-	console.log("拦截")
-	app.$store.commit("init");
-	console.log(to.name, canGoModule.indexOf(to.name));
 	if (canGoModule.indexOf(to.name) !== -1) {
 		next();
 	} else {
-		//验证cookie是否到期，到期重新登录，否则直接跳转
-		let expire = app.$store.getters.expire;
-		let time = new Date().getTime();
-		if (time > expire) {
-			console.log("cookie过期")
+		app.$store.commit("init");
+		console.log("路由拦截", app.$store.state)
+		if (!app.$store.getters.isLogin) {
+			console.log("cookie过期或没有cookie")
 			let account = app.$store.getters.account;
-			if (account.userName) {
+			if (account.username) {
 				console.log("有账号")
 				let res = await accountApi.login(account);
 				let user = {

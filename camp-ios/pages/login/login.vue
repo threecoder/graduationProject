@@ -50,7 +50,7 @@ export default {
 				if (this.name) {
 					this.$Router.push({ name: this.name });
 				} else {
-					uni.redirectTo({ url: '/pages/personal/personal' });
+					uni.switchTab({ url: '/pages/personal/personal' });
 				}
 			} catch (e) {
 				toast(e.message);
