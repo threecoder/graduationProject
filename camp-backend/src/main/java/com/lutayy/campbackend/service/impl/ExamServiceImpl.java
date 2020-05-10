@@ -85,7 +85,7 @@ public class ExamServiceImpl implements ExamService {
             return result;
         }
         data.put("total", exams.size());
-        data.put("list", exams.subList((currentPage - 1) * pageSize, currentPage * pageSize));
+        data.put("list", exams.subList((currentPage - 1) * pageSize, currentPage * pageSize<=exams.size()?currentPage * pageSize:exams.size()));
         result.put("code", "success");
         result.put("data", data);
         result.put("msg", "查询成功");
@@ -138,8 +138,7 @@ public class ExamServiceImpl implements ExamService {
             exams.getJSONObject(i).put("grade", null);
         }
         data.put("total", exams.size());
-//        data.put("list", exams.subList((currentPage - 1) * pageSize, currentPage * pageSize));
-        data.put("list", exams.subList(0, exams.size()));
+        data.put("list", exams.subList((currentPage - 1) * pageSize, currentPage * pageSize<=exams.size()?currentPage * pageSize:exams.size()));
         result.put("code", "success");
         result.put("data", data);
         result.put("msg", "查询成功");
@@ -166,7 +165,7 @@ public class ExamServiceImpl implements ExamService {
             return result;
         }
         data.put("total", exams.size());
-        data.put("list", exams.subList((currentPage - 1) * pageSize, currentPage * pageSize));
+        data.put("list", exams.subList((currentPage - 1) * pageSize, currentPage * pageSize<=exams.size()?currentPage * pageSize:exams.size()));
         result.put("code", "success");
         result.put("data", data);
         result.put("msg", "查询成功");

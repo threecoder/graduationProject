@@ -82,12 +82,6 @@ public class ActivityServiceImpl implements ActivityService {
         activityExample.setOffset((currentPage-1)*pageSize);
         activityExample.setLimit(pageSize);
         List<Activity> activities = activityMapper.selectByExample(activityExample);
-        if (activities.size() == 0) {
-            result.put("code", "success");
-            result.put("msg", "暂无可报名活动");
-            result.put("data", null);
-            return result;
-        }
 
         for (Activity activity : activities) {
             JSONObject object = new JSONObject();

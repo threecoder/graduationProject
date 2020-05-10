@@ -253,12 +253,7 @@ public class TrainingServiceImpl implements TrainingService {
         trainingExample.setOffset((currentPage - 1) * pageSize);
         trainingExample.setLimit(pageSize);
         List<Training> trainings = trainingMapper.selectByExample(trainingExample);
-        if (trainings.size() == 0) {
-            result.put("code", "success");
-            result.put("msg", "无可报名培训");
-            result.put("data", null);
-            return result;
-        }
+
         for (Training training : trainings) {
             JSONObject object = new JSONObject();
             object.put("id", training.getTrainingId());

@@ -21,7 +21,7 @@ public class ActivityController {
     @ResponseBody
     public Object getJoinableActivities(@RequestParam("pageSize") Integer pageSize,
                                         @RequestParam("currentPage") Integer currentPage,
-                                        @RequestParam("name") String name){
+                                        @RequestParam(value = "name", required = false) String name){
         return activityService.getJoinableActivities(pageSize, currentPage, name);
     }
 
