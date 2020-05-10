@@ -569,6 +569,14 @@ public class ExamServiceImpl implements ExamService {
             return result;
         }
 
+        ExamExample examExample=new ExamExample();
+        examExample.createCriteria().andTrainingIdEqualTo(trainingId);
+        if(examMapper.countByExample(examExample)>0){
+            result.put("code", "fail");
+            result.put("msg", "创建失败！所选培训已发布考试");
+            return result;
+        }
+
         Exam exam = new Exam();
         exam.setExamName(name);
         exam.setExamPass(pass);
@@ -1187,6 +1195,7 @@ public class ExamServiceImpl implements ExamService {
         // TODO 发送站内信给对应的管理员
         MessageText messageText = new MessageText();
         messageText.setSendTime(new Date());
+        messageText.setType("checkGrade");
         messageText.setMessage("审核队列更新，新增" + totalNum + "条审核请求！");
         messageText.setTitle("审核队列更新，新增" + totalNum + "条审核请求！分别是：" + sendReportStr);
         messageTextMapper.insertSelective(messageText);

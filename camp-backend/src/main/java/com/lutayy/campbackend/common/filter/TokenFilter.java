@@ -42,7 +42,7 @@ public class TokenFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) resp;
         String url = request.getRequestURI();
         String contentType = request.getContentType();
-        if (url.contains("/register") || url.contains("/login") || url.contains("/index") || url.contains("/aliPayNotify") || url.contains(".") || url.equals("/") || (contentType!=null && contentType.contains("multipart/form-data"))) {
+        if (url.contains("/register") || url.contains("/login") ||  url.contains("/logout") || url.contains("/index") || url.contains("/aliPayNotify") || url.contains(".") || url.equals("/") || (contentType!=null && contentType.contains("multipart/form-data"))) {
             chain.doFilter(request, response);
             return;
         }

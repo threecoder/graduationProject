@@ -871,6 +871,11 @@ public class TrainingServiceImpl implements TrainingService {
             return result;
         }
         for (Training training : trainings) {
+            ExamExample examExample=new ExamExample();
+            examExample.createCriteria().andTrainingIdEqualTo(training.getTrainingId());
+            if(examMapper.countByExample(examExample)>0){
+                continue;
+            }
             JSONObject object = new JSONObject();
             object.put("label", training.getTrainingName());
             object.put("id", training.getTrainingId());

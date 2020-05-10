@@ -393,6 +393,7 @@ public class NewsServiceImpl implements NewsService {
         news.setContent(content);
         news.setDescription(desc);
         news.setTitle(title);
+        news.setType("notice");
         news.setPostTime(new Date());
         newsMapper.insertSelective(news);
         result.put("code", "success");
@@ -646,18 +647,12 @@ public class NewsServiceImpl implements NewsService {
         newsImgExample.setOrderByClause("img_news_index ASC");
         List<NewsImg> newsImgs = newsImgMapper.selectByExample(newsImgExample);
 
-        List<String> contentArray = StrUtil.cutStringByPlaceHolder(news.getContent(), news.getImgPlaceholder());
-
-        StringBuilder content = new StringBuilder();
-        for (int i = 0; i < contentArray.size() - 1; i++) {
-            content.append(contentArray.get(i));
-            if (newsImgs.get(i) != null) {
-                urlList.add(newsImgs.get(i).getImgPath());
-            }
+        for (int i = 0; i < newsImgs.size(); i++) {
+            urlList.add(IMG_HOST+newsImgs.get(i).getImgPath());
         }
-        content.append(contentArray.get(contentArray.size() - 1));
 
-        data.put("content", content.toString());
+        data.put("id", news.getNewsId());
+        data.put("content", news.getContent());
         data.put("type", type);
         data.put("placeholder", news.getImgPlaceholder());
         data.put("urlList", urlList);
