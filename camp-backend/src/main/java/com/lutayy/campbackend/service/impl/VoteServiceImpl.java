@@ -139,6 +139,7 @@ public class VoteServiceImpl implements VoteService {
         VoteOptionExample voteOptionExample = new VoteOptionExample();
         VoteOptionExample.Criteria criteria = voteOptionExample.createCriteria();
         criteria.andVoteIdEqualTo(voteId);
+        voteOptionExample.setOrderByClause("option_id ASC");
         List<VoteOption> voteOptions = voteOptionMapper.selectByExample(voteOptionExample);
         //计算投票总参与数
         long sum = 0;
@@ -287,6 +288,7 @@ public class VoteServiceImpl implements VoteService {
         VoteOptionExample voteOptionExample = new VoteOptionExample();
         VoteOptionExample.Criteria criteria = voteOptionExample.createCriteria();
         criteria.andVoteIdEqualTo(voteId);
+        voteOptionExample.setOrderByClause("option_id ASC");
         List<VoteOption> voteOptions = voteOptionMapper.selectByExample(voteOptionExample);
         for (VoteOption voteOption : voteOptions) {
             options.add(voteOption.getOptionText());
@@ -304,6 +306,7 @@ public class VoteServiceImpl implements VoteService {
         int voteId = jsonObject.getInteger("voteId");
         VoteOptionExample voteOptionExample = new VoteOptionExample();
         voteOptionExample.createCriteria().andVoteIdEqualTo(voteId);
+        voteOptionExample.setOrderByClause("option_id ASC");
         List<VoteOption> voteOptions = voteOptionMapper.selectByExample(voteOptionExample);
 
         JSONArray array = jsonObject.getJSONArray("data");
@@ -418,6 +421,7 @@ public class VoteServiceImpl implements VoteService {
         int voteId = jsonObject.getInteger("voteId");
         VoteOptionExample voteOptionExample = new VoteOptionExample();
         voteOptionExample.createCriteria().andVoteIdEqualTo(voteId);
+        voteOptionExample.setOrderByClause("option_id ASC");
         List<VoteOption> voteOptions = voteOptionMapper.selectByExample(voteOptionExample);
 
         JSONArray array = jsonObject.getJSONArray("data");
@@ -468,6 +472,7 @@ public class VoteServiceImpl implements VoteService {
             object.put("id", vote.getVoteId());
             object.put("name", vote.getVoteContent());
             object.put("type", vote.getOptionalNum() !=null && vote.getOptionalNum() > 1 ? "多选" : "单选");
+            System.out.println(vote.getOptionalNum());
             object.put("time", vote.getEndTime());
             list.add(object);
         }

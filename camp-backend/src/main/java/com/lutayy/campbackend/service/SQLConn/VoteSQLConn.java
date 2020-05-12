@@ -152,9 +152,11 @@ public class VoteSQLConn {
             statement = conn.createStatement();
             String sql;
             if (role == 0) {
-                sql = "select distinct v.* from vote v inner join vote_option_member om on v.vote_id=om.vote_id where om.member_key_id="+id;
+                sql = "select distinct v.* from vote v inner join vote_option_member om" +
+                        " on v.vote_id=om.vote_id where om.member_key_id="+id;
             } else {
-                sql = "select distinct v.* from vote v inner join vote_option_student os on v.vote_id=os.vote_id where os.student_id="+id;;
+                sql = "select distinct v.* from vote v inner join vote_option_student os" +
+                        " on v.vote_id=os.vote_id where os.student_id="+id;;
             }
             if (name != null && !name.equals("")) {
                 sql += (" and v.vote_content like '%" + name + "%' ");
@@ -172,8 +174,8 @@ public class VoteSQLConn {
                 Vote vote=new Vote();
                 vote.setVoteId(rs.getInt("vote_id"));
                 vote.setVoteContent(rs.getString("vote_content"));
-//                vote.setOptionalNum(rs.getByte("optional_num"));
-//                vote.setOptionalSum(rs.getByte("optional_sum"));
+                vote.setOptionalNum(rs.getByte("optional_num"));
+                vote.setOptionalSum(rs.getByte("optional_sum"));
                 vote.setVoteType(rs.getByte("vote_type"));
                 vote.setEndTime(rs.getTimestamp("end_time"));
                 voteList.add(vote);
