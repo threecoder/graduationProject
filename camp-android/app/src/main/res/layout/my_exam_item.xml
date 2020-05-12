@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    app:cardUseCompatPadding="true"
+    app:cardCornerRadius="8dp">
+    <!--作为子项的布局，使得每张图片都是在卡片当中-->
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="15dp"
+        android:paddingRight="30dp"
+        android:paddingLeft="20dp"
+        android:paddingBottom="25dp">
+
+        <TextView
+            android:id="@+id/name_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:text="考试名称: "
+            android:layout_gravity="center_horizontal"
+            android:textSize="15sp"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+        <TextView
+            android:id="@+id/my_exam_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="质量检测"
+            android:textColor="@color/coral"
+            android:layout_toRightOf="@+id/name_text"
+            android:layout_gravity="center_horizontal"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+        <TextView
+            android:id="@+id/time_long_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="20dp"
+            android:text="考试时长: "
+            android:layout_below="@+id/my_exam_name"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+        <TextView
+            android:id="@+id/my_exam_length"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:text="60分钟"
+            android:layout_toRightOf="@+id/time_long_text"
+            android:layout_below="@+id/my_exam_name"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+        <TextView
+            android:id="@+id/time_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="20dp"
+            android:text="考试时间: "
+            android:layout_below="@+id/my_exam_length"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+        <TextView
+            android:id="@+id/my_exam_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:text="2020-08-12 07:07:20----2020-08-12 07:07:20"
+            android:layout_toRightOf="@+id/time_text"
+            android:layout_below="@+id/my_exam_length"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+
+        <TextView
+            android:id="@+id/training_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="20dp"
+            android:text="所属培训: "
+            android:layout_below="@+id/my_exam_time"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+        <TextView
+            android:id="@+id/my_exam_training_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:text="质量检测"
+            android:layout_toRightOf="@+id/training_text"
+            android:layout_below="@+id/my_exam_time"
+            />
+
+        <TextView
+            android:id="@+id/grade_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="20dp"
+            android:text="分数: "
+            android:layout_below="@+id/my_exam_training_name"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+        <TextView
+            android:id="@+id/my_exam_grade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:textColor="@color/red"
+            android:textSize="20dp"
+            android:text="60"
+            android:layout_toRightOf="@+id/grade_text"
+            android:layout_below="@+id/my_exam_training_name"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/exam_color"
+        android:layout_gravity="bottom|right"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="10dp"
+        />
+</androidx.cardview.widget.CardView>

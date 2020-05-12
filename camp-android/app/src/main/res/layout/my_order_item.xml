@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    app:cardUseCompatPadding="true"
+    app:cardCornerRadius="8dp">
+    <!--作为子项的布局，使得每张图片都是在卡片当中-->
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="15dp"
+        android:paddingRight="30dp"
+        android:paddingLeft="20dp"
+        android:paddingBottom="25dp">
+
+        <TextView
+            android:id="@+id/order_id_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:text="订单号: "
+            android:layout_gravity="center_horizontal"
+            android:textSize="15sp"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+        <TextView
+            android:id="@+id/my_order_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2019527248634786369"
+            android:textColor="@color/steelblue"
+            android:layout_toRightOf="@+id/order_id_text"
+            android:layout_gravity="center_horizontal"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+        <TextView
+            android:id="@+id/type_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="5dp"
+            android:text="类型: "
+            android:layout_below="@+id/my_order_num"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+        <TextView
+            android:id="@+id/my_order_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:text="证书复审"
+            android:layout_toRightOf="@+id/type_text"
+            android:layout_below="@+id/my_order_num"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+        <TextView
+            android:id="@+id/man_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:layout_marginLeft="20dp"
+            android:text="下单人: "
+            android:layout_below="@+id/my_order_num"
+            android:layout_toRightOf="@+id/my_order_type"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+        <TextView
+            android:id="@+id/my_order_man"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:layout_marginLeft="5dp"
+            android:text="张三"
+            android:layout_toRightOf="@+id/man_text"
+            android:layout_below="@+id/my_order_num"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+        <TextView
+            android:id="@+id/bussiness_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="20dp"
+            android:text="业务名称: "
+            android:layout_below="@+id/my_order_man"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+        <TextView
+            android:id="@+id/my_order_bussiness"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:text="质量检测培训"
+            android:layout_toRightOf="@+id/bussiness_text"
+            android:layout_below="@+id/my_order_man"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+
+        <TextView
+            android:id="@+id/create_time_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="20dp"
+            android:text="创建时间: "
+            android:layout_below="@+id/my_order_bussiness"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+        <TextView
+            android:id="@+id/my_order_create_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:text="2020-07-12 12:00:00"
+            android:layout_toRightOf="@+id/create_time_text"
+            android:layout_below="@+id/my_order_bussiness"
+            />
+
+        <TextView
+            android:id="@+id/end_time_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="20dp"
+            android:text="失效时间: "
+            android:layout_below="@+id/my_order_create_time"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+        <TextView
+            android:id="@+id/my_order_end_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:text="2020-07-12 12:00:00"
+            android:layout_toRightOf="@+id/end_time_text"
+            android:layout_below="@+id/my_order_create_time"
+            />
+
+        <TextView
+            android:id="@+id/pay_time_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="20dp"
+            android:text="支付时间: "
+            android:layout_below="@+id/my_order_end_time"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+        <TextView
+            android:id="@+id/my_order_pay_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:text="2020-07-12 12:00:00"
+            android:layout_toRightOf="@+id/pay_time_text"
+            android:layout_below="@+id/my_order_end_time"
+            />
+
+        <TextView
+            android:id="@+id/fee_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="20dp"
+            android:text="订单金额: "
+            android:layout_below="@+id/my_order_pay_time"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+        <TextView
+            android:id="@+id/my_order_fee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:textColor="@color/black"
+            android:text="￥99.99"
+            android:layout_toRightOf="@+id/fee_text"
+            android:layout_below="@+id/my_order_pay_time"
+            />
+
+        <TextView
+            android:id="@+id/status_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="20dp"
+            android:text="订单状态: "
+            android:layout_below="@+id/my_order_fee"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+        <TextView
+            android:id="@+id/my_order_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:text="订单关闭"
+            android:layout_toRightOf="@+id/status_text"
+            android:layout_below="@+id/my_order_fee"
+            />
+
+    </RelativeLayout>
+
+<!--    <Button-->
+<!--        android:id="@+id/pay_btn"-->
+<!--        android:layout_width="130dp"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:layout_gravity="bottom|right"-->
+<!--        android:layout_marginRight="10dp"-->
+<!--        android:layout_marginBottom="20dp"-->
+<!--        android:text="支付"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:background="@drawable/button_shape"-->
+<!--        />-->
+    <TextView
+        android:id="@+id/can_pay_tag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="20dp"
+        android:text="点击可进行支付"
+        android:textColor="@color/black"
+        android:background="@drawable/button_shape"/>
+</androidx.cardview.widget.CardView>

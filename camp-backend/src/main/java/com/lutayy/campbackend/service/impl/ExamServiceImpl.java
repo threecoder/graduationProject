@@ -153,12 +153,7 @@ public class ExamServiceImpl implements ExamService {
         }
 
         JSONArray exams = ExamStudentSQLConn.getExamByCondition(studentId, "(r.remaining_times=0 or r.score>=e.exam_pass)");
-        if (exams.size() == 0) {
-            result.put("code", "fail");
-            result.put("data", null);
-            result.put("msg", "查询无结果");
-            return result;
-        }
+
         data.put("total", exams.size());
         data.put("list", exams.subList((currentPage - 1) * pageSize, currentPage * pageSize<=exams.size()?currentPage * pageSize:exams.size()));
         result.put("code", "success");

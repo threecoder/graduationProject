@@ -1,0 +1,2 @@
+rootProject.name='camp-Android'
+include ':app'

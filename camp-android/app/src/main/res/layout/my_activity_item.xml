@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    app:cardUseCompatPadding="true"
+    app:cardCornerRadius="8dp">
+    <!--作为子项的布局，使得每张图片都是在卡片当中-->
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="15dp"
+        android:paddingRight="30dp"
+        android:paddingLeft="20dp"
+        android:paddingBottom="25dp">
+
+        <TextView
+            android:id="@+id/name_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:text="活动名称: "
+            android:layout_gravity="center_horizontal"
+            android:textSize="15sp"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+        <TextView
+            android:id="@+id/my_activity_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="质量检测"
+            android:textColor="@color/coral"
+            android:layout_toRightOf="@+id/name_text"
+            android:layout_gravity="center_horizontal"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+        <TextView
+            android:id="@+id/my_activity_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:text="这是一则活动介绍，主要用来介绍活动，已达到向用户介绍活动的作用。"
+            android:layout_below="@+id/my_activity_name"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+
+        <TextView
+            android:id="@+id/time_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="10dp"
+            android:text="活动时间: "
+            android:layout_below="@+id/my_activity_desc"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+        <TextView
+            android:id="@+id/my_activity_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:text="2020-08-12 07:07:20"
+            android:layout_toRightOf="@+id/time_text"
+            android:layout_below="@+id/my_activity_desc"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+        <TextView
+            android:id="@+id/level_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="10dp"
+            android:text="活动地址: "
+            android:layout_below="@+id/my_activity_time"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+        <TextView
+            android:id="@+id/my_activity_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:text="广东省广州市大学城华南理工大学大学城校区C12-331"
+            android:layout_toRightOf="@+id/level_text"
+            android:layout_below="@+id/my_activity_time"
+            />
+
+        <TextView
+            android:id="@+id/fee_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="10dp"
+            android:text="活动费用: "
+            android:layout_below="@+id/my_activity_address"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+        <TextView
+            android:id="@+id/my_activity_fee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:textColor="@color/salmon"
+            android:text="199.99"
+            android:layout_toRightOf="@+id/fee_text"
+            android:layout_below="@+id/my_activity_address"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/activity_color2"
+        android:layout_gravity="bottom|right"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="10dp"
+        />
+</androidx.cardview.widget.CardView>
