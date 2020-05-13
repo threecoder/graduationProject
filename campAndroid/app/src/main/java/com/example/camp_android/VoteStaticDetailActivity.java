@@ -56,7 +56,23 @@ public class VoteStaticDetailActivity extends AppCompatActivity {
         @Override
         public void handleMessage(@NonNull Message msg) {
             if(msg.what==SUCCESS){
-
+                voteDetailName.setText(voteName);
+                voteDetailType.setText(voteType);
+                VoteDetailNum.setText(String.valueOf(optionalNum));
+                for(int i=0; i<optionArray.size(); i++){
+                    LinearLayout linearLayout=new LinearLayout(VoteStaticDetailActivity.this);
+                    linearLayout.setOrientation(LinearLayout.VERTICAL);
+                    TextView dataNum = new TextView(VoteStaticDetailActivity.this);
+                    dataNum.setText("票数: "+optionArray.getJSONObject(i).getString("quantity")+"\t占比: "+optionArray.getJSONObject(i).getString("per")+"%");
+                    TextView text = new TextView(VoteStaticDetailActivity.this);
+                    text.setText(optionArray.getJSONObject(i).getString("text"));
+                    dataNum.setTextColor(Color.parseColor("#D2691E"));
+                    text.setTextSize(18);
+                    linearLayout.addView(dataNum, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    linearLayout.addView(text, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    linearLayout.setPadding(30, 0, 20, 50);
+                    optionGroup.addView(linearLayout, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                }
             } else if(msg.what==FAIL){
                 Toast.makeText(VoteStaticDetailActivity.this, failInfo, Toast.LENGTH_LONG).show();
             } else if(msg.what==ERROR){
@@ -113,23 +129,8 @@ public class VoteStaticDetailActivity extends AppCompatActivity {
                     voteType = voteDetailJson.getString("type");
                     optionalNum = voteDetailJson.getInteger("num");
                     optionArray = voteDetailJson.getJSONArray("options");
-                    voteDetailName.setText(voteName);
-                    voteDetailType.setText(voteType);
-                    VoteDetailNum.setText(String.valueOf(optionalNum));
-                    for(int i=0; i<optionArray.size(); i++){
-                        LinearLayout linearLayout=new LinearLayout(VoteStaticDetailActivity.this);
-                        linearLayout.setOrientation(LinearLayout.VERTICAL);
-                        TextView dataNum = new TextView(VoteStaticDetailActivity.this);
-                        dataNum.setText("票数: "+optionArray.getJSONObject(i).getString("quantity")+"\t占比: "+optionArray.getJSONObject(i).getString("per")+"%");
-                        TextView text = new TextView(VoteStaticDetailActivity.this);
-                        text.setText(optionArray.getJSONObject(i).getString("text"));
-                        dataNum.setTextColor(Color.parseColor("#D2691E"));
-                        text.setTextSize(18);
-                        linearLayout.addView(dataNum, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                        linearLayout.addView(text, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                        linearLayout.setPadding(30, 0, 20, 50);
-                        optionGroup.addView(linearLayout, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    }
+                    msg.what=SUCCESS;
+                    handler.sendMessage(msg);
                 }
             }
         });

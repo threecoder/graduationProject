@@ -238,7 +238,7 @@ public class MyActivityActivity extends AppCompatActivity {
     private void addArrayIntoList(List<JSONObject>dataList, JSONArray jsonArray){
         for(int i=0;i<jsonArray.size();i++){
             JSONObject object=jsonArray.getJSONObject(i);
-            object.put("type", "myActivity");
+            object.put("activityType", "myActivity");
             dataList.add(object);
         }
     }

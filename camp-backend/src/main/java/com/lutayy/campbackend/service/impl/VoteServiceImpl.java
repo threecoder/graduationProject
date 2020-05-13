@@ -443,7 +443,7 @@ public class VoteServiceImpl implements VoteService {
             voteOptionStudent.setOptionId(voteOptions.get(index - 1).getOptionId());
             voteOptionStudent.setVoteId(voteId);
             VoteOptionStudentExample voteOptionStudentExample = new VoteOptionStudentExample();
-            voteOptionStudentExample.createCriteria().andOptionIdEqualTo(voteOptions.get(index - 1).getOptionId()).andVoteIdEqualTo(voteId).andVoteIdEqualTo(jsonObject.getInteger("id"));
+            voteOptionStudentExample.createCriteria().andOptionIdEqualTo(voteOptions.get(index - 1).getOptionId()).andVoteIdEqualTo(voteId).andStudentIdEqualTo(jsonObject.getInteger("id"));
             if (voteOptionStudentMapper.countByExample(voteOptionStudentExample) == 0) {
                 voteOptionStudentMapper.insert(voteOptionStudent);
             }

@@ -43,6 +43,8 @@ public class VoteDetailActivity extends AppCompatActivity {
     private final int FAIL=2;
     private final int ERROR=3;
 
+    private int requestType;//1为请求数据，2为投票
+
     private String failInfo, errorInfo, successInfo;
 
     private LinearLayout checkGroup;
@@ -62,10 +64,53 @@ public class VoteDetailActivity extends AppCompatActivity {
         @Override
         public void handleMessage(@NonNull Message msg) {
             if(msg.what==SUCCESS){
-                Toast.makeText(VoteDetailActivity.this, successInfo, Toast.LENGTH_LONG).show();
-                Intent intent=new Intent();
-                setResult(1, intent);
-                finish();
+                if(requestType==1){
+                    voteDetailName.setText(voteName);
+                    voteDetailEndTime.setText(voteEndDate);
+                    voteDetailType.setText(voteType);
+                    VoteDetailNum.setText(String.valueOf(optionalNum));
+                    for(int i=0; i<optionArray.size(); i++){
+                        CheckBox tempCheckBox=new CheckBox(VoteDetailActivity.this);
+                        tempCheckBox.setText(optionArray.getString(i));
+                        tempCheckBox.setTextSize(18);
+                        tempCheckBox.setTextColor(Color.parseColor("#808080"));
+                        checkGroup.addView(tempCheckBox, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        checkBoxList.add(tempCheckBox);
+                    }
+
+                    // 监听所有checkBox
+                    for(CheckBox checkBox:checkBoxList){
+                        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                System.out.println("---------"+selectedNum);
+                                if(b){
+                                    selectedNum++;
+                                    if(selectedNum == optionalNum){
+                                        for(CheckBox checkBox:checkBoxList){
+                                            if(!checkBox.isChecked()) {
+                                                checkBox.setEnabled(false);
+                                                checkBox.setClickable(false);
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    selectedNum--;
+                                    for(CheckBox checkBox:checkBoxList){
+                                        checkBox.setEnabled(true);
+                                        checkBox.setClickable(true);
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }else {
+                    Toast.makeText(VoteDetailActivity.this, successInfo, Toast.LENGTH_LONG).show();
+                    Intent intent=new Intent();
+                    setResult(1, intent);
+                    finish();
+                }
+
             } else if(msg.what==FAIL){
                 Toast.makeText(VoteDetailActivity.this, failInfo, Toast.LENGTH_LONG).show();
             } else if(msg.what==ERROR){
@@ -128,45 +173,9 @@ public class VoteDetailActivity extends AppCompatActivity {
                     voteType = voteDetailJson.getString("type");
                     optionalNum = voteDetailJson.getInteger("num");
                     optionArray = voteDetailJson.getJSONArray("options");
-                    voteDetailName.setText(voteName);
-                    voteDetailEndTime.setText(voteEndDate);
-                    voteDetailType.setText(voteType);
-                    VoteDetailNum.setText(String.valueOf(optionalNum));
-                    for(int i=0; i<optionArray.size(); i++){
-                        CheckBox tempCheckBox=new CheckBox(VoteDetailActivity.this);
-                        tempCheckBox.setText(optionArray.getString(i));
-                        tempCheckBox.setTextSize(18);
-                        tempCheckBox.setTextColor(Color.parseColor("#808080"));
-                        checkGroup.addView(tempCheckBox, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                        checkBoxList.add(tempCheckBox);
-                    }
-
-                    // 监听所有checkBox
-                    for(CheckBox checkBox:checkBoxList){
-                        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                System.out.println("---------"+selectedNum);
-                                if(b){
-                                    selectedNum++;
-                                    if(selectedNum == optionalNum){
-                                        for(CheckBox checkBox:checkBoxList){
-                                            if(!checkBox.isChecked()) {
-                                                checkBox.setEnabled(false);
-                                                checkBox.setClickable(false);
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    selectedNum--;
-                                    for(CheckBox checkBox:checkBoxList){
-                                        checkBox.setEnabled(true);
-                                        checkBox.setClickable(true);
-                                    }
-                                }
-                            }
-                        });
-                    }
+                    requestType=1;
+                    msg.what=SUCCESS;
+                    handler.sendMessage(msg);
                 }
             }
         });
@@ -223,6 +232,7 @@ public class VoteDetailActivity extends AppCompatActivity {
                                         failInfo = res.getString("msg");
                                     } else if (res.getString("code").equals("success")){
                                         msg.what = SUCCESS;
+                                        requestType=2;
                                         successInfo = res.getString("msg");
                                     }
                                     handler.sendMessage(msg);

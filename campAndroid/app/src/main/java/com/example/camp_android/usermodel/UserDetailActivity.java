@@ -48,14 +48,19 @@ public class UserDetailActivity extends AppCompatActivity {
     private Toolbar detailToolbar;
     private Button btnSave;
 
+    private int requestType; //1为请求数据，2为保存
+
     private JSONObject userInfo;
 
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
             if(msg.what==SUCCESS){
-                fillUserInfo();
-                Toast.makeText(UserDetailActivity.this, successInfo, Toast.LENGTH_LONG).show();
+                if(requestType==1) {
+                    fillUserInfo();
+                }else {
+                    Toast.makeText(UserDetailActivity.this, successInfo, Toast.LENGTH_LONG).show();
+                }
             }else if(msg.what==FAIL){
                 Toast.makeText(UserDetailActivity.this, failInfo, Toast.LENGTH_LONG).show();
             } else if(msg.what==ERROR){
@@ -100,6 +105,7 @@ public class UserDetailActivity extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 String resBodyStr=response.body().string();
                 JSONObject res=JSONObject.parseObject(resBodyStr);
+                System.out.println(res);
                 Message msg=new Message();
                 if(res.getString("code")==null){
                     msg.what=ERROR;
@@ -110,8 +116,10 @@ public class UserDetailActivity extends AppCompatActivity {
                     failInfo=res.getString("msg");
                     handler.sendMessage(msg);
                 }else {
+                    requestType=1;
                     userInfo=res.getJSONObject("data");
                     msg.what=SUCCESS;
+                    handler.sendMessage(msg);
                 }
             }
         });
@@ -121,6 +129,7 @@ public class UserDetailActivity extends AppCompatActivity {
 
     // 填充个人信息
     private void fillUserInfo(){
+        System.out.println("-------------1");
         showUserIdcard.setText(userInfo.getString("idNum"));
         showUserName.setText(userInfo.getString("name"));
         showUserSex.setSelection(userInfo.getString("sex").equals("男")?0:1);
@@ -188,6 +197,7 @@ public class UserDetailActivity extends AppCompatActivity {
                                     failInfo=res.getString("msg");
                                     handler.sendMessage(msg);
                                 }else {
+                                    requestType=2;
                                     successInfo=res.getString("msg");
                                     msg.what=SUCCESS;
                                     handler.sendMessage(msg);
@@ -199,7 +209,7 @@ public class UserDetailActivity extends AppCompatActivity {
                 confirm.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        System.out.println("取消投票");
+                        System.out.println("取消更改");
                     }
                 });
                 confirm.show();
