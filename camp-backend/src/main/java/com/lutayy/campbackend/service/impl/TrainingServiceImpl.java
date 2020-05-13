@@ -417,9 +417,7 @@ public class TrainingServiceImpl implements TrainingService {
         }
 
         String orderId = OrderIdGenerator.getUniqueId();
-        while (!redisUtil.hset("order_no_map", orderId, "training")) {
-            orderId = OrderIdGenerator.getUniqueId();
-        }
+        redisUtil.hset("order_no_map", orderId, "training");
         //订单号生成并查重（查重如非高并发系统基本上可以省略）
 //        while(trainingOrderMapper.selectByPrimaryKey(orderId)!=null){
 //            orderId=OrderIdGenerator.getUniqueId();
@@ -564,9 +562,7 @@ public class TrainingServiceImpl implements TrainingService {
         }
 
         String orderId = OrderIdGenerator.getUniqueId();
-        while (!redisUtil.hset("order_no_map", orderId, "training")) {
-            orderId = OrderIdGenerator.getUniqueId();
-        }
+        redisUtil.hset("order_no_map", orderId, "training");
         //订单号生成并查重（如非高并发系统基本上可以省略）
 //        while(trainingOrderMapper.selectByPrimaryKey(orderId)!=null){
 //            orderId=OrderIdGenerator.getUniqueId();

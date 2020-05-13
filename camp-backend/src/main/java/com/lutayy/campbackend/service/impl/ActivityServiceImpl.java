@@ -303,9 +303,7 @@ public class ActivityServiceImpl implements ActivityService {
 //        activityStudent.setApplyTime(new Date());
 //        if(activityStudentMapper.insert(activityStudent)>0){
         String orderId = OrderIdGenerator.getUniqueId();
-        while (!redisUtil.hset("order_no_map", orderId, "activity")) {
-            orderId = OrderIdGenerator.getUniqueId();
-        }
+        redisUtil.hset("order_no_map", orderId, "activity");
         //订单号生成并查重（查重如非高并发系统基本上可以省略）
         //while(activityOrderMapper.selectByPrimaryKey(orderId)!=null){
         //    orderId=OrderIdGenerator.getUniqueId();
@@ -376,9 +374,7 @@ public class ActivityServiceImpl implements ActivityService {
         }
 
         String orderId = OrderIdGenerator.getUniqueId();
-        while (!redisUtil.hset("order_no_map", orderId, "activity")) {
-            orderId = OrderIdGenerator.getUniqueId();
-        }
+        redisUtil.hset("order_no_map", orderId, "activity");
         //订单号生成并查重（如非高并发系统基本上可以省略）
 //        while(activityOrderMapper.selectByPrimaryKey(orderId)!=null){
 //            orderId=OrderIdGenerator.getUniqueId();
