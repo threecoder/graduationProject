@@ -89,7 +89,6 @@ export default {
                     { prop: "orderNum", label: "订单号" },
                     { prop: "orderType", label: "订单类型" },
                     { prop: "businessName", label: "关联名称" },
-                    { prop: "businessType", label: "属培训/活动" },
                     { prop: "builder", label: "下单人" },
                     { prop: "buildTime", label: "创建时间" },
                     { prop: "startTime", label: "生效时间" },
