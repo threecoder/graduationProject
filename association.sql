@@ -217,7 +217,7 @@ CREATE TABLE `association_text` (
 
 /*Data for the table `association_text` */
 
-insert  into `association_text`(`id`,`item_name`,`item_context`,`is_invalid`,`description`) values (1,'association_name','毕设头很大',0,'协会名称'),(2,'framework','<p>架构架构</p>',0,'协会框架'),(3,'constitution','<p>章程</p>',0,'协会章程'),(4,'brief','<p>简介</p>',0,'协会简介');
+insert  into `association_text`(`id`,`item_name`,`item_context`,`is_invalid`,`description`) values (1,'association_name','XXXXXXX',0,'协会名称'),(2,'framework','<p>架构架构</p>',0,'协会框架'),(3,'constitution','<p>章程</p>',0,'协会章程'),(4,'brief','<p>简介</p>',0,'协会简介');
 
 /*Table structure for table `authority` */
 
@@ -255,7 +255,7 @@ CREATE TABLE `certificate` (
   KEY `student_id` (`student_id`),
   CONSTRAINT `certificate_ibfk_1` FOREIGN KEY (`training_id`) REFERENCES `training` (`training_id`),
   CONSTRAINT `certificate_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 /*Data for the table `certificate` */
 
@@ -295,7 +295,7 @@ CREATE TABLE `certificate_change_order` (
   `member_key_id` int(11) DEFAULT NULL COMMENT '如果为会员的订单此处应不为空',
   `order_price` decimal(10,2) DEFAULT NULL COMMENT '订单金额',
   `order_begin_time` datetime DEFAULT NULL COMMENT '订单生成时间',
-  `payment_state` tinyint(1) DEFAULT NULL COMMENT '0为未付款，1为已付款',
+  `payment_state` tinyint(1) DEFAULT '0' COMMENT '0为未付款，1为已付款',
   `close` tinyint(1) DEFAULT '0' COMMENT '1为订单关闭',
   `pay_time` datetime DEFAULT NULL COMMENT '付款时间',
   `is_delete_user` tinyint(1) DEFAULT '0',
@@ -310,7 +310,7 @@ CREATE TABLE `certificate_change_order` (
   CONSTRAINT `certificate_change_order_ibfk_1` FOREIGN KEY (`certificate_id`) REFERENCES `certificate` (`certificate_id`),
   CONSTRAINT `certificate_change_order_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`),
   CONSTRAINT `certificate_change_order_ibfk_3` FOREIGN KEY (`member_key_id`) REFERENCES `member` (`member_key_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 /*Data for the table `certificate_change_order` */
 
@@ -378,8 +378,8 @@ CREATE TABLE `certificate_recheck_order` (
   `student_id` int(11) DEFAULT NULL,
   `order_price` decimal(10,2) DEFAULT NULL COMMENT '订单金额',
   `order_begin_time` datetime DEFAULT NULL COMMENT '订单生成时间',
-  `payment_state` tinyint(1) DEFAULT NULL COMMENT '0为未付款，1为已付款',
-  `close` tinyint(1) DEFAULT NULL COMMENT '1为订单关闭',
+  `payment_state` tinyint(1) DEFAULT '0' COMMENT '0为未付款，1为已付款',
+  `close` tinyint(1) DEFAULT '0' COMMENT '1为订单关闭',
   `pay_time` datetime DEFAULT NULL COMMENT '付款时间',
   `is_delete_user` tinyint(1) DEFAULT '0',
   `is_delete_admin` tinyint(1) DEFAULT '0',
@@ -747,11 +747,11 @@ CREATE TABLE `news` (
   PRIMARY KEY (`news_id`),
   KEY `admin_id` (`admin_id`),
   CONSTRAINT `news_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`admin_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8;
 
 /*Data for the table `news` */
 
-insert  into `news`(`news_id`,`admin_id`,`title`,`description`,`content`,`img_placeholder`,`post_time`,`type`,`is_invalid`) values (27,1,'这是一条新闻','这是简介','<p>这是@图#片$占#位@@图#片$占#位@@图#片$占#位@@图#片$占#位@</p><p>新闻@图#片$占#位@内容@图#片$占#位@</p>','@图#片$占#位@','2020-04-18 20:43:26','dynamic',0),(33,1,'新闻示例222','试试','<p>试试@图#片$占#位@存@图#片$占#位@</p>','@图#片$占#位@','2020-04-20 00:14:59','news',1),(34,1,'新闻333','都是','<p>@图#片$占#位@</p>','@图#片$占#位@','2020-04-20 00:41:13','news',1),(35,1,'新闻1123','试试','<p>dfd@图#片$占#位@sas</p>','@图#片$占#位@','2020-04-20 00:42:37','news',0),(36,1,'dfd','dsdsd','<p>@图#片$占#位@@图#片$占#位@@图#片$占#位@</p>','@图#片$占#位@','2020-04-20 00:55:02','news',0),(37,1,'xsss','sssss','<p>@图#片$占#位@</p>','@图#片$占#位@','2020-04-20 00:58:14','news',1),(38,1,'小新闻11','简介','<p>@图#片$占#位@</p>','@图#片$占#位@','2020-04-20 23:52:31','news',1);
+insert  into `news`(`news_id`,`admin_id`,`title`,`description`,`content`,`img_placeholder`,`post_time`,`type`,`is_invalid`) values (27,1,'这是一条新闻这是一条新闻这是一条新闻这是一条新闻这是一条新闻这是一条新闻这是一条新闻这是一条新闻','这是简介','<p>这是@图#片$占#位@@图#片$占#位@@图#片$占#位@@图#片$占#位@</p><p>新闻@图#片$占#位@内容@图#片$占#位@</p>','@图#片$占#位@','2020-04-18 20:43:26','dynamic',0),(33,1,'新闻示例222','试试','<p>试试@图#片$占#位@存@图#片$占#位@</p>','@图#片$占#位@','2020-04-20 00:14:59','news',1),(34,1,'新闻333','都是','<p>@图#片$占#位@</p>','@图#片$占#位@','2020-04-20 00:41:13','news',1),(35,1,'新闻1123','试试','<p>dfd@图#片$占#位@sas</p>','@图#片$占#位@','2020-04-20 00:42:37','news',0),(36,1,'dfd','dsdsd','<p>@图#片$占#位@@图#片$占#位@@图#片$占#位@</p>','@图#片$占#位@','2020-04-20 00:55:02','news',0);
 
 /*Table structure for table `news_img` */
 
@@ -843,7 +843,7 @@ CREATE TABLE `student` (
 
 /*Data for the table `student` */
 
-insert  into `student`(`student_id`,`student_password`,`student_idcard`,`student_phone`,`student_name`,`student_sex`,`student_email`,`student_position`,`student_country`,`student_province`,`student_city`,`student_area`,`student_address`,`company`,`enter_time`,`has_org`) values (1,'123456','445281199308310056','15521054789','张三','女','881@qq.com','经理','中国','广东省','广州市','番禺区','大学城华南理工大学','AA股份有限公司',NULL,1),(2,'123456','445281199308310037','15521064789','李四','女','22@qq.com',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(8,'123456','445281199707774569','13112114587','王建国','男',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1),(38,'123456','4342323432','15521065436','张英语','男',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL,1),(39,'123456','134455','15521065326','李数学','男',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL,1),(40,'123456','445281199302210226','15521065416','陈政治','女',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL,1);
+insert  into `student`(`student_id`,`student_password`,`student_idcard`,`student_phone`,`student_name`,`student_sex`,`student_email`,`student_position`,`student_country`,`student_province`,`student_city`,`student_area`,`student_address`,`company`,`enter_time`,`has_org`) values (1,'123456','445281199308310056','15521054789','张三','男','881@qq.com','经理','中国','广东省','广州市','番禺区','大学城华南理工大学','AA股份有限公司',NULL,1),(2,'123456','445281199308310037','15521064789','李四','女','22@qq.com',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(8,'123456','445281199707774569','13112114587','王建国','男',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1),(38,'123456','4342323432','15521065436','张英语','男',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL,1),(39,'123456','134455','15521065326','李数学','男',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL,1),(40,'123456','445281199302210226','15521065416','陈政治','女',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'BB股份有限公司',NULL,1);
 
 /*Table structure for table `system_parameter` */
 
@@ -887,7 +887,7 @@ CREATE TABLE `training` (
   PRIMARY KEY (`training_id`),
   KEY `cer_img_id` (`cer_img_id`),
   CONSTRAINT `training_ibfk_1` FOREIGN KEY (`cer_img_id`) REFERENCES `certificate_image` (`image_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 /*Data for the table `training` */
 
@@ -921,7 +921,7 @@ CREATE TABLE `training_order` (
   CONSTRAINT `training_order_ibfk_1` FOREIGN KEY (`training_id`) REFERENCES `training` (`training_id`),
   CONSTRAINT `training_order_ibfk_3` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`),
   CONSTRAINT `training_order_ibfk_4` FOREIGN KEY (`member_key_id`) REFERENCES `member` (`member_key_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 /*Data for the table `training_order` */
 
@@ -981,7 +981,7 @@ CREATE TABLE `vote` (
   `optional_num` tinyint(4) DEFAULT NULL COMMENT '可多选数目',
   `post_time` datetime DEFAULT NULL COMMENT '发布时间',
   PRIMARY KEY (`vote_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 /*Data for the table `vote` */
 
@@ -1042,7 +1042,7 @@ CREATE TABLE `vote_option_student` (
 
 /*Data for the table `vote_option_student` */
 
-insert  into `vote_option_student`(`vote_id`,`option_id`,`student_id`) values (1,1,2),(1,3,2),(1,1,2),(1,3,2);
+insert  into `vote_option_student`(`vote_id`,`option_id`,`student_id`) values (4,12,1),(4,13,1),(1,1,2),(1,3,2),(1,4,2);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

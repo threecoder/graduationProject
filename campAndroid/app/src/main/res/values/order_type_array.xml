@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <string-array name="order_type_values">
+        <item>培训</item>
+        <item>活动</item>
+        <item>证书校正</item>
+        <item>证书复审</item>
+    </string-array>
+</resources>

@@ -253,12 +253,7 @@ public class TrainingServiceImpl implements TrainingService {
         trainingExample.setOffset((currentPage - 1) * pageSize);
         trainingExample.setLimit(pageSize);
         List<Training> trainings = trainingMapper.selectByExample(trainingExample);
-        if (trainings.size() == 0) {
-            result.put("code", "success");
-            result.put("msg", "无可报名培训");
-            result.put("data", null);
-            return result;
-        }
+
         for (Training training : trainings) {
             JSONObject object = new JSONObject();
             object.put("id", training.getTrainingId());
@@ -422,9 +417,7 @@ public class TrainingServiceImpl implements TrainingService {
         }
 
         String orderId = OrderIdGenerator.getUniqueId();
-        while (!redisUtil.hset("order_no_map", orderId, "training")) {
-            orderId = OrderIdGenerator.getUniqueId();
-        }
+        redisUtil.hset("order_no_map", orderId, "training");
         //订单号生成并查重（查重如非高并发系统基本上可以省略）
 //        while(trainingOrderMapper.selectByPrimaryKey(orderId)!=null){
 //            orderId=OrderIdGenerator.getUniqueId();
@@ -569,9 +562,7 @@ public class TrainingServiceImpl implements TrainingService {
         }
 
         String orderId = OrderIdGenerator.getUniqueId();
-        while (!redisUtil.hset("order_no_map", orderId, "training")) {
-            orderId = OrderIdGenerator.getUniqueId();
-        }
+        redisUtil.hset("order_no_map", orderId, "training");
         //订单号生成并查重（如非高并发系统基本上可以省略）
 //        while(trainingOrderMapper.selectByPrimaryKey(orderId)!=null){
 //            orderId=OrderIdGenerator.getUniqueId();
@@ -871,6 +862,11 @@ public class TrainingServiceImpl implements TrainingService {
             return result;
         }
         for (Training training : trainings) {
+            ExamExample examExample=new ExamExample();
+            examExample.createCriteria().andTrainingIdEqualTo(training.getTrainingId());
+            if(examMapper.countByExample(examExample)>0){
+                continue;
+            }
             JSONObject object = new JSONObject();
             object.put("label", training.getTrainingName());
             object.put("id", training.getTrainingId());

@@ -78,14 +78,9 @@ public class ExamServiceImpl implements ExamService {
         }
 
         JSONArray exams = ExamStudentSQLConn.getExamByCondition(studentId, "r.score<e.exam_pass and r.remaining_times<3 and r.remaining_times>0");
-        if (exams.size() == 0) {
-            result.put("code", "fail");
-            result.put("data", null);
-            result.put("msg", "查询无结果");
-            return result;
-        }
+        
         data.put("total", exams.size());
-        data.put("list", exams.subList((currentPage - 1) * pageSize, currentPage * pageSize));
+        data.put("list", exams.subList((currentPage - 1) * pageSize, currentPage * pageSize<=exams.size()?currentPage * pageSize:exams.size()));
         result.put("code", "success");
         result.put("data", data);
         result.put("msg", "查询成功");
@@ -138,8 +133,7 @@ public class ExamServiceImpl implements ExamService {
             exams.getJSONObject(i).put("grade", null);
         }
         data.put("total", exams.size());
-//        data.put("list", exams.subList((currentPage - 1) * pageSize, currentPage * pageSize));
-        data.put("list", exams.subList(0, exams.size()));
+        data.put("list", exams.subList((currentPage - 1) * pageSize, currentPage * pageSize<=exams.size()?currentPage * pageSize:exams.size()));
         result.put("code", "success");
         result.put("data", data);
         result.put("msg", "查询成功");
@@ -159,14 +153,9 @@ public class ExamServiceImpl implements ExamService {
         }
 
         JSONArray exams = ExamStudentSQLConn.getExamByCondition(studentId, "(r.remaining_times=0 or r.score>=e.exam_pass)");
-        if (exams.size() == 0) {
-            result.put("code", "fail");
-            result.put("data", null);
-            result.put("msg", "查询无结果");
-            return result;
-        }
+
         data.put("total", exams.size());
-        data.put("list", exams.subList((currentPage - 1) * pageSize, currentPage * pageSize));
+        data.put("list", exams.subList((currentPage - 1) * pageSize, currentPage * pageSize<=exams.size()?currentPage * pageSize:exams.size()));
         result.put("code", "success");
         result.put("data", data);
         result.put("msg", "查询成功");
@@ -567,6 +556,14 @@ public class ExamServiceImpl implements ExamService {
         if (trainingMapper.selectByPrimaryKey(trainingId) == null) {
             result.put("code", "fail");
             result.put("msg", "所选培训不存在");
+            return result;
+        }
+
+        ExamExample examExample=new ExamExample();
+        examExample.createCriteria().andTrainingIdEqualTo(trainingId);
+        if(examMapper.countByExample(examExample)>0){
+            result.put("code", "fail");
+            result.put("msg", "创建失败！所选培训已发布考试");
             return result;
         }
 
@@ -1188,6 +1185,7 @@ public class ExamServiceImpl implements ExamService {
         // TODO 发送站内信给对应的管理员
         MessageText messageText = new MessageText();
         messageText.setSendTime(new Date());
+        messageText.setType("checkGrade");
         messageText.setMessage("审核队列更新，新增" + totalNum + "条审核请求！");
         messageText.setTitle("审核队列更新，新增" + totalNum + "条审核请求！分别是：" + sendReportStr);
         messageTextMapper.insertSelective(messageText);

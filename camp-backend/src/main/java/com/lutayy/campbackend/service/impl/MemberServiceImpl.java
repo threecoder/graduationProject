@@ -175,9 +175,7 @@ public class MemberServiceImpl implements MemberService {
         memberSubscriptionOrder.setOpManName(member.getMemberName());
         memberSubscriptionOrder.setBusinessName(member.getMemberName()+"续费一年");
         String orderId = OrderIdGenerator.getUniqueId();
-        while (!redisUtil.hset("order_no_map", orderId, "member")) {
-            orderId = OrderIdGenerator.getUniqueId();
-        }
+        redisUtil.hset("order_no_map", orderId, "member");
         memberSubscriptionOrder.setSubscriptionOrderId(orderId);
         memberSubscriptionOrderMapper.insertSelective(memberSubscriptionOrder);
         data.put("orderNum", orderId);

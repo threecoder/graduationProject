@@ -44,7 +44,7 @@ public class ExamStudentSQLConn {
         try{
             conn= DriverManager.getConnection(URL,Name,Pwd);
             statement=conn.createStatement();
-            String sql="select distinct e.exam_id,e.exam_name,e.training_id,e.exam_start_time,e.exam_end_time,e.exam_length_min,r.score from exam e, student s,exam_re_student r " +
+            String sql="select distinct e.exam_id,e.exam_name,e.training_id,e.exam_start_time,e.exam_end_time,e.exam_length_min, e.exam_pass, r.score from exam e, student s,exam_re_student r " +
                     "where e.exam_id = r.exam_id and s.student_id = r.student_id and r.is_invalid=0 and s.student_id ="+userKey;
             if(!condition.equals("")){
                 sql+=" and "+condition;
@@ -58,6 +58,7 @@ public class ExamStudentSQLConn {
                 String examEndTime=rs.getString("exam_end_time");
                 byte examLengthMin=rs.getByte("exam_length_min");
                 int score=rs.getInt("score");
+                int examPass=rs.getInt("exam_pass");
                 JSONObject exam=new JSONObject();
                 exam.put("examName",examName);
                 exam.put("startTime",examStartTime);
@@ -67,6 +68,7 @@ public class ExamStudentSQLConn {
                 exam.put("examId", examId);
                 Training training=examStudentSQLConn.trainingMapper.selectByPrimaryKey(trainingId);
                 exam.put("belong",training.getTrainingName());
+                exam.put("examPass", examPass);
                 exams.add(exam);
             }
             return exams;

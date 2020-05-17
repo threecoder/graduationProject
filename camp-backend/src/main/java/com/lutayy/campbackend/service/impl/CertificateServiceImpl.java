@@ -264,9 +264,7 @@ public class CertificateServiceImpl implements CertificateService {
             // TODO 新建订单
             CertificateChangeOrder changeOrder=new CertificateChangeOrder();
             String orderId = OrderIdGenerator.getUniqueId();
-            while (!redisUtil.hset("order_no_map", orderId, "cerChange")) {
-                orderId = OrderIdGenerator.getUniqueId();
-            }
+            redisUtil.hset("order_no_map", orderId, "cerChange");
             changeOrder.setCertificateChangeOrderId(orderId);
             changeOrder.setCertificateId(changeLog.getCertificateId());
             changeOrder.setStudentId(changeLog.getCerStudentId());
@@ -318,9 +316,7 @@ public class CertificateServiceImpl implements CertificateService {
             certificateMapper.updateByPrimaryKeySelective(certificate);
             // TODO 新建订单
             String orderId = OrderIdGenerator.getUniqueId();
-            while (!redisUtil.hset("order_no_map", orderId, "cerRecheck")) {
-                orderId = OrderIdGenerator.getUniqueId();
-            }
+            redisUtil.hset("order_no_map", orderId, "cerRecheck");
             CertificateRecheckOrder recheckOrder=new CertificateRecheckOrder();
             recheckOrder.setCertificateRecheckOrderId(orderId);
             recheckOrder.setCertificateId(recheckLog.getCertificateId());

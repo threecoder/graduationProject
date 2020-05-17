@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    app:cardUseCompatPadding="true"
+    app:cardCornerRadius="8dp">
+    <!--作为子项的布局，使得每张图片都是在卡片当中-->
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="15dp"
+        android:paddingRight="30dp"
+        android:paddingLeft="20dp"
+        android:paddingBottom="15dp">
+
+        <TextView
+            android:id="@+id/name_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:text="标题: "
+            android:layout_gravity="center_horizontal"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+        <TextView
+            android:id="@+id/my_msg_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="这是消息标题"
+            android:layout_toRightOf="@+id/name_text"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+        <TextView
+            android:id="@+id/content_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="10dp"
+            android:text="摘要: "
+            android:layout_below="@+id/my_msg_name"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+        <TextView
+            android:id="@+id/my_msg_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:text="这是一条简介是是..."
+            android:layout_toRightOf="@+id/content_text"
+            android:layout_below="@+id/my_msg_name"
+            />
+
+        <TextView
+            android:id="@+id/time_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="10dp"
+            android:text="发送时间: "
+            android:layout_below="@+id/my_msg_content"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+        <TextView
+            android:id="@+id/my_msg_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:text="2020-08-11 12:00:00"
+            android:layout_toRightOf="@+id/time_text"
+            android:layout_below="@+id/my_msg_content"
+            />
+        <TextView
+            android:id="@+id/type_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="10dp"
+            android:text="类别: "
+            android:layout_below="@+id/my_msg_time"
+            android:ellipsize="end"
+            android:lines="1"
+            />
+
+        <TextView
+            android:id="@+id/my_msg_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:text="cerChange"
+            android:layout_toRightOf="@+id/type_text"
+            android:layout_below="@+id/my_msg_time"
+            />
+
+    </RelativeLayout>
+
+<!--    <ImageView-->
+<!--        android:layout_width="40dp"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:src="@drawable/cer_color"-->
+<!--        android:layout_gravity="bottom|right"-->
+<!--        android:layout_marginRight="15dp"-->
+<!--        android:layout_marginBottom="10dp"-->
+<!--        />-->
+    <TextView
+        android:id="@+id/my_msg_read_or_not"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="12dp"
+        android:text="未读"
+        android:textColor="@color/orangered"
+        />
+</androidx.cardview.widget.CardView>
