@@ -1,7 +1,7 @@
 <template>
     <div class="coupon-container">
         <div class="table-container">
-            <m-table :data="table.data" :tableConfig="table.config" :loading="loading"></m-table>
+            <m-table :data="table.data" :tableConfig="table.config" :loading="table.loading"></m-table>
         </div>
         <div class="page-container">
             <page
@@ -51,6 +51,7 @@ export default {
             this.getCouponList();
         },
         async getCouponList() {
+            this.table.loading = true;
             try {
                 let res = await orderApi.getCouponList(this.form);
                 this.table.data = res.data.data;
@@ -58,6 +59,7 @@ export default {
             } catch (error) {
                 this.$message.error(error.message);
             }
+            this.table.loading = false;
         }
     }
 };

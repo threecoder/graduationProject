@@ -18,7 +18,8 @@
                 >
                     <div slot-scope="{ row }">
                         <el-button type="primary" size="mini" @click="checkDetail(row)">更多</el-button>
-                        <el-button type="primary" size="mini" @click="handleSEAT(row)">安排座位</el-button>
+                        <el-button type="primary" size="mini" @click="handleSEAT(row)">手动排座</el-button>
+                        <el-button type="primary" size="mini" @click="autoSEAT(row)">自动排座</el-button>
                     </div>
                 </el-table-column>
             </m-table>
@@ -41,7 +42,7 @@
             <div class="drawer-footer">
                 <el-button @click="exportEntryForm" type="primary">导出报名表</el-button>
                 <!-- <el-button type="primary">导出座位表模板</el-button>
-                <el-button type="primary">导出座位表</el-button> -->
+                <el-button type="primary">导出座位表</el-button>-->
             </div>
         </el-drawer>
 
@@ -90,7 +91,7 @@ export default {
                         label: "操作",
                         fixed: "right",
                         slot: "oper",
-                        width: "200px"
+                        width: "300px"
                     }
                 ],
                 tableData: [],
@@ -129,7 +130,6 @@ export default {
         async init() {
             try {
                 let listRes = await adminActivityApi.getActivityList();
-                console.log(listRes);
                 this.activityTable.tableData = listRes.data;
             } catch (error) {
                 this.$message.error(error.message);
@@ -209,6 +209,20 @@ export default {
                         }
                     });
             }
+        },
+        async autoSEAT(row) {
+            this.$confirm("确定要自动安排座位吗？", "提示", {
+                cancelButtonText: "取消",
+                confirmButtonText: "确定",
+                type: "warning"
+            }).then(async () => {
+                try {
+                    let res = await adminActivityApi.autoSEAT(row.id);
+                    this.$message.success("自动排位成功");
+                } catch (error) {
+                    this.$message.error(error.message);
+                }
+            });
         },
         beforeRemove() {},
         handleExceed() {},

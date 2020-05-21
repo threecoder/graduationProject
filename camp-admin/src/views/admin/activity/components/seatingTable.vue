@@ -1,9 +1,25 @@
 <template>
     <div class="all-container">
         <div class="panel">
-            <el-input ref="input" autoFocus :disabled="tem.lock" v-model="tem.num" placeholder="输入人员编号"></el-input>
-            <el-button size="small" type="primary" @click="lock" :disabled="tem.x<1||tem.y<1">{{tem.lock==false?`锁定席位`:`解除锁定`}}</el-button>
-            <el-button size="small" type="primary" @click="saveOneNum" :disabled="tem.x<1||tem.y<1">确认修改</el-button>
+            <el-input
+                ref="input"
+                autofocus
+                :disabled="tem.lock"
+                v-model="tem.num"
+                placeholder="输入人员编号，编号查看导出的报名表"
+            ></el-input>
+            <el-button
+                size="small"
+                type="primary"
+                @click="lock"
+                :disabled="tem.x<1||tem.y<1"
+            >{{tem.lock==false?`锁定席位`:`解除锁定`}}</el-button>
+            <el-button
+                size="small"
+                type="primary"
+                @click="saveOneNum"
+                :disabled="tem.x<1||tem.y<1"
+            >确认修改</el-button>
         </div>
 
         <div class="contain">
@@ -19,8 +35,9 @@
                     <div class="row" :key="i">
                         <template v-for="j in attr.yLen">
                             <div class="colunm" :key="j">
-                                <span class="seat" 
-                                    :class="{green:Arr[i-1][j-1].num !== null,lock:Arr[i-1][j-1].lock}" 
+                                <span
+                                    class="seat"
+                                    :class="{green:Arr[i-1][j-1].num !== null,lock:Arr[i-1][j-1].lock}"
                                     @click="showPanel(i,j)"
                                 >{{Arr[i-1][j-1].num===null?"":Arr[i-1][j-1].num}}</span>
                             </div>
@@ -29,7 +46,6 @@
                 </template>
             </div>
         </div>
-        
     </div>
 </template>
 <script>
@@ -37,7 +53,7 @@ export default {
     props: {
         attr: {
             type: Object,
-            default(){
+            default() {
                 return {};
             }
         },
@@ -56,26 +72,26 @@ export default {
             flag: false
         };
     },
-    mounted(){
-        console.log("座位表挂载")
+    mounted() {
+        console.log("座位表挂载");
     },
     methods: {
-        showPanel(i,j){
-            this.tem.num = this.Arr[i-1][j-1].num;
+        showPanel(i, j) {
+            this.tem.num = this.Arr[i - 1][j - 1].num;
             this.tem.x = i;
             this.tem.y = j;
-            this.tem.lock = this.Arr[i-1][j-1].lock;
+            this.tem.lock = this.Arr[i - 1][j - 1].lock;
             this.flag = true;
             this.$refs.input.focus();
         },
-        lock(){
+        lock() {
             let t = this.tem;
             t.lock = !t.lock;
-            this.$emit("lock",t.x-1,t.y-1,t.lock);
+            this.$emit("lock", t.x - 1, t.y - 1, t.lock);
         },
-        saveOneNum(){
+        saveOneNum() {
             let t = this.tem;
-            this.$emit("num",t.x-1,t.y-1,t.num);
+            this.$emit("num", t.x - 1, t.y - 1, t.num);
         }
     }
 };

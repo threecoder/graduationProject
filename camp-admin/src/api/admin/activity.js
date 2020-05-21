@@ -1,7 +1,7 @@
 import { request } from '../request';
 import { apiPrefix } from '../../const';
 //添加新的活动
-const newActivity = par => request(apiPrefix + '/addNewActivity', 'post', par);
+const newActivity = data => request(apiPrefix + '/addNewActivity', 'post', data);
 
 //获取发布的活动列表
 const getActivityList = () => request(apiPrefix + '/getActivityList', 'get');
@@ -16,7 +16,10 @@ const getEntryForm = activityId => request(apiPrefix + `/getEntryForm`, 'get', {
 const getSEATForm = () => request(apiPrefix + "/getSEATForm", 'get', {}, 'blob');
 
 //管理员设置座位信息
-const setSEATInfo = par => request(apiPrefix + '/setSEATInfo', 'post', par);
+const setSEATInfo = data => request(apiPrefix + '/setSEATInfo', 'post', data);
+
+//自动排位
+const autoSEAT = activityId => request(apiPrefix + "/autoSEAT", 'post', { activityId });
 
 export default {
     newActivity,
@@ -24,5 +27,6 @@ export default {
     getSEATInfo,
     getEntryForm,
     getSEATForm,
-    setSEATInfo
+    setSEATInfo,
+    autoSEAT
 }

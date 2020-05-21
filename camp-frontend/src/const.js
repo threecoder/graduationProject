@@ -35,6 +35,7 @@ export const msgTypeList = [
     { path: "/order", label: '会员续费', key: 'memberSubscription' }
 ]
 
+//订单类别
 export const orderTypeList = [
     { label: "活动", key: "activity" },
     { label: "培训", key: "training" },
