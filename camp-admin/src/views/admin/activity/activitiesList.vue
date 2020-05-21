@@ -24,7 +24,7 @@
             </m-table>
         </div>
 
-        <el-drawer class="drawer-container" title="活动详情" :visible.sync="drawer" size="40%">
+        <el-drawer class="drawer-container" title="活动详情" :visible.sync="drawer" size="30%">
             <div class="tac">
                 <h3>{{drwaerInfo.name}}</h3>
                 <p>活动时间：{{drwaerInfo.date}}</p>
@@ -39,29 +39,9 @@
                 <p>联系电话：{{drwaerInfo.phone}}。</p>
             </div>
             <div class="drawer-footer">
-                <el-upload
-                    class="upload-demo"
-                    action="https://jsonplaceholder.typicode.com/posts/"
-                    :before-remove="beforeRemove"
-                    :limit="1"
-                    :on-exceed="handleExceed"
-                    :file-list="fileList"
-                >
-                    <el-button type="primary">导入报名表</el-button>
-                </el-upload>
                 <el-button @click="exportEntryForm" type="primary">导出报名表</el-button>
-                <el-button type="primary">导出座位表模板</el-button>
-                <el-button type="primary">导出座位表</el-button>
-                <el-upload
-                    class="upload-demo"
-                    action="https://jsonplaceholder.typicode.com/posts/"
-                    :before-remove="beforeRemove"
-                    :limit="1"
-                    :on-exceed="handleExceed"
-                    :file-list="fileList"
-                >
-                    <el-button type="primary">导入座位表</el-button>
-                </el-upload>
+                <!-- <el-button type="primary">导出座位表模板</el-button>
+                <el-button type="primary">导出座位表</el-button> -->
             </div>
         </el-drawer>
 
@@ -90,6 +70,7 @@
 import mTable from "../../../components/mTable.vue";
 import sTable from "./components/seatingTable.vue";
 import adminActivityApi from "../../../api/admin/activity.js";
+import { download } from "../../../api/request";
 export default {
     components: {
         mTable,
@@ -112,58 +93,7 @@ export default {
                         width: "200px"
                     }
                 ],
-                tableData: [
-                    {
-                        id: 1,
-                        name: "活动测试",
-                        date: "2016-10-10 14:00:00-16:00:00",
-                        openDate: "2016-10-10 14:00:00-16:00:00",
-                        address: "广州市番禺区小谷围街道华南理工大学",
-                        fee: 1000,
-                        introduce: [
-                            `企业网站的作用是展示企业网站，
-                    为企业提供产品展示、企业宣传、形象建设、
-                    联系企业等方面提供了重要信息渠道，企业如果能够做好网站宣传和网络口碑建设，
-                    那么用户转化率就会大大提高，企业客户资源的源源不断带给我们企业的将会是订单，
-                    所以企业网站建设不能只是摆设性的搭建一个域名、空间和程序，需要融合企业文化和企业精华到网站中。`
-                        ],
-                        joinNum: 11,
-                        seatInfo: true,
-                        contacts: "唐先生 13535789321"
-                    },
-                    {
-                        id: 2,
-                        name: "活动测试",
-                        date: "2016-11-11 14:00:00-16:00:00",
-                        address: "广州市番禺区小谷围街道华南理工大学",
-                        seatInfo: false,
-                        fee: 1000,
-                        introduciotn: [
-                            `企业网站的作用是展示企业网站，为企业提供产品展示、企业宣传、形象建设、
-                    联系企业等方面提供了重要信息渠道，企业如果能够做好网站宣传和网络口碑建设，
-                    那么用户转化率就会大大提高，企业客户资源的源源不断带给我们企业的将会是订单，
-                    所以企业网站建设不能只是摆设性的搭建一个域名、空间和程序，需要融合企业文化和企业精华到网站中。`
-                        ],
-                        status: "已支付",
-                        contacts: "唐先生 13535789321"
-                    },
-                    {
-                        id: 3,
-                        name: "活动测试",
-                        date: "2016-10-10 14:00:00-16:00:00",
-                        address: "广州市番禺区小谷围街道华南理工大学",
-                        fee: 1000,
-                        introduciotn: [
-                            `企业网站的作用是展示企业网站，
-                    为企业提供产品展示、企业宣传、形象建设、
-                    联系企业等方面提供了重要信息渠道，企业如果能够做好网站宣传和网络口碑建设，
-                    那么用户转化率就会大大提高，企业客户资源的源源不断带给我们企业的将会是订单，
-                    所以企业网站建设不能只是摆设性的搭建一个域名、空间和程序，需要融合企业文化和企业精华到网站中。`
-                        ],
-                        status: "已完结",
-                        contacts: "唐先生 13535789321"
-                    }
-                ],
+                tableData: [],
                 tableAttr: {
                     stripe: true
                 },
@@ -303,7 +233,6 @@ export default {
                 activityId: this.seatInfo.id,
                 data: this.seatInfo.arr
             };
-            console.log(par);
             try {
                 let res = await adminActivityApi.setSEATInfo(par);
             } catch (error) {
@@ -312,7 +241,10 @@ export default {
         },
         async exportEntryForm() {
             try {
-                let res = await adminActivityApi.getEntryForm(drwaerInfo.id);
+                let res = await adminActivityApi.getEntryForm(
+                    this.drwaerInfo.id
+                );
+                download(res);
             } catch (error) {
                 this.$message.error(error.message);
             }
@@ -353,7 +285,7 @@ export default {
         border-top: 1px solid rgb(58, 158, 240);
         width: 100%;
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-start;
         position: absolute;
         bottom: 0;
         padding: 30px;

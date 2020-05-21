@@ -3,7 +3,7 @@
         <h2>个人信息</h2>
         <div>
             <span class="panel-title">基本信息</span>
-            <el-form :model="info" :loading="loading">
+            <el-form :model="info" :loading="loading" label-position="top">
                 <el-row :gutter="40">
                     <el-col :span="8">
                         <el-form-item label-position="top" label="身份证号码">
@@ -31,7 +31,7 @@
 
                     <el-col :span="8">
                         <el-form-item label-position="top" label="所属公司">
-                            <el-input v-model="info.company" :disabled="readOnly"></el-input>
+                            <el-input v-model="info.company" :disabled="true"></el-input>
                         </el-form-item>
                     </el-col>
 
@@ -60,9 +60,9 @@
                 </el-row>
             </el-form>
             <div class="tac mt30">
-                <el-button v-if="readOnly" type="primary" @click="readOnly=false">修改资料</el-button>
+                <el-button v-if="readOnly" type="primary" @click="readOnly = false">修改资料</el-button>
                 <el-button v-if="!readOnly" type="primary" @click="setUserInfo">确定</el-button>
-                <el-button v-if="!readOnly" type="primary" @click="readOnly=true">取消</el-button>
+                <el-button v-if="!readOnly" type="primary" @click="cancel">取消</el-button>
             </div>
         </div>
     </div>
@@ -93,11 +93,11 @@ export default {
             provinceOptions: [],
             cityOptions: [],
             loading: false,
-            confirmLoading: false
+            confirmLoading: false,
+            backupInfo: {}
         };
     },
     mounted() {
-        console.log(11);
         this.getUserInfo();
     },
     methods: {
@@ -106,6 +106,7 @@ export default {
                 this.loading = true;
                 let res = await infoApi.getStudentInfo();
                 this.info = res.data;
+                this.backupInfo = res.data;
             } catch (error) {
                 this.$message.error(error.message);
             }
@@ -121,6 +122,10 @@ export default {
                 this.$message.error(error.message);
             }
             this.confirmLoading = false;
+        },
+        cancel() {
+            this.readOnly = false;
+            this.info = this.backupInfo;
         },
         changeProvince(val) {
             this.info.province = val;
