@@ -114,56 +114,7 @@ export default {
                         slot: "oper"
                     }
                 ],
-                tableData: [
-                    {
-                        id: 1,
-                        name: "活动测试",
-                        date: "2016-10-10 14:00:00-16:00:00",
-                        address: "广州市番禺区小谷围街道华南理工大学",
-                        fee: 1000,
-                        introduciotn: [
-                            `企业网站的作用是展示企业网站，
-                    为企业提供产品展示、企业宣传、形象建设、
-                    联系企业等方面提供了重要信息渠道，企业如果能够做好网站宣传和网络口碑建设，
-                    那么用户转化率就会大大提高，企业客户资源的源源不断带给我们企业的将会是订单，
-                    所以企业网站建设不能只是摆设性的搭建一个域名、空间和程序，需要融合企业文化和企业精华到网站中。`
-                        ],
-                        status: "未支付",
-                        contacts: "唐先生 13535789321"
-                    },
-                    {
-                        id: 2,
-                        name: "活动测试",
-                        date: "2016-11-11 14:00:00-16:00:00",
-                        address: "广州市番禺区小谷围街道华南理工大学",
-                        fee: 1000,
-                        introduciotn: [
-                            `企业网站的作用是展示企业网站，
-                    为企业提供产品展示、企业宣传、形象建设、
-                    联系企业等方面提供了重要信息渠道，企业如果能够做好网站宣传和网络口碑建设，
-                    那么用户转化率就会大大提高，企业客户资源的源源不断带给我们企业的将会是订单，
-                    所以企业网站建设不能只是摆设性的搭建一个域名、空间和程序，需要融合企业文化和企业精华到网站中。`
-                        ],
-                        status: "已支付",
-                        contacts: "唐先生 13535789321"
-                    },
-                    {
-                        id: 3,
-                        name: "活动测试",
-                        date: "2016-10-10 14:00:00-16:00:00",
-                        address: "广州市番禺区小谷围街道华南理工大学",
-                        fee: 1000,
-                        introduciotn: [
-                            `企业网站的作用是展示企业网站，
-                    为企业提供产品展示、企业宣传、形象建设、
-                    联系企业等方面提供了重要信息渠道，企业如果能够做好网站宣传和网络口碑建设，
-                    那么用户转化率就会大大提高，企业客户资源的源源不断带给我们企业的将会是订单，
-                    所以企业网站建设不能只是摆设性的搭建一个域名、空间和程序，需要融合企业文化和企业精华到网站中。`
-                        ],
-                        status: "已完结",
-                        contacts: "唐先生 13535789321"
-                    }
-                ],
+                tableData: [],
                 tableAttr: {
                     // stripe: true
                 },
@@ -192,134 +143,7 @@ export default {
                 id: null,
                 listFlag: false,
                 data: [],
-                list: [
-                    {
-                        name: "1",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "2",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "3",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "4",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "5",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "ss",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "ss",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "ss",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "ss",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "ss",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "ss",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "ss",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "ss",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "ss",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "ss",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "ss",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "ss",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "ss",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "ss",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "ss",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    },
-                    {
-                        name: "ss",
-                        idNum: "445122222222",
-                        phone: "15222222",
-                        position: "经理"
-                    }
-                ]
+                list: []
             }
         };
     },
@@ -407,9 +231,9 @@ export default {
                         activityId: this.studentList.id
                     };
                     let res = await activityApi.memberJoinActivity(par);
-                    this.$message.success("报名成功");
+                    this.$alert(res.msg);
                 } catch (error) {
-                    this.$message.error(error.message);
+                    this.$alert(error.message);
                 }
             });
         },

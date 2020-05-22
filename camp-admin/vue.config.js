@@ -10,7 +10,11 @@ module.exports = {
         hotOnly:false,
         proxy: {
             '/campback':{
+<<<<<<< HEAD
                 //target:'http://localhost:3000',
+=======
+                // target:'http://localhost:3000',
+>>>>>>> 50fafe981eb75812526dcebde3c769f64720cf9d
                 target: 'http://112.126.67.240:3000',
                 pathRewrite:{
                     '^/campback':'/'

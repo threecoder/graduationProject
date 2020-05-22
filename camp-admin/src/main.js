@@ -7,16 +7,12 @@ import element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import { getCanGoPath } from './assets/js/util';
 
-// import 'vue-fabric/dist/vue-fabric.min.css';
-// import { Fabric } from 'vue-fabric';
-// Vue.use(Fabric);
-
 Vue.config.productionTip = false
 Vue.prototype.$message = element.Message;
 Vue.prototype.$msbox = element.MessageBox;
 Vue.prototype.confirm = element.MessageBox.confirm;
-
 Vue.use(element);
+
 // 配置路由拦截
 router.beforeEach((to, from, next) => {
     store.commit("init");
@@ -35,7 +31,7 @@ router.beforeEach((to, from, next) => {
     } else {
         next();
     }
-})
+});
 
 //http response 拦截器
 Axios.interceptors.response.use(
@@ -68,7 +64,8 @@ Axios.interceptors.response.use(
         }
         throw new Error(error);
     }
-)
+);
+
 const mainProcess = new Vue({
     router,
     store,

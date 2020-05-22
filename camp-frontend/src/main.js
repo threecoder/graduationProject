@@ -22,7 +22,6 @@ import "./assets/css/quill.snow.css";
 router.beforeEach((to, from, next) => {
     let token = document.cookie.indexOf("token");
     if (!store.getters.isLogin) {
-        console.log(store.getters.isLogin)
         store.commit("initState");
     }
     if ((token == -1 || !store.getters.isLogin) && canGoPath.indexOf(to.path) == -1) {

@@ -7,7 +7,7 @@
             <p class="title">{{detail.title}}</p>
             <p class="date">{{detail.date}}</p>
         </div>
-        <div v-html="detail.content" class="content"></div>
+        <!-- <div v-html="detail.content" class="content"></div> -->
         <div id="content" class="content"></div>
     </div>
 </template>
@@ -43,7 +43,6 @@ export default {
     mounted() {
         this.info = this.$route.query;
         this.getDetail();
-        // this.$_handleData();
     },
     methods: {
         isImg(item) {
@@ -70,7 +69,7 @@ export default {
                 }
             }
             let urlList = this.detail.urlList;
-            let com = Vue.extend({
+            let Com = Vue.extend({
                 template: "<div>" + this.detail.content + "</div>",
                 components: {
                     elImage
@@ -86,7 +85,8 @@ export default {
                     }
                 }
             });
-            com = new com().$mount();
+            let com = new Com().$mount();
+            console.log(com)
             console.log(this.detail.content);
             document.getElementById("content").appendChild(com.$el);
         },
@@ -101,7 +101,8 @@ export default {
                 } else {
                     res = await dynamicApi.getDynamicDetail(this.info.id);
                 }
-                this.detail = res.data.info;
+                this.detail = res.data;
+                this.$_handleData();
                 console.log(this.detail.content);
             } catch (error) {
                 this.$message.error(error.message);

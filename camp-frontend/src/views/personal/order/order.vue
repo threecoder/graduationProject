@@ -38,10 +38,16 @@
                 <el-table-column slot="oper" slot-scope="{params}" v-bind="params" align="center">
                     <div slot-scope="{row}">
                         <el-button
-                            v-if="row.status=='未支付'"
+                            v-if="row.status=='未支付' && idType==0"
                             size="small"
                             type="primary"
-                            @click="pay(row)"
+                            @click="studentPay(row)"
+                        >支付</el-button>
+                        <el-button
+                            v-if="row.status=='未支付' && idType==1"
+                            size="small"
+                            type="primary"
+                            @click="beforePay(row)"
                         >支付</el-button>
                     </div>
                 </el-table-column>
@@ -56,8 +62,8 @@
             />
         </div>
 
-        <el-dialog title="订单支付" :visible.sync="payment.flag" v-if="payment.flag">
-            <payment :orderId="payment.orderId" />
+        <el-dialog title="请选择优惠券" :visible.sync="payment.flag" v-if="payment.flag">
+            <payment :orderId="payment.orderId" @cancel="payment.flag=false" @fresh="getOrderList" />
         </el-dialog>
 
         <el-dialog title="我的优惠券" :visible.sync="couponFlag" v-if="couponFlag">
@@ -114,18 +120,7 @@ export default {
                         fixed: "right"
                     }
                 ],
-                data: [
-                    {
-                        orderNum: "20191023111733112724",
-                        orderType: "学员订单",
-                        name: "英语角",
-                        builder: "张三",
-                        buildTime: "2020-02-02 20:20:30",
-                        endTime: "2020-03-02 20:20:20",
-                        price: "9500",
-                        status: "未支付"
-                    }
-                ],
+                data: [],
                 loading: false
             },
             payment: {
@@ -158,12 +153,22 @@ export default {
                 let res = await orderApi.getOrderList(this.idType, this.form);
                 this.table.data = res.data.list;
                 this.form.total = res.data.total;
+                let typeStr = "";
+                for(let i = 0; i<orderTypeList.length; i++ ){
+                    if(this.form.type == orderTypeList[i].key) {
+                        typeStr = orderTypeList[i].label;
+                        break;
+                    }
+                }
+                this.table.data.forEach(val=> {
+                    val.orderType = typeStr;
+                })
             } catch (error) {
                 this.$message.error(error.message);
             }
             this.table.loading = false;
         },
-        async pay(row) {
+        async studentPay(row) {
             let data = {
                 orderId: row.orderNum,
                 returnUrl: "/#/order",
@@ -188,6 +193,10 @@ export default {
             let myForm = document.forms[document.forms.length - 1];
             myForm.setAttribute("target", "_blank"); // 新开窗口跳转
             myForm.submit();
+        },
+        beforePay(row) {
+            this.payment.orderId = row.orderNum;
+            this.payment.flag = true;
         }
     }
 };

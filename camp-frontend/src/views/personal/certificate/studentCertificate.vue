@@ -74,7 +74,7 @@ export default {
             },
             table: {
                 config: [
-                    { prop: "name", label: "证书名称" },
+                    { prop: "cerName", label: "证书名称" },
                     { prop: "trainingName", label: "所属培训" },
                     { prop: "memberName", label: "所属组织" },
                     { prop: "effectiveLength", label: "有效时长" },
