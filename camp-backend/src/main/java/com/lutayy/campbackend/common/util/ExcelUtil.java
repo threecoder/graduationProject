@@ -228,7 +228,7 @@ public class ExcelUtil {
             // TODO 写入数据
             for (int i = 0; i < rowList.size(); i++) {
                 // 创建行
-                Row row = sheet.createRow(i+1);
+                Row row = sheet.createRow(i);
                 List<String> cellList = (ArrayList<String>) rowList.get(i);
                 for (int j = 0; j < cellList.size(); j++) {
                     // 创建列

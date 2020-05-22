@@ -46,6 +46,7 @@ public class StaticScheduleTask {
         memberExample.createCriteria().andIsVipEqualTo(true)
                 .andVipEndDateLessThanOrEqualTo(nowTime);
         Member memberRecord = new Member();
+        memberRecord.setIsVip(false);
         List<Member> members=memberMapper.selectByExample(memberExample);
         if(members.size()>0){
             MessageText messageText=new MessageText();

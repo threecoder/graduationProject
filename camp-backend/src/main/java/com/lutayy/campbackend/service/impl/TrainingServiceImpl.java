@@ -436,7 +436,7 @@ public class TrainingServiceImpl implements TrainingService {
         trainingOrder.setClose(false);
         trainingOrder.setBusinessName(training.getTrainingName());
         trainingOrder.setOpManName(student.getStudentName());
-        if (trainingOrderMapper.insert(trainingOrder) > 0) {
+        if (trainingOrderMapper.insertSelective(trainingOrder) > 0) {
             result.put("code", "success");
             result.put("msg", "订单生成生成!待支付");
             // TODO 插入“订单—学生”表
@@ -638,15 +638,15 @@ public class TrainingServiceImpl implements TrainingService {
         }
 
         /** 模拟订单支付确认 **/
-        if (confirmOrder(orderId) == 1) {
-            msg += "  模拟订单支付确认完成";
-        }
+//        if (confirmOrder(orderId) == 1) {
+//            msg += "  模拟订单支付确认完成";
+//        }
         result.put("msg", msg);
         return result;
     }
 
     /**
-     * 会员订单成功支付
+     * 会员订单成功支付 用不到了用不到了
      **/
     private int confirmOrder(String orderId) {
         System.out.println("---- 模拟订单支付确认 开启 ----");
@@ -822,15 +822,18 @@ public class TrainingServiceImpl implements TrainingService {
         }
         intro.append(trainingIntro.get(trainingIntro.size() - 1));
 
-        //培训名称查重
-        TrainingExample trainingExample = new TrainingExample();
-        TrainingExample.Criteria criteria = trainingExample.createCriteria();
-        criteria.andTrainingNameEqualTo(trainingName);
-        if (trainingMapper.selectByExample(trainingExample).size() > 0) {
-            result.put("msg", "已有同名的培训,修改失败！");
-            return result;
-        }
         Training training = trainingMapper.selectByPrimaryKey(jsonObject.getInteger("trainingId"));
+        //培训名称查重
+        if(!trainingName.equals(training.getTrainingName())) {
+            TrainingExample trainingExample = new TrainingExample();
+            TrainingExample.Criteria criteria = trainingExample.createCriteria();
+            criteria.andTrainingNameEqualTo(trainingName);
+            if (trainingMapper.selectByExample(trainingExample).size() > 0) {
+                result.put("msg", "已有同名的培训,修改失败！");
+                return result;
+            }
+        }
+
         training.setContactName(contactName);
         training.setContactPhone(contactPhone);
         training.setLevel(level);
@@ -1020,6 +1023,8 @@ public class TrainingServiceImpl implements TrainingService {
     //管理员根据id获取已报名培训学员列表
     @Override
     public JSONObject getEnrolledStudentList(Integer pageSize, Integer currentPage, Integer trainingId, String studentName, String idCard, String company) {
+        getObjectHelper.checkAllTrainingOrder();
+
         JSONObject result=new JSONObject();
         JSONObject data=new JSONObject();
         data.put("total", TrainingStudentSQLConn.countStudentByTrainingId(trainingId, studentName, idCard, company));

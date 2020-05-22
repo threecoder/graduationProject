@@ -24,7 +24,7 @@ public interface CertificateService {
 
 
     //会员获取学员现有证书
-    JSONObject memberGetStudentCerList(Integer memberId, String cerName, String trainingName, Integer pageSize, Integer currentPage);
+    JSONObject memberGetStudentCerList(Integer memberId, String idNum, String cerName, String trainingName, Integer pageSize, Integer currentPage);
     //会员获取学员的某个证书相关信息
     JSONObject memberGetCerInfo(Integer memberId, String idNum, Integer cerId);
 

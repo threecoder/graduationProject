@@ -67,6 +67,8 @@ public class CertificateServiceImpl implements CertificateService {
 
     @Value("${IMG_HOST}")
     private String IMG_HOST;
+    @Value("${IMG_PATH}")
+    private String IMG_PATH;
 
     /** 管理员操作 **/
     //管理员修改某个证书信息(修改背景图)
@@ -103,15 +105,14 @@ public class CertificateServiceImpl implements CertificateService {
     @Override
     public JSONObject uploadCerBackground(MultipartFile img, String imgName) {
         JSONObject result=new JSONObject();
-        String mainPath = "./src/main/resources/static";
-        String dirPath="/image/certificate_background";
-        String imgPath=dirPath+"/"+UUIDUtil.getMemberUUID().substring(3)+ new Date().getTime()+".jpg";
-        File dest=new File(mainPath+dirPath);
+        String dirPath="/serveImage/certificate_background";
+        String imgPath=dirPath+"/"+ new Date().getTime()+UUIDUtil.getMemberUUID().substring(0,3)+".jpg";
+        File dest=new File(IMG_PATH+dirPath);
         if (!dest.exists()) {
             dest.mkdirs();
         }
         try{
-            FileOutputStream out = new FileOutputStream(mainPath + imgPath);
+            FileOutputStream out = new FileOutputStream(IMG_PATH + imgPath);
             out.write(img.getBytes());
             out.flush();
             out.close();
@@ -131,7 +132,6 @@ public class CertificateServiceImpl implements CertificateService {
     @Override
     public JSONObject getCerBackgroundImg() {
         JSONObject result=new JSONObject();
-        String mainPath = "./src/main/resources/static";
 
         CertificateImageExample example=new CertificateImageExample();
         example.createCriteria().andIsInvalidEqualTo(false);
@@ -438,13 +438,13 @@ public class CertificateServiceImpl implements CertificateService {
 
     //会员获取学员现有证书
     @Override
-    public JSONObject memberGetStudentCerList(Integer memberId, String cerName,
+    public JSONObject memberGetStudentCerList(Integer memberId, String idNum, String cerName,
                                         String trainingName, Integer pageSize, Integer currentPage) {
         JSONObject result=new JSONObject();
         JSONObject data=new JSONObject();
 
-        int total= CertificateSQLConn.memberCountCerficateId(memberId, cerName, trainingName);
-        List<Integer> idList=CertificateSQLConn.memberGetCerficateId(memberId, cerName, trainingName, pageSize, currentPage);
+        int total= CertificateSQLConn.memberCountCerficateId(memberId, idNum, cerName, trainingName);
+        List<Integer> idList=CertificateSQLConn.memberGetCerficateId(memberId, idNum, cerName, trainingName, pageSize, currentPage);
         JSONArray list=new JSONArray();
         for(int i=0;i<idList.size();i++){
             JSONObject object=new JSONObject();
@@ -527,7 +527,7 @@ public class CertificateServiceImpl implements CertificateService {
         String mainPath = "./src/main/resources/templates";
         String temPath;
         String outPath = mainPath + "/certificate/training_cer/" + training.getTrainingId() + "_"+studentId+"_training_cer.pdf";
-        String backImgPath = "./src/main/resources/static" +
+        String backImgPath = IMG_PATH +
                     certificateImageMapper.selectByPrimaryKey(training.getCerImgId()).getImgPath();
         Map<String, String> contentMap = new HashMap<>();
         // TODO 参数设置

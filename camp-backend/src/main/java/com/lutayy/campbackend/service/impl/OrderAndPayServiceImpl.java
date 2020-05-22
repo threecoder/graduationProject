@@ -64,6 +64,10 @@ public class OrderAndPayServiceImpl implements OrderAndPayService {
     @Autowired
     CertificateChangeOrderNewMemberNameMapper certificateChangeOrderNewMemberNameMapper;
     @Autowired
+    CouponMemberMapper couponMemberMapper;
+    @Autowired
+    CouponMapper couponMapper;
+    @Autowired
     GetObjectHelper getObjectHelper;
     @Resource
     private RedisUtil redisUtil;
@@ -929,6 +933,17 @@ public class OrderAndPayServiceImpl implements OrderAndPayService {
         String serverPort=jsonObject.getString("serverPort");
         String returnUrl=jsonObject.getString("returnUrl");
         String orderCode=jsonObject.getString("orderId");
+        Integer uniqueCouponId=jsonObject.getInteger("couponId");
+        BigDecimal subMoney=BigDecimal.valueOf(0);
+        if(uniqueCouponId!=null) {
+            CouponMember couponMember = couponMemberMapper.selectByPrimaryKey(uniqueCouponId);
+            if(!couponMember.getIsInvalid()) {
+                if (couponMember != null) {
+                    Coupon coupon = couponMapper.selectByPrimaryKey(couponMember.getCouponId());
+                    subMoney = coupon == null ? BigDecimal.valueOf(0) : coupon.getAmountDiscount();
+                }
+            }
+        }
 
         Object orderTypeObject=redisUtil.hget("order_no_map", orderCode);
         if(orderTypeObject==null){
@@ -963,7 +978,7 @@ public class OrderAndPayServiceImpl implements OrderAndPayService {
                 }
             }
 
-            fee=activityOrder.getOrderPrice();
+            fee=activityOrder.getOrderPrice().subtract(subMoney);
             bussinessName=activityOrder.getOpManName()+"_"+activityOrder.getBusinessName();
 
         } else if (orderType.equals("training")) {
@@ -989,7 +1004,7 @@ public class OrderAndPayServiceImpl implements OrderAndPayService {
                     return result;
                 }
             }
-            fee=trainingOrder.getOrderPrice();
+            fee=trainingOrder.getOrderPrice().subtract(subMoney);
             bussinessName=trainingOrder.getOpManName()+"_"+trainingOrder.getBusinessName();
 
         } else if (orderType.equals("cerChange")) {
@@ -1002,7 +1017,7 @@ public class OrderAndPayServiceImpl implements OrderAndPayService {
                 result.put("msg", "订单已失效，无法进行支付");
                 return result;
             }
-            fee=certificateChangeOrder.getOrderPrice();
+            fee=certificateChangeOrder.getOrderPrice().subtract(subMoney);
             bussinessName=certificateChangeOrder.getOpManName()+"_"+certificateChangeOrder.getBusinessName();
 
         } else if (orderType.equals("cerRecheck")) {
@@ -1015,7 +1030,7 @@ public class OrderAndPayServiceImpl implements OrderAndPayService {
                 result.put("msg", "订单已失效，无法进行支付");
                 return result;
             }
-            fee=certificateRecheckOrder.getOrderPrice();
+            fee=certificateRecheckOrder.getOrderPrice().subtract(subMoney);
             bussinessName=certificateRecheckOrder.getOpManName()+"_"+certificateRecheckOrder.getBusinessName();
 
         } else if (orderType.equals("member")) {
@@ -1028,7 +1043,7 @@ public class OrderAndPayServiceImpl implements OrderAndPayService {
                 result.put("msg", "订单已失效，无法进行支付");
                 return result;
             }
-            fee=memberSubscriptionOrder.getFee();
+            fee=memberSubscriptionOrder.getFee().subtract(subMoney);
             bussinessName=memberSubscriptionOrder.getOpManName()+"_"+memberSubscriptionOrder.getBusinessName();
 
         } else {
@@ -1047,7 +1062,7 @@ public class OrderAndPayServiceImpl implements OrderAndPayService {
                 "    \"product_code\":\"FAST_INSTANT_TRADE_PAY\","  +
                 "    \"total_amount\":"+fee+","  +
                 "    \"subject\":\""+bussinessName+"\","  +
-                "    \"body\":\""+orderType+"\","  +
+                "    \"body\":\""+orderType+","+uniqueCouponId+"\","  +
                 "    \"extend_params\":{"  +
                 "    }" +
                 "}" ); //填充业务参数
@@ -1087,7 +1102,17 @@ public class OrderAndPayServiceImpl implements OrderAndPayService {
         if (signVerified) {
             // TODO 处理自己的业务逻辑
             String orderCode=map.get("out_trade_no");
-            String orderType=map.get("orderType");
+            String bodyStr=map.get("body");
+            Integer uniqueCouponIdStr=Integer.valueOf(bodyStr.split(",")[1]);
+            String orderType=bodyStr.split(",")[0];
+            if(uniqueCouponIdStr!=null){
+                Integer uniqueCouponId=Integer.valueOf(uniqueCouponIdStr);
+                CouponMember couponMember=couponMemberMapper.selectByPrimaryKey(uniqueCouponId);
+                if(couponMember!=null){
+                    couponMember.setIsInvalid(true);
+                    couponMemberMapper.updateByPrimaryKeySelective(couponMember);
+                }
+            }
             // 确认订单支付成功，同时更新数据库状态
             confirmOrder(orderCode, orderType);
             // TODO 插入支付业务流水表
