@@ -25,8 +25,12 @@ public interface ActivityService {
     JSONObject memberGetSignedActivities(Integer memberId, Integer currentPage, Integer pageSize, String name);
     //管理员导出报名表
     ResponseEntity<byte[]> getEntryForm(Integer activityId, Integer adminId);
+    //管理员导出座位信息表
+//    ResponseEntity<byte[]> getSeatForm(Integer activityId, Integer adminId);
     //管理员设置座位信息
     JSONObject setSEATInfo(JSONObject jsonObject);
     //管理员获取活动座位表
     JSONObject getActivitySEAT(Integer activityId);
+    //管理员提交自动排位
+    JSONObject autoSEAT(JSONObject jsonObject);
 }

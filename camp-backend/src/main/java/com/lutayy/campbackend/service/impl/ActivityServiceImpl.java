@@ -322,7 +322,7 @@ public class ActivityServiceImpl implements ActivityService {
         activityOrder.setClose(false);
         activityOrder.setOpManName(student.getStudentName());
         activityOrder.setBusinessName(activity.getActivityName());
-        if (activityOrderMapper.insert(activityOrder) > 0) {
+        if (activityOrderMapper.insertSelective(activityOrder) > 0) {
             result.put("code", "success");
             result.put("msg", "订单生成成功!待支付");
             // TODO 插入“订单—学生”表
@@ -393,7 +393,7 @@ public class ActivityServiceImpl implements ActivityService {
         activityOrder.setClose(false);
         activityOrder.setBusinessName(activity.getActivityName());
         activityOrder.setOpManName(member.getMemberName());
-        activityOrderMapper.insert(activityOrder);
+        activityOrderMapper.insertSelective(activityOrder);
 
         int existTotalCount = 0;
         String existTagTip = "";
@@ -647,6 +647,10 @@ public class ActivityServiceImpl implements ActivityService {
             criteria.andActivityIdEqualTo(activity.getActivityId());
             long joinNum = activityStudentMapper.countByExample(activityStudentExample);
             object.put("joinNum", joinNum);
+            /* 有无设置座位 */
+            ActivitySeatExample activitySeatExample=new ActivitySeatExample();
+            activitySeatExample.createCriteria().andActivityIdEqualTo(activity.getActivityId());
+            object.put("seatInfo", activitySeatMapper.countByExample(activitySeatExample)>0);
             data.add(object);
         }
         result.put("data", data);
@@ -655,12 +659,16 @@ public class ActivityServiceImpl implements ActivityService {
         return result;
     }
 
-    //管理员导出报名表
+    //管理员导出座位信息表
     @Override
     public ResponseEntity<byte[]> getEntryForm(Integer activityId, Integer adminId) {
 
         String fileName = adminId+"_activity_"+activityId+"_signed_form.xlsx";
-        String filePath = "./src/main/resources/templates/opXlsx/"+fileName;
+        File dest = new File("/root/excelTemplates/opXlsx/");
+        if (!dest.exists()) {
+            dest.mkdirs();
+        }
+        String filePath = "/root/excelTemplates/opXlsx/"+fileName;
         ExcelUtil.createExcel(filePath);
 
         InputStream in;
@@ -846,6 +854,58 @@ public class ActivityServiceImpl implements ActivityService {
         result.put("data", data);
         result.put("code", "success");
         result.put("msg", "获取座位表成功！");
+        return result;
+    }
+
+    @Override
+    public JSONObject autoSEAT(JSONObject jsonObject) {
+        JSONObject result = new JSONObject();
+        result.put("code", "fail");
+        //权限检查
+        Integer opAdminId=jsonObject.getInteger("id");
+        if(!getObjectHelper.checkAdminIfHasAuthority(opAdminId, AuthorityParam.ACTIVITY)){
+            result.put("msg", "操作失败！当前用户无该操作权限");
+            return result;
+        }
+        Integer activityId=jsonObject.getInteger("activityId");
+        Activity activity = activityMapper.selectByPrimaryKey(activityId);
+        if (activity == null) {
+            result.put("msg", "设置失败！系统中找不到该活动");
+            return result;
+        }
+        if(activity.getAreaWidth()==null || activity.getAreaLength()==null){
+            result.put("msg", "设置失败！该活动未设置座位信息");
+            return result;
+        }
+        //获取活动的座位
+        ActivitySeatExample activitySeatExample=new ActivitySeatExample();
+        activitySeatExample.createCriteria().andActivityIdEqualTo(activityId)
+                .andIsLockEqualTo(false);
+        activitySeatExample.setOrderByClause("fake_y ASC");
+        List<ActivitySeat> seats=activitySeatMapper.selectByExample(activitySeatExample);
+        //获取报名了活动的学员
+        ActivityStudentExample activityStudentExample=new ActivityStudentExample();
+        activityStudentExample.createCriteria().andActivityIdEqualTo(activityId)
+                .andIsInvalidEqualTo(false);
+        activityStudentExample.setOrderByClause("apply_time DESC");
+        List<ActivityStudent> activityStudents=activityStudentMapper.selectByExample(activityStudentExample);
+        // TODO 安排座位
+        for(int i=0; i<seats.size(); i++){
+            ActivitySeat seat=seats.get(i);
+            if(i<activityStudents.size()){
+                ActivityStudent activityStudent=activityStudents.get(i);
+                activityStudent.setSeatNumber(seat.getFakeY() + "行" + seat.getFakeX() + "座");
+                activityStudentMapper.updateByPrimaryKeySelective(activityStudent);
+                seat.setIsOccupied(true);
+                seat.setStudentnum(activityStudent.getStudentId());
+            }else {
+                seat.setIsOccupied(false);
+                seat.setStudentnum(null);
+            }
+            activitySeatMapper.updateByPrimaryKeySelective(seat);
+        }
+        result.put("code", "success");
+        result.put("msg", "自动排位成功！");
         return result;
     }
 }

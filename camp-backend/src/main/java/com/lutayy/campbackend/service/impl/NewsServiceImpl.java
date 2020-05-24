@@ -33,6 +33,9 @@ public class NewsServiceImpl implements NewsService {
 
     @Value("${IMG_HOST}")
     private String IMG_HOST;
+    @Value("${IMG_PATH}")
+    private String IMG_PATH;
+
     @Autowired
     NewsMapper newsMapper;
     @Autowired
@@ -121,14 +124,14 @@ public class NewsServiceImpl implements NewsService {
         news.setType(type);
         newsMapper.insertSelective(news);
         Integer newsId = news.getNewsId();
-        String mainPath = "./src/main/resources/static";
+        String mainPath = IMG_PATH;
         String dirPath;
         if(type.equals("news")){
-            dirPath = "/image/news/" + adminId + "/";
+            dirPath = "/serveImage/news/" + adminId + "/";
         }else if(type.equals("dynamic")){
-            dirPath = "/image/dynamic/" + adminId + "/";
+            dirPath = "/serveImage/dynamic/" + adminId + "/";
         }else {
-            dirPath = "/image/notice/" + adminId + "/";
+            dirPath = "/serveImage/notice/" + adminId + "/";
         }
         for (int i = 0; i < imgList.length; i++) {
             String fileName = imgList[i].getOriginalFilename();
@@ -317,14 +320,14 @@ public class NewsServiceImpl implements NewsService {
         news.setType(type);
         newsMapper.updateByPrimaryKey(news);
         int imgListIndex = 0;
-        String mainPath = "./src/main/resources/static";
+        String mainPath = "/root";
         String dirPath;
         if(type.equals("news")){
-            dirPath = "/image/news/" + adminId + "/";
+            dirPath = "/serveImage/news/" + adminId + "/";
         }else if(type.equals("dynamic")){
-            dirPath = "/image/dynamic/" + adminId + "/";
+            dirPath = "/serveImage/dynamic/" + adminId + "/";
         }else {
-            dirPath = "/image/notice/" + adminId + "/";
+            dirPath = "/serveImage/notice/" + adminId + "/";
         }
         //将原来新闻的所有图片置为失效
         NewsImgExample newsImgExample = new NewsImgExample();

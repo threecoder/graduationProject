@@ -99,4 +99,10 @@ public class ActivityController {
         return activityService.getActivitySEAT(activityId);
     }
 
+    @RequestMapping("/admin/autoSEAT")
+    @ResponseBody
+    public JSONObject autoSEAT(@RequestBody JSONObject jsonObject){
+        return activityService.autoSEAT(jsonObject);
+    }
+
 }

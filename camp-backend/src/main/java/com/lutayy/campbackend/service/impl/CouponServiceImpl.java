@@ -249,27 +249,36 @@ public class CouponServiceImpl implements CouponService {
         JSONObject data=new JSONObject();
         result.put("data", data);
         result.put("code", "fail");
-
         Coupon coupon=couponMapper.selectByPrimaryKey(couponId);
         if(coupon==null){
             result.put("msg", "该优惠券不存在");
             return result;
         }
-        int total= CouponMemberSQLConn.countMembersByCouponId(couponId, memberKeyId, memberName);
-        List<Integer> memberKeyIds=CouponMemberSQLConn.getMemberKeyIdListByCouponId(couponId, memberKeyId, memberName, pageSize, currentPage);
+
+        MemberExample memberExample=new MemberExample();
+        MemberExample.Criteria criteria=memberExample.createCriteria();
+        if(memberKeyId!=null)
+            criteria.andMemberKeyIdEqualTo(memberKeyId);
+        if(memberName!=null && !memberName.equals(""))
+            criteria.andMemberNameLike("%"+memberName+"%");
+        long total=memberMapper.countByExample(memberExample);
+        memberExample.setOffset((currentPage-1)*pageSize);
+        memberExample.setLimit(pageSize);
+        List<Member> members=memberMapper.selectByExample(memberExample);
         JSONArray list=new JSONArray();
-        for(Integer id:memberKeyIds){
+        for(Member member:members){
             JSONObject object=new JSONObject();
-            Member member=memberMapper.selectByPrimaryKey(id);
-            object.put("id", id);
+            object.put("id", member.getMemberKeyId());
             object.put("name", member.getMemberName());
             object.put("phone", member.getMemberPhone());
             object.put("email", member.getMemberEmail());
             CouponMemberExample example=new CouponMemberExample();
-            example.createCriteria().andMemberKeyIdEqualTo(id).andCouponIdEqualTo(couponId).andIsInvalidEqualTo(false);
+            example.createCriteria().andIsInvalidEqualTo(false)
+                    .andMemberKeyIdEqualTo(member.getMemberKeyId()).andCouponIdEqualTo(couponId);
             object.put("num", couponMemberMapper.countByExample(example));
             list.add(object);
         }
+
         data.put("total", total);
         data.put("data", list);
         result.put("data", data);
@@ -294,6 +303,7 @@ public class CouponServiceImpl implements CouponService {
         for(CouponMember couponMember:couponMembers){
             JSONObject object=new JSONObject();
             Coupon coupon=couponMapper.selectByPrimaryKey(couponMember.getCouponId());
+            object.put("couponId", couponMember.getId());
             object.put("code", couponMember.getCouponCode());
             object.put("name", coupon.getCouponName());
             object.put("startTime", coupon.getStartTime());

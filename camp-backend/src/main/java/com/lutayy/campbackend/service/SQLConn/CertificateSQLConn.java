@@ -11,7 +11,7 @@ public class CertificateSQLConn {
     private static final String Name = "root";
     private static final String Pwd = "123456";
     //会员获取名下学员的证书
-    public static List<Integer> memberGetCerficateId(Integer memberId, String cerName, String trainingName,
+    public static List<Integer> memberGetCerficateId(Integer memberId, String idNum, String cerName, String trainingName,
                                         Integer pageSize, Integer currentPage){
         List<Integer> idList=new ArrayList<>();
         Connection conn = null;
@@ -23,7 +23,11 @@ public class CertificateSQLConn {
             sql = "select c.certificate_id from certificate c " +
                     "join training t on c.training_id=t.training_id " +
                     "join member_re_student r on c.student_id=r.student_id " +
+                    "join student s on c.student_id=s.student_id " +
                     "where r.member_key_id="+memberId+" and c.is_invalid=0";
+            if (idNum != null && !idNum.equals("")) {
+                sql += (" and s.student_idcard=" + idNum);
+            }
             if (cerName != null && !cerName.equals("")) {
                 sql += (" and c.certificate_name like '%" + cerName + "%'");
             }
@@ -42,7 +46,7 @@ public class CertificateSQLConn {
         }
     }
 
-    public static int memberCountCerficateId(Integer memberId, String cerName, String trainingName){
+    public static int memberCountCerficateId(Integer memberId,  String idNum, String cerName, String trainingName){
         int sum=0;
         Connection conn = null;
         Statement statement = null;
@@ -53,7 +57,11 @@ public class CertificateSQLConn {
             sql = "select count(c.certificate_id) cou from certificate c " +
                     "join training t on c.training_id=t.training_id " +
                     "join member_re_student r on c.student_id=r.student_id " +
+                    "join student s on c.student_id=s.student_id " +
                     "where r.member_key_id="+memberId+" and c.is_invalid=0";
+            if (idNum != null && !idNum.equals("")) {
+                sql += (" and s.student_idcard=" + idNum);
+            }
             if (cerName != null && !cerName.equals("")) {
                 sql += (" and c.certificate_name like '%" + cerName + "%'");
             }

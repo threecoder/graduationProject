@@ -80,8 +80,10 @@ public class TrainingStudentSQLConn {
         try {
             conn = DriverManager.getConnection(URL, Name, Pwd);
             statement = conn.createStatement();
-            String sql = "select s.student_idcard, s.student_name, s.student_phone, s.company from student s inner join training_re_student r on s.student_id=r.student_id " +
-                    "where r.is_invalid=0 and r.training_id="+trainingId;
+            String sql = "select s.student_idcard, s.student_name, s.student_phone, s.company, t_o.payment_state from training_order_student tos " +
+                    "inner join student s on s.student_id=tos.student_id " +
+                    "inner join training_order t_o on t_o.order_key_id=tos.order_key_id " +
+                    "where t_o.close=0 and t_o.training_id="+trainingId;
             if(studentName!=null && !studentName.equals("")){
                 sql+=" and s.student_name like '%" + studentName + "%'";
             }
@@ -100,6 +102,11 @@ public class TrainingStudentSQLConn {
                 object.put("name", rs.getString("student_name"));
                 object.put("phone", rs.getString("student_phone"));
                 object.put("company", rs.getString("company"));
+                if(rs.getBoolean("payment_state")){
+                    object.put("status", "是");
+                }else {
+                    object.put("status", "否");
+                }
                 array.add(object);
             }
             return array;

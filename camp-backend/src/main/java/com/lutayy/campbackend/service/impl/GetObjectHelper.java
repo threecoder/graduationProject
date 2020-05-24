@@ -311,7 +311,7 @@ public class GetObjectHelper {
         return false;
     }
 
-    //检查活动订单是否过期
+    //检查培训订单是否过期
     public boolean checkTrainingOrderOutOfTime(TrainingOrder trainingOrder){
         Date endTime=getOrderEndTime("training", trainingOrder.getOrderBeginTime());
         if(trainingOrder.getClose())
@@ -327,6 +327,18 @@ public class GetObjectHelper {
             }
         }
         return false;
+    }
+
+    //刷新所有培训订单状态(过期的置失效)
+    public void checkAllTrainingOrder(){
+        Calendar cal=Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.MINUTE, -getSystemParaByParaKey("training_order_length"));
+        TrainingOrderExample example=new TrainingOrderExample();
+        example.createCriteria().andCloseEqualTo(false).andOrderBeginTimeLessThan(cal.getTime());
+        TrainingOrder trainingOrder=new TrainingOrder();
+        trainingOrder.setClose(true);
+        trainingOrderMapper.updateByExampleSelective(trainingOrder, example);
     }
 
     //

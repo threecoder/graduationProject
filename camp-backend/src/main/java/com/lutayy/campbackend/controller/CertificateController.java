@@ -77,10 +77,11 @@ public class CertificateController {
     @ResponseBody
     public Object memberGetStudentCerList(@RequestParam("id") Integer memberId,
                                           @RequestParam(value = "cerName", required = false) String cerName,
+                                          @RequestParam(value = "idNum", required = false) String idNum,
                                           @RequestParam(value = "trainingName", required = false) String trainingName,
                                           @RequestParam("pageSize") Integer pageSize,
                                           @RequestParam("currentPage") Integer currentPage) {
-        return certificateService.memberGetStudentCerList(memberId, cerName, trainingName, pageSize, currentPage);
+        return certificateService.memberGetStudentCerList(memberId, idNum, cerName, trainingName, pageSize, currentPage);
     }
 
     @RequestMapping("/member/getCerInfo")
