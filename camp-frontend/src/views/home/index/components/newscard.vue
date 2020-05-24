@@ -7,7 +7,7 @@
             </div>
             <ul v-if="list.length!=0" v-loading="loading">
                 <li v-for="(newsitem,key) in list" :key="key" class="newsitem">
-                    <span class="news-title" @click="detail(newsitem)">{{newsitem.title}}</span>
+                    <span class="news-title" @click="detail(newsitem)">{{shortStr(newsitem.title)}}</span>
                     <span class="newsdate">{{newsitem.date}}</span>
                 </li>
             </ul>
@@ -23,11 +23,11 @@ export default {
     data() {
         return {
             list: [
-                {
-                    title: "新闻新闻新闻新闻新闻新闻新闻新闻新闻",
-                    date: "2019-09-01",
-                    id: "111"
-                }
+                // {
+                //     title: "新闻新闻新闻新闻新闻新闻新闻新闻新闻",
+                //     date: "2019-09-01",
+                //     id: "111"
+                // }
             ],
             loading: false
         };
@@ -72,6 +72,12 @@ export default {
                     `/dynamicDetail?type=dynamic&id=${newsitem.id}`
                 );
             }
+        },
+        shortStr(str) {
+            if(str.length>18) {
+                return str.substring(0,18) + "......"
+            }
+            return str;
         }
     }
 };

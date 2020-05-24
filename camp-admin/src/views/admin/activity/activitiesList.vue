@@ -154,12 +154,10 @@ export default {
             this.drwaerInfo = row;
         },
         async handleSEAT(row) {
-            this.seatInfo.id = row.id;
             if (row.seatInfo == true) {
                 try {
                     let res = await adminActivityApi.getSEATInfo(row.id);
                     this.seatInfo = res.data;
-                    this.flag = true;
                 } catch (error) {
                     this.$message.error("获取座位信息失败");
                 }
@@ -209,6 +207,8 @@ export default {
                         }
                     });
             }
+            this.seatInfo.id = row.id;
+            this.flag = true;
         },
         async autoSEAT(row) {
             this.$confirm("确定要自动安排座位吗？", "提示", {
@@ -249,6 +249,8 @@ export default {
             };
             try {
                 let res = await adminActivityApi.setSEATInfo(par);
+                this.$message.success("保存成功");
+                this.init();
             } catch (error) {
                 this.$message.error(error.message);
             }

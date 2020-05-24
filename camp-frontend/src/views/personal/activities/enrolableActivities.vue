@@ -254,18 +254,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-// .table-container {
-//     margin-top: 50px;
-//     ::v-deep .el-table__header-wrapper {
-//         thead {
-//             .cell {
-//                 font-size: 16px;
-//                 font-weight: 100;
-//                 color: black;
-//             }
-//         }
-//     }
-// }
 .drawer-container {
     .tac {
         h3 {

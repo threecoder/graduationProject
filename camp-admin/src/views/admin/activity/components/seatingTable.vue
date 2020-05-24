@@ -37,9 +37,9 @@
                             <div class="colunm" :key="j">
                                 <span
                                     class="seat"
-                                    :class="{green:Arr[i-1][j-1].num !== null,lock:Arr[i-1][j-1].lock}"
+                                    :class="{green:isGreen(i,j),lock:isLock(i,j)}"
                                     @click="showPanel(i,j)"
-                                >{{Arr[i-1][j-1].num===null?"":Arr[i-1][j-1].num}}</span>
+                                >{{num(i,j)}}</span>
                             </div>
                         </template>
                     </div>
@@ -68,25 +68,49 @@ export default {
                 x: null,
                 y: null,
                 lock: false
-            },
-            flag: false
+            }
         };
     },
     mounted() {
         console.log("座位表挂载");
     },
     methods: {
+        isGreen(i, j) {
+            if (!this.Arr[i - 1][j - 1]) {
+                return false;
+            } else {
+                return this.Arr[i - 1][j - 1].num !== null;
+            }
+        },
+        isLock(i, j) {
+            if (!this.Arr[i - 1][j - 1]) {
+                return false;
+            } else {
+                return this.Arr[i - 1][j - 1].lock;
+            }
+        },
+        num(i, j) {
+            if (
+                !this.Arr[i - 1][j - 1] ||
+                this.Arr[i - 1][j - 1].num === null
+            ) {
+                return "";
+            } else {
+                return this.Arr[i - 1][j - 1].num;
+            }
+        },
         showPanel(i, j) {
             this.tem.num = this.Arr[i - 1][j - 1].num;
             this.tem.x = i;
             this.tem.y = j;
             this.tem.lock = this.Arr[i - 1][j - 1].lock;
-            this.flag = true;
             this.$refs.input.focus();
         },
         lock() {
             let t = this.tem;
             t.lock = !t.lock;
+            t.num = null;
+            this.Arr[t.x - 1][t.y - 1].num = null;
             this.$emit("lock", t.x - 1, t.y - 1, t.lock);
         },
         saveOneNum() {
