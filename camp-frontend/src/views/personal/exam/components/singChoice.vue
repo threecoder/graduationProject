@@ -5,9 +5,9 @@
             <span v-if="type==0" class="blue">[单选题]</span>
             <span v-if="type==1" class="blue">[多选题]</span>
             {{title}}
-            <span class="grey">({{score}}分)</span>
+            <span class="grey" v-if="score">({{score}}分)</span>
         </p>
-        <ul v-if="type!=1">
+        <ul v-if="type==0">
             <li v-for="(item,i) in arr" :key="i">
                 <el-radio v-model="choice[index-1]" :label="i+1">{{getWord(i)}}{{item}}</el-radio>
             </li>
@@ -15,12 +15,20 @@
         <template v-if="type==1">
             <el-checkbox-group @change="mulChange" v-model="mulChoice">
                 <ul>
-                    <li v-for="(item,i) in arr" :key="i" >
-                        <el-checkbox :label="item" ></el-checkbox>
+                    <li v-for="(item,i) in arr" :key="i">
+                        <el-checkbox :label="item"></el-checkbox>
                     </li>
                 </ul>
             </el-checkbox-group>
         </template>
+        <ul v-if="type==2">
+            <li>
+                <el-radio v-model="choice[index-1]" label="1">对</el-radio>
+            </li>
+            <li>
+                <el-radio v-model="choice[index-1]" label="2">错</el-radio>
+            </li>
+        </ul>
     </div>
 </template>
 <script>
@@ -33,19 +41,19 @@ export default {
         };
     },
     methods: {
-        mulChange(){
-            while(this.choice[this.index-1].length!=0){
-                this.choice[this.index-1].pop();
+        mulChange() {
+            while (this.choice[this.index - 1].length != 0) {
+                this.choice[this.index - 1].pop();
             }
-            this.mulChoice.forEach(val=>{
+            this.mulChoice.forEach(val => {
                 let t = this.arr.indexOf(val);
-                if(t!=-1){
-                    this.choice[this.index-1].push(t+1);
+                if (t != -1) {
+                    this.choice[this.index - 1].push(t + 1);
                 }
             });
         },
-        getWord(i){
-            switch(i){
+        getWord(i) {
+            switch (i) {
                 case 0:
                     return "A.";
                 case 1:

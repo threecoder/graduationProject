@@ -1,7 +1,7 @@
 <template>
     <div class="dialog-container">
         <div class="table-container">
-            <m-table :tableConfig="table.config" :data="table.data"></m-table>
+            <m-table :tableConfig="table.config" :data="table.data" :loading="table.loading"></m-table>
         </div>
         <div class="page-container">
             <page
@@ -23,7 +23,8 @@ export default {
             type: String,
             required: true
         },
-        type: { //使用组件的类型：证书记录或者是培训记录
+        type: {
+            //使用组件的类型：证书记录或者是培训记录
             type: String,
             required: true
         }
@@ -41,7 +42,8 @@ export default {
             },
             table: {
                 config: [],
-                data: []
+                data: [],
+                loading: false
             }
         };
     },
@@ -74,9 +76,9 @@ export default {
                 // ];
             } else {
                 this.table.config = [
-                    { prop: "id", label: "证书序号" },
                     { prop: "name", label: "证书名称" },
                     { prop: "training", label: "所属培训" },
+                    { prop: "beginTime", label: "开始时间" },
                     { prop: "deadline", label: "到期时间" }
                 ];
             }
@@ -86,20 +88,23 @@ export default {
             this.getData();
         },
         async getData() {
+            this.table.loading = true;
             try {
                 let res = null;
                 let par = { ...this.form };
                 par.idNum = this.idNum;
                 if (this.type == "training") {
                     res = await studentApi.getStudentTrainingHistory(par);
+                    this.table.data = res.data.list;
                 } else {
                     res = await studentApi.getStudentCertificate(par);
+                    this.table.data = res.data.data;
                 }
-                this.table.data = res.data.list;
                 this.form.total = res.data.total;
             } catch (e) {
                 this.$message.error(e.message);
             }
+            this.table.loading = false;
         }
     }
 };

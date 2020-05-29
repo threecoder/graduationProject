@@ -75,7 +75,7 @@ export default {
         },
         shortStr(str) {
             if(str.length>18) {
-                return str.substring(0,18) + "......"
+                return str.substring(0,12) + "......"
             }
             return str;
         }

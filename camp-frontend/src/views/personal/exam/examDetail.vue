@@ -9,7 +9,7 @@
         </div>
         <div class="detail-container">
             <template v-for="(item,i) in list">
-                <singleOne :key="i" :item="item" />
+                <single-one :key="i" :item="item" />
             </template>
         </div>
     </div>

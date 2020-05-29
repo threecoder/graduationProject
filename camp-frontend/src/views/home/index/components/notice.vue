@@ -12,7 +12,7 @@
                         <p class="year-month">{{item.yearAndMonth}}</p>
                     </div>
                     <div class="info-container">
-                        <p class="news-title" @click="detail(item)">{{item.title}}</p>
+                        <p class="news-title" @click="detail(item)">{{shortStr(item.title)}}</p>
                     </div>
                 </li>
             </ul>
@@ -25,38 +25,7 @@ import noticeApi from "../../../../api/index/notice";
 export default {
     data() {
         return {
-            list: [
-                {
-                    title: "公告1",
-                    date: "2019-09-01",
-                    id: "111"
-                },
-                {
-                    title: "公告2",
-                    date: "2019-09-01",
-                    link: ""
-                },
-                {
-                    title: "公告3",
-                    date: "2019-09-01",
-                    link: ""
-                },
-                {
-                    title: "公告4",
-                    date: "2019-09-01",
-                    link: ""
-                },
-                {
-                    title: "公告5",
-                    date: "2019-09-01",
-                    link: ""
-                },
-                {
-                    title: "公告6",
-                    date: "2019-09-01",
-                    link: ""
-                }
-            ],
+            list: [],
             loading: false
         };
     },
@@ -93,6 +62,12 @@ export default {
         },
         detail(item) {
             this.$router.push(`/dynamicDetail?type=notice&id=${item.id}`);
+        },
+        shortStr(str) {
+            if (str.length > 16) {
+                return str.substring(0, 16) + "......";
+            }
+            return str;
         }
     }
 };
@@ -158,6 +133,7 @@ export default {
             }
             .info-container {
                 float: left;
+                width: calc(100% - 60px);
                 height: auto;
                 .news-title {
                     font-size: 17px;

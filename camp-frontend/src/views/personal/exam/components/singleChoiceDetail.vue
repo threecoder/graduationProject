@@ -9,8 +9,8 @@
             <span class="fr" :class="{'redWords':!flag,'greenWords':flag}">{{flag==true?"正确":"错误"}}</span>
         </p>
         <ul>
-            <li v-for="(t,i) in item.arr" :key="i" :class="getClass(i)">
-                <span>{{getWord(i)}}{{t}}</span>
+            <li v-for="(t,i) in item.arr" :key="i" :class="getClass(i+1)">
+                <span>{{getWord(i+1)}}{{t}}</span>
             </li>
         </ul>
         <div class="summary">
@@ -49,13 +49,13 @@ export default {
         getWord(i) {
             if (!Array.isArray(i)) {
                 switch (i) {
-                    case 0:
-                        return "A.";
                     case 1:
-                        return "B.";
+                        return "A.";
                     case 2:
-                        return "C.";
+                        return "B.";
                     case 3:
+                        return "C.";
+                    case 4:
                         return "D.";
                     default:
                         return "";
@@ -64,16 +64,16 @@ export default {
                 let str = "";
                 for (let index = 0; index < i.length; index++) {
                     switch (i[index]) {
-                        case 0:
+                        case 1:
                             str += "A";
                             break;
-                        case 1:
+                        case 2:
                             str += "B";
                             break;
-                        case 2:
+                        case 3:
                             str += "C";
                             break;
-                        case 3:
+                        case 4:
                             str += "D";
                             break;
                         default:

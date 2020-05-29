@@ -75,6 +75,7 @@ export default {
 .index {
     width: 100%;
     overflow: hidden;
+    padding-bottom: 100px;
     .first-node {
         overflow: hidden;
         .carousel-container {
