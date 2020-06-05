@@ -31,12 +31,12 @@
 
                 <el-row :gutter="20">
                     <el-col :span="10">
-                        <el-form-item label="及格分数(百分制)" prop="pass" label-width="130px">
+                        <el-form-item label="及格分数(百分制)" prop="pass" label-width="140px">
                             <el-input v-model="ruleForm.pass" placeholder="输入及格分数"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="所属培训" prop="training" label-width="100px">
+                        <el-form-item label="所属培训" prop="training" label-width="140px">
                             <el-select v-model="ruleForm.training">
                                 <el-option
                                     v-for="(item,i) in trainingList"

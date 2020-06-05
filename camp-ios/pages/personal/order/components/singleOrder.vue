@@ -26,8 +26,8 @@
 			</view>
 		</view>
 		<view class="oper">
-			<button class="button-small" v-if="status == 'vote'" @click="vote">投票</button>
-			<button class="button-small" v-else @click="detail">详情</button>
+			<!-- <button class="button-small" v-if="status == 'vote'" @click="vote">投票</button>
+			<button class="button-small" v-else @click="detail">详情</button> -->
 		</view>
 	</view>
 </template>

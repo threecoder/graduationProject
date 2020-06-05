@@ -22,6 +22,7 @@
                 :data="table.data"
                 :tableAttr="table.attr"
                 :tableEvent="table.event"
+                :loading="table.loading"
             >
                 <el-table-column
                     slot="select"
@@ -84,26 +85,14 @@ export default {
                     { prop: "phone", label: "公司电话" },
                     { slot: "oper", label: "操作" }
                 ],
-                data: [
-                    {
-                        id: "111",
-                        name: "模拟数据",
-                        phone: "123456",
-                        company: "公司"
-                    },
-                    {
-                        id: "2222",
-                        name: "模拟数据",
-                        phone: "123456",
-                        company: "公司"
-                    }
-                ],
+                data: [],
                 attr: {
                     "row-key": "idNum"
                 },
                 event: {
                     "selection-change": this.selectChange
-                }
+                },
+                loading: true
             },
             selected: []
         };
@@ -113,14 +102,15 @@ export default {
     },
     methods: {
         async getMemberList() {
+            this.table.loading = true;
             try {
-                console.log(this.form);
                 let res = await studentApi.getMemSelectList();
                 // this.form.total = res.data.total;
                 this.table.data = res.data;
             } catch (error) {
                 this.$message.error(error.message);
             }
+            this.table.loading = false;
         },
         getPromptTarget(type, row) {
             if (type == "single") {

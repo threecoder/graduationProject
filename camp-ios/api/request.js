@@ -18,7 +18,7 @@ const SALT = "6e6s4xswqsD25WEWQ3sShLJOK";
  * @responseType    返回类型
  */
 export function request(url, type, data = {}, responseType = "json") {
-	
+	console.log(url, data)
 	return new Promise((resolve, reject) => {
 		let networkStatus = getApp().globalData.network;
 		if (networkStatus == "none") {
@@ -40,7 +40,6 @@ export function request(url, type, data = {}, responseType = "json") {
 			},
 			responseType //浏览器返回的数据类型
 		}).then(res => {
-			console.log(url);
 			console.log(res);
 			let response = res[1];
 			uni.hideLoading();
@@ -64,6 +63,11 @@ export function request(url, type, data = {}, responseType = "json") {
 						})
 						throw new Error("你的登录信息已过期，请重新登录");
 					} else if (response.data.code == 'fail') {
+						if (response.data.msg == '密码错误！') {
+							app.$Router.push({
+								name: "login"
+							})
+						}
 						throw new Error(response.data.msg);
 					} else {
 						throw new Error('未知错误');

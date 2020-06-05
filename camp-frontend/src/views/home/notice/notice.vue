@@ -107,7 +107,7 @@ export default {
             border: 1px solid rgba(0, 0, 0, 0.2);
             li {
                 border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-                height: 60px;
+                // height: 60px;
                 padding: 10px 5px;
                 &:last-of-type {
                     border-bottom: none;

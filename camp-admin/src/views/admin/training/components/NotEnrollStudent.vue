@@ -22,6 +22,7 @@
                 :data="table.data"
                 :tableAttr="table.attr"
                 :tableEvent="table.event"
+                :loading="table.loading"
             >
                 <el-table-column
                     slot="select"
@@ -85,26 +86,14 @@ export default {
                     { prop: "company", label: "所属公司" },
                     { slot: "oper", label: "操作" }
                 ],
-                data: [
-                    {
-                        idNum: "445281199308310056",
-                        name: "模拟数据",
-                        phone: "123456",
-                        company: "公司"
-                    },
-                    {
-                        idNum: "445281199308310037",
-                        name: "模拟数据",
-                        phone: "123456",
-                        company: "公司"
-                    }
-                ],
+                data: [],
                 attr: {
                     "row-key": "idNum"
                 },
                 event: {
                     "selection-change": this.selectChange
-                }
+                },
+                loading: false
             },
             selected: []
         };
@@ -114,14 +103,15 @@ export default {
     },
     methods: {
         async getNotEnrollStudent() {
+            this.table.loading = true;
             try {
-                console.log(this.form);
                 let res = await trainingApi.getNotEnrollStudentList(this.form);
                 this.form.total = res.data.total;
                 this.table.data = res.data.list;
             } catch (error) {
                 this.$message.error(error.message);
             }
+            this.table.loading = false;
         },
         getPromptTarget(type, row) {
             if (type == "single") {

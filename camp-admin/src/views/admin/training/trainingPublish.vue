@@ -97,7 +97,7 @@
                 <el-row>
                     <el-col>
                         <el-form-item>
-                            <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+                            <el-button :loading="loading" type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
                             <el-popover
                                 placement="top"
                                 width="160"
@@ -167,6 +167,7 @@ export default {
             },
             par: null,
             flag: false,
+            loading: false,
             visible: false,
             rules: {
                 name: [
@@ -260,6 +261,7 @@ export default {
         },
         async newTraining(par) {
             if (this.flag) {
+                this.loading = true;
                 try {
                     let res = await adminTrainingApi.addNewTraining(par);
                     this.$message.success("新建培训成功");
@@ -267,6 +269,7 @@ export default {
                 } catch (error) {
                     this.$message.error(error.message);
                 }
+                this.loading = false;
             }
         },
         resetForm(formName) {

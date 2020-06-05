@@ -45,12 +45,24 @@ export default {
 				} else {
 					res = await dynamicApi.getDynamicDetail(this.info.id);
 				}
-				this.detail = res.data.info;
+				console.log('详情', res);
+				this.detail = res.data;
+				this.$_handleImg();
 				this.detail.content = this.detail.content.replace(/http:\/\/localhost:3000/g, baseUrl);
 				console.log(this.detail.content);
 			} catch (error) {
 				toast(error.message);
 			}
+		},
+		$_handleImg() {
+			let placeholder = this.detail.placeholder;
+			let content = this.detail.content;
+			let index = 0;
+			while (index < this.detail.urlList.length) {
+				let img = '<img src="' + this.detail.urlList[index++] + '" />';
+				content = content.replace(placeholder, img);
+			}
+			this.detail.content = content;
 		}
 	}
 };

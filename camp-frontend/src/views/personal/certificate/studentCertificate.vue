@@ -126,6 +126,7 @@ export default {
             this.getCertificateList();
         },
         async getCertificateList() {
+            this.table.loading = true;
             try {
                 let res = null;
                 if (this.type) {
@@ -138,6 +139,7 @@ export default {
             } catch (error) {
                 this.$message.error(error.message);
             }
+            this.table.loading = false;
         },
         async show(row) {
             try {

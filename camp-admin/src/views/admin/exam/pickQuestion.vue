@@ -230,6 +230,7 @@ export default {
             }
         },
         async search() {
+            this.table.loading = true;
             try {
                 let res = await adminExamApi.getQuestionList(this.form);
                 this.table.data = res.data.list;
@@ -250,8 +251,8 @@ export default {
                 this.form.total = res.data.total;
             } catch (error) {
                 this.$message.error(error.message);
-                console.log(error);
             }
+            this.table.loading = false;
         },
         async checkDetail(row, type) {
             if (type == "picked") {

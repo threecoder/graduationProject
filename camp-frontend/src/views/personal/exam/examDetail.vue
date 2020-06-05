@@ -3,7 +3,7 @@
         <div class="examInfo fixed">
             <span class="title">{{examInfo.examName}}</span>
             <span>姓名:{{examInfo.name}}</span>
-            <span>考试时间：{{examInfo.date}} {{examInfo.startTime}}-{{examInfo.endTime}}</span>
+            <span>考试时间：{{examInfo.startTime}}-{{examInfo.endTime}}</span>
             <span>考试时长：{{examInfo.min}}分钟</span>
             <span>总得分：{{examInfo.grade}}</span>
         </div>

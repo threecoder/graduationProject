@@ -18,7 +18,7 @@
         </div>
 
         <el-dialog :visible.sync="diaFlag" v-if="diaFlag" title="发送消息">
-            <seng-msg />
+            <seng-msg @cancel="diaFlag=false" />
         </el-dialog>
     </div>
 </template>

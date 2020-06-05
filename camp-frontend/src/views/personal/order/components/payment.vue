@@ -81,8 +81,8 @@ export default {
         async pay(row) {
             let data = {
                 orderId: this.orderId,
-                returnUrl: "/order",
-                serverPort: "8888",
+                returnUrl: "/#/order",
+                serverPort: "8080",
                 couponCode: row.code
             };
             try {
@@ -101,8 +101,8 @@ export default {
             }).then(async () => {
                 let data = {
                     orderId: this.orderId,
-                    returnUrl: "/order",
-                    serverPort: "8888"
+                    returnUrl: "/#/order",
+                    serverPort: "8080"
                 };
                 try {
                     let res = await orderApi.aliPay(1, data);

@@ -32,7 +32,7 @@
                             size="small"
                             type="primary"
                             v-if="idType==0"
-                            @click="studentJoin"
+                            @click="studentJoin(row)"
                         >报名</el-button>
                         <el-button
                             size="small"

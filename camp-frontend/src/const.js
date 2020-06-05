@@ -8,6 +8,7 @@ export const canGoPath = [
     '/login',
     '/404',
     '/introduction',
+    '/courses',
     '/courses/previous',
     '/courses/now',
     '/courses/future',
@@ -16,6 +17,10 @@ export const canGoPath = [
     '/brief',
     '/constitution',
     '/framework',
+    '/activities',
+    '/news',
+    '/notice',
+    '/dynamicDetail',
     '/',
 ]
 
@@ -32,7 +37,7 @@ export const msgTypeList = [
     { path: "/examDone", label: "成绩审核", key: "gradeExamine" },
     { path: "/cerOperHistory", label: "证书复审", key: "cerRecheck" },
     { path: "/cerOperHistory", label: "证书校正", key: "cerChange" },
-    { path: "/order", label: '会员续费', key: 'memberSubscription' }
+    { path: "/order", label: '会员续费', key: 'memberRenew' }
 ]
 
 //订单类别

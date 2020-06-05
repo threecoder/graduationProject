@@ -78,12 +78,12 @@ export default {
                     { prop: "memberName", label: "所属组织" },
                     { prop: "effectiveLength", label: "有效时长" },
                     { prop: "beginTime", label: "生效时间" },
-                    { prop: "endTime", label: "失效时间" },
-                    {
-                        slot: "oper",
-                        label: "操作",
-                        fixed: "right"
-                    }
+                    { prop: "endTime", label: "失效时间" }
+                    // {
+                    //     slot: "oper",
+                    //     label: "操作",
+                    //     fixed: "right"
+                    // }
                 ],
                 data: [
                     {

@@ -82,9 +82,10 @@ export default {
 				} else {
 					this.par.currentPage = 1;
 					res = await examApi.getDoneExam(this.par);
-					this.doneList = res.data;
+					this.doneList = res.data.list;
 				}
-				if (res.data.length == 0) {
+				console.log('考试', res);
+				if (res.data.list.length == 0) {
 					this.hasMore = 'noMore';
 				} else {
 					this.hasMore = 'more';
@@ -103,9 +104,10 @@ export default {
 				} else {
 					this.par.currentPage = 1;
 					res = await examApi.getTodoExam(this.par);
-					this.todoList = res.data;
+					this.todoList = res.data.list;
 				}
-				if (res.data.length == 0) {
+				console.log('考试', res);
+				if (res.data.list.length == 0) {
 					this.hasMore = 'noMore';
 				} else {
 					this.hasMore = 'more';

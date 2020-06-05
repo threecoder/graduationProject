@@ -101,20 +101,20 @@ export default {
                     // { slot: "oper", label: "操作" }
                 ],
                 data: [
-                    {
-                        idNum: 1,
-                        name: "模拟名字",
-                        phone: "151551515",
-                        status: "未支付"
-                    }
+                    // {
+                    //     idNum: 1,
+                    //     name: "模拟名字",
+                    //     phone: "151551515",
+                    //     status: "未支付"
+                    // }
                 ]
             },
             memberList: [
-                {
-                    name: "bb公司",
-                    idNum: 1,
-                    phone: "2121"
-                }
+                // {
+                //     name: "bb公司",
+                //     idNum: 1,
+                //     phone: "2121"
+                // }
             ],
             studentDialog: {
                 flag: false,

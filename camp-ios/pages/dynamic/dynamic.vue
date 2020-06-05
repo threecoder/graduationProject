@@ -28,7 +28,6 @@ import dynamicApi from '../../api/index/dynamic.js';
 import indexApi from '../../api/index/index.js';
 import newsApi from '../../api/index/news.js';
 import { toast } from '../../assets/js/commom.js';
-import { getNetwork } from '../../network.js';
 import { baseUrl } from '../../const';
 export default {
 	components: {
@@ -88,7 +87,6 @@ export default {
 		}
 	},
 	mounted() {
-		getNetwork();
 		this.getSwiperList();
 		this.getNewsList('new');
 	},
@@ -109,7 +107,9 @@ export default {
 	methods: {
 		$_replaceSrc(data) {
 			data.forEach(val => {
-				val.url = val.url.replace(/http:\/\/localhost:3000/g, baseUrl);
+				if (val.url) {
+					val.url = val.url.replace(/http:\/\/localhost:3000/g, baseUrl);
+				}
 			});
 		},
 		async getDynamicList(type = 'add') {
@@ -124,6 +124,7 @@ export default {
 					res = await dynamicApi.getDynamicList(this.par);
 					this.dynamicList = res.data.list;
 				}
+				console.log('shouye', this.dynamicList);
 				this.$_replaceSrc(this.dynamicList);
 				if (res.data.list.length == 0) {
 					this.hasMore = 'noMore';
@@ -144,6 +145,7 @@ export default {
 					res = await newsApi.getNewsList(this.par);
 					this.newsList = res.data.list;
 				}
+				console.log('shouye', this.newsList);
 				this.$_replaceSrc(this.newsList);
 				if (res.data.list.length == 0) {
 					this.hasMore = 'noMore';

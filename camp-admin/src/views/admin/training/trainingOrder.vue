@@ -19,7 +19,7 @@
             </el-form>
         </div>
         <div class="table-container">
-            <m-table :data="table.data" :tableConfig="table.config">
+            <m-table :data="table.data" :tableConfig="table.config" :loading="table.loading">
                 <el-table-column slot="oper" slot-scope="{params}" v-bind="params" align="center">
                     <div slot-scope="{row}">
                         <el-button
@@ -74,16 +74,17 @@ export default {
                     { slot: "oper", label: "操作", fixed: "right" }
                 ],
                 data: [
-                    {
-                        orderNum: "111",
-                        orderType: "学员",
-                        builderId: "123",
-                        builderName: "用户名",
-                        buildTime: "2020-10-10",
-                        price: "111",
-                        status: "未支付"
-                    }
-                ]
+                    // {
+                    //     orderNum: "111",
+                    //     orderType: "学员",
+                    //     builderId: "123",
+                    //     builderName: "用户名",
+                    //     buildTime: "2020-10-10",
+                    //     price: "111",
+                    //     status: "未支付"
+                    // }
+                ],
+                loading: false
             }
         };
     },
@@ -92,6 +93,7 @@ export default {
     },
     methods: {
         async getOrderList() {
+            this.table.loading = true;
             try {
                 let res = await trainingApi.getTrainingOrderList(this.form);
                 this.table.data = res.data.data;
@@ -99,6 +101,7 @@ export default {
             } catch (error) {
                 this.$message.error(error.message);
             }
+            this.table.loading = false;
         },
         modifyPrice(row) {
             this.$prompt("请输入目标金额", "提示", {
